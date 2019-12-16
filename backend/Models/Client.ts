@@ -1,14 +1,59 @@
 import { Sequelize, Model, DataTypes, BuildOptions } from 'sequelize';
-//const sequelize = new Sequelize('mysql://root:asd123@localhost:3306/mydb');
-import * as dbConnect from '../db';
+import * as db from '../db';
+import IEntitie from './IEntitie';
+import {DbInstance} from '../db'
 
-export default class Client extends Model{
+var _instance = new DbInstance().getInstance();
+
+class ClientMdl {
+    public firstName!: string;
+    public lastName!: string;
+    public phone!: string;
+}
+
+class Client extends Model implements IEntitie{
+
     public id!: number;
     public firstName!: string;
     public lastName!: string;
     public phone!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
+
+    Save(value) {
+        _instance.sync()
+        .then(() => Client.create({
+            firstName: value.firstName,
+            lastName: value.lastName,
+            phone: value.phone
+        }))
+        .then(j => {
+        console.log(j.toJSON());
+        });
+    }
+    Search(value) {
+        var result = null;
+        result =_instance.sync()
+        .then(() => Client.scope("public").findAll({
+            where:{
+                firstName: value.firstName,
+                lastName: value.lastName
+            }
+        }))
+        .then(j => {
+            console.log(j);
+            });
+
+        //console.log(result.toJSON());
+        return result;
+       
+    }
+    Update() {
+        throw new Error("Method not implemented.");
+    }
+    Delete() {
+        throw new Error("Method not implemented.");
+    }
 }
 
 Client.init({
@@ -30,16 +75,15 @@ Client.init({
         allowNull: false,
     }
 },{
-    sequelize: new dbConnect.default('sstec', 'sa', 'Root1526', './sqlexpress').getInstance(),
-    tableName: 'Client'
+    sequelize: new db.DbInstance().getInstance(),
+    tableName: 'Client',
+    scopes: {
+        public: {
+            attributes: ['id', 'firstName', 'lastName', 'phone']
+        }
+    }
 });
 
-// sequelize.sync()
-//   .then(() => Client.create({
-//     firstName: 'janedoe',
-//     lastName: 'janedoe',
-//     phone: '81986465525'
-//   }))
-//   .then(j => {
-//     console.log(j.toJSON());
-//   });
+Client.sync({force: false});
+
+export {Client, ClientMdl};

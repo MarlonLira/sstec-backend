@@ -1,6 +1,6 @@
 export default interface IEntitie{
-    Save();
-    Search();
-    Update();
-    Delete();
+    Save(value);
+    Search(value);
+    Update(value);
+    Delete(value);
 }
