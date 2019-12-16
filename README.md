@@ -9,8 +9,6 @@
 
 ### Estrutura dos arquivos do app
 **assets/** - Arquivos estáticos: fontes, imagens, etc.\
-**boot/** - Arquivos de configurações iniciais.\
-**boot/setup.jsx** - Prover do redux e dependencias de style à aplicação, chama Splashscreen, etc.\
 **src/** - Arquivos de códigos da aplicação.\
 **src/common/** - Arquivos comuns da aplicação. Inclui componentes e utilitários.\
 **src/common/styles/** - Arquivos de estilo da aplicação.\
@@ -18,26 +16,15 @@
 **src/screens/exemploDeScreen/** - Arquivos de uma tela.\
 **src/screens/exemploDeScreen/components/** - Componentes utilizados na tela.\
 **src/screens/exemploDeScreen/components/ExemploX.jsx** - Componente de apresentação utilizado na tela.\
-**src/screens/exemploDeScreen/containers/** - Os componentes devem ser integrados ao redux pelo container.\
-**src/screens/exemploDeScreen/containers/ExemploX.js** - Ligação do componente com o redux.\
-**src/screens/exemploDeScreen/actions.js** - Contém todas action creators referente ao módulo, algmas regras são criadas aqui.\
-**src/screens/exemploDeScreen/exemploDeScreenComponent.jsx** - Componente de apresentação.\
-**src/screens/exemploDeScreen/exemploDeScreenContainer.js** - Ligação do componente com o redux.\
 **src/screens/exemploDeScreen/index.js** - Exporta o tela como default.\
 **src/screens/exemploDeScreen/reducer.js** - Contém a estrutura do estado da tela e é responsável por atualizar o estado.\
 **src/screens/exemploDeScreen/types.js** - Contém constantes para serem utilizadas nos types das actions creators e reducers.\
 **src/Navigation.jsx** - Configura a navegação de todas as telas.\
-**src/reducers.js** - Arquivo com reducers combinados (combineReducers) para prover para aplicação.\
-**.eslintrc.json** - Arquivo de configuração do ESLint.\
 **.gitignore** - Configura arquivos a serem ignorados pelo git.\
-**.watchmanconfig** - Arquivo de configurações do vigia, caso alguem utilize.\
 **App.js** - Arquivo inicial. Arquivo chamado pelo Expo.\
-**app.json** - Utilizado pelo expo para definir SDK, icone e outras configurações não relacionada ao código que serão utilizadas na compilação.\
-**babel.config.js** - Configurações do babel.\
 **package.json** - Arquivo de dependências e detalhes do projeto.\
 **README.md** - Leia-me com instruções.\
-**rn-cli.config** - Configurações do CLI do react-native.\
-**yarn.lock** - Mapa de dependencias gerenciado pelo yarn.
+**yarn.lock** - Mapa de dependencias gerenciado pelo yarn| Caso algúem use o Yarn.
 
 ### Nomeação dos arquivos e componentes
   - Os componentes são nomeados com o padrão PascalCase independente de ser componente de classe ou funcional.
