@@ -6,9 +6,17 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarlonLira/sstec.git"
+  },
   "keywords": [],
-  "author": "",
+  "author": "Marlon Lira",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MarlonLira/sstec/issues"
+  },
+  "homepage": "https://github.com/MarlonLira/sstec#readme",
   "dependencies": {
     "bcrypt": "^3.0.7",
     "body-parse": "^0.1.0",
