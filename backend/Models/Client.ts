@@ -6,6 +6,7 @@ import {DbInstance} from '../db'
 var _instance = new DbInstance().getInstance();
 
 class ClientMdl {
+    public id!: number;
     public firstName!: string;
     public lastName!: string;
     public phone!: string;
@@ -20,7 +21,7 @@ class Client extends Model implements IEntitie{
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
-    Save(value) {
+    Save(value : ClientMdl) {
         _instance.sync()
         .then(() => Client.create({
             firstName: value.firstName,
@@ -31,28 +32,77 @@ class Client extends Model implements IEntitie{
         console.log(j.toJSON());
         });
     }
-    Search(value) {
-        var result = null;
-        result =_instance.sync()
-        .then(() => Client.scope("public").findAll({
+    Search(value : ClientMdl) {
+        var result = new ClientMdl();
+        var _ = _instance.sync()
+        .then(() => Client.scope("public").findOne({
             where:{
                 firstName: value.firstName,
                 lastName: value.lastName
             }
         }))
         .then(j => {
-            console.log(j);
+                result.id = j.id;
+                result.firstName = j.firstName;
+                result.lastName = j.lastName;
+                result.phone = j.phone;
+                //console.log(j.toJSON());
+                //console.log(result);
             });
-
-        //console.log(result.toJSON());
         return result;
-       
     }
-    Update() {
-        throw new Error("Method not implemented.");
+
+    Update(value : ClientMdl) {
+        var result = new ClientMdl();
+        if(value.id > 0 ){
+        var _ =_instance.sync()
+        .then(() => Client.update({
+            firstName: value.firstName,
+            lastName: value.lastName,
+        },{
+            where:{
+                id: value.id
+            }
+        }))
+        .then(j => {
+                result.id = j.id;
+                result.firstName = j.firstName;
+                result.lastName = j.lastName;
+                result.phone = j.phone;
+                //console.log(j.toJSON());
+                console.log(result);
+            });
+        }else{
+            console.log("O id da entidade não foi informado! " + value);
+        }
+        return result;
     }
-    Delete() {
-        throw new Error("Method not implemented.");
+    Delete(value : ClientMdl) {
+        var deleteEntitie = new ClientMdl();
+
+        console.log("Iniciando exclusão da entidade: " + 
+            " Id: " + value.id + 
+            " FirstName: " + value.firstName + 
+            " LastName: " + value.lastName + 
+            " Phone: " + value.phone);
+          
+        if(deleteEntitie.id > 0){
+            _instance.sync()
+            .then(() => Client.destroy({
+                where:{
+                    id: deleteEntitie.id
+                }
+            }))
+            .then(j => {
+                    console.log(j.toJSON());
+                });
+        }else{
+            console.log("Entidade não encontrada: " + 
+            " Id: " + deleteEntitie.id + 
+            " FirstName: " + deleteEntitie.firstName + 
+            " LastName: " + deleteEntitie.lastName + 
+            " Phone: " + deleteEntitie.phone);
+        }
     }
 }
 

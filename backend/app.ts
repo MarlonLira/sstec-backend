@@ -25,6 +25,11 @@ app.listen(port, () => {
 var val = new ClientMdl();
 val.firstName = "Marlon";
 val.lastName = "Lira",
-val.phone = "81983943612"
+val.phone = "81986803427";
 
-new Client().Search(val);
+//new Client().Save(val);
+var val2 = new Client().Search(val);
+// val.firstName = "Marlon";
+//new Client().update(val);
+//new Client().Delete(val);
+console.log(val2)
