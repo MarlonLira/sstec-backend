@@ -1,4 +1,4 @@
-import { Sequelize, Model, DataTypes, BuildOptions } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 import * as db from '../db';
 import IEntitie from './IEntitie';
 import { DbInstance } from '../db'
@@ -9,6 +9,7 @@ class ClientMdl {
 	public id!: number;
 	public firstName!: string;
 	public lastName!: string;
+	public registryCode!: string;
 	public phone!: string;
 }
 
@@ -17,52 +18,104 @@ class Client extends Model implements IEntitie {
 	public id!: number;
 	public firstName!: string;
 	public lastName!: string;
+	public registryCode!: string;
 	public phone!: string;
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;
 
-	Save(value: ClientMdl) {
-		_instance.sync()
-			.then(() => Client.create({
-				firstName: value.firstName,
-				lastName: value.lastName,
-				phone: value.phone
-			}))
-			.then(j => {
-				console.log(j.toJSON());
-			});
+	Save(entitie: ClientMdl) {
+		return new Promise((resolve, reject) => {
+			this.Search(entitie).then(found => {
+				if(found != null){return resolve("Já existe um cliente com essas informações! ")}
+				_instance.sync()
+					.then(() => Client.create({
+						firstName: entitie.firstName,
+						lastName: entitie.lastName,
+						registryCode: entitie.registryCode,
+						phone: entitie.phone
+					}))
+					.then(result => {
+						resolve(result.dataValues)
+					})
+			})
+		})
 	}
-	Search(value: ClientMdl) {
+	Search(entitie: ClientMdl) {
+		return new Promise((resolve, reject) => {
+			if(entitie.id > 0)
+				this.SearchById(entitie).then(result => resolve(result));
+			else if(entitie.registryCode.length > 0)
+				this.SearchByRCode(entitie).then(result => resolve(result));
+			else
+				this.SearchByName(entitie).then(result => resolve(result));
+		})
+	}
+
+	SearchById(entitie: ClientMdl){
 		return new Promise((resolve, reject) => {
 			_instance.sync()
 				.then(() => Client.scope("public").findOne({
 					where: {
-						id: value.id
+						id: entitie.id
 					}
 				}))
-				.then(j => {
-					let found = j == null ? null : j.dataValues;
+				.then(result => {
+					let found = result == null ? null : result.dataValues;
 					resolve(found)
 				})
-				.catch(j => {
-					reject(j)
+				.catch(except => {
+					reject(except)
 				});
 		})
 	}
 
-	Update(value: ClientMdl) {
+	SearchByName(entitie: ClientMdl){
 		return new Promise((resolve, reject) => {
-			this.Search(value).then(x => {
-				if (x == null) { return resolve("Cliente não encontrado!") }
+			_instance.sync()
+				.then(() => Client.scope("public").findOne({
+					where: {
+						firstName: entitie.firstName,
+						lastName: entitie.lastName
+					}
+				}))
+				.then(result => {
+					let found = result == null ? null : result.dataValues;
+					resolve(found)
+				})
+				.catch(except => {
+					reject(except)
+				});
+		})
+	}
+
+	SearchByRCode(entitie: ClientMdl){
+		return new Promise((resolve, reject) => {
+			_instance.sync()
+				.then(() => Client.scope("public").findOne({
+					where: {
+						registryCode: entitie.registryCode
+					}
+				}))
+				.then(result => {
+					let found = result == null ? null : result.dataValues;
+					resolve(found)
+				})
+				.catch(except => {
+					reject(except)
+				});
+		})
+	}
+
+	Update(entitie: ClientMdl) {
+		return new Promise((resolve, reject) => {
+			this.Search(entitie).then(found => {
+				if (found == null) { return resolve("Cliente não encontrado!") }
+				entitie.id = found["id"];
 				_instance.sync()
-					.then(() => Client.update({
-						firstName: value.firstName,
-						lastName: value.lastName,
-						phone: value.phone
-					},
+					.then(() => Client.update(entitie,
 						{
 							where: {
-								id: value.id
+								id: entitie.id
 							}
 						}))
 					.then(() => {
@@ -89,7 +142,7 @@ class Client extends Model implements IEntitie {
 						}
 					))
 					.then(() => {
-						let result = "Cliente Atualizado!";
+						let result = "Cliente Apagado!";
 						resolve(result)
 					})
 					.catch(j => {
@@ -114,6 +167,9 @@ Client.init({
 		type: new DataTypes.STRING(128),
 		allowNull: false,
 	},
+	registryCode:{
+		type: new DataTypes.STRING(12)
+	},
 	phone: {
 		type: new DataTypes.STRING(12),
 		allowNull: false,
@@ -123,7 +179,7 @@ Client.init({
 	tableName: 'Client',
 	scopes: {
 		public: {
-			attributes: ['id', 'firstName', 'lastName', 'phone']
+			attributes: ['id', 'firstName', 'lastName', 'phone', 'registryCode']
 		}
 	}
 });

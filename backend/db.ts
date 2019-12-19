@@ -12,13 +12,11 @@ class DbConnect {
     private password: string;
 
     constructor(Schema, userName, password, host, port) {
-
         this.userName = userName;
         this.password = password;
         this.host = host;
         this.Schema = Schema;
         this.port = port;
-
     }
 
     getNewInstance() {
@@ -30,16 +28,6 @@ class DbConnect {
                 ssl: true
             }
         );
-
-        // sequelize
-        // .authenticate()
-        // .then(() => {
-        //     console.log('Connection has been established successfully. Server: ' + this.host + ':' + this.port + ' - Schema: ' + this.Schema );
-        // })
-        // .catch(err => {
-        // console.error('Unable to connect to the database:', err);
-        // });
-
         return sequelize;
     }
 }

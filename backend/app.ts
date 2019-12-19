@@ -1,7 +1,5 @@
 // src/index.ts
-
 import * as express from 'express';
-import * as Db from './db';
 import { Client, ClientMdl } from './Models/Client';
 
 //import * as cors from 'cors'
@@ -23,16 +21,15 @@ app.listen(port, () => {
 })
 
 var val = new ClientMdl();
-val.id = 2;
-val.firstName = "Marlon";
-val.lastName = "Lira";
-val.phone = "81986803427";
+val.phone = "81999003499";
+val.registryCode = "09177350480"
 var val2 = null;
 //new Client().Save(val);
 var cl = new Client();
-
-//cl.Search(val).then(x => console.log(x))
-cl.Update(val).then(x => console.log(x));
+//cl.Save(val).then(x => console.log(x));
+//cl.Search(val).then(x => console.log(x));
+//cl.Update(val).then(x => console.log(x));
+//cl.Delete(val).then(x => console.log(x));
 
  //((value) => new Client().Search(val).then(() => console.log(value)))
 
