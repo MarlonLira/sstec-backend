@@ -1,7 +1,5 @@
 // src/index.ts
-
 import * as express from 'express';
-import * as Db from './db';
 import { Client, ClientMdl } from './Models/Client';
 
 //import * as cors from 'cors'
@@ -15,16 +13,27 @@ const port = 4001
 //app.use(cors())
 
 app.get('/', (req, res, next) => {
-    res.json('Hello world');
+	res.json('Hello world');
 })
 
 app.listen(port, () => {
-    console.log(`App is listening on port ${port}`)
+	console.log(`App is listening on port ${port}`)
 })
 
 var val = new ClientMdl();
-val.firstName = "Marlon";
-val.lastName = "Lira",
-val.phone = "81983943612"
+val.phone = "81999003499";
+val.registryCode = "09177350480"
+var val2 = null;
+//new Client().Save(val);
+var cl = new Client();
+//cl.Save(val).then(x => console.log(x));
+//cl.Search(val).then(x => console.log(x));
+//cl.Update(val).then(x => console.log(x));
+//cl.Delete(val).then(x => console.log(x));
 
-new Client().Search(val);
+ //((value) => new Client().Search(val).then(() => console.log(value)))
+
+// val.firstName = "Marlon";
+//
+//new Client().Delete(val);
+
