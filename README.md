@@ -17,7 +17,6 @@
 **src/screens/exemploDeScreen/components/** - Componentes utilizados na tela.\
 **src/screens/exemploDeScreen/components/ExemploX.jsx** - Componente de apresentação utilizado na tela.\
 **src/screens/exemploDeScreen/index.js** - Exporta o tela como default.\
-**src/screens/exemploDeScreen/reducer.js** - Contém a estrutura do estado da tela e é responsável por atualizar o estado.\
 **src/screens/exemploDeScreen/types.js** - Contém constantes para serem utilizadas nos types das actions creators e reducers.\
 **src/Navigation.jsx** - Configura a navegação de todas as telas.\
 **.gitignore** - Configura arquivos a serem ignorados pelo git.\
