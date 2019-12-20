@@ -12,6 +12,7 @@ const port = 4001
 //app.use(bodyParser.urlencoded({ extended: true }))
 //app.use(cors())
 
+//Exemplo de Rota
 app.get('/', (req, res, next) => {
 	res.json('Hello world');
 })
@@ -20,9 +21,12 @@ app.listen(port, () => {
 	console.log(`App is listening on port ${port}`)
 })
 
+// Exemplo de modificação de entidade
 var val = new ClientMdl();
+val.firstName = "Marlon";
+val.lastName = "Lira";
 val.phone = "81999003499";
-val.registryCode = "09177350480"
+val.registryCode = "0927756789";
 var val2 = null;
 //new Client().Save(val);
 var cl = new Client();
