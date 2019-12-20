@@ -1,24 +1,38 @@
 # Simple Parking
-###### Esse documento auxiliará no desenvolvimento do aplicativo
+###### Esse documento auxiliará no desenvolvimento do Backend da Aplicação -> Web|Mobile
 
 ### Dados do projeto
 **Empresa:** Simple System Tecnologia SSTEC\
 **Nome do app:** Simple Parking\
 **Site:** simpleparking.com\
-**Tecnologias de desenvolvimento:** Flutter | React Js | Node js | Typescript 
+**Tecnologias de desenvolvimento:**  Node js | Typescript 
 
-### Estrutura dos arquivos do app
-**assets/** - Arquivos estáticos: fontes, imagens, etc.\
-**src/** - Arquivos de códigos da aplicação.\
-**src/common/** - Arquivos comuns da aplicação. Inclui componentes e utilitários.\
-**src/common/styles/** - Arquivos de estilo da aplicação.\
-**src/screens/** - Telas.\
-**src/screens/exemploDeScreen/** - Arquivos de uma tela.\
-**src/screens/exemploDeScreen/components/** - Componentes utilizados na tela.\
-**src/screens/exemploDeScreen/components/ExemploX.jsx** - Componente de apresentação utilizado na tela.\
-**src/screens/exemploDeScreen/index.js** - Exporta o tela como default.\
-**src/screens/exemploDeScreen/types.js** - Contém constantes para serem utilizadas nos types das actions creators e reducers.\
-**src/Navigation.jsx** - Configura a navegação de todas as telas.\
+
+### Requisitos
+- [VS Code](https://code.visualstudio.com/ "Visual Studio Code").
+- [Node LTS](https://nodejs.org/en/ "Node Js") Aplicação Web|Mobile - BackEnd
+- [Cmder](https://cmder.net/ "Cmder")
+
+### Dependencias
+- [BCrypt](https://www.npmjs.com/package/bcrypt/ "BCrypt")
+- [Body Parser](https://www.npmjs.com/package/body-parser/ "Body Parser")
+- [Cookie Parser](https://www.npmjs.com/package/cookie-parser/ "Cookie Parser")
+- [Express](https://expressjs.com/ "Express")
+- [Express Validator](https://express-validator.github.io/docs/ "Cookie Parser")
+- [Cors](https://adonisjs.com/docs/4.1/cors/ "Cors")
+- [Jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken/ "Jsonwebtoken")
+- [Sequelize](https://sequelize.org/v5/ "Sequelize")
+
+### Instalação Requisitos
+- Via Executavel.
+
+### Instalação Dependencias
+- Via NPM ou YARN.
+
+### Estrutura dos arquivos do Backend da Aplicação -> Web|Mobile
+**dist/src/** - Arquivos de códigos da aplicação.\
+**dist/src/common/** - Arquivos comuns da aplicação. Inclui componentes e utilitários.\
+**dist/src/routes.js** - Configura a navegação de todas as telas.\
 **.gitignore** - Configura arquivos a serem ignorados pelo git.\
 **App.js** - Arquivo inicial. Arquivo chamado pelo Expo.\
 **package.json** - Arquivo de dependências e detalhes do projeto.\
@@ -40,7 +54,7 @@ O GitFlow Workflow é um design de fluxo de trabalho Git que define um modelo de
 ![](https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fraw.githubusercontent.com%2FVoronenko%2Fgitflow-release%2Fmaster%2Fimages%2Fgit-workflow-release-cycle-4maintenance.png&f=1)
 
 ### Versionamento Semântico
-O Versionamento Semântico são regras que formalizam de forma prática e eficiente o incremento de versões de software. O versionamento do Youfit deve basedado na versão 2 do Versionament Semântico utilizando as regras 2, 3, 4, 6, 7, 8, 9 e 11 encontradas no [site do samver.org](https://semver.org/lang/pt-BR/).
+O Versionamento Semântico são regras que formalizam de forma prática e eficiente o incremento de versões de software. O versionamento do Simple Parking deve basedado na versão 2 do Versionament Semântico utilizando as regras 2, 3, 4, 6, 7, 8, 9 e 11 encontradas no [site do samver.org](https://semver.org/lang/pt-BR/).
 
 ### Commits Semânticos
 Para uma melhor navegação pelos commits, possibilitando um entendimento melhor e mais rápido, e consequentemente melhorando a manutenção do sistema, utilizamos um padrão na escrita do commit similar ao proposto por http://karma-runner.github.io/3.0/dev/git-commit-msg.html.

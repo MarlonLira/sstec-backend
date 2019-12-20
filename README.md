@@ -7,7 +7,16 @@
 **Site:** simpleparking.com\
 **Tecnologias de desenvolvimento:** Flutter | React Js | Node js | Typescript 
 
-### Estrutura dos arquivos do app
+### Requisitos
+- [Android Studio](https://developer.android.com/studio/ "Android Studio") Aplicação Mobile - Flutter.
+- [VS Code](https://code.visualstudio.com/ "Visual Studio Code").
+- [Node LTS](https://nodejs.org/en/ "Node Js") Aplicação Web|Mobile - BackEnd
+- [Cmder](https://cmder.net/ "Cmder")
+
+### Instalação
+- Via Executavel.
+
+### Estrutura dos arquivos do FrontEnd da Aplicação -> Web
 **assets/** - Arquivos estáticos: fontes, imagens, etc.\
 **src/** - Arquivos de códigos da aplicação.\
 **src/common/** - Arquivos comuns da aplicação. Inclui componentes e utilitários.\
@@ -25,6 +34,21 @@
 **README.md** - Leia-me com instruções.\
 **yarn.lock** - Mapa de dependencias gerenciado pelo yarn| Caso algúem use o Yarn.
 
+### Estrutura dos arquivos do FrontEnd da Aplicação -> Mobile
+**assets/** - Arquivos estáticos: fontes, imagens, etc.\
+**src/** - Arquivos de códigos da aplicação.\
+**src/common/** - Arquivos comuns da aplicação. Inclui componentes e utilitários.\
+**src/common/styles/** - Arquivos de estilo da aplicação.\
+**src/screens/** - Telas.\
+**src/screens/exemploDeScreen/** - Arquivos de uma tela.\
+**src/screens/exemploDeScreen/components/** - Componentes utilizados na tela.\
+**src/screens/exemploDeScreen/components/ExemploX.dart** - Componente de apresentação utilizado na tela.\
+**src/screens/exemploDeScreen/index.dart** - Exporta o tela como default.\
+**src/screens/exemploDeScreen/types.dart** - Contém constantes para serem utilizadas nos types das actions creators e reducers.\
+**.gitignore** - Configura arquivos a serem ignorados pelo git.\
+**App.dart** - Arquivo inicial. Arquivo chamado pelo Expo.\
+**README.md** - Leia-me com instruções.\
+
 ### Nomeação dos arquivos e componentes
   - Os componentes são nomeados com o padrão PascalCase independente de ser componente de classe ou funcional.
   - Os components e containers tem seus arquivos com o mesmo nome. Caso o component ou container esteja fora do diretório components ou containers respectivamente, o nome do arquivo deve serguir com o identificador Component ou Container.
@@ -40,7 +64,7 @@ O GitFlow Workflow é um design de fluxo de trabalho Git que define um modelo de
 ![](https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fraw.githubusercontent.com%2FVoronenko%2Fgitflow-release%2Fmaster%2Fimages%2Fgit-workflow-release-cycle-4maintenance.png&f=1)
 
 ### Versionamento Semântico
-O Versionamento Semântico são regras que formalizam de forma prática e eficiente o incremento de versões de software. O versionamento do Youfit deve basedado na versão 2 do Versionament Semântico utilizando as regras 2, 3, 4, 6, 7, 8, 9 e 11 encontradas no [site do samver.org](https://semver.org/lang/pt-BR/).
+O Versionamento Semântico são regras que formalizam de forma prática e eficiente o incremento de versões de software. O versionamento do Simple Parking deve basedado na versão 2 do Versionamento Semântico utilizando as regras 2, 3, 4, 6, 7, 8, 9 e 11 encontradas no [site do samver.org](https://semver.org/lang/pt-BR/).
 
 ### Commits Semânticos
 Para uma melhor navegação pelos commits, possibilitando um entendimento melhor e mais rápido, e consequentemente melhorando a manutenção do sistema, utilizamos um padrão na escrita do commit similar ao proposto por http://karma-runner.github.io/3.0/dev/git-commit-msg.html.
