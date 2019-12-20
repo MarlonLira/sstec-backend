@@ -30,7 +30,7 @@ val.registryCode = "0927756789";
 var val2 = null;
 //new Client().Save(val);
 var cl = new Client();
-cl.Save(val).then(x => console.log(x));
+//cl.Save(val).then(x => console.log(x));
 //cl.Search(val).then(x => console.log(x));
 //cl.Update(val).then(x => console.log(x));
 //cl.Delete(val).then(x => console.log(x));
