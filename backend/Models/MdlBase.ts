@@ -1,3 +1,3 @@
-export default abstract class MdlBase{
+export default abstract class MdlBase {
 
 }

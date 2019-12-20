@@ -25,8 +25,9 @@ class Client extends Model implements IEntitie {
 
 	Save(entitie: ClientMdl) {
 		return new Promise((resolve, reject) => {
+			if (entitie.firstName == null || entitie.lastName == null) { return resolve("Erro: existe campos vazios, preencha os campos necessarios!") }
 			this.Search(entitie).then(found => {
-				if(found != null){return resolve("Já existe um cliente com essas informações! ")}
+				if (found != null) { return resolve("Erro: Já existe um cliente com essas informações! ") }
 				_instance.sync()
 					.then(() => Client.create({
 						firstName: entitie.firstName,
@@ -42,16 +43,16 @@ class Client extends Model implements IEntitie {
 	}
 	Search(entitie: ClientMdl) {
 		return new Promise((resolve, reject) => {
-			if(entitie.id > 0)
+			if (entitie.id > 0)
 				this.SearchById(entitie).then(result => resolve(result));
-			else if(entitie.registryCode.length > 0)
+			else if (entitie.registryCode.length > 0)
 				this.SearchByRCode(entitie).then(result => resolve(result));
 			else
 				this.SearchByName(entitie).then(result => resolve(result));
 		})
 	}
 
-	SearchById(entitie: ClientMdl){
+	SearchById(entitie: ClientMdl) {
 		return new Promise((resolve, reject) => {
 			_instance.sync()
 				.then(() => Client.scope("public").findOne({
@@ -69,7 +70,7 @@ class Client extends Model implements IEntitie {
 		})
 	}
 
-	SearchByName(entitie: ClientMdl){
+	SearchByName(entitie: ClientMdl) {
 		return new Promise((resolve, reject) => {
 			_instance.sync()
 				.then(() => Client.scope("public").findOne({
@@ -88,7 +89,7 @@ class Client extends Model implements IEntitie {
 		})
 	}
 
-	SearchByRCode(entitie: ClientMdl){
+	SearchByRCode(entitie: ClientMdl) {
 		return new Promise((resolve, reject) => {
 			_instance.sync()
 				.then(() => Client.scope("public").findOne({
@@ -167,7 +168,7 @@ Client.init({
 		type: new DataTypes.STRING(128),
 		allowNull: false,
 	},
-	registryCode:{
+	registryCode: {
 		type: new DataTypes.STRING(12)
 	},
 	phone: {

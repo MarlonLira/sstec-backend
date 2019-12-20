@@ -23,12 +23,14 @@ app.listen(port, () => {
 
 // Exemplo de modificação de entidade
 var val = new ClientMdl();
+val.firstName = "Marlon";
+val.lastName = "Lira";
 val.phone = "81999003499";
-val.registryCode = "09177350480"
+val.registryCode = "0927756789";
 var val2 = null;
 //new Client().Save(val);
 var cl = new Client();
-//cl.Save(val).then(x => console.log(x));
+cl.Save(val).then(x => console.log(x));
 //cl.Search(val).then(x => console.log(x));
 //cl.Update(val).then(x => console.log(x));
 //cl.Delete(val).then(x => console.log(x));
