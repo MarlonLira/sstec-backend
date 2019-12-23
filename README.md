@@ -31,7 +31,9 @@
 
 ### Estrutura dos arquivos do Backend da Aplicação -> Web|Mobile
 **dist/src/** - Arquivos de códigos da aplicação.\
-**dist/src/common/** - Arquivos comuns da aplicação. Inclui componentes e utilitários.\
+**dist/src/models/** - Arquivos de códigos da aplicação.\
+**dist/src/controllers/** - Arquivos de códigos da aplicação.\
+**dist/src/commons/** - Arquivos comuns da aplicação. Inclui componentes e utilitários.\
 **dist/src/routes.js** - Configura a navegação de todas as telas.\
 **.gitignore** - Configura arquivos a serem ignorados pelo git.\
 **App.js** - Arquivo inicial. Arquivo chamado pelo Expo.\
@@ -42,9 +44,8 @@
 ### Nomeação dos arquivos e componentes
   - Os componentes são nomeados com o padrão PascalCase independente de ser componente de classe ou funcional.
   - Os components e containers tem seus arquivos com o mesmo nome. Caso o component ou container esteja fora do diretório components ou containers respectivamente, o nome do arquivo deve serguir com o identificador Component ou Container.
-  - As screens também são considerados componentes e devem ter seus arquivos ScreenComponent.jsx e ScreenContainer.js.
   - Os arquivos que não são componentes devem ser nomeados no formato camelCase.js.
-  - Os arquivos que contém código JSX devem ser nomeados com a extensão .jsx.
+  - Os arquivos que contém código ts devem ser nomeados com a extensão .ts.
 
 ### GitFlow
 O GitFlow Workflow é um design de fluxo de trabalho Git que define um modelo de ramificação projetado em torno da versão do projeto. Isso fornece uma estrutura robusta para gerenciar projetos maiores.\
