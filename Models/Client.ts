@@ -1,4 +1,4 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, Op } from 'sequelize';
 import * as db from '../db';
 import IEntitie from './IEntitie';
 import { DbInstance } from '../db'
@@ -11,6 +11,13 @@ class ClientMdl {
 	public lastName!: string;
 	public registryCode!: string;
 	public phone!: string;
+
+	constructor(firstName, lastName, registryCode, phone) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.registryCode = registryCode;
+		this.phone = phone;
+	}
 }
 
 class Client extends Model implements IEntitie {
@@ -20,8 +27,17 @@ class Client extends Model implements IEntitie {
 	public lastName!: string;
 	public registryCode!: string;
 	public phone!: string;
-	public readonly createdAt!: Date;
-	public readonly updatedAt!: Date;
+
+	constructor(json?: any) {
+		super()
+		if (json != undefined) {
+			this.id = json.id
+			this.firstName = json.firstName
+			this.lastName = json.lastName
+			this.registryCode = json.registryCode
+			this.phone = json.phone
+		}
+	}
 
 	Save(entitie: ClientMdl) {
 		return new Promise((resolve, reject) => {
@@ -37,6 +53,8 @@ class Client extends Model implements IEntitie {
 					}))
 					.then(result => {
 						resolve(result.dataValues)
+					}).catch(error => {
+						reject(error)
 					})
 			})
 		})
@@ -72,12 +90,30 @@ class Client extends Model implements IEntitie {
 
 	SearchByName(entitie: ClientMdl) {
 		return new Promise((resolve, reject) => {
+
+			let query: any = {}
+
+			if (entitie.lastName != undefined && entitie.lastName != '' && entitie.lastName != null) {
+				query.lastName = {
+					[Op.like]: `${entitie.lastName}%`
+				}
+			}
+
+			if (entitie.firstName != undefined && entitie.firstName != '' && entitie.firstName != null) {
+				query.firstName = {
+					[Op.like]: `${entitie.firstName}%`
+				}
+			}
+
+			if (entitie.registryCode != undefined && entitie.registryCode != '' && entitie.registryCode != null) {
+				query.registryCode = {
+					[Op.like]: `${entitie.registryCode}%`
+				}
+			}
+
 			_instance.sync()
 				.then(() => Client.scope("public").findOne({
-					where: {
-						firstName: entitie.firstName,
-						lastName: entitie.lastName
-					}
+					where: query
 				}))
 				.then(result => {
 					let found = result == null ? null : result.dataValues;
@@ -187,4 +223,4 @@ Client.init({
 
 //Client.sync({force: false});
 
-export { Client, ClientMdl };
+export { Client };
