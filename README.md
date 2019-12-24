@@ -12,7 +12,7 @@
 - [Node LTS](https://nodejs.org/en/ "Node Js") Aplicação Web|Mobile - BackEnd
 - [Cmder](https://cmder.net/ "Cmder")
 - [Postman](https://www.getpostman.com/downloads/ "Postman")
-- [Windows Build Tools]("npm install --global --production windows-build-tools") - Rodar no PowerShell como administrador.
+
 
 ### Dependencias
 - [BCrypt](https://www.npmjs.com/package/bcrypt/ "BCrypt")
@@ -100,3 +100,7 @@ Exemplos: init, runner, watcher, config, web-server, proxy, etc.
 **\<corpo\>:** Deve conter descrições mais precisas do que está contido no commit, mostrando as razões ou consequências geradas pela alteração, assim como instruções futuras.
 
 **\<rodapé\>:** È dedicado para notas e avisos importantes, como fechamento de issue e se existem mudanças radicais que quebrem funcionalidades. No caso de mudanças de quebras (BREAKING CHANGE) deve ser indicado “BREAKING CHANGE:” seguido com a explicação que leva a inclusão dessa marcação.
+
+### Correções de possiveis erros
+
+- [Windows Build Tools](# "npm install --global --production windows-build-tools") - Rodar no PowerShell como administrador.
