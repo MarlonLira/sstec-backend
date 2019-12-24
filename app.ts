@@ -1,6 +1,6 @@
 // src/index.ts
 import * as express from 'express';
-import { Client } from './Models/Client';
+import { Client } from './models/Client';
 
 import * as cors from 'cors'
 import * as bodyParser from 'body-parser'
@@ -39,34 +39,9 @@ app.route('/Client')
 		console.log(req.params);
 	})
 	.post((req, res) => {
-		Client.findOne({
-			where: {
-				firstName: req.body.firstName,
-				lastName: req.body.lastName
-			}
-		}).then(result => {
-			if (result != undefined && result != null) {
-				res.status(400).send({
-					code: 400,
-					message: 'Usuário já cadastrado'
-				})
-			} else {
-				Client.scope('public').create({
-					firstName: req.body.firstName,
-					lastName: req.body.lastName,
-					registryCode: req.body.registryCode,
-					phone: req.body.phone
-				}).then(result => {
-					res.status(200).send(result)
-				}).catch(error => {
-					console.error(error)
-					res.status(500).send({
-						code: 500,
-						message: 'internal error'
-					})
-				})
-			}
-		})
+		console.log(req.body)
+		new Client(req.body).Save(res).then(x => console.log());
+	
 	})
 	.put((req, res, next) => {
 		res.json('Request of put: ' + req.params.id + req.params.firstName + ' ' + req.params.lastName);

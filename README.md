@@ -7,11 +7,12 @@
 **Site:** simpleparking.com\
 **Tecnologias de desenvolvimento:**  Node js | Typescript 
 
-
 ### Requisitos
 - [VS Code](https://code.visualstudio.com/ "Visual Studio Code").
 - [Node LTS](https://nodejs.org/en/ "Node Js") Aplicação Web|Mobile - BackEnd
 - [Cmder](https://cmder.net/ "Cmder")
+- [Postman](https://www.getpostman.com/downloads/ "Postman")
+- [Windows Build Tools]("npm install --global --production windows-build-tools") - Rodar no PowerShell como administrador.
 
 ### Dependencias
 - [BCrypt](https://www.npmjs.com/package/bcrypt/ "BCrypt")
@@ -22,6 +23,7 @@
 - [Cors](https://adonisjs.com/docs/4.1/cors/ "Cors")
 - [Jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken/ "Jsonwebtoken")
 - [Sequelize](https://sequelize.org/v5/ "Sequelize")
+- [Nodemon](https://www.npmjs.com/package/nodemon "Nodemon")
 
 ### Instalação Requisitos
 - Via Executavel.

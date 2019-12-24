@@ -6,12 +6,12 @@ class dbConfig {
   schema: string;
 
   constructor() {
-    this.host = "localhost";
-    this.port = 3306;
-    this.userName = "root";
-    this.password = "123456";
+    this.host = "DESKTOP-O8EQSGP";
+    this.port = 1433;
+    this.userName = "sa";
+    this.password = "Root1526";
     this.schema = "sstec";
   }
 }
-
+ 
 export { dbConfig };

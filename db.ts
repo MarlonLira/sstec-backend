@@ -24,7 +24,7 @@ class DbConnect {
       {
         port: this.port,
         host: this.host,
-        dialect: 'mysql',
+        dialect: 'mssql',
         ssl: true
       }
     );
