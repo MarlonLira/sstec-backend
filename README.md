@@ -103,4 +103,8 @@ Exemplos: init, runner, watcher, config, web-server, proxy, etc.
 
 ### Correções de possiveis erros
 
-- [Windows Build Tools](# "npm install --global --production windows-build-tools") - Rodar no PowerShell como administrador.
+```Windows Build Tools
+- Windows Build Tools
+ * Rodar no PowerShell como administrador.
+  -> npm install --global --production windows-build-tools
+```
