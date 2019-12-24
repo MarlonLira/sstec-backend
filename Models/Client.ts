@@ -39,99 +39,65 @@ class Client extends Model implements IEntitie {
 		}
 	}
 
-	Save(entitie: ClientMdl) {
+	Save(response? : any) {
 		return new Promise((resolve, reject) => {
-			if (entitie.firstName == null || entitie.lastName == null) { return resolve("Erro: existe campos vazios, preencha os campos necessarios!") }
-			this.Search(entitie).then(found => {
-				if (found != null) { return resolve("Erro: Já existe um cliente com essas informações! ") }
-				_instance.sync()
-					.then(() => Client.create({
-						firstName: entitie.firstName,
-						lastName: entitie.lastName,
-						registryCode: entitie.registryCode,
-						phone: entitie.phone
+			Client.findOne({
+				where: {
+					firstName: this.firstName,
+					lastName: this.lastName
+				}
+			}).then(result => {
+				if (result != undefined && result != null) {
+					resolve(response.status(400).send({
+						code: 400,
+						message: 'Usuário já cadastrado'
 					}))
-					.then(result => {
-						resolve(result.dataValues)
+				} else {
+					Client.scope('public').create({
+						firstName: this.firstName,
+						lastName: this.lastName,
+						registryCode: this.registryCode,
+						phone: this.phone
+					}).then(result => {
+						response.status(200).send(result);
+						resolve(result);
 					}).catch(error => {
-						reject(error)
+						console.error(error)
+						resolve(response.status(500).send({
+							code: 500,
+							message: 'internal error'
+						}))
 					})
+				}
 			})
 		})
 	}
-	Search(entitie: ClientMdl) {
-		return new Promise((resolve, reject) => {
-			if (entitie.id > 0)
-				this.SearchById(entitie).then(result => resolve(result));
-			else if (entitie.registryCode.length > 0)
-				this.SearchByRCode(entitie).then(result => resolve(result));
-			else
-				this.SearchByName(entitie).then(result => resolve(result));
-		})
-	}
 
-	SearchById(entitie: ClientMdl) {
+	Search(response? : any) {
 		return new Promise((resolve, reject) => {
-			_instance.sync()
-				.then(() => Client.scope("public").findOne({
-					where: {
-						id: entitie.id
-					}
-				}))
-				.then(result => {
-					let found = result == null ? null : result.dataValues;
-					resolve(found)
-				})
-				.catch(except => {
-					reject(except)
-				});
-		})
-	}
-
-	SearchByName(entitie: ClientMdl) {
-		return new Promise((resolve, reject) => {
-
 			let query: any = {}
 
-			if (entitie.lastName != undefined && entitie.lastName != '' && entitie.lastName != null) {
+			if (this.lastName != undefined && this.lastName != '' && this.lastName != null) {
 				query.lastName = {
-					[Op.like]: `${entitie.lastName}%`
+					[Op.like]: `${this.lastName}%`
 				}
 			}
 
-			if (entitie.firstName != undefined && entitie.firstName != '' && entitie.firstName != null) {
+			if (this.firstName != undefined && this.firstName != '' && this.firstName != null) {
 				query.firstName = {
-					[Op.like]: `${entitie.firstName}%`
+					[Op.like]: `${this.firstName}%`
 				}
 			}
 
-			if (entitie.registryCode != undefined && entitie.registryCode != '' && entitie.registryCode != null) {
+			if (this.registryCode != undefined && this.registryCode != '' && this.registryCode != null) {
 				query.registryCode = {
-					[Op.like]: `${entitie.registryCode}%`
+					[Op.like]: `${this.registryCode}%`
 				}
 			}
 
 			_instance.sync()
 				.then(() => Client.scope("public").findOne({
 					where: query
-				}))
-				.then(result => {
-					let found = result == null ? null : result.dataValues;
-					resolve(found)
-				})
-				.catch(except => {
-					reject(except)
-				});
-		})
-	}
-
-	SearchByRCode(entitie: ClientMdl) {
-		return new Promise((resolve, reject) => {
-			_instance.sync()
-				.then(() => Client.scope("public").findOne({
-					where: {
-						registryCode: entitie.registryCode
-					}
 				}))
 				.then(result => {
 					let found = result == null ? null : result.dataValues;
@@ -192,7 +158,7 @@ class Client extends Model implements IEntitie {
 
 Client.init({
 	id: {
-		type: DataTypes.INTEGER.UNSIGNED,
+		type: new DataTypes.INTEGER,
 		autoIncrement: true,
 		primaryKey: true,
 	},
@@ -221,6 +187,6 @@ Client.init({
 	}
 });
 
-//Client.sync({force: false});
+Client.sync({force: false});
 
-export { Client };
+export { Client, ClientMdl };
