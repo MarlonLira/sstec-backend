@@ -1,9 +1,9 @@
 import { Sequelize } from 'sequelize';
-import { dbConfig } from './config';
+import { dbConfig } from '../configs/DbConfig';
 
 var _instance = null;
 
-class DbConnect {
+class DbContext {
 
   private port: number;
   private host: string;
@@ -35,7 +35,7 @@ class DbConnect {
 class DbInstance {
   getInstance() {
     var db = new dbConfig();
-    _instance = _instance ?? new DbConnect(db.schema, db.userName, db.password, db.host, db.port).getNewInstance();
+    _instance = _instance ?? new DbContext (db.schema, db.userName, db.password, db.host, db.port).getNewInstance();
     return _instance;
   }
 }
