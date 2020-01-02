@@ -2,6 +2,7 @@ import IEntitie from '../interfaces/IEntitie';
 import { DbInstance } from '../context/DbContext'
 import { Client } from '../models/Client';
 import { Op } from 'sequelize';
+import {HttpCod, HttpMessage } from '../enums/HttpStatus';
 
 var _instance = new DbInstance().getInstance();
 
@@ -16,10 +17,7 @@ export default class ClientController extends Client implements IEntitie{
 				}
 			}).then(result => {
 				if (result != undefined && result != null) {
-					resolve(response.status(400).send({
-						code: 400,
-						message: 'Usuário já cadastrado'
-					}))
+					resolve(response.status(HttpCod.Bad_Request).send(HttpMessage(HttpCod.Bad_Request, 'Usuário já cadastrado')))
 				} else {
 					Client.scope('public').create({
 						firstName: this.firstName,
@@ -27,14 +25,11 @@ export default class ClientController extends Client implements IEntitie{
 						registryCode: this.registryCode,
 						phone: this.phone
 					}).then(result => {
-						response.status(200).send(result);
+						response.status(HttpCod.Ok).send(HttpMessage(HttpCod.Ok, 'Cliente encontrado!'));
 						resolve(result);
 					}).catch(error => {
 						console.error(error)
-						resolve(response.status(500).send({
-							code: 500,
-							message: 'internal error'
-						}))
+						resolve(response.status(HttpCod.Internal_Server_Error).send(HttpMessage(HttpCod.Internal_Server_Error)))
 					})
 				}
 			})
@@ -68,24 +63,26 @@ export default class ClientController extends Client implements IEntitie{
 					where: query
 				}))
 				.then(result => {
-					let found = result == null ? null : result.dataValues;
-					resolve(found)
-				})
-				.catch(except => {
-					reject(except)
+					response.status(HttpCod.Ok).send(HttpMessage(HttpCod.Ok));
+					resolve(result);
+				}).catch(error => {
+					console.error(error)
+					resolve(response.status(HttpCod.Internal_Server_Error).send(HttpMessage(HttpCod.Internal_Server_Error)))
 				});
 		})
 	}
 
 	Update(response? : any) {
 		return new Promise((resolve, reject) => {
-      resolve("Não implementado")
+			resolve(response.status(HttpCod.Not_Implemented).send(HttpMessage(HttpCod.Not_Implemented)));
+      console.log("Não implementado");
 		})
 	}
 
 	Delete(response? : any) {
 		return new Promise((resolve, reject) => {
-			resolve("Não implementado")
+			resolve(response.status(HttpCod.Not_Implemented).send(HttpMessage(HttpCod.Not_Implemented)));
+      console.log("Não implementado");
 		})
 	}
 }

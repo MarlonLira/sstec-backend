@@ -24,20 +24,11 @@ app.use(cors())
 // 	console.log()
 // })
 
-app.route('/Client')
+app.route('/client/search')
 	.get((req, res, next) => {
-
-		new ClientController().Search(new Client({
-			firstName: req.params.firstName,
-			lastName: req.params.lastName,
-			registryCode: req.params.registryCode,
-			phone: req.params.phone
-		})
-		).then(x => {
-			res.json('Request of Get: ' + x);
-		});
-
-		console.log(req.params);
+		console.log(req.body);
+		console.log(req.params.firstName);
+		//new ClientController(req.params).Search(res).then(x => console.log());
 	})
 	.post((req, res) => {
 		console.log(req.body)
