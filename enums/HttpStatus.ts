@@ -1,5 +1,5 @@
 
-enum Cod {
+enum HttpCod {
   Continue = 100,
   Processing = 102,
   Ok = 200,
@@ -18,58 +18,72 @@ enum Cod {
 }
 
 //http://weblink.com.br/blog/o-que-e-http-codigos-erros-http
-function HttpMessage(value : Cod){
-  var result = "";
+function HttpMessage(value : HttpCod, msg = null){
+  var result;
     switch(value){
-      case Cod.Continue :{
+      case HttpCod.Continue :{
         result = "Continua";
         break;
       }
-      case Cod.Processing :{
+      case HttpCod.Processing :{
         result = "Processando";
         break;
       }
-      case Cod.Ok :{
-        result = "Ok"
+      case HttpCod.Ok :{
+        result = {
+          code: 200,
+          message: msg ?? 'Ok'
+        };
+
         break;
       }
-      case Cod.Created :{
+      case HttpCod.Created :{
         result = "Criado/Gerado"
         break;
       }
-      case Cod.Accepted :{
+      case HttpCod.Accepted :{
         result = "Aceito";
         break;
       }
-      case Cod.Found :{
+      case HttpCod.Found :{
         result = "Encontrado"
         break;
       }
-      case Cod.Bad_Request :{
+      case HttpCod.Bad_Request :{
+        result = {
+          code: 400,
+          message: msg ?? 'Solicitação Inválida'
+        };
+
         break;
       }
-      case Cod.Unauthorized :{
+      case HttpCod.Unauthorized :{
         break;
       }
-      case Cod.Forbidden :{
+      case HttpCod.Forbidden :{
         break;
       }
-      case Cod.Not_Found :{
+      case HttpCod.Not_Found :{
         break;
       }
-      case Cod.Expectation_Failed :{
+      case HttpCod.Expectation_Failed :{
         break;
       }
-      case Cod.Internal_Server_Error :{
+      case HttpCod.Internal_Server_Error :{
+        result = {
+          code: 500,
+          message: 'Internal Server Error'
+        };
+
         break;
       }
-      case Cod.Not_Implemented :{
+      case HttpCod.Not_Implemented :{
         break;
       }
-      case Cod.Bad_Gateway :{
+      case HttpCod.Bad_Gateway :{
         break;
       }
-      case Cod.Service_Unavailable :{
+      case HttpCod.Service_Unavailable :{
         break;
       }
       default :{
@@ -79,3 +93,5 @@ function HttpMessage(value : Cod){
 
     return result;
 }
+
+export { HttpCod,  HttpMessage};
