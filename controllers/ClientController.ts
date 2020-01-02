@@ -68,24 +68,31 @@ export default class ClientController extends Client implements IEntitie{
 					where: query
 				}))
 				.then(result => {
-					let found = result == null ? null : result.dataValues;
-					resolve(found)
-				})
-				.catch(except => {
-					reject(except)
+					response.status(200).send(result);
+					resolve(result);
+				}).catch(error => {
+					console.error(error)
+					resolve(response.status(500).send({
+						code: 500,
+						message: 'internal error'
+					}))
 				});
 		})
 	}
 
 	Update(response? : any) {
 		return new Promise((resolve, reject) => {
-      resolve("Não implementado")
+			resolve(null);
+			response.status(501).send("Not Implemented");
+      console.log("Não implementado");
 		})
 	}
 
 	Delete(response? : any) {
 		return new Promise((resolve, reject) => {
-			resolve("Não implementado")
+			resolve(null);
+			response.status(501).send("Not Implemented");
+      console.log("Não implementado");
 		})
 	}
 }
