@@ -3,6 +3,7 @@
     "outDir": "./dist/src",
     "sourceMap": true,
     "module": "commonjs",
-    "target": "es2017"
+    "target": "es2017",
+    "resolveJsonModule": true
   }
 }
