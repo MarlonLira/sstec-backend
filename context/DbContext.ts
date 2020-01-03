@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import { dbConfig } from '../configs/DbConfig';
+import * as dbConfig from '../configs/DbConfig.json';
 
 var _instance = null;
 
@@ -11,12 +11,12 @@ class DbContext {
   private userName: string;
   private password: string;
 
-  constructor(Schema, userName, password, host, port) {
-    this.userName = userName;
-    this.password = password;
-    this.host = host;
-    this.Schema = Schema;
-    this.port = port;
+  constructor() {
+    this.userName = dbConfig.MSSQL.username;
+    this.password = dbConfig.MSSQL.password;
+    this.host = dbConfig.MSSQL.host;
+    this.Schema = dbConfig.MSSQL.schema;
+    this.port = dbConfig.MSSQL.port;
   }
 
   getNewInstance() {
@@ -34,9 +34,7 @@ class DbContext {
 
 class DbInstance {
   getInstance() {
-    var db = new dbConfig();
-    _instance = _instance ?? new DbContext (db.schema, db.userName, db.password, db.host, db.port).getNewInstance();
-    return _instance;
+    return _instance ?? new DbContext().getNewInstance();
   }
 }
 
