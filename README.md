@@ -5,7 +5,7 @@
 **Empresa:** Simple System Tecnologia SSTEC\
 **Nome do app:** Simple Parking\
 **Site:** simpleparking.com\
-**Tecnologias de desenvolvimento:**  Node js | (Input - Typescript) -> (Output -- Javascript)
+**Tecnologias de desenvolvimento:**  [Node js](https://nodejs.org/en/docs/) | (Input - [Typescript](https://www.typescriptlang.org/docs/home.html)) -> (Output -- [Javascript](https://developer.mozilla.org/pt-BR/docs/Aprender/JavaScript))
 
 ### Requisitos
 - [VS Code](https://code.visualstudio.com/ "Visual Studio Code").
