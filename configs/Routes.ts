@@ -11,15 +11,15 @@ function Register(server, path, controller : any) {
   
     router.post('/create', (req, res) => {
         console.log(req.body)
-		new controller(req.body).Save(res).then(x => console.log(x.dataValues));
+		new controller(req.body).Save(res).then(x => console.log());
     });
     router.get('/search', (req, res) => {
-        new controller(req.body).Search(res).then(x => console.log(x.dataValues));
+        new controller(req.body).Search(res).then(x => console.log());
     });
     router.put('/update', (req, res) => {
-        new controller(req.body).Update(res).then(x => console.log(x.dataValues));
+        new controller(req.body).Update(res).then(x => console.log());
     });
     router.delete('/delete', (req, res) => {
-        new controller(req.body).Delete(res).then(x => console.log(x.dataValues));
+        new controller(req.body).Delete(res).then(x => console.log());
     });
   }

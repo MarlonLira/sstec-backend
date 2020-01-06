@@ -18,7 +18,7 @@ enum HttpCod {
 }
 
 //http://weblink.com.br/blog/o-que-e-http-codigos-erros-http
-function HttpMessage(value : HttpCod, msg = null){
+function HttpMessage(value : HttpCod, msg = null, result = null){
   var result;
     switch(value){
       case HttpCod.Continue :{
@@ -32,13 +32,17 @@ function HttpMessage(value : HttpCod, msg = null){
       case HttpCod.Ok :{
         result = {
           code: 200,
-          message: msg ?? 'Ok'
+          message: msg ?? 'Ok',
+          result: result
         };
-
         break;
       }
       case HttpCod.Created :{
-        result = "Criado/Gerado"
+        result = {
+          code: 201,
+          message: msg ?? 'Criado/Gerado',
+          result: result
+        };
         break;
       }
       case HttpCod.Accepted :{
@@ -46,7 +50,11 @@ function HttpMessage(value : HttpCod, msg = null){
         break;
       }
       case HttpCod.Found :{
-        result = "Encontrado"
+        result = {
+          code: 302,
+          message: msg ?? 'Encontrado',
+          result: result
+        };
         break;
       }
       case HttpCod.Bad_Request :{
@@ -54,7 +62,6 @@ function HttpMessage(value : HttpCod, msg = null){
           code: 400,
           message: msg ?? 'Solicitação Inválida'
         };
-
         break;
       }
       case HttpCod.Unauthorized :{
@@ -74,7 +81,6 @@ function HttpMessage(value : HttpCod, msg = null){
           code: 500,
           message: 'Internal Server Error'
         };
-
         break;
       }
       case HttpCod.Not_Implemented :{

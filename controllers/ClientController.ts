@@ -25,7 +25,7 @@ export default class ClientController extends Client implements IEntitie{
 						registryCode: this.registryCode,
 						phone: this.phone
 					}).then(result => {
-						response.status(HttpCod.Ok).send(HttpMessage(HttpCod.Ok, 'Cliente encontrado!'));
+						response.status(HttpCod.Ok).send(HttpMessage(HttpCod.Ok, 'Cliente cadastrado com sucesso!', result));
 						resolve(result);
 					}).catch(error => {
 						console.error(error)
@@ -63,7 +63,7 @@ export default class ClientController extends Client implements IEntitie{
 					where: query
 				}))
 				.then(result => {
-					response.status(HttpCod.Ok).send(HttpMessage(HttpCod.Ok));
+					response.status(HttpCod.Ok).send(HttpMessage(HttpCod.Ok, 'Usuario encontrato!', result));
 					resolve(result);
 				}).catch(error => {
 					console.error(error)
