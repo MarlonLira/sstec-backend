@@ -18,7 +18,7 @@ enum HttpCod {
 }
 
 //http://weblink.com.br/blog/o-que-e-http-codigos-erros-http
-function HttpMessage(value : HttpCod, msg = null){
+function HttpMessage(value : HttpCod, msg = null, result = null){
   var result;
     switch(value){
       case HttpCod.Continue :{
@@ -32,7 +32,8 @@ function HttpMessage(value : HttpCod, msg = null){
       case HttpCod.Ok :{
         result = {
           code: 200,
-          message: msg ?? 'Ok'
+          message: msg ?? 'Ok',
+          result: result
         };
 
         break;

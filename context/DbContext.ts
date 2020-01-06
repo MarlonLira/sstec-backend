@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize';
 import * as dbConfig from '../configs/DbConfig.json';
 
 var _instance = null;
+var _dbConfig = dbConfig.MySql;
 
 class DbContext {
 
@@ -12,11 +13,11 @@ class DbContext {
   private password: string;
 
   constructor() {
-    this.userName = dbConfig.MSSQL.username;
-    this.password = dbConfig.MSSQL.password;
-    this.host = dbConfig.MSSQL.host;
-    this.Schema = dbConfig.MSSQL.schema;
-    this.port = dbConfig.MSSQL.port;
+    this.userName = _dbConfig.username;
+    this.password = _dbConfig.password;
+    this.host = _dbConfig.host;
+    this.Schema = _dbConfig.schema;
+    this.port = _dbConfig.port;
   }
 
   getNewInstance() {
@@ -24,7 +25,7 @@ class DbContext {
       {
         port: this.port,
         host: this.host,
-        dialect: 'mssql',
+        dialect: 'mysql',
         ssl: true
       }
     );
