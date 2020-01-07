@@ -60,7 +60,8 @@ function HttpMessage(value : HttpCod, msg = null, result = null){
       case HttpCod.Bad_Request :{
         result = {
           code: 400,
-          message: msg ?? 'Solicitação Inválida'
+          message: msg ?? 'Solicitação Inválida',
+          result: result
         };
         break;
       }
@@ -71,6 +72,11 @@ function HttpMessage(value : HttpCod, msg = null, result = null){
         break;
       }
       case HttpCod.Not_Found :{
+        result = {
+          code: 404,
+          message: msg ?? 'Not Found',
+          result: result
+        };
         break;
       }
       case HttpCod.Expectation_Failed :{
@@ -79,7 +85,8 @@ function HttpMessage(value : HttpCod, msg = null, result = null){
       case HttpCod.Internal_Server_Error :{
         result = {
           code: 500,
-          message: 'Internal Server Error'
+          message: msg ?? 'Internal Server Error',
+          result: result
         };
         break;
       }
