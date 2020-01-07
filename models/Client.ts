@@ -1,4 +1,4 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, CharDataType } from 'sequelize';
 import { DbInstance } from '../context/DbContext'
 
 var _instance = new DbInstance().getInstance();
@@ -6,6 +6,7 @@ var _instance = new DbInstance().getInstance();
 class Client extends Model {
 
 	public id!: number;
+	public status : number;
 	public firstName!: string;
 	public lastName!: string;
 	public registryCode!: string;
@@ -14,11 +15,12 @@ class Client extends Model {
 	constructor(json?: any) {
 		super()
 		if (json != undefined) {
-			this.id = json.id
-			this.firstName = json.firstName
-			this.lastName = json.lastName
-			this.registryCode = json.registryCode
-			this.phone = json.phone
+			this.id = json.id;
+			this.firstName = json.firstName;
+			this.lastName = json.lastName;
+			this.status = json.status;
+			this.registryCode = json.registryCode;
+			this.phone = json.phone;
 		}
 	}
 }
@@ -29,20 +31,23 @@ Client.init({
 		autoIncrement: true,
 		primaryKey: true,
 	},
+	status: {
+		type: new DataTypes.TINYINT
+	},
 	firstName: {
 		type: new DataTypes.STRING(128),
-		allowNull: false,
+		allowNull: false
 	},
 	lastName: {
 		type: new DataTypes.STRING(128),
-		allowNull: false,
+		allowNull: false
 	},
 	registryCode: {
-		type: new DataTypes.STRING(12)
+		type: new DataTypes.STRING(12),
+		allowNull: false
 	},
 	phone: {
-		type: new DataTypes.STRING(12),
-		allowNull: false,
+		type: new DataTypes.STRING(12)
 	}
 }, {
 	sequelize: _instance,
@@ -57,3 +62,5 @@ Client.init({
 Client.sync({force: false});
 
 export { Client };
+
+//Todo modelo deverá ter um atributo de status/ ajustar
