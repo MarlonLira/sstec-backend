@@ -29,10 +29,10 @@ Client.init({
 	id: {
 		type: new DataTypes.INTEGER,
 		autoIncrement: true,
-		primaryKey: true,
+		primaryKey: true
 	},
 	status: {
-		type: new DataTypes.TINYINT
+		type: new DataTypes.INTEGER
 	},
 	firstName: {
 		type: new DataTypes.STRING(128),
