@@ -43,39 +43,44 @@ export default class ClientController extends Client implements IEntitie{
 
 	Search(response? : any) {
 		return new Promise((resolve, reject) => {
-			let query: any = {}
+			let query: any = {};
+			let valid: boolean = false;
 			
 			if(!_Attributes.IsValid(this.id)){
 				
 				query.status = 1;
 				if(_Attributes.IsValid(this.status)){
 					query.status = this.status;
+					valid = true;
 				}
 
 				if (_Attributes.IsValid(this.lastName)) {
 					query.lastName = {
 						[Op.like]: `${this.lastName}%`
-					}
+					};
+					valid = true;
 				}
 
 				if (_Attributes.IsValid(this.firstName)) {
 					query.firstName = {
 						[Op.like]: `${this.firstName}%`
-					}
+					};
+					valid = true;
 				}
 
 				if (_Attributes.IsValid(this.registryCode)) {
 					query.registryCode = {
 						[Op.like]: `${this.registryCode}%`
-					}
+					};
+					valid = true;
 				}
 			}else{
 				query.id = this.id;
 			}
-			_instance.sync()
-				.then(() => Client.scope("public").findOne({
+			if(valid){
+				Client.scope("public").findOne({
 					where: query
-				}))
+				})
 				.then(result => {
 					if(result != null)
 						response.status(HttpCod.Ok).send(HttpMessage(HttpCod.Ok, 'Usuario encontrato!', result));
@@ -87,6 +92,9 @@ export default class ClientController extends Client implements IEntitie{
 					console.error(error)
 					resolve(response.status(HttpCod.Internal_Server_Error).send(HttpMessage(HttpCod.Internal_Server_Error)));
 				});
+			}else{
+				resolve(response.status(HttpCod.Not_Found).send(HttpMessage(HttpCod.Not_Found)));
+			}
 		})
 	}
 
