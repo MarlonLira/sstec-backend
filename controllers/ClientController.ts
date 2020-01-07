@@ -2,7 +2,7 @@ import IEntitie from '../interfaces/IEntitie';
 import { DbInstance } from '../context/DbContext'
 import { Client } from '../models/Client';
 import { Op } from 'sequelize';
-import {HttpCod, HttpMessage } from '../enums/HttpStatus';
+import {HttpCod, HttpMessage } from '../commons/enums/HttpStatus';
 import {Attributes} from '../commons/Helpers'
 
 var _instance = new DbInstance().getInstance();
