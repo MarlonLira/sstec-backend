@@ -4,6 +4,8 @@ import { Client } from '../models/Client';
 import { Op } from 'sequelize';
 import {HttpCod, HttpMessage } from '../commons/enums/HttpStatus';
 import {Attributes} from '../commons/Helpers'
+import { response } from 'express';
+import { promises } from 'dns';
 
 var _instance = new DbInstance().getInstance();
 var _Attributes = new Attributes();
@@ -21,10 +23,11 @@ export default class ClientController extends Client implements IEntitie{
 				if (result != undefined && result != null) {
 					resolve(response.status(HttpCod.Bad_Request).send(HttpMessage(HttpCod.Bad_Request, 'Usuário já cadastrado')));
 				} else {
-					Client.scope('public').create({
-						firstName: this.firstName,
-						lastName: this.lastName,
-						registryCode: this.registryCode,
+					Client.create({
+						firstName: _Attributes.ReturnIfValid(this.firstName),
+						lastName: _Attributes.ReturnIfValid(this.lastName),
+						status: 1,
+						registryCode: _Attributes.ReturnIfValid(this.registryCode),
 						phone: this.phone
 					}).then(result => {
 						response.status(HttpCod.Ok).send(HttpMessage(HttpCod.Ok, 'Cliente cadastrado com sucesso!', result));
@@ -41,36 +44,65 @@ export default class ClientController extends Client implements IEntitie{
 	Search(response? : any) {
 		return new Promise((resolve, reject) => {
 			let query: any = {}
-
-			if (_Attributes.IsValid(this.lastName)) {
-				query.lastName = {
-					[Op.like]: `${this.lastName}%`
+			
+			if(!_Attributes.IsValid(this.id)){
+				
+				query.status = 1;
+				if(_Attributes.IsValid(this.status)){
+					query.status = this.status;
 				}
-			}
 
-			if (_Attributes.IsValid(this.firstName)) {
-				query.firstName = {
-					[Op.like]: `${this.firstName}%`
+				if (_Attributes.IsValid(this.lastName)) {
+					query.lastName = {
+						[Op.like]: `${this.lastName}%`
+					}
 				}
-			}
 
-			if (_Attributes.IsValid(this.registryCode)) {
-				query.registryCode = {
-					[Op.like]: `${this.registryCode}%`
+				if (_Attributes.IsValid(this.firstName)) {
+					query.firstName = {
+						[Op.like]: `${this.firstName}%`
+					}
 				}
-			}
 
+				if (_Attributes.IsValid(this.registryCode)) {
+					query.registryCode = {
+						[Op.like]: `${this.registryCode}%`
+					}
+				}
+			}else{
+				query.id = this.id;
+			}
 			_instance.sync()
 				.then(() => Client.scope("public").findOne({
 					where: query
 				}))
 				.then(result => {
-					response.status(HttpCod.Ok).send(HttpMessage(HttpCod.Ok, 'Usuario encontrato!', result));
+					if(result != null)
+						response.status(HttpCod.Ok).send(HttpMessage(HttpCod.Ok, 'Usuario encontrato!', result));
+					else
+						resolve(response.status(HttpCod.Not_Found).send(HttpMessage(HttpCod.Not_Found)));
+
 					resolve(result);
 				}).catch(error => {
 					console.error(error)
 					resolve(response.status(HttpCod.Internal_Server_Error).send(HttpMessage(HttpCod.Internal_Server_Error)));
 				});
+		})
+	}
+
+	SearchAll(response? : any){
+		let query: any = {}
+		query.status = _Attributes.ReturnIfValid(this.status) ?? 1;
+		return new Promise((resolve, reject) => {
+			Client.scope("public").findAll(query)
+			.then(result => {
+				response.status(HttpCod.Ok).send(HttpMessage(HttpCod.Ok, null, result));
+				resolve(result);
+			})
+			.catch(error => {
+				console.error(error);
+				resolve(response.status(HttpCod.Internal_Server_Error).send(HttpMessage(HttpCod.Internal_Server_Error)));
+			})
 		})
 	}
 
