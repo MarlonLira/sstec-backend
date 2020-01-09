@@ -1,35 +1,18 @@
-
-enum HttpCod {
-  Continue = 100,
-  Processing = 102,
-  Ok = 200,
-  Created = 201,
-  Accepted = 202,
-  Found = 302,
-  Bad_Request = 400,
-  Unauthorized = 401,
-  Forbidden = 403,
-  Not_Found = 404,
-  Expectation_Failed = 417,
-  Internal_Server_Error = 500,
-  Not_Implemented = 501,
-  Bad_Gateway = 502,
-  Service_Unavailable = 503
-}
+import { HttpCode } from '../enums/Http';
 
 //http://weblink.com.br/blog/o-que-e-http-codigos-erros-http
-function HttpMessage(value : HttpCod, msg = null, result = null){
+function GetHttpMessage(value : HttpCode, msg = null, result = null){
   var result;
     switch(value){
-      case HttpCod.Continue :{
+      case HttpCode.Continue :{
         result = "Continua";
         break;
       }
-      case HttpCod.Processing :{
+      case HttpCode.Processing :{
         result = "Processando";
         break;
       }
-      case HttpCod.Ok :{
+      case HttpCode.Ok :{
         result = {
           code: 200,
           message: msg ?? 'Ok',
@@ -37,7 +20,7 @@ function HttpMessage(value : HttpCod, msg = null, result = null){
         };
         break;
       }
-      case HttpCod.Created :{
+      case HttpCode.Created :{
         result = {
           code: 201,
           message: msg ?? 'Criado/Gerado',
@@ -45,11 +28,11 @@ function HttpMessage(value : HttpCod, msg = null, result = null){
         };
         break;
       }
-      case HttpCod.Accepted :{
+      case HttpCode.Accepted :{
         result = "Aceito";
         break;
       }
-      case HttpCod.Found :{
+      case HttpCode.Found :{
         result = {
           code: 302,
           message: msg ?? 'Encontrado',
@@ -57,7 +40,7 @@ function HttpMessage(value : HttpCod, msg = null, result = null){
         };
         break;
       }
-      case HttpCod.Bad_Request :{
+      case HttpCode.Bad_Request :{
         result = {
           code: 400,
           message: msg ?? 'Solicitação Inválida',
@@ -65,13 +48,13 @@ function HttpMessage(value : HttpCod, msg = null, result = null){
         };
         break;
       }
-      case HttpCod.Unauthorized :{
+      case HttpCode.Unauthorized :{
         break;
       }
-      case HttpCod.Forbidden :{
+      case HttpCode.Forbidden :{
         break;
       }
-      case HttpCod.Not_Found :{
+      case HttpCode.Not_Found :{
         result = {
           code: 404,
           message: msg ?? 'Not Found',
@@ -79,10 +62,10 @@ function HttpMessage(value : HttpCod, msg = null, result = null){
         };
         break;
       }
-      case HttpCod.Expectation_Failed :{
+      case HttpCode.Expectation_Failed :{
         break;
       }
-      case HttpCod.Internal_Server_Error :{
+      case HttpCode.Internal_Server_Error :{
         result = {
           code: 500,
           message: msg ?? 'Internal Server Error',
@@ -90,21 +73,24 @@ function HttpMessage(value : HttpCod, msg = null, result = null){
         };
         break;
       }
-      case HttpCod.Not_Implemented :{
+      case HttpCode.Not_Implemented :{
         break;
       }
-      case HttpCod.Bad_Gateway :{
+      case HttpCode.Bad_Gateway :{
         break;
       }
-      case HttpCod.Service_Unavailable :{
+      case HttpCode.Service_Unavailable :{
         break;
       }
       default :{
-        result = "Codigo não encontrado!";
+        result = {
+          code: 500,
+          message: msg ?? 'Internal Server Error',
+          result: "Codigo não encontrado!"
+        };
       }
     }
-
     return result;
 }
 
-export { HttpCod,  HttpMessage};
+export { GetHttpMessage };
