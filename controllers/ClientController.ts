@@ -4,8 +4,6 @@ import { Client } from '../models/Client';
 import { Op } from 'sequelize';
 import {HttpCod, HttpMessage } from '../commons/enums/HttpStatus';
 import {Attributes} from '../commons/Helpers'
-import { response } from 'express';
-import { promises } from 'dns';
 
 var _instance = new DbInstance().getInstance();
 var _Attributes = new Attributes();
