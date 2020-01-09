@@ -2,8 +2,9 @@ import IEntitie from '../interfaces/IEntitie';
 import { DbInstance } from '../context/DbContext'
 import { Client } from '../models/Client';
 import { Op } from 'sequelize';
-import {HttpCod, HttpMessage } from '../commons/enums/HttpStatus';
-import {Attributes} from '../commons/Helpers'
+import { HttpCode } from '../commons/enums/Http';
+import { GetHttpMessage } from '../commons/functions/Http';
+import { Attributes } from '../commons/Helpers'
 
 var _instance = new DbInstance().getInstance();
 var _Attributes = new Attributes();
@@ -19,7 +20,7 @@ export default class ClientController extends Client implements IEntitie{
 				}
 			}).then(result => {
 				if (result != undefined && result != null) {
-					resolve(response.status(HttpCod.Bad_Request).send(HttpMessage(HttpCod.Bad_Request, 'Usuário já cadastrado')));
+					resolve(response.status(HttpCode.Bad_Request).send(GetHttpMessage(HttpCode.Bad_Request, 'Usuário já cadastrado')));
 				} else {
 					Client.create({
 						firstName: _Attributes.ReturnIfValid(this.firstName),
@@ -28,11 +29,11 @@ export default class ClientController extends Client implements IEntitie{
 						registryCode: _Attributes.ReturnIfValid(this.registryCode),
 						phone: this.phone
 					}).then(result => {
-						response.status(HttpCod.Ok).send(HttpMessage(HttpCod.Ok, 'Cliente cadastrado com sucesso!', result));
+						response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, 'Cliente cadastrado com sucesso!', result));
 						resolve(result);
 					}).catch(error => {
 						console.error(error)
-						resolve(response.status(HttpCod.Internal_Server_Error).send(HttpMessage(HttpCod.Internal_Server_Error)));
+						resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error)));
 					})
 				}
 			})
@@ -81,17 +82,17 @@ export default class ClientController extends Client implements IEntitie{
 				})
 				.then(result => {
 					if(result != null)
-						response.status(HttpCod.Ok).send(HttpMessage(HttpCod.Ok, 'Usuario encontrato!', result));
+						response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, 'Usuario encontrato!', result));
 					else
-						resolve(response.status(HttpCod.Not_Found).send(HttpMessage(HttpCod.Not_Found)));
+						resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found)));
 
 					resolve(result);
 				}).catch(error => {
 					console.error(error)
-					resolve(response.status(HttpCod.Internal_Server_Error).send(HttpMessage(HttpCod.Internal_Server_Error)));
+					resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error)));
 				});
 			}else{
-				resolve(response.status(HttpCod.Not_Found).send(HttpMessage(HttpCod.Not_Found)));
+				resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found)));
 			}
 		})
 	}
@@ -102,12 +103,12 @@ export default class ClientController extends Client implements IEntitie{
 		return new Promise((resolve, reject) => {
 			Client.scope("public").findAll(query)
 			.then(result => {
-				response.status(HttpCod.Ok).send(HttpMessage(HttpCod.Ok, null, result));
+				response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, null, result));
 				resolve(result);
 			})
 			.catch(error => {
 				console.error(error);
-				resolve(response.status(HttpCod.Internal_Server_Error).send(HttpMessage(HttpCod.Internal_Server_Error)));
+				resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error)));
 			})
 		})
 	}
@@ -132,15 +133,15 @@ export default class ClientController extends Client implements IEntitie{
 					}
 				})
 				.then(result => {
-					response.status(HttpCod.Ok).send(HttpMessage(HttpCod.Ok, 'Usuario Atualizado', result));
+					response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, 'Usuario Atualizado', result));
 					resolve(result);
 				})
 				.catch(error => {
-					resolve(response.status(HttpCod.Internal_Server_Error).send(HttpMessage(HttpCod.Internal_Server_Error, null, error)));
+					resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error, null, error)));
 				})
 			})
 			.catch(error => {
-				resolve(response.status(HttpCod.Not_Found).send(HttpMessage(HttpCod.Not_Found, 'Usuario não encontrado', error)));
+				resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found, 'Usuario não encontrado', error)));
 			})
 		})
 	}
@@ -153,14 +154,14 @@ export default class ClientController extends Client implements IEntitie{
 				}
 			}).then(result => {
 				if(result == 1){			
-					response.status(HttpCod.Ok).send(HttpMessage(HttpCod.Ok, 'Usuario Apagado', result));
+					response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, 'Usuario Apagado', result));
 				}else{
-					resolve(response.status(HttpCod.Not_Found).send(HttpMessage(HttpCod.Not_Found, 'Usuario não encontrado', result)));
+					resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found, 'Usuario não encontrado', result)));
 				}
 				resolve(result);
 			})
 			.catch(error => {
-				resolve(response.status(HttpCod.Internal_Server_Error).send(HttpMessage(HttpCod.Not_Found, null, error)));
+				resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Not_Found, null, error)));
 			})
 		})
 	}

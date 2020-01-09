@@ -62,5 +62,3 @@ Client.init({
 Client.sync({force: false});
 
 export { Client };
-
-//Todo modelo deverá ter um atributo de status/ ajustar
