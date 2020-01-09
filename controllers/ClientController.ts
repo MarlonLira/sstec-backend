@@ -9,9 +9,9 @@ import { Attributes } from '../commons/Helpers'
 var _instance = new DbInstance().getInstance();
 var _Attributes = new Attributes();
 
-export default class ClientController extends Client implements IEntitie{
+export default class ClientController extends Client implements IEntitie {
 
-	Save(response? : any) {
+	Save(response?: any) {
 		return new Promise((resolve, reject) => {
 			Client.findOne({
 				where: {
@@ -40,15 +40,15 @@ export default class ClientController extends Client implements IEntitie{
 		})
 	}
 
-	Search(response? : any) {
+	Search(response?: any) {
 		return new Promise((resolve, reject) => {
 			let query: any = {};
 			let valid: boolean = false;
-			
-			if(!_Attributes.IsValid(this.id)){
-				
+
+			if (!_Attributes.IsValid(this.id)) {
+
 				query.status = 1;
-				if(_Attributes.IsValid(this.status)){
+				if (_Attributes.IsValid(this.status)) {
 					query.status = this.status;
 					valid = true;
 				}
@@ -73,35 +73,35 @@ export default class ClientController extends Client implements IEntitie{
 					};
 					valid = true;
 				}
-			}else{
+			} else {
 				query.id = this.id;
 				valid = true;
 			}
-			if(valid){
+			if (valid) {
 				Client.scope("public").findOne({
 					where: query
 				})
-				.then(result => {
-					if(result != null)
-						response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, 'Usuario encontrato!', result));
-					else
-						resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found)));
+					.then(result => {
+						if (result != null)
+							response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, 'Usuario encontrato!', result));
+						else
+							resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found)));
 
-					resolve(result);
-				}).catch(error => {
-					console.error(error)
-					resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error)));
-				});
-			}else{
+						resolve(result);
+					}).catch(error => {
+						console.error(error)
+						resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error)));
+					});
+			} else {
 				resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found)));
 			}
 		})
 	}
 
-	SearchAll(response? : any){
+	SearchAll(response?: any) {
 		let query: any = {}
 		query.status = _Attributes.ReturnIfValid(this.status) ?? 1;
-		if(_Attributes.IsValid(this.status)){
+		if (_Attributes.IsValid(this.status)) {
 			query.status = this.status;
 		}
 
@@ -121,20 +121,22 @@ export default class ClientController extends Client implements IEntitie{
 			query.registryCode = {
 				[Op.like]: `${this.registryCode}%`
 			};
+		}
 		return new Promise((resolve, reject) => {
 			Client.scope("public").findAll(query)
-			.then(result => {
-				response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, null, result));
-				resolve(result);
-			})
-			.catch(error => {
-				console.error(error);
-				resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error)));
-			})
+				.then(result => {
+					response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, null, result));
+					resolve(result);
+				})
+				.catch(error => {
+					console.error(error);
+					resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error)));
+				})
 		})
 	}
 
-	Update(response? : any) {
+
+	Update(response?: any) {
 		return new Promise((resolve, reject) => {
 			let attributes: any = {}
 
@@ -145,45 +147,45 @@ export default class ClientController extends Client implements IEntitie{
 			}).then(result => {
 				attributes.firstName = _Attributes.ReturnIfValid(this.firstName) ?? result.firstName;
 				attributes.lastName = _Attributes.ReturnIfValid(this.lastName) ?? result.lastName;
-				attributes.registryCode = _Attributes.ReturnIfValid(this.registryCode)?? result.registryCode;
+				attributes.registryCode = _Attributes.ReturnIfValid(this.registryCode) ?? result.registryCode;
 				attributes.phone = _Attributes.ReturnIfValid(this.phone) ?? result.phone;
 
-				Client.update(attributes,{
-					where:{
-						id : this.id
+				Client.update(attributes, {
+					where: {
+						id: this.id
 					}
 				})
-				.then(result => {
-					response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, 'Usuario Atualizado', result));
-					resolve(result);
-				})
+					.then(result => {
+						response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, 'Usuario Atualizado', result));
+						resolve(result);
+					})
+					.catch(error => {
+						resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error, null, error)));
+					})
+			})
 				.catch(error => {
-					resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error, null, error)));
+					resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found, 'Usuario não encontrado', error)));
 				})
-			})
-			.catch(error => {
-				resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found, 'Usuario não encontrado', error)));
-			})
 		})
 	}
 
-	Delete(response? : any) {
+	Delete(response?: any) {
 		return new Promise((resolve, reject) => {
 			Client.destroy({
-				where :{
-					id : this.id
+				where: {
+					id: this.id
 				}
 			}).then(result => {
-				if(result == 1){			
+				if (result == 1) {
 					response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, 'Usuario Apagado', result));
-				}else{
+				} else {
 					resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found, 'Usuario não encontrado', result)));
 				}
 				resolve(result);
 			})
-			.catch(error => {
-				resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Not_Found, null, error)));
-			})
+				.catch(error => {
+					resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Not_Found, null, error)));
+				})
 		})
 	}
 }
