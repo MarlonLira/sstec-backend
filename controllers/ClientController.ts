@@ -75,6 +75,7 @@ export default class ClientController extends Client implements IEntitie{
 				}
 			}else{
 				query.id = this.id;
+				valid = true;
 			}
 			if(valid){
 				Client.scope("public").findOne({
@@ -100,6 +101,26 @@ export default class ClientController extends Client implements IEntitie{
 	SearchAll(response? : any){
 		let query: any = {}
 		query.status = _Attributes.ReturnIfValid(this.status) ?? 1;
+		if(_Attributes.IsValid(this.status)){
+			query.status = this.status;
+		}
+
+		if (_Attributes.IsValid(this.lastName)) {
+			query.lastName = {
+				[Op.like]: `${this.lastName}%`
+			};
+		}
+
+		if (_Attributes.IsValid(this.firstName)) {
+			query.firstName = {
+				[Op.like]: `${this.firstName}%`
+			};
+		}
+
+		if (_Attributes.IsValid(this.registryCode)) {
+			query.registryCode = {
+				[Op.like]: `${this.registryCode}%`
+			};
 		return new Promise((resolve, reject) => {
 			Client.scope("public").findAll(query)
 			.then(result => {
