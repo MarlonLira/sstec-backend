@@ -3,16 +3,16 @@ import { DbInstance } from '../context/DbContext'
 
 var _instance = new DbInstance().getInstance();
 
-class Funcionario extends Model{
-    public id!: number;
-	public status : number;
+class Employee extends Model {
+	public id!: number;
+	public status: number;
 	public firstName!: string;
 	public lastName!: string;
 	public registryCode!: string;
-    public phone!: string;
-    public salary: number;
+	public phone!: string;
+	public salary: number;
 
-    constructor(json?: any) {
+	constructor(json?: any) {
 		super()
 		if (json != undefined) {
 			this.id = json.id;
@@ -20,14 +20,14 @@ class Funcionario extends Model{
 			this.lastName = json.lastName;
 			this.status = json.status;
 			this.registryCode = json.registryCode;
-            this.phone = json.phone;
-            this.salary = json.salary;
+			this.phone = json.phone;
+			this.salary = json.salary;
 		}
 	}
 }
 
-Funcionario.init({
-    id: {
+Employee.init({
+	id: {
 		type: new DataTypes.INTEGER,
 		autoIncrement: true,
 		primaryKey: true
@@ -49,16 +49,16 @@ Funcionario.init({
 	},
 	phone: {
 		type: new DataTypes.STRING(12)
-    },
-    salary: {
+	},
+	salary: {
 		type: new DataTypes.FLOAT,
-        allowNull: false
-    }
-},{
-    sequelize: _instance,
-	tableName: 'Funcionario',
+		allowNull: false
+	}
+}, {
+	sequelize: _instance,
+	tableName: 'Employee',
 });
 
-Funcionario.sync({force: false});
+Employee.sync({ force: false });
 
-export { Funcionario };
+export { Employee };

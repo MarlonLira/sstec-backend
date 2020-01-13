@@ -4,13 +4,13 @@ import { Op } from 'sequelize';
 import { HttpCode } from '../commons/enums/Http';
 import { GetHttpMessage } from '../commons/functions/Http';
 import { Attributes } from '../commons/Helpers';
-import { Funcionario } from '../models/Funcionario';
+import { Employee } from '../models/Employee';
 
 var _instance = new DbInstance().getInstance();
 var _Attributes = new Attributes();
 
 
-export default class FuncionarioController extends Funcionario implements IEntitie {
+export default class EmployeeController extends Employee implements IEntitie {
     Save(response?: any) {
         throw new Error("Method not implemented.");
     }
