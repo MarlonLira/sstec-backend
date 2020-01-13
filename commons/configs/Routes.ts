@@ -1,8 +1,10 @@
 import * as express from 'express';
 import ClientController from '../../controllers/ClientController';
+import FuncionarioController from '../../controllers/FuncionarioController';
 
 module.exports = function(server) {
     Register(server, 'client', ClientController);
+    Register(server, 'funcionario', FuncionarioController);
 }
 
 function Register(server, path, controller : any) {
