@@ -1,5 +1,5 @@
-import { Model, DataTypes, CharDataType } from 'sequelize';
-import { DbInstance } from '../context/DbContext'
+import { Model, DataTypes } from 'sequelize';
+import { DbInstance } from '../context/DbContext';
 
 var _instance = new DbInstance().getInstance();
 
@@ -51,8 +51,7 @@ Employee.init({
 		type: new DataTypes.STRING(12)
 	},
 	salary: {
-		type: new DataTypes.FLOAT,
-		allowNull: false
+		type: new DataTypes.FLOAT
 	}
 }, {
 	sequelize: _instance,

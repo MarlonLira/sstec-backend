@@ -1,5 +1,5 @@
-import { Model, DataTypes, CharDataType } from 'sequelize';
-import { DbInstance } from '../context/DbContext'
+import { Model, DataTypes } from 'sequelize';
+import { DbInstance } from '../context/DbContext';
 
 var _instance = new DbInstance().getInstance();
 

@@ -4,7 +4,7 @@ class Helpers{
 
 class Attributes {
 
-  IsValid(value : any){
+  static IsValid(value : any){
     let result = false;
     if (value != undefined && value != '' && value != null) {
       result = true;
@@ -12,7 +12,7 @@ class Attributes {
     return result;
   }
 
-  ReturnIfValid(value : any){
+  static ReturnIfValid(value : any){
     let result = null;
     if (value != undefined && value != '' && value != null) {
       result = value;
