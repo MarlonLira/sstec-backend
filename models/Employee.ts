@@ -3,14 +3,14 @@ import { DbInstance } from '../context/DbContext';
 
 var _instance = new DbInstance().getInstance();
 
-class Client extends Model {
-
+class Employee extends Model {
 	public id!: number;
-	public status : number;
+	public status: number;
 	public firstName!: string;
 	public lastName!: string;
 	public registryCode!: string;
 	public phone!: string;
+	public salary: number;
 
 	constructor(json?: any) {
 		super()
@@ -21,11 +21,12 @@ class Client extends Model {
 			this.status = json.status;
 			this.registryCode = json.registryCode;
 			this.phone = json.phone;
+			this.salary = json.salary;
 		}
 	}
 }
 
-Client.init({
+Employee.init({
 	id: {
 		type: new DataTypes.INTEGER,
 		autoIncrement: true,
@@ -48,17 +49,15 @@ Client.init({
 	},
 	phone: {
 		type: new DataTypes.STRING(12)
+	},
+	salary: {
+		type: new DataTypes.FLOAT
 	}
 }, {
 	sequelize: _instance,
-	tableName: 'Client',
-	scopes: {
-		public: {
-			attributes: ['id', 'firstName', 'lastName', 'phone', 'registryCode']
-		}
-	}
+	tableName: 'Employee',
 });
 
-Client.sync({force: false});
+Employee.sync({ force: false });
 
-export { Client };
+export { Employee };

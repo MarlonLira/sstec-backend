@@ -1,13 +1,9 @@
 import IEntitie from '../interfaces/IEntitie';
-import { DbInstance } from '../context/DbContext'
 import { Client } from '../models/Client';
 import { Op } from 'sequelize';
 import { HttpCode } from '../commons/enums/Http';
 import { GetHttpMessage } from '../commons/functions/Http';
 import { Attributes } from '../commons/Helpers'
-
-var _instance = new DbInstance().getInstance();
-var _Attributes = new Attributes();
 
 export default class ClientController extends Client implements IEntitie {
 
@@ -23,10 +19,10 @@ export default class ClientController extends Client implements IEntitie {
 					resolve(response.status(HttpCode.Bad_Request).send(GetHttpMessage(HttpCode.Bad_Request, 'Usuário já cadastrado')));
 				} else {
 					Client.create({
-						firstName: _Attributes.ReturnIfValid(this.firstName),
-						lastName: _Attributes.ReturnIfValid(this.lastName),
+						firstName: Attributes.ReturnIfValid(this.firstName),
+						lastName: Attributes.ReturnIfValid(this.lastName),
 						status: 1,
-						registryCode: _Attributes.ReturnIfValid(this.registryCode),
+						registryCode: Attributes.ReturnIfValid(this.registryCode),
 						phone: this.phone
 					}).then(result => {
 						response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, 'Cliente cadastrado com sucesso!', result));
@@ -40,34 +36,34 @@ export default class ClientController extends Client implements IEntitie {
 		})
 	}
 
-	Search(response?: any) {
+	Search(response?: any, isAll?: boolean) {
 		return new Promise((resolve, reject) => {
 			let query: any = {};
 			let valid: boolean = false;
+			query.status = 1;
 
-			if (!_Attributes.IsValid(this.id)) {
-
-				query.status = 1;
-				if (_Attributes.IsValid(this.status)) {
+			if (!Attributes.IsValid(this.id)) {
+				
+				if (Attributes.IsValid(this.status)) {
 					query.status = this.status;
 					valid = true;
 				}
 
-				if (_Attributes.IsValid(this.lastName)) {
+				if (Attributes.IsValid(this.lastName)) {
 					query.lastName = {
 						[Op.like]: `${this.lastName}%`
 					};
 					valid = true;
 				}
 
-				if (_Attributes.IsValid(this.firstName)) {
+				if (Attributes.IsValid(this.firstName)) {
 					query.firstName = {
 						[Op.like]: `${this.firstName}%`
 					};
 					valid = true;
 				}
 
-				if (_Attributes.IsValid(this.registryCode)) {
+				if (Attributes.IsValid(this.registryCode)) {
 					query.registryCode = {
 						[Op.like]: `${this.registryCode}%`
 					};
@@ -77,16 +73,18 @@ export default class ClientController extends Client implements IEntitie {
 				query.id = this.id;
 				valid = true;
 			}
-			if (valid) {
-				Client.scope("public").findOne({
+			if (valid || isAll) {
+				Client.scope("public").findAll({
 					where: query
 				})
 					.then(result => {
-						if (result != null)
+						if (result != null && result != undefined && result[0] != undefined){
 							response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, 'Usuario encontrato!', result));
-						else
+							resolve(result);
+						}
+						else{
 							resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found)));
-
+						}
 						resolve(result);
 					}).catch(error => {
 						console.error(error)
@@ -98,44 +96,6 @@ export default class ClientController extends Client implements IEntitie {
 		})
 	}
 
-	SearchAll(response?: any) {
-		let query: any = {}
-		query.status = _Attributes.ReturnIfValid(this.status) ?? 1;
-		if (_Attributes.IsValid(this.status)) {
-			query.status = this.status;
-		}
-
-		if (_Attributes.IsValid(this.lastName)) {
-			query.lastName = {
-				[Op.like]: `${this.lastName}%`
-			};
-		}
-
-		if (_Attributes.IsValid(this.firstName)) {
-			query.firstName = {
-				[Op.like]: `${this.firstName}%`
-			};
-		}
-
-		if (_Attributes.IsValid(this.registryCode)) {
-			query.registryCode = {
-				[Op.like]: `${this.registryCode}%`
-			};
-		}
-		return new Promise((resolve, reject) => {
-			Client.scope("public").findAll(query)
-				.then(result => {
-					response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, null, result));
-					resolve(result);
-				})
-				.catch(error => {
-					console.error(error);
-					resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error)));
-				})
-		})
-	}
-
-
 	Update(response?: any) {
 		return new Promise((resolve, reject) => {
 			let attributes: any = {}
@@ -145,10 +105,10 @@ export default class ClientController extends Client implements IEntitie {
 					id: this.id
 				}
 			}).then(result => {
-				attributes.firstName = _Attributes.ReturnIfValid(this.firstName) ?? result.firstName;
-				attributes.lastName = _Attributes.ReturnIfValid(this.lastName) ?? result.lastName;
-				attributes.registryCode = _Attributes.ReturnIfValid(this.registryCode) ?? result.registryCode;
-				attributes.phone = _Attributes.ReturnIfValid(this.phone) ?? result.phone;
+				attributes.firstName = Attributes.ReturnIfValid(this.firstName) ?? result.firstName;
+				attributes.lastName = Attributes.ReturnIfValid(this.lastName) ?? result.lastName;
+				attributes.registryCode = Attributes.ReturnIfValid(this.registryCode) ?? result.registryCode;
+				attributes.phone = Attributes.ReturnIfValid(this.phone) ?? result.phone;
 
 				Client.update(attributes, {
 					where: {
