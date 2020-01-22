@@ -3,20 +3,18 @@ import { Client } from '../models/Client';
 import { Op } from 'sequelize';
 import { HttpCode } from '../commons/enums/Http';
 import { GetHttpMessage } from '../commons/functions/Http';
-import { Attributes } from '../commons/Helpers'
+import { Attributes, Querying } from '../commons/Helpers'
 
 export default class ClientController extends Client implements IEntitie {
 
 	Save(response?: any) {
+		let query: any = Querying.ReturnLikeQuery(this, ['firstName', 'lastName', 'registryCode']);
 		return new Promise((resolve, reject) => {
 			Client.findOne({
-				where: {
-					firstName: this.firstName,
-					lastName: this.lastName
-				}
+				where: query
 			}).then(result => {
 				if (result != undefined && result != null) {
-					resolve(response.status(HttpCode.Bad_Request).send(GetHttpMessage(HttpCode.Bad_Request, 'Usuário já cadastrado')));
+					resolve(response.status(HttpCode.Bad_Request).send(GetHttpMessage(HttpCode.Bad_Request, Client, result)));
 				} else {
 					Client.create({
 						firstName: Attributes.ReturnIfValid(this.firstName),
@@ -25,11 +23,11 @@ export default class ClientController extends Client implements IEntitie {
 						registryCode: Attributes.ReturnIfValid(this.registryCode),
 						phone: this.phone
 					}).then(result => {
-						response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, 'Cliente cadastrado com sucesso!', result));
+						response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Created, Client, result));
 						resolve(result);
 					}).catch(error => {
 						console.error(error)
-						resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error)));
+						resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error, Client, error)));
 					})
 				}
 			})
@@ -38,113 +36,78 @@ export default class ClientController extends Client implements IEntitie {
 
 	Search(response?: any, isAll?: boolean) {
 		return new Promise((resolve, reject) => {
-			let query: any = {};
-			let valid: boolean = false;
-			query.status = 1;
-
-			if (!Attributes.IsValid(this.id)) {
-				
-				if (Attributes.IsValid(this.status)) {
-					query.status = this.status;
-					valid = true;
+			let query: any;
+			if (!isAll) {
+				query = Querying.ReturnEqualQuery(this, ['id']);
+				if (!Attributes.IsValid(query)) {
+					query = Querying.ReturnLikeQuery(this, ['status', 'lastName', 'registryCode', 'firstName']);
 				}
-
-				if (Attributes.IsValid(this.lastName)) {
-					query.lastName = {
-						[Op.like]: `${this.lastName}%`
-					};
-					valid = true;
-				}
-
-				if (Attributes.IsValid(this.firstName)) {
-					query.firstName = {
-						[Op.like]: `${this.firstName}%`
-					};
-					valid = true;
-				}
-
-				if (Attributes.IsValid(this.registryCode)) {
-					query.registryCode = {
-						[Op.like]: `${this.registryCode}%`
-					};
-					valid = true;
-				}
-			} else {
-				query.id = this.id;
-				valid = true;
 			}
-			if (valid || isAll) {
-				Client.scope("public").findAll({
-					where: query
-				})
-					.then(result => {
-						if (result != null && result != undefined && result[0] != undefined){
-							response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, 'Usuario encontrato!', result));
-							resolve(result);
-						}
-						else{
-							resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found)));
-						}
+			Client.scope("public").findAll({
+				where: query
+			})
+				.then(result => {
+					if (Attributes.IsValid(result) && Attributes.IsValid(result[0])) {
+						response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, Client, result));
 						resolve(result);
-					}).catch(error => {
-						console.error(error)
-						resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error)));
-					});
-			} else {
-				resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found)));
-			}
+					}
+					else {
+						resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found, Client, '')));
+					}
+					resolve(result);
+				}).catch(error => {
+					console.error(error)
+					resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error, Client, error)));
+				});
 		})
 	}
 
 	Update(response?: any) {
 		return new Promise((resolve, reject) => {
 			let attributes: any = {}
+			let query = Querying.ReturnEqualQuery(this, ['id']);
 
 			Client.findOne({
-				where: {
-					id: this.id
-				}
-			}).then(result => {
-				attributes.firstName = Attributes.ReturnIfValid(this.firstName) ?? result.firstName;
-				attributes.lastName = Attributes.ReturnIfValid(this.lastName) ?? result.lastName;
-				attributes.registryCode = Attributes.ReturnIfValid(this.registryCode) ?? result.registryCode;
-				attributes.phone = Attributes.ReturnIfValid(this.phone) ?? result.phone;
-
-				Client.update(attributes, {
-					where: {
-						id: this.id
-					}
-				})
-					.then(result => {
-						response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, 'Usuario Atualizado', result));
-						resolve(result);
-					})
-					.catch(error => {
-						resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error, null, error)));
-					})
+				where: query
 			})
+				.then(result => {
+					attributes.firstName = Attributes.ReturnIfValid(this.firstName, result.firstName);
+					attributes.lastName = Attributes.ReturnIfValid(this.lastName, result.lastName);
+					attributes.registryCode = Attributes.ReturnIfValid(this.registryCode, result.registryCode);
+					attributes.phone = Attributes.ReturnIfValid(this.phone, result.phone);
+
+					Client.update(attributes, {
+						where: query
+					})
+						.then(result => {
+							response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, Client, result));
+							resolve(result);
+						})
+						.catch(error => {
+							resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error, Client, error)));
+						})
+				})
 				.catch(error => {
-					resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found, 'Usuario não encontrado', error)));
+					resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found, Client, error)));
 				})
 		})
 	}
 
 	Delete(response?: any) {
+		let query = Querying.ReturnEqualQuery(this, ['id']);
 		return new Promise((resolve, reject) => {
 			Client.destroy({
-				where: {
-					id: this.id
-				}
+				where: query
 			}).then(result => {
 				if (result == 1) {
-					response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, 'Usuario Apagado', result));
+					response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, Client, result));
 				} else {
-					resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found, 'Usuario não encontrado', result)));
+					resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found, Client, result)));
 				}
 				resolve(result);
 			})
 				.catch(error => {
-					resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Not_Found, null, error)));
+					resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Not_Found, Client, error)));
 				})
 		})
 	}

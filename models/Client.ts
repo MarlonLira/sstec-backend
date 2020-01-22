@@ -1,5 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import { DbInstance } from '../context/DbContext';
+import { Attributes } from '../commons/Helpers';
 
 var _instance = new DbInstance().getInstance();
 
@@ -14,14 +15,12 @@ class Client extends Model {
 
 	constructor(json?: any) {
 		super()
-		if (json != undefined) {
-			this.id = json.id;
-			this.firstName = json.firstName;
-			this.lastName = json.lastName;
-			this.status = json.status;
-			this.registryCode = json.registryCode;
-			this.phone = json.phone;
-		}
+			this.id = Attributes.ReturnIfValid(json.id);
+			this.firstName = Attributes.ReturnIfValid(json.firstName);
+			this.lastName = Attributes.ReturnIfValid(json.lastName);
+			this.status = Attributes.ReturnIfValid(json.status);
+			this.registryCode = Attributes.ReturnIfValid(json.registryCode);
+			this.phone = Attributes.ReturnIfValid(json.phone);
 	}
 }
 
@@ -35,11 +34,11 @@ Client.init({
 		type: new DataTypes.INTEGER
 	},
 	firstName: {
-		type: new DataTypes.STRING(128),
+		type: new DataTypes.STRING(30),
 		allowNull: false
 	},
 	lastName: {
-		type: new DataTypes.STRING(128),
+		type: new DataTypes.STRING(30),
 		allowNull: false
 	},
 	registryCode: {
