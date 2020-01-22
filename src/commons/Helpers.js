@@ -1,8 +1,36 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const sequelize_1 = require("sequelize");
 class Helpers {
 }
 exports.Helpers = Helpers;
+class Querying {
+    static ReturnLikeQuery(entitie, properties) {
+        let query = {};
+        properties.forEach(propertie => {
+            if (Attributes.IsValid(entitie[propertie])) {
+                query[propertie] = {
+                    [sequelize_1.Op.like]: `${entitie[propertie]}%`
+                };
+            }
+        });
+        console.log(query);
+        return query;
+    }
+    static ReturnEqualQuery(entitie, properties) {
+        let query = {};
+        properties.forEach(propertie => {
+            if (Attributes.IsValid(entitie[propertie])) {
+                query[propertie] = {
+                    [sequelize_1.Op.eq]: entitie[propertie]
+                };
+            }
+        });
+        console.log(query);
+        return query;
+    }
+}
+exports.Querying = Querying;
 class Attributes {
     static IsValid(value) {
         return (value != undefined && value != '' && value != null) ? true : false;
