@@ -1,0 +1,23 @@
+{
+    "MySql": {
+        "host": "localhost",
+        "port": 3306,
+        "username": "root",
+        "password": "123456",
+        "schema": "sstec"
+    },
+    "MSSQL": {
+        "host": "DESKTOP-O8EQSGP",
+        "port": 1433,
+        "username": "sa",
+        "password": "Root1526",
+        "schema": "sstec"
+    },
+    "PostgreSQL": {
+        "host": "ec2-107-21-110-75.compute-1.amazonaws.com",
+        "port": 5432,
+        "username": "nlftzsubppeyav",
+        "password": "259cf8d446022dc1743ab5ee5727a7e969d6b6e38e8826dddb5c1c0a09dae068",
+        "schema": "d8crqilshjdjcp"
+    }
+}
