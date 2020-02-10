@@ -2,13 +2,13 @@
   "name": "sstec-backend",
   "version": "1.0.2",
   "description": "",
-  "main": "src/app.js",
+  "main": "dist/src/app.js",
   "scripts": {
     "build-ts": "tsc",
     "postinstall": "npm run build-ts",
     "start": "npm run app",
-    "app": "node src/app.js",
-    "dev": "nodemon src/app.js",
+    "app": "node dist/src/app.js",
+    "dev": "nodemon dist/src/app.js",
     "watch-ts": "tsc -w"
   },
   "repository": {
