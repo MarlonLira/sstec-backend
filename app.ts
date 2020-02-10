@@ -1,2 +1,2 @@
-var app = require('./commons/configs/Server');
-require('./Routes')(app);
+var app = require('./main/Server');
+require('./main/Routes')(app);
