@@ -36,8 +36,8 @@
 **src/models/** - Arquivos de códigos da aplicação.\
 **src/controllers/** - Arquivos de códigos da aplicação.\
 **src/commons/** - Arquivos comuns da aplicação. Inclui componentes e utilitários.\
-**src/commons/config** - Arquivos de configuração do servidor e banco de dados.\
-**src/routes.js** - Configura a navegação de todas as telas.\
+**src/main/** - Arquivos de configuração do servidor e banco de dados.\
+**src/main/routes.js** - Configura a navegação de todas as telas.\
 **.gitignore** - Configura arquivos a serem ignorados pelo git.\
 **App.js** - Arquivo inicial. Arquivo chamado pelo Expo.\
 **package.json** - Arquivo de dependências e detalhes do projeto.\

@@ -1,8 +1,7 @@
 import { Sequelize } from 'sequelize';
-import * as dbConfig from '../commons/configs/DbConfig.json';
+import * as dbConfig from '../config.json';
 
-var _instance = null;
-var _dbConfig = dbConfig.PostgreSQL;
+var _dbConfig = dbConfig.Database.PostgreSQL;
 
 class DbContext {
 
@@ -35,7 +34,7 @@ class DbContext {
 
 class DbInstance {
   getInstance() {
-    return _instance ?? new DbContext().getNewInstance();
+    return new DbContext().getNewInstance();
   }
 }
 
