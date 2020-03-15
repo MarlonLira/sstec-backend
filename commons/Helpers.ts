@@ -1,4 +1,5 @@
 import { Op } from 'sequelize';
+var bcrypt = require('bcrypt');
 
 class Helpers {
 
@@ -7,26 +8,24 @@ class Helpers {
 class Querying {
   static ReturnLikeQuery(entitie, properties: Array<string>) {
     let query: any = {};
-    properties.forEach(propertie =>{
-      if(Attributes.IsValid(entitie[propertie])){
+    properties.forEach(propertie => {
+      if (Attributes.IsValid(entitie[propertie])) {
         query[propertie] = {
           [Op.like]: `${entitie[propertie]}%`
         };
       }
     });
-    console.log(query)
     return query;
   }
   static ReturnEqualQuery(entitie, properties: Array<string>) {
     let query: any = {};
-    properties.forEach(propertie =>{
-      if(Attributes.IsValid(entitie[propertie])){
+    properties.forEach(propertie => {
+      if (Attributes.IsValid(entitie[propertie])) {
         query[propertie] = {
           [Op.eq]: entitie[propertie]
         };
       }
     });
-    console.log(query)
     return query;
   }
 }
@@ -41,7 +40,7 @@ class Attributes {
     return (value != undefined && value != '' && value != null) ? value : returnIfNotValid;
   }
 
-  
+
 }
 
 class InnerJson {
@@ -63,4 +62,16 @@ class InnerJson {
   }
 }
 
-export { Helpers, Attributes, InnerJson, Querying }
+class Crypto {
+  static Encrypt(password: string) {
+    var salt = bcrypt.genSaltSync(10);
+    var hash = bcrypt.hashSync(password, salt);
+    return hash;
+  }
+
+  static Compare(password: string, hash: string) {
+    return bcrypt.compareSync(password, hash);
+  }
+}
+
+export { Helpers, Attributes, InnerJson, Querying, Crypto }
