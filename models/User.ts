@@ -15,6 +15,7 @@ class User extends Model {
   phone!: string;
   email!: string;
   password!: string;
+  newPassword!: string;
 
   constructor(json?: any) {
     super()
@@ -25,6 +26,7 @@ class User extends Model {
     this.phone = Attributes.ReturnIfValid(json.phone);
     this.email = Attributes.ReturnIfValid(json.email);
     this.password = Attributes.ReturnIfValid(json.password);
+    this.newPassword = Attributes.ReturnIfValid(json.newPassword);
   }
 }
 
@@ -42,7 +44,7 @@ User.init({
     allowNull: false
   },
   registryCode: {
-    type: new DataTypes.STRING(12),
+    type: new DataTypes.STRING(14),
     allowNull: false
   },
   phone: {
@@ -52,7 +54,8 @@ User.init({
     type: new DataTypes.STRING(50)
   },
   password:{
-    type: new DataTypes.STRING(100)
+    type: new DataTypes.STRING(100),
+    allowNull: false
   }
 }, {
   sequelize: _instance,

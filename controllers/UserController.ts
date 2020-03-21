@@ -58,15 +58,63 @@ export default class UserController extends User implements IEntitie {
           }
           resolve(result);
         }).catch(error => {
-          console.error(error)
           resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error, User, error)));
         });
     })
   }
   Update(response?: any) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      let attributes: any = {}
+      let query = Querying.ReturnEqualQuery(this, ['id']);
+
+      User.findOne({
+        where: query
+      })
+        .then(result => {
+          attributes.name = Attributes.ReturnIfValid(this.name, result.name);
+          attributes.registryCode = Attributes.ReturnIfValid(this.registryCode, result.registryCode);
+          attributes.phone = Attributes.ReturnIfValid(this.phone, result.phone);
+          attributes.email = Attributes.ReturnIfValid(this.email, result.email);
+          
+          if (Attributes.IsValid(result) && Crypto.Compare(this.password, result.password)) {
+            attributes.newPassword = Attributes.ReturnIfValid(this.newPassword);
+            if (attributes.newPassword != null){
+              attributes.newPassword = Crypto.Encrypt(attributes.newPassword);
+            }
+            attributes.password = Attributes.ReturnIfValid(attributes.newPassword, result.password);
+            User.update(attributes, {
+              where: query
+            })
+              .then(result => {
+                response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, User, result, "Atualizado"));
+                resolve(result);
+              })
+              .catch(error => {
+                resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Internal_Server_Error, User, error)));
+              })
+          } else {
+            resolve(false)
+            response.status(HttpCode.Unauthorized).send(GetHttpMessage(HttpCode.Unauthorized, User, 'Unauthorized', 'A conta informada é inválida!'));
+          }
+        })
+    })
   }
   Delete(response?: any) {
-    throw new Error("Method not implemented.");
+    let query = Querying.ReturnEqualQuery(this, ['id']);
+    return new Promise((resolve, reject) => {
+      User.destroy({
+        where: query
+      }).then(result => {
+        if (result == 1) {
+          response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, User, result, 'Usuário deletado'));
+        } else {
+          resolve(response.status(HttpCode.Not_Found).send(GetHttpMessage(HttpCode.Not_Found, User, result)));
+        }
+        resolve(result);
+      })
+        .catch(error => {
+          resolve(response.status(HttpCode.Internal_Server_Error).send(GetHttpMessage(HttpCode.Not_Found, User, error)));
+        })
+    })
   }
 }

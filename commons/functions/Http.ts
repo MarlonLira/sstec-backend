@@ -31,7 +31,7 @@ function GetHttpMessage(value: HttpCode, entitie = null, _result = null, msg = '
     case HttpCode.Created: {
       result = {
         code: 201,
-        message: `${entitie.name} - Criado/Gerado - ${msg}`, 
+        message: `${entitie.name} - Criado - ${msg}`, 
         result: _result
       };
       break;
@@ -63,7 +63,7 @@ function GetHttpMessage(value: HttpCode, entitie = null, _result = null, msg = '
     case HttpCode.Unauthorized: {
       result = {
         code: 401,
-        message: `${entitie.name} - Unauthorized - ${msg}`, 
+        message: `${entitie.name} - Não autorizado - ${msg}`, 
         result: _result
       }
       break;
@@ -71,7 +71,7 @@ function GetHttpMessage(value: HttpCode, entitie = null, _result = null, msg = '
     case HttpCode.Forbidden: {
       result = {
         code: 403,
-        message: `${entitie.name} - Forbidden - ${msg}`, 
+        message: `${entitie.name} - Proibido - ${msg}`, 
         result: _result
       }
       
@@ -80,7 +80,7 @@ function GetHttpMessage(value: HttpCode, entitie = null, _result = null, msg = '
     case HttpCode.Not_Found: {
       result = {
         code: 404,
-        message: `${entitie.name} - Not Found - ${msg}`, 
+        message: `${entitie.name} - Não encontrado - ${msg}`, 
         result: _result
       };
       break;
@@ -88,7 +88,7 @@ function GetHttpMessage(value: HttpCode, entitie = null, _result = null, msg = '
     case HttpCode.Expectation_Failed: {
       result = {
         code: 417,
-        message: `${entitie.name} - Expectation Failed - ${msg}`, 
+        message: `${entitie.name} - Expectativa falhou - ${msg}`, 
         result: _result
       };
       break;
@@ -96,7 +96,7 @@ function GetHttpMessage(value: HttpCode, entitie = null, _result = null, msg = '
     case HttpCode.Internal_Server_Error: {
       result = {
         code: 500,
-        message: `${entitie.name} - Internal Server Error - ${msg}`, 
+        message: `${entitie.name} - Erro interno do servidor - ${msg}`, 
         result: _result
       };
       break;
@@ -104,7 +104,7 @@ function GetHttpMessage(value: HttpCode, entitie = null, _result = null, msg = '
     case HttpCode.Not_Implemented: {
       result = {
         code: 501,
-        message: `${entitie.name} - Not Implemented - ${msg}`, 
+        message: `${entitie.name} - Não Implementado - ${msg}`, 
         result: _result
       };
       break;
@@ -112,7 +112,7 @@ function GetHttpMessage(value: HttpCode, entitie = null, _result = null, msg = '
     case HttpCode.Bad_Gateway: {
       result = {
         code: 502,
-        message: `${entitie.name} - Bad Gateway - ${msg}`, 
+        message: `${entitie.name} - Acesso negado - ${msg}`, 
         result: _result
       };
       break;
@@ -120,7 +120,7 @@ function GetHttpMessage(value: HttpCode, entitie = null, _result = null, msg = '
     case HttpCode.Service_Unavailable: {
       result = {
         code: 503,
-        message: `${entitie.name} - Service Unavailable - ${msg}`, 
+        message: `${entitie.name} - Serviço indisponível - ${msg}`, 
         result: _result
       };
       break;
@@ -128,7 +128,7 @@ function GetHttpMessage(value: HttpCode, entitie = null, _result = null, msg = '
     default: {
       result = {
         code: 500,
-        message: `${entitie.name} - Internal Server Error - ${msg}`, 
+        message: `${entitie.name} - Erro desconhecido - ${msg}`, 
         result: _result
       };
     }
