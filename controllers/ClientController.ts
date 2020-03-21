@@ -8,13 +8,14 @@ import { Attributes, Querying } from '../commons/Helpers'
 export default class ClientController extends Client implements IEntitie {
 
 	Save(response?: any) {
-		let query: any = Querying.ReturnLikeQuery(this, ['firstName', 'lastName', 'registryCode']);
+		let query: any = Querying.ReturnLikeQuery(this, ['registryCode']);
 		return new Promise((resolve, reject) => {
 			Client.findOne({
 				where: query
 			}).then(result => {
 				if (result != undefined && result != null) {
-					resolve(response.status(HttpCode.Bad_Request).send(GetHttpMessage(HttpCode.Bad_Request, Client, result)));
+					response.status(HttpCode.Bad_Request).send(GetHttpMessage(HttpCode.Bad_Request, Client, null, 'Cliente já cadastrado'));
+					resolve(false);
 				} else {
 					Client.create({
 						firstName: Attributes.ReturnIfValid(this.firstName),
@@ -48,7 +49,7 @@ export default class ClientController extends Client implements IEntitie {
 			})
 				.then(result => {
 					if (Attributes.IsValid(result) && Attributes.IsValid(result[0])) {
-						response.status(HttpCode.Ok).send(GetHttpMessage(HttpCode.Ok, Client, result));
+						response.status(HttpCode.Found).send(GetHttpMessage(HttpCode.Found, Client, result));
 						resolve(result);
 					}
 					else {

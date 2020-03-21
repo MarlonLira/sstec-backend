@@ -25,7 +25,9 @@ class DbContext {
         port: this.port,
         host: this.host,
         dialect: 'postgres',
-        ssl: true
+        dialectOptions: {
+          ssl: true
+        }
       }
     );
     return sequelize;
