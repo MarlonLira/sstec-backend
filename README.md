@@ -8,10 +8,12 @@
 **Tecnologias de desenvolvimento:**  [Node js](https://nodejs.org/en/docs/) | (Input - [Typescript](https://www.typescriptlang.org/docs/home.html)) -> (Output -- [Javascript](https://developer.mozilla.org/pt-BR/docs/Aprender/JavaScript))
 
 ### Requisitos
-- [VS Code](https://code.visualstudio.com/ "Visual Studio Code").
-- [Node LTS](https://nodejs.org/en/ "Node Js") Aplicação Web|Mobile - BackEnd
-- [Cmder](https://cmder.net/ "Cmder")
-- [Postman](https://www.getpostman.com/downloads/ "Postman")
+- [VS Code](https://code.visualstudio.com/ "Visual Studio Code") - Recomendado
+- [Node LTS](https://nodejs.org/en/ "Node Js") - Obrigatório
+- [Cmder](https://cmder.net/ "Cmder") - Recomendado
+- [Postman](https://www.getpostman.com/downloads/ "Postman") - Recomendado
+- [Document This](https://marketplace.visualstudio.com/items?itemName=joelday.docthis " This a Visual Studio Code extension that automatically generates detailed JSDoc comments for both TypeScript and JavaScript files.") - Opcional
+- [OpenAPI(Swagger) Editor](https://marketplace.visualstudio.com/items?itemName=42Crunch.vscode-openapi "This Visual Studio Code (VS Code) extension adds rich support for the OpenAPI Specification (OAS) (formerly known as Swagger Specification) in JSON or YAML format.") - Opcional
 
 
 ### Dependencias
