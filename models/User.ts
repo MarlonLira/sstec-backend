@@ -6,7 +6,7 @@ import * as Config from '../config.json';
 var _reSync = Config.Database.ForceSync;
 var _instance = new DbInstance().getInstance();
 
-class Client extends Model {
+class User extends Model {
 
   id!: number;
   status: number;
@@ -14,6 +14,8 @@ class Client extends Model {
   registryCode!: string;
   phone!: string;
   email!: string;
+  password!: string;
+  newPassword!: string;
 
   constructor(json?: any) {
     super()
@@ -23,10 +25,12 @@ class Client extends Model {
     this.registryCode = Attributes.ReturnIfValid(json.registryCode);
     this.phone = Attributes.ReturnIfValid(json.phone);
     this.email = Attributes.ReturnIfValid(json.email);
+    this.password = Attributes.ReturnIfValid(json.password);
+    this.newPassword = Attributes.ReturnIfValid(json.newPassword);
   }
 }
 
-Client.init({
+User.init({
   id: {
     type: new DataTypes.INTEGER,
     autoIncrement: true,
@@ -40,7 +44,7 @@ Client.init({
     allowNull: false
   },
   registryCode: {
-    type: new DataTypes.STRING(12),
+    type: new DataTypes.STRING(14),
     allowNull: false
   },
   phone: {
@@ -48,10 +52,14 @@ Client.init({
   },
   email: {
     type: new DataTypes.STRING(50)
+  },
+  password:{
+    type: new DataTypes.STRING(100),
+    allowNull: false
   }
 }, {
   sequelize: _instance,
-  tableName: 'Client',
+  tableName: 'User',
   scopes: {
     public: {
       attributes: ['id', 'name', 'phone', 'email', 'registryCode']
@@ -59,6 +67,6 @@ Client.init({
   }
 });
 
-Client.sync({ force: _reSync });
+User.sync({ force: _reSync });
 
-export { Client };
+export { User };
