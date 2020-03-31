@@ -33,18 +33,25 @@
 ### Instalação Dependencias
 - Via NPM ou YARN.
 
-### Estrutura dos arquivos do Backend da Aplicação -> Web|Mobile
-**src/** - Arquivos de códigos da aplicação.\
-**src/models/** - Arquivos de códigos da aplicação.\
-**src/controllers/** - Arquivos de códigos da aplicação.\
-**src/commons/** - Arquivos comuns da aplicação. Inclui componentes e utilitários.\
-**src/main/** - Arquivos de configuração do servidor e banco de dados.\
-**src/main/routes.js** - Configura a navegação de todas as telas.\
-**.gitignore** - Configura arquivos a serem ignorados pelo git.\
-**App.js** - Arquivo inicial. Arquivo chamado pelo Expo.\
-**package.json** - Arquivo de dependências e detalhes do projeto.\
-**README.md** - Leia-me com instruções.\
-**yarn.lock** - Mapa de dependencias gerenciado pelo yarn| Caso algúem use o Yarn.
+### Estrutura dos arquivos do Backend
+**./** - Arquivos de códigos da aplicação.\
+**./main** - Arquivos com configuração do server da aplicação.\
+**./data/models/** - Arquivos de códigos da aplicação.\
+**./data/controllers/** - Arquivos de códigos da aplicação.\
+**./data/repositories/** - Arquivos de códigos da aplicação.\
+**./data/interfaces/** - Arquivos de códigos da aplicação.\
+**./data/types/** - Arquivos de códigos da aplicação.\
+**./data/services/** - Arquivos de códigos da aplicação.\
+**./commons/** - Arquivos comuns da aplicação. Inclui utilitários.\
+**./routes/router.ts** - Configura as rotas de todas as telas.\
+**../gitignore** - Configura arquivos a serem ignorados pelo git.\
+**./app.ts** - Arquivo inicial.\
+**./inversify.config.ts** - Arquivo responsável pela criação do container da injeção de dependencias.\
+**./package.json** - Arquivo de dependências e detalhes da aplicacação.\
+**./config.json** - Arquivo com configurações do projeto como configurações de banco de dados.\
+**./tsconfig.json** - Arquivo com configurações do transpile da aplicação.\
+**./swagger.json** - Arquivo com configurações do swagger da aplicação.\
+**./README.md** - Leia-me com instruções.\
 
 ### Nomeação dos arquivos e componentes
   - Os componentes são nomeados com o padrão PascalCase independente de ser componente de classe ou funcional.
