@@ -1,4 +1,5 @@
-import { User } from './User';
+import User from './user';
+
 class Auth {
 
   token!: string;
@@ -11,4 +12,4 @@ class Auth {
   }
 }
 
-export { Auth };
+export default Auth;

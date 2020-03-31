@@ -1,6 +1,6 @@
 import IAuthService from "../interfaces/IAuthService";
-import { User } from '../models/User';
-import { Auth } from '../models/auth';
+import User from '../models/user';
+import Auth from '../models/auth';
 
 import { injectable } from "inversify";
 

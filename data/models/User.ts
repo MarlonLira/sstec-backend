@@ -1,4 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
+
 import { DbInstance } from '../../main/context';
 import { Attributes } from '../../commons/Helpers';
 import * as Config from '../../config.json';
@@ -15,13 +16,13 @@ var _instance = new DbInstance().getInstance();
 class User extends Model {
 
   id!: number;
-  status: number;
-  name!: string;
+  status: string;
+  name: string;
   registryCode!: string;
   phone!: string;
   email!: string;
   password!: string;
-  ruleId!: number;
+  vehicles!: {};
 
   /**
    *Creates an instance of User.
@@ -38,7 +39,8 @@ class User extends Model {
     this.phone = Attributes.ReturnIfValid(json.phone);
     this.email = Attributes.ReturnIfValid(json.email);
     this.password = Attributes.ReturnIfValid(json.password);
-    this.ruleId = Attributes.ReturnIfValid(json.ruleId);
+    this.vehicles = Attributes.ReturnIfValid(json.vehicles);
+
   }
 }
 
@@ -49,7 +51,8 @@ User.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.INTEGER
+    type: new DataTypes.CHAR(2),
+    allowNull: false
   },
   name: {
     type: new DataTypes.STRING(30),
@@ -67,13 +70,6 @@ User.init({
   },
   password: {
     type: new DataTypes.STRING(100)
-  },
-  ruleId: {
-    type: new DataTypes.INTEGER,
-    references: {
-      model: 'Rule',
-      key: 'id'
-    }
   }
 }, {
   sequelize: _instance,
@@ -86,4 +82,4 @@ User.init({
 });
 
 User.sync({ force: _reSync });
-export { User };
+export default User;

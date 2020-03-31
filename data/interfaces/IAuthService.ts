@@ -1,5 +1,5 @@
-import { Auth } from '../models/auth';
-import { User } from '../models/User';
+import Auth from '../models/auth';
+import User from '../models/user';
 
 export default interface IAuthService {
   TokenValidate(auth: Auth);

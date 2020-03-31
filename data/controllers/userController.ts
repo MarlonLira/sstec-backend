@@ -3,7 +3,7 @@ import { interfaces, controller, httpGet, httpPost, httpDelete, request, respons
 import { inject } from "inversify";
 
 import IUserRepository from '../interfaces/IUserRepository';
-import { User } from "../models/User";
+import User from "../models/user";
 import TYPES from '../types/userTypes';
 import { Attributes, Crypto } from '../../commons/Helpers';
 import { Http } from '../../commons/Http';
