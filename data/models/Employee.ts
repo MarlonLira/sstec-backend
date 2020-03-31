@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
-import { DbInstance } from '../context/DbContext';
-import * as Config from '../config.json';
+import { DbInstance } from '../../main/context';
+import * as Config from '../../config.json';
 
 var _reSync = Config.Database.ForceSync;
 

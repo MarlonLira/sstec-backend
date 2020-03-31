@@ -4,6 +4,12 @@
     "sourceMap": true,
     "module": "commonjs",
     "target": "es2017",
-    "resolveJsonModule": true
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "types": [
+      "reflect-metadata"
+    ]
   }
 }

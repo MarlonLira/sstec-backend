@@ -1,4 +1,4 @@
-import { Attributes } from '../commons/Helpers';
+import { Attributes } from '../../commons/Helpers';
 
 class InnerDate {
   Day!: string;

@@ -1,12 +1,12 @@
 import { Model, DataTypes } from 'sequelize';
-import { DbInstance } from '../context/DbContext';
-import { Attributes } from '../commons/Helpers';
-import * as Config from '../config.json';
+import { DbInstance } from '../../main/context';
+import { Attributes } from '../../commons/Helpers';
+import * as Config from '../../config.json';
 
 var _reSync = Config.Database.ForceSync;
 var _instance = new DbInstance().getInstance();
 
-class User extends Model {
+class Client extends Model {
 
   id!: number;
   status: number;
@@ -14,8 +14,6 @@ class User extends Model {
   registryCode!: string;
   phone!: string;
   email!: string;
-  password!: string;
-  newPassword!: string;
 
   constructor(json?: any) {
     super()
@@ -25,12 +23,10 @@ class User extends Model {
     this.registryCode = Attributes.ReturnIfValid(json.registryCode);
     this.phone = Attributes.ReturnIfValid(json.phone);
     this.email = Attributes.ReturnIfValid(json.email);
-    this.password = Attributes.ReturnIfValid(json.password);
-    this.newPassword = Attributes.ReturnIfValid(json.newPassword);
   }
 }
 
-User.init({
+Client.init({
   id: {
     type: new DataTypes.INTEGER,
     autoIncrement: true,
@@ -44,7 +40,7 @@ User.init({
     allowNull: false
   },
   registryCode: {
-    type: new DataTypes.STRING(14),
+    type: new DataTypes.STRING(12),
     allowNull: false
   },
   phone: {
@@ -52,14 +48,10 @@ User.init({
   },
   email: {
     type: new DataTypes.STRING(50)
-  },
-  password:{
-    type: new DataTypes.STRING(100),
-    allowNull: false
   }
 }, {
   sequelize: _instance,
-  tableName: 'User',
+  tableName: 'Client',
   scopes: {
     public: {
       attributes: ['id', 'name', 'phone', 'email', 'registryCode']
@@ -67,6 +59,6 @@ User.init({
   }
 });
 
-User.sync({ force: _reSync });
+Client.sync({ force: _reSync });
 
-export { User };
+export { Client };

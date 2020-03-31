@@ -1,8 +1,8 @@
 import { Model, DataTypes } from 'sequelize';
-import { DbInstance } from '../context/DbContext';
-import { Attributes } from '../commons/Helpers';
-import { InnerDate } from '../models/InnerDate';
-import * as Config from '../config.json';
+import { DbInstance } from '../../main/context';
+import { Attributes } from '../../commons/Helpers';
+import { InnerDate } from './InnerDate';
+import * as Config from '../../config.json';
 
 var _reSync = Config.Database.ForceSync;
 
