@@ -1,3 +1,7 @@
+/**
+ * @description
+ * @enum {number}
+ */
 enum HttpCode {
   Continue = 100,
   Processing = 102,
