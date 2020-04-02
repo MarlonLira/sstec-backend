@@ -5,6 +5,8 @@
 **Empresa:** Simple System Tecnologia SSTEC\
 **Nome do app:** Simple Parking\
 **Site:** simpleparking.com\
+**Site Temp:** simpleparking.herokuapp.com/\
+**Endpoint:** simplebackend.herokuapp.com/\
 **Tecnologias de desenvolvimento:**  [Node js](https://nodejs.org/en/docs/) | (Input - [Typescript](https://www.typescriptlang.org/docs/home.html)) -> (Output -- [Javascript](https://developer.mozilla.org/pt-BR/docs/Aprender/JavaScript))
 
 ### Requisitos
