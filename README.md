@@ -8,10 +8,12 @@
 **Tecnologias de desenvolvimento:**  [Node js](https://nodejs.org/en/docs/) | (Input - [Typescript](https://www.typescriptlang.org/docs/home.html)) -> (Output -- [Javascript](https://developer.mozilla.org/pt-BR/docs/Aprender/JavaScript))
 
 ### Requisitos
-- [VS Code](https://code.visualstudio.com/ "Visual Studio Code").
-- [Node LTS](https://nodejs.org/en/ "Node Js") Aplicação Web|Mobile - BackEnd
-- [Cmder](https://cmder.net/ "Cmder")
-- [Postman](https://www.getpostman.com/downloads/ "Postman")
+- [VS Code](https://code.visualstudio.com/ "Visual Studio Code") - Recomendado
+- [Node LTS](https://nodejs.org/en/ "Node Js") - Obrigatório
+- [Cmder](https://cmder.net/ "Cmder") - Recomendado
+- [Postman](https://www.getpostman.com/downloads/ "Postman") - Recomendado
+- [Document This](https://marketplace.visualstudio.com/items?itemName=joelday.docthis " This a Visual Studio Code extension that automatically generates detailed JSDoc comments for both TypeScript and JavaScript files.") - Opcional
+- [OpenAPI(Swagger) Editor](https://marketplace.visualstudio.com/items?itemName=42Crunch.vscode-openapi "This Visual Studio Code (VS Code) extension adds rich support for the OpenAPI Specification (OAS) (formerly known as Swagger Specification) in JSON or YAML format.") - Opcional
 
 
 ### Dependencias
@@ -31,18 +33,24 @@
 ### Instalação Dependencias
 - Via NPM ou YARN.
 
-### Estrutura dos arquivos do Backend da Aplicação -> Web|Mobile
-**src/** - Arquivos de códigos da aplicação.\
-**src/models/** - Arquivos de códigos da aplicação.\
-**src/controllers/** - Arquivos de códigos da aplicação.\
-**src/commons/** - Arquivos comuns da aplicação. Inclui componentes e utilitários.\
-**src/main/** - Arquivos de configuração do servidor e banco de dados.\
-**src/main/routes.js** - Configura a navegação de todas as telas.\
-**.gitignore** - Configura arquivos a serem ignorados pelo git.\
-**App.js** - Arquivo inicial. Arquivo chamado pelo Expo.\
-**package.json** - Arquivo de dependências e detalhes do projeto.\
-**README.md** - Leia-me com instruções.\
-**yarn.lock** - Mapa de dependencias gerenciado pelo yarn| Caso algúem use o Yarn.
+### Estrutura dos arquivos do Backend
+**/** - Arquivos de códigos da aplicação.\
+**main** - Arquivos com configuração do server da aplicação.\
+**data/models/** - Arquivos de códigos da aplicação.\
+**data/controllers/** - Arquivos de códigos da aplicação.\
+**data/repositories/** - Arquivos de códigos da aplicação.\
+**data/interfaces/** - Arquivos de códigos da aplicação.\
+**data/types/** - Arquivos de códigos da aplicação.\
+**data/services/** - Arquivos de códigos da aplicação.\
+**commons/** - Arquivos comuns da aplicação. Inclui utilitários.\
+**gitignore** - Configura arquivos a serem ignorados pelo git.\
+**app.ts** - Arquivo inicial.\
+**inversify.config.ts** - Arquivo responsável pela criação do container da injeção de dependencias.\
+**package.json** - Arquivo de dependências e detalhes da aplicacação.\
+**config.json** - Arquivo com configurações do projeto como configurações de banco de dados.\
+**tsconfig.json** - Arquivo com configurações do transpile da aplicação.\
+**swagger.json** - Arquivo com configurações do swagger da aplicação.\
+**README.md** - Leia-me com instruções.
 
 ### Nomeação dos arquivos e componentes
   - Os componentes são nomeados com o padrão PascalCase independente de ser componente de classe ou funcional.

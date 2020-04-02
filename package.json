@@ -23,24 +23,20 @@
   },
   "homepage": "https://github.com/MarlonLira/sstec#readme",
   "dependencies": {
-    "bcrypt": "^3.0.6",
-    "body-parse": "^0.1.0",
-    "body-parser": "^1.15.2",
-    "cookie-parser": "^1.4.4",
+    "bcrypt": "^4.0.1",
+    "body-parser": "^1.19.0",
+    "cli-color": "^2.0.0",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
-    "dotenv-safe": "^8.2.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-query-int": "^1.0.1",
-    "express-validator": "^6.3.0",
+    "inversify": "^5.0.1",
+    "inversify-express-utils": "^6.3.2",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.4",
-    "mysql2": "^2.0.2",
-    "node-restful": "^0.2.5",
-    "pg": "^7.14.0",
-    "pg-hstore": "^2.3.3",
-    "pm2": "^2.1.5",
-    "sequelize": "^5.21.3",
-    "tedious": "^6.0.0"
+    "mysql2": "^2.1.0",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^5.21.5",
+    "tedious": "^8.2.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
@@ -48,12 +44,11 @@
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.6",
     "@types/dotenv": "^8.2.0",
-    "@types/es6-promise": "^3.3.0",
-    "@types/express": "^4.17.2",
-    "@types/express-validator": "^3.0.0",
     "@types/jsonwebtoken": "^8.3.5",
-    "@types/node": "^12.12.17",
+    "@types/node": "^12.12.30",
     "@types/sequelize": "^4.28.8",
-    "typescript": "^3.7.3"
+    "@types/express": "^4.17.3",
+    "swagger-ui-express": "^4.1.4",
+    "typescript": "^3.8.3"
   }
 }

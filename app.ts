@@ -1,2 +1,1 @@
-var app = require('./main/Server');
-require('./main/Routes')(app);
+var app = require('./main/server');
