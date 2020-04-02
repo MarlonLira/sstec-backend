@@ -26,6 +26,9 @@
 - [Jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken/ "Jsonwebtoken")
 - [Sequelize](https://sequelize.org/v5/ "Sequelize")
 - [Nodemon](https://www.npmjs.com/package/nodemon "Nodemon")
+- [Inversify](http://inversify.io/ "Inversify")
+- [cli-color](https://github.com/medikoo/cli-color "Cli Color")
+- [swagger](https://swagger.io/ "Swagger")
 
 ### Instalação Requisitos
 - Via Executavel.
