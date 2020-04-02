@@ -1,13 +1,24 @@
-import { Attributes } from '../../commons/Helpers';
+import { Attributes } from '../../commons/helpers';
 
+/**
+ * @description
+ * @author Marlon Lira
+ * @class InnerDate
+ */
 class InnerDate {
-  Day!: string;
-  Month!: string;
-  Year!: string;
-  FullDate!: string;
-  _isValidDate!: boolean;
+  public Day!: string;
+  public Month!: string;
+  public Year!: string;
+  public FullDate!: string;
+  public _isValidDate!: boolean;
 
-  constructor(fullDate?: any) {
+  /**
+   *Creates an instance of InnerDate.
+   * @author Marlon Lira
+   * @param {*} [fullDate]
+   * @memberof InnerDate
+   */
+  public constructor(fullDate?: any) {
     this._isValidDate = true;
     let datePart = Attributes.IsValid(fullDate) ? fullDate.split('-') : undefined;
 
@@ -21,20 +32,68 @@ class InnerDate {
     }
   }
 
+  /**
+   * @description returns the built date in the constructor
+   * @author Marlon Lira
+   * @returns 
+   * @memberof InnerDate
+   */
   getFullDate() {
     return this._isValidDate ? `${this.Year}-${this.Month}-${this.Day}` : undefined;
   }
 
-  Now() {
+  /**
+   * @description Loads the entity with the current date
+   * @author Marlon Lira
+   * @returns 
+   * @memberof InnerDate
+   */
+  public Now() {
     let _date = new Date();
     this.Year = LeftZero(_date.getFullYear());
     this.Month = LeftZero(_date.getMonth() + 1);
     this.Day = LeftZero(_date.getDay());
     this.FullDate = `${this.Year}-${this.Month}-${this.Day}`;
-    return this;
+    return `${this.Year}-${this.Month}-${this.Day}`;
   }
 }
 
+/**
+ * @description
+ * @author Marlon Lira
+ * @returns Current date
+ */
+function DateNow() {
+  var _date = new Date();
+  var Year = LeftZero(_date.getFullYear());
+  var Month = LeftZero(_date.getMonth() + 1);
+  var Day = LeftZero(_date.getDay());
+  return `${Year}-${Month}-${Day}`;
+}
+
+/**
+ * @description
+ * @author Marlon Lira
+ * @returns Current date with time
+ */
+function DateTimeNow() {
+  var _date = new Date();
+  var Year = LeftZero(_date.getFullYear());
+  var Month = LeftZero(_date.getMonth() + 1);
+  var Day = LeftZero(_date.getDay());
+  var hours = _date.getUTCHours() - 3;
+  var minutes = _date.getUTCMinutes();
+  var seconds = _date.getUTCSeconds();
+  var build = `${Year}-${Month}-${Day} ${hours}:${minutes}:${seconds}`;
+  return build;
+}
+
+/**
+ * @description
+ * @author Marlon Lira
+ * @param {*} value
+ * @returns 
+ */
 function LeftZero(value: any) {
   let result: string = ' ';
   if (value != undefined && value != null) {
@@ -46,4 +105,4 @@ function LeftZero(value: any) {
   return result;
 }
 
-export { InnerDate };
+export { InnerDate, DateNow, DateTimeNow };

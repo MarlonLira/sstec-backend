@@ -1,6 +1,6 @@
 import { Response } from "express";
-import { HttpCode } from './enums/HttpCode';
-import { HttpMessage } from './functions/HttpMessage';
+import { HttpCode } from './enums/httpCode';
+import { HttpMessage } from './functions/httpMessage';
 
 /**
  * @description
