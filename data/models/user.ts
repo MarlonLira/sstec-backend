@@ -1,10 +1,9 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, BelongsToGetAssociationMixin } from 'sequelize';
 
 import { DbInstance } from '../../main/context';
 import { Attributes } from '../../commons/helpers';
-import * as Config from '../../config.json';
+import Vehicle from './vehicle';
 
-var _reSync = Config.Database.ForceSync;
 var _instance = new DbInstance().getInstance();
 
 /**
@@ -42,6 +41,8 @@ class User extends Model {
     this.vehicles = Attributes.ReturnIfValid(json.vehicles);
 
   }
+
+  public getProjects !: BelongsToGetAssociationMixin<Vehicle>;
 }
 
 User.init({
@@ -81,5 +82,4 @@ User.init({
   }
 });
 
-User.sync({ force: _reSync });
 export default User;

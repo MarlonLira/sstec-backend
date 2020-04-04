@@ -1,8 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
 import { DbInstance } from '../../main/context';
-import * as Config from '../../config.json';
-
-var _reSync = Config.Database.ForceSync;
 
 var _instance = new DbInstance().getInstance();
 
@@ -60,7 +57,5 @@ Employee.init({
   sequelize: _instance,
   tableName: 'Employee',
 });
-
-Employee.sync({ force: _reSync });
 
 export { Employee };

@@ -1,4 +1,4 @@
-import { Attributes } from '../../commons/helpers';
+import { Attributes } from './helpers';
 
 /**
  * @description
