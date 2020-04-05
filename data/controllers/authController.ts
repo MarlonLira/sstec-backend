@@ -1,14 +1,15 @@
 import { Response, Request } from "express";
-import { interfaces, controller, httpPost, request, response } from "inversify-express-utils";
+import { controller, httpPost, request, response } from "inversify-express-utils";
 import { inject } from "inversify";
 
 import IAuthService from '../interfaces/IServices/IAuthService';
 import IUserRepository from '../interfaces/IRepositories/IUserRepository';
-import TYPES from '../types/types';
+import TYPES from '../types';
 import Auth from "../models/auth";
 import { Http } from '../../commons/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { Attributes, Crypto } from '../../commons/helpers';
+import IAuthController from "../interfaces/IControllers/IAuthController";
 
 /**
  * @description
@@ -17,34 +18,19 @@ import { Attributes, Crypto } from '../../commons/helpers';
  * @implements {interfaces.Controller}
  */
 @controller('/auth')
-class AuthController implements interfaces.Controller {
-
-  /**
-   * @description
-   * @type {IAuthService}
-   * @memberof AuthController
-   */
-  readonly _authService: IAuthService;
-  /**
-   * @description
-   * @type {IUserRepository}
-   * @memberof AuthController
-   */
-  readonly _userRepository: IUserRepository;
+class AuthController implements IAuthController {
 
   /**
    *Creates an instance of AuthController.
    * @author Marlon Lira
-   * @param {IAuthService} authService
+   * @param {IAuthService} _authService
+   * @param {IUserRepository} _userRepository
    * @memberof AuthController
    */
   constructor(
-    @inject(TYPES.IAuthService) private authService: IAuthService,
-    @inject(TYPES.IUserRepository) private userRepository: IUserRepository
-  ) {
-    this._authService = authService;
-    this._userRepository = userRepository;
-  }
+    @inject(TYPES.IAuthService) private _authService: IAuthService,
+    @inject(TYPES.IUserRepository) private _userRepository: IUserRepository
+  ) { }
 
   /**
    * @description

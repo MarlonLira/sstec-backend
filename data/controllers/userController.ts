@@ -1,11 +1,11 @@
 import { Response, Request } from "express";
-import { interfaces, controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
+import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
 import IUserController from '../interfaces/IControllers/IUserController';
 import IUserRepository from '../interfaces/IRepositories/IUserRepository';
 import User from "../models/user";
-import TYPES from '../types/types';
+import TYPES from '../types';
 import { Attributes, Crypto } from '../../commons/helpers';
 import { Http } from '../../commons/http';
 import { HttpCode } from '../../commons/enums/httpCode';
@@ -21,21 +21,12 @@ import { HttpCode } from '../../commons/enums/httpCode';
 class UserController implements IUserController {
 
   /**
-   * @description
-   * @type {IUserRepository}
-   * @memberof UserController
-   */
-  readonly _userRepository: IUserRepository;
-
-  /**
    *Creates an instance of UserController.
    * @author Marlon Lira
    * @param {IUserRepository} userRepository
    * @memberof UserController
    */
-  constructor(@inject(TYPES.IUserRepository) private userRepository: IUserRepository) {
-    this._userRepository = userRepository;
-  }
+  constructor(@inject(TYPES.IUserRepository) private _userRepository: IUserRepository) {}
 
   /**
    * @description

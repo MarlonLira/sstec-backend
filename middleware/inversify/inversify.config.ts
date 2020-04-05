@@ -1,7 +1,7 @@
 import { Container } from 'inversify';
 
 //Types
-import TYPES from '../../data/types/types';
+import TYPES from '../../data/types';
 
 //Repositories
 import UserRepository from '../../data/repositories/userRepository';

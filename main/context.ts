@@ -43,12 +43,12 @@ class Context {
         host: this.host,
         dialect: 'mssql',
         logging: _logging,
-        // dialectOptions: {
-        //   options: {
-        //     trustServerCertificate: true
-        //   },
-        //   ssl: true
-        // }
+        dialectOptions: {
+          options: {
+            trustServerCertificate: true
+          },
+          ssl: true
+        }
       }
     );
     return sequelize;

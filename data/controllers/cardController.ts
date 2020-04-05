@@ -1,11 +1,11 @@
 import { Response, Request } from "express";
-import { interfaces, controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
+import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
 import ICardController from '../interfaces/IControllers/ICardController';
 import ICardRepository from '../interfaces/IRepositories/ICardRepository';
 import Card from "../models/card";
-import TYPES from '../types/types';
+import TYPES from '../types';
 import { Attributes, Crypto } from '../../commons/helpers';
 import { Http } from '../../commons/http';
 import { HttpCode } from '../../commons/enums/httpCode';
@@ -20,21 +20,12 @@ import { HttpCode } from '../../commons/enums/httpCode';
 class CardController implements ICardController {
 
   /**
-   * @description
-   * @type {ICardRepository}
-   * @memberof CardController
-   */
-  readonly _cardRepository: ICardRepository;
-
-  /**
    *Creates an instance of CardController.
    * @author Gustavo Gusmão
    * @param {ICardRepository} cardRepository
    * @memberof CardController
    */
-  constructor(@inject(TYPES.ICardRepository) private cardRepository: ICardRepository) {
-    this._cardRepository = cardRepository;
-  }
+  constructor(@inject(TYPES.ICardRepository) private _cardRepository: ICardRepository) {}
 
   @httpPost('/card')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
