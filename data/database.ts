@@ -8,7 +8,7 @@ import Card from './models/card';
 
 import Logger from '../commons/logger';
 
-var { ForceSync, AlterSync, Logging } = Config.Database;
+var { ForceSync, AlterSync, IsLogger } = Config.Database;
 
 /**
  * @description
@@ -65,7 +65,7 @@ class Database {
       let total = sucess + errors;
       let modelsWithErrors = [];
       models.forEach(async model => {
-        await model.entity.sync({ force: ForceSync, alter: AlterSync, logging: Logging ? msg => Logger.Info(model.name, msg) : Logging })
+        await model.entity.sync({ force: ForceSync, alter: AlterSync, logging: IsLogger ? msg => Logger.Info(model.name, msg) : IsLogger })
           .then(result => {
             Logger.Info(model.name, 'verification finished!');
             sucess++;
@@ -87,7 +87,7 @@ class Database {
             errors = 0;
 
             modelsWithErrors.forEach(async model => {
-              await model.entity.sync({ force: ForceSync, alter: AlterSync, logging: Logging ? msg => Logger.Info(model.name, msg) : Logging })
+              await model.entity.sync({ force: ForceSync, alter: AlterSync, logging: IsLogger ? msg => Logger.Info(model.name, msg) : IsLogger })
                 .then(result => {
                   Logger.Info(model.name, 'correction completed!');
                   sucess++;
