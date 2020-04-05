@@ -41,16 +41,11 @@ class Context {
       {
         port: this.port,
         host: this.host,
-<<<<<<< HEAD
-        dialect: 'postgres',
-        dialectOptions: {
-=======
         dialect: 'mssql',
         dialectOptions: {
           options: {
             trustServerCertificate: true
           },
->>>>>>> 3e3f7e7eabf3155f996109b221823bebb1f8a0a6
           ssl: true
         }
       }
