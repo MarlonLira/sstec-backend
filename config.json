@@ -24,6 +24,7 @@
       "schema": "d8crqilshjdjcp"
     },
     "ForceSync": false,
-    "AlterSync": true
+    "AlterSync": true,
+    "Logging": true
   }
 }
