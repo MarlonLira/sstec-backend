@@ -50,7 +50,7 @@ class UserRepository implements IUserRepository {
         registryCode: user.registryCode,
         phone: user.phone,
         email: user.email,
-        status: 1,
+        status: 'AT',
         password: user.password
       }).then(result => {
         resolve(result);

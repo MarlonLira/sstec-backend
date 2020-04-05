@@ -4,8 +4,7 @@ import { inject } from "inversify";
 
 import IAuthService from '../interfaces/IServices/IAuthService';
 import IUserRepository from '../interfaces/IRepositories/IUserRepository';
-import AUTH_TYPES from '../types/authTypes';
-import USER_TYPES from '../types/userTypes';
+import TYPES from '../types/types';
 import Auth from "../models/auth";
 import { Http } from '../../commons/http';
 import { HttpCode } from '../../commons/enums/httpCode';
@@ -40,8 +39,8 @@ class AuthController implements interfaces.Controller {
    * @memberof AuthController
    */
   constructor(
-    @inject(AUTH_TYPES.IAuthService) private authService: IAuthService,
-    @inject(USER_TYPES.IUserRepository) private userRepository: IUserRepository
+    @inject(TYPES.IAuthService) private authService: IAuthService,
+    @inject(TYPES.IUserRepository) private userRepository: IUserRepository
   ) {
     this._authService = authService;
     this._userRepository = userRepository;

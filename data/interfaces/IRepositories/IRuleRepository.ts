@@ -5,3 +5,5 @@ interface IRuleRepository {
   Save(rule : Rule);
   Find(rule: Rule, properties: string[]);
 }
+
+export default IRuleRepository;

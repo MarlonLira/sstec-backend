@@ -6,10 +6,12 @@ import User from '../../models/user';
  * @export
  * @interface IUserRepository
  */
-export default interface IUserRepository {
+interface IUserRepository {
   GetByName(userName: string);
   GetByRegistryCode(registryCode: string);
   ToList();
   Save(user : User);
   Find(user: User, properties: string[]);
 }
+
+export default IUserRepository;

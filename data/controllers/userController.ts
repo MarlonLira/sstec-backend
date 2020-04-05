@@ -5,7 +5,7 @@ import { inject } from "inversify";
 import IUserController from '../interfaces/IControllers/IUserController';
 import IUserRepository from '../interfaces/IRepositories/IUserRepository';
 import User from "../models/user";
-import TYPES from '../types/userTypes';
+import TYPES from '../types/types';
 import { Attributes, Crypto } from '../../commons/helpers';
 import { Http } from '../../commons/http';
 import { HttpCode } from '../../commons/enums/httpCode';

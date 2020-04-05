@@ -17,8 +17,8 @@ class Card extends Model {
   id!: number;
   status: string;
   holder: string;
-  number: number;
-  secureCode: number;
+  number: string;
+  secureCode: string;
   type: string;
   users!: BelongsToGetAssociationMixin<User>;
 
@@ -32,10 +32,10 @@ class Card extends Model {
     super()
     this.id = Attributes.ReturnIfValid(json.id);
     this.status = Attributes.ReturnIfValid(json.status);
-    this.holder = Attributes.ReturnIfValid(json.country);
-    this.number = Attributes.ReturnIfValid(json.state);
-    this.secureCode = Attributes.ReturnIfValid(json.city);
-    this.type = Attributes.ReturnIfValid(json.street);
+    this.holder = Attributes.ReturnIfValid(json.holder);
+    this.number = Attributes.ReturnIfValid(json.number);
+    this.secureCode = Attributes.ReturnIfValid(json.secureCode);
+    this.type = Attributes.ReturnIfValid(json.type);
   }
 }
 
@@ -50,15 +50,15 @@ Card.init({
     allowNull: false
   },
   holder: {
-    type: new DataTypes.STRING(15),
+    type: new DataTypes.STRING(40),
     allowNull: false
   },
   number: {
-    type: new DataTypes.INTEGER,
+    type: new DataTypes.STRING(20),
     allowNull: false
   },
   secureCode: {
-    type: new DataTypes.STRING(20),
+    type: new DataTypes.CHAR(3),
     allowNull: false
   },
   type: {
