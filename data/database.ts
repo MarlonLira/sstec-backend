@@ -3,6 +3,8 @@ import * as Config from '../config.json';
 
 import User from './models/user';
 import Vehicle from './models/vehicle'
+import UserAdress from './models/userAdress';
+import Card from './models/card';
 
 import Logger from '../commons/logger';
 
@@ -25,7 +27,9 @@ class Database {
       //Order influences creation in the database
       let Models = [
         { name: 'User', entity: User.sequelize },
-        { name: 'Vehicle', entity: Vehicle.sequelize }
+        { name: 'Vehicle', entity: Vehicle.sequelize },
+        { name: 'UserAdress', entity: UserAdress.sequelize },
+        { name: 'Card', entity: Card.sequelize }
       ];
 
       Logger.Info('Database', 'Table verification started!');
@@ -33,6 +37,11 @@ class Database {
       // User.belongsTo(Permission, { foreignKey: 'permissionId', as: 'Permission' });
       User.belongsToMany(Vehicle, { through: 'User_Vehicle', constraints: true, foreignKey: 'userId', otherKey: 'vehicleId' });
       Vehicle.belongsToMany(User, { through: 'User_Vehicle', constraints: true, foreignKey: 'vehicleId', otherKey: 'userId' });
+
+      User.belongsToMany(Card, { through: 'User_Card', constraints: true, foreignKey: 'userId', otherKey: 'cardId' });
+      Card.belongsToMany(User, { through: 'User_Card', constraints: true, foreignKey: 'cardId', otherKey: 'userId' });
+
+      UserAdress.belongsTo(User, { foreignKey: 'userId', as: 'User' });
 
       this.CreateDatabaseFromModels(Models)
         .then(result => {
