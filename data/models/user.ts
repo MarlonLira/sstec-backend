@@ -26,7 +26,6 @@ class User extends Model {
   vehicles!: BelongsToGetAssociationMixin<Vehicle>;
   cards!: BelongsToGetAssociationMixin<Card>;
   userAdress!: BelongsToGetAssociationMixin<UserAdress>;
-  
 
   /**
    *Creates an instance of User.
@@ -44,7 +43,6 @@ class User extends Model {
     this.email = Attributes.ReturnIfValid(json.email);
     this.password = Attributes.ReturnIfValid(json.password);
     this.vehicles = Attributes.ReturnIfValid(json.vehicles);
-
   }
 }
 
