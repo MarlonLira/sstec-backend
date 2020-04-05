@@ -5,6 +5,8 @@ import { Attributes } from '../../commons/helpers';
 
 var _instance = new DbInstance().getInstance();
 
-class Parking {
-  
+class Rule {
+
 }
+
+export default Rule;

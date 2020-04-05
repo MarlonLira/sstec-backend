@@ -7,9 +7,9 @@ import IUserRepository from '../interfaces/IUserRepository';
 import AUTH_TYPES from '../types/authTypes';
 import USER_TYPES from '../types/userTypes';
 import Auth from "../models/auth";
-import { Http } from '../../commons/Http';
-import { HttpCode } from '../../commons/enums/HttpCode';
-import { Attributes, Crypto } from '../../commons/Helpers';
+import { Http } from '../../commons/http';
+import { HttpCode } from '../../commons/enums/httpCode';
+import { Attributes, Crypto } from '../../commons/helpers';
 
 /**
  * @description

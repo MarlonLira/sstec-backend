@@ -1,4 +1,4 @@
-import { HttpCode } from '../enums/HttpCode';
+import { HttpCode } from '../enums/httpCode';
 
 /**
  * @description http://weblink.com.br/blog/o-que-e-http-codigos-erros-http

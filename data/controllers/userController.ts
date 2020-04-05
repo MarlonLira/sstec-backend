@@ -5,9 +5,9 @@ import { inject } from "inversify";
 import IUserRepository from '../interfaces/IUserRepository';
 import User from "../models/user";
 import TYPES from '../types/userTypes';
-import { Attributes, Crypto } from '../../commons/Helpers';
-import { Http } from '../../commons/Http';
-import { HttpCode } from '../../commons/enums/HttpCode';
+import { Attributes, Crypto } from '../../commons/helpers';
+import { Http } from '../../commons/http';
+import { HttpCode } from '../../commons/enums/httpCode';
 
 /**
  * @description
@@ -79,7 +79,6 @@ export default class UserController implements interfaces.Controller {
   @httpGet('/user/id/:id')
   Search(@request() req: Request, @response() res: Response) {
     let _user = new User(req.params);
-    console.log(req.params)
     return new Promise((resolve, reject) => {
       this._userRepository.Find(_user, ['registryCode', 'id'])
         .then(result => {

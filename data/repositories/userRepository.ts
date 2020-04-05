@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 
 import IUserRepository from '../interfaces/IUserRepository';
 import User from '../models/user';
-import { Querying } from '../../commons/Helpers';
+import { Querying } from '../../commons/helpers';
 import { injectable } from "inversify";
 
 /**
