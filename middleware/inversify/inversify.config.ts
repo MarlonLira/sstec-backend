@@ -9,8 +9,8 @@ import UserRepository from '../../data/repositories/userRepository';
 import AuthService from '../../data/services/authService';
 
 //interfaces
-import IUserRepository from '../../data/interfaces/IUserRepository';
-import IAuthService from '../../data/interfaces/IAuthService';
+import IUserRepository from '../../data/interfaces/IRepositories/IUserRepository';
+import IAuthService from '../../data/interfaces/IServices/IAuthService';
 
 const container = new Container();
 container.bind<IUserRepository>(USER_TYPES.IUserRepository).to(UserRepository);

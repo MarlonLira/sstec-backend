@@ -1,4 +1,4 @@
-import IAuthService from "../interfaces/IAuthService";
+import IAuthService from "../interfaces/IServices/IAuthService";
 import User from '../models/user';
 import Auth from '../models/auth';
 

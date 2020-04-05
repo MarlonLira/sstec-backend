@@ -2,7 +2,8 @@ import { Response, Request } from "express";
 import { interfaces, controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import IUserRepository from '../interfaces/IUserRepository';
+import IUserController from '../interfaces/IControllers/IUserController';
+import IUserRepository from '../interfaces/IRepositories/IUserRepository';
 import User from "../models/user";
 import TYPES from '../types/userTypes';
 import { Attributes, Crypto } from '../../commons/helpers';
@@ -14,11 +15,10 @@ import { HttpCode } from '../../commons/enums/httpCode';
  * @author Marlon Lira
  * @export
  * @class UserController
- * @implements {interfaces.Controller}
+ * @implements {IUserController}
  */
 @controller('')
-export default class UserController implements interfaces.Controller {
-
+class UserController implements IUserController {
 
   /**
    * @description
@@ -128,3 +128,5 @@ export default class UserController implements interfaces.Controller {
     throw new Error("Method not implemented.");
   }
 }
+
+export default UserController;

@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 
-import IUserRepository from '../interfaces/IUserRepository';
+import IUserRepository from '../interfaces/IRepositories/IUserRepository';
 import User from '../models/user';
 import { Querying } from '../../commons/helpers';
 import { injectable } from "inversify";

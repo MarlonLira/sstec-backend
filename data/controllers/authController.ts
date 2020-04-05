@@ -2,8 +2,8 @@ import { Response, Request } from "express";
 import { interfaces, controller, httpPost, request, response } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import IAuthService from '../interfaces/IAuthService';
-import IUserRepository from '../interfaces/IUserRepository';
+import IAuthService from '../interfaces/IServices/IAuthService';
+import IUserRepository from '../interfaces/IRepositories/IUserRepository';
 import AUTH_TYPES from '../types/authTypes';
 import USER_TYPES from '../types/userTypes';
 import Auth from "../models/auth";

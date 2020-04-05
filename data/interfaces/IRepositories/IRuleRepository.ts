@@ -1,4 +1,4 @@
-import Rule from '../models/rule';
+import Rule from '../../models/rule';
 
 interface IRuleRepository {
   ToList();
