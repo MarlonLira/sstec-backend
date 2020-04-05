@@ -3,6 +3,8 @@ import { Model, DataTypes, BelongsToGetAssociationMixin } from 'sequelize';
 import { DbInstance } from '../../main/context';
 import { Attributes } from '../../commons/helpers';
 import Vehicle from './vehicle';
+import Card from './card';
+import UserAdress from './userAdress';
 
 var _instance = new DbInstance().getInstance();
 
@@ -21,7 +23,10 @@ class User extends Model {
   phone!: string;
   email!: string;
   password!: string;
-  vehicles!: {};
+  vehicles!: BelongsToGetAssociationMixin<Vehicle>;
+  cards!: BelongsToGetAssociationMixin<Card>;
+  userAdress!: BelongsToGetAssociationMixin<UserAdress>;
+  
 
   /**
    *Creates an instance of User.
@@ -41,8 +46,6 @@ class User extends Model {
     this.vehicles = Attributes.ReturnIfValid(json.vehicles);
 
   }
-
-  public getProjects !: BelongsToGetAssociationMixin<Vehicle>;
 }
 
 User.init({
