@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize';
 import * as Config from '../config.json';
 
 var _logging = Config.Database.Logging;
-var _dbConfig = Config.Database.MySql;
+var _dbConfig = Config.Database.MSSQL;
 
 /**
  * @description
@@ -41,14 +41,14 @@ class Context {
       {
         port: this.port,
         host: this.host,
-        dialect: 'mysql',
+        dialect: 'mssql',
         logging: _logging,
-        // dialectOptions: {
-        //   options: {
-        //     trustServerCertificate: true
-        //   },
-        //   ssl: true
-        // }
+        dialectOptions: {
+          options: {
+            trustServerCertificate: true
+          },
+          ssl: true
+        }
       }
     );
     return sequelize;
