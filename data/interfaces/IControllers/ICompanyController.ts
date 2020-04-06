@@ -1,7 +1,6 @@
 import { interfaces } from "inversify-express-utils";
 import { Response, Request } from "express";
 
-
 interface ICompanyController extends interfaces.Controller {
   Save(req: Request<any>, res: Response<any>)
   Search(req: Request<any>, res: Response<any>)

@@ -1,13 +1,14 @@
-import { Sequelize, Transaction } from 'sequelize';
+import { Sequelize, Transaction, QueryInterface } from 'sequelize';
 import * as Config from '../config.json';
+import Logger from '../commons/logger';
 
+//Entities
 import User from './models/user';
 import Vehicle from './models/vehicle'
 import UserAdress from './models/userAdress';
 import Card from './models/card';
-
-import Logger from '../commons/logger';
 import Company from './models/company';
+import Employee from './models/employee';
 
 var { ForceSync, AlterSync, IsLogger } = Config.Database;
 
@@ -31,100 +32,28 @@ class Database {
         { name: 'Vehicle', entity: Vehicle.sequelize },
         { name: 'UserAdress', entity: UserAdress.sequelize },
         { name: 'Card', entity: Card.sequelize },
-        { name: 'Company', entity: Company.sequelize }
-
+        { name: 'Company', entity: Company.sequelize },
+        { name: 'Employee', entity: Employee.sequelize }
       ];
 
       Logger.Info('Database', 'Table verification started!');
 
-      // Table relationchip
+      //Table relationchip
       User.belongsToMany(Vehicle, { through: 'User_Vehicle', constraints: true, foreignKey: 'userId', otherKey: 'vehicleId' });
       Vehicle.belongsToMany(User, { through: 'User_Vehicle', constraints: true, foreignKey: 'vehicleId', otherKey: 'userId' });
 
       User.belongsToMany(Card, { through: 'User_Card', constraints: true, foreignKey: 'userId', otherKey: 'cardId' });
       Card.belongsToMany(User, { through: 'User_Card', constraints: true, foreignKey: 'cardId', otherKey: 'userId' });
 
+      Employee.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' })
       UserAdress.belongsTo(User, { foreignKey: 'userId', as: 'User' });
-      // Table relationchip END
-      
-      if (!ForceSync) {
-        this.CreateDatabase(Models)
-          .then(result => {
-            Logger.Info('Database', `Table verification ${result}!`);
-          });
-      } else {
-        this.ForceCreateDatabase(Models)
-          .then(result => {
-            Logger.Info('Database', `Table verification ${result}!`);
-          });
-      }
+      //Table relationchip End
+
+      this.CreateDatabase(Models)
+        .then(result => {
+          Logger.Info('Database', `Table verification ${result}!`);
+        });
     }
-  }
-
-  /**
-   * @description
-   * @author Marlon Lira
-   * @private
-   * @param {{ name: string, entity: Sequelize }[]} models
-   * @returns 
-   * @memberof Database
-   */
-  private ForceCreateDatabase(models: { name: string, entity: Sequelize }[]) {
-    return new Promise((resolve, reject) => {
-      let sucess = 0;
-      let errors = 0;
-      let total = sucess + errors;
-      let modelsWithErrors = [];
-      models.forEach(async model => {
-        await model.entity.sync({ force: ForceSync, alter: AlterSync, logging: (IsLogger ? msg => Logger.Info(model.name, msg) : IsLogger) })
-          .then(result => {
-            Logger.Info(model.name, 'verification finished!')
-            sucess++;
-          })
-          .catch(error => {
-            Logger.Error(model.name, error);
-            modelsWithErrors.push(model);
-            errors++;
-          });
-
-        total = sucess + errors;
-        if (total == models.length) {
-          Logger.Info('Database', `Sucess: ${sucess} | Errors: ${errors} | Total: ${total}`);
-
-          if (errors > 0) {
-            Logger.Error('Database', `${errors} errors in the models were found!`);
-            Logger.Warn('Database', 'trying to fix the models');
-            total = 0;
-            sucess = 0;
-            errors = 0;
-
-            modelsWithErrors.forEach(async model => {
-              await model.entity.sync({ force: ForceSync, alter: AlterSync, logging: IsLogger ? msg => Logger.Info(model.name, msg) : IsLogger })
-                .then(result => {
-                  Logger.Info(model.name, 'correction completed!')
-                  sucess++;
-                })
-                .catch(error => {
-                  Logger.Error(model.name, error);
-                  errors++;
-                });
-
-              total = sucess + errors;
-              if (total == modelsWithErrors.length) {
-                Logger.Info('Database', `Sucess: ${sucess} | Errors: ${errors} | Total: ${total}`);
-                if (errors > 0) {
-                  resolve('finished with errors');
-                } else {
-                  resolve('finished successfully and corrected errors');
-                }
-              }
-            })
-          } else {
-            resolve('finished successfully');
-          }
-        }
-      });
-    })
   }
 
   private async CreateDatabase(models: { name: string, entity: Sequelize }[]) {
@@ -134,20 +63,26 @@ class Database {
       let errors = 0;
       let total = 0;
       let modelsWithErrors = [];
+
+      if (ForceSync) {
+        await this.DropAllTables(models);
+      }
+
       while (count < models.length) {
-        await models[count].entity.sync({ force: ForceSync, alter: AlterSync, logging: (IsLogger ? msg => Logger.Info(models[count].name, msg) : IsLogger) })
+        await models[count].entity.sync({ alter: AlterSync, logging: (IsLogger ? msg => Logger.Info(models[count].name, msg) : IsLogger) })
           .then(result => {
+            Logger.Info(models[count].name, 'verification finished!')
             sucess++;
           })
           .catch(error => {
             Logger.Error(models[count].name, error);
             modelsWithErrors.push(models[count]);
             errors++;
-          }).finally(() => Logger.Info(models[count].name, 'verification finished!'));
+          });
         count++;
         total = sucess + errors;
         if (total == models.length) {
-          Logger.Info('Database', `Sucess: ${sucess} | Errors: ${errors} | Total: ${total}`);
+          Logger.Info('Database', `verification result => Sucess: ${sucess} | Errors: ${errors} | Total: ${models.length}`);
 
           if (errors > 0) {
             Logger.Error('Database', `${errors} errors in the models were found!`);
@@ -156,33 +91,54 @@ class Database {
             errors = 0;
             count = 0;
 
-            while (count < modelsWithErrors.length) {
-              await modelsWithErrors[count].entity.sync({ force: ForceSync, alter: AlterSync, logging: IsLogger ? msg => Logger.Info(modelsWithErrors[count].name, msg) : IsLogger })
-                .then(result => {
-                  Logger.Info(modelsWithErrors[count].name, 'correction completed!');
-                  sucess++;
-                })
-                .catch(error => {
-                  Logger.Error(modelsWithErrors[count].name, error);
-                  errors++;
-                });
-              count++;
-              total = sucess + errors;
-              if (total == modelsWithErrors.length) {
-                Logger.Info('Database', `Sucess: ${sucess} | Errors: ${errors} | Total: ${total}`);
-                if (errors > 0) {
-                  resolve('finished with errors');
-                } else {
-                  resolve('finished successfully and corrected errors');
-                }
-              }
-            }
+            await this.TryFixModels(modelsWithErrors, resolve);
           } else {
             resolve('finished successfully');
           }
+          break;
         }
       }
     });
+  }
+
+  private async TryFixModels(modelsWithErrors: any[], resolve: (value?: unknown) => void) {
+    let attempts = 0
+    let count = 0;
+    let sucess = 0;
+    let errors = 0;
+
+    while (count < modelsWithErrors.length) {
+      await modelsWithErrors[count].entity.sync({ alter: AlterSync, logging: IsLogger ? msg => Logger.Info(modelsWithErrors[count].name, msg) : IsLogger })
+        .then(result => {
+          Logger.Info(modelsWithErrors[count].name, 'correction completed!');
+          sucess++;
+        })
+        .catch(error => {
+          Logger.Error(modelsWithErrors[count].name, error);
+          errors++;
+        });
+      count++;
+      attempts = sucess + errors;
+      if (attempts == modelsWithErrors.length) {
+        Logger.Info('Database', `correction attempts => Sucess: ${sucess} | Errors: ${errors} | Total: ${attempts}`);
+        if (errors > 0) {
+          resolve('finished with errors');
+        }
+        else {
+          resolve('finished successfully and corrected errors');
+        }
+      }
+    }
+  }
+
+  private async DropAllTables(models: { name: string; entity: Sequelize; }[]) {
+    let queryInterface = models[0].entity.getQueryInterface();
+    await queryInterface.dropAllTables()
+      .then(result => {
+        Logger.Warn('Database', 'drop all the table finished!');
+      }).catch(error => {
+        Logger.Error('Database', error);
+      });
   }
 }
 
