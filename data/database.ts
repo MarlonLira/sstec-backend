@@ -7,6 +7,7 @@ import UserAdress from './models/userAdress';
 import Card from './models/card';
 
 import Logger from '../commons/logger';
+import Company from './models/company';
 
 var { ForceSync, AlterSync, IsLogger } = Config.Database;
 
@@ -29,12 +30,14 @@ class Database {
         { name: 'User', entity: User.sequelize },
         { name: 'Vehicle', entity: Vehicle.sequelize },
         { name: 'UserAdress', entity: UserAdress.sequelize },
-        { name: 'Card', entity: Card.sequelize }
+        { name: 'Card', entity: Card.sequelize },
+        { name: 'Company', entity: Company.sequelize }
+
       ];
 
       Logger.Info('Database', 'Table verification started!');
 
-      // User.belongsTo(Permission, { foreignKey: 'permissionId', as: 'Permission' });
+      // Table relationchip
       User.belongsToMany(Vehicle, { through: 'User_Vehicle', constraints: true, foreignKey: 'userId', otherKey: 'vehicleId' });
       Vehicle.belongsToMany(User, { through: 'User_Vehicle', constraints: true, foreignKey: 'vehicleId', otherKey: 'userId' });
 
@@ -42,6 +45,8 @@ class Database {
       Card.belongsToMany(User, { through: 'User_Card', constraints: true, foreignKey: 'cardId', otherKey: 'userId' });
 
       UserAdress.belongsTo(User, { foreignKey: 'userId', as: 'User' });
+      // Table relationchip END
+      
       if (!ForceSync) {
         this.CreateDatabase(Models)
           .then(result => {
