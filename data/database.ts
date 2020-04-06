@@ -8,6 +8,7 @@ import Card from './models/card';
 
 import Logger from '../commons/logger';
 import Company from './models/company';
+import CompanyAdress from './models/companyAdress';
 
 var { ForceSync, AlterSync, IsLogger } = Config.Database;
 
@@ -31,7 +32,8 @@ class Database {
         { name: 'Vehicle', entity: Vehicle.sequelize },
         { name: 'UserAdress', entity: UserAdress.sequelize },
         { name: 'Card', entity: Card.sequelize },
-        { name: 'Company', entity: Company.sequelize }
+        { name: 'Company', entity: Company.sequelize },
+        { name: 'CompanyAdress', entity: CompanyAdress.sequelize }
 
       ];
 
@@ -45,6 +47,7 @@ class Database {
       Card.belongsToMany(User, { through: 'User_Card', constraints: true, foreignKey: 'cardId', otherKey: 'userId' });
 
       UserAdress.belongsTo(User, { foreignKey: 'userId', as: 'User' });
+      CompanyAdress.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' });
       // Table relationchip END
       
       if (!ForceSync) {
