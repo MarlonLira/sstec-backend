@@ -8,6 +8,7 @@ import Vehicle from './models/vehicle'
 import UserAdress from './models/userAdress';
 import Card from './models/card';
 import Company from './models/company';
+import CompanyAdress from './models/companyAdress';
 import Employee from './models/employee';
 
 var { ForceSync, AlterSync, IsLogger } = Config.Database;
@@ -33,6 +34,7 @@ class Database {
         { name: 'UserAdress', entity: UserAdress.sequelize },
         { name: 'Card', entity: Card.sequelize },
         { name: 'Company', entity: Company.sequelize },
+        { name: 'CompanyAdress', entity: CompanyAdress.sequelize },
         { name: 'Employee', entity: Employee.sequelize }
       ];
 
@@ -47,6 +49,7 @@ class Database {
 
       Employee.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' })
       UserAdress.belongsTo(User, { foreignKey: 'userId', as: 'User' });
+      CompanyAdress.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' });
       //Table relationchip End
 
       this.CreateDatabase(Models)
