@@ -10,6 +10,7 @@ import Card from './models/card';
 import Company from './models/company';
 import CompanyAdress from './models/companyAdress';
 import Employee from './models/employee';
+import Payment from './models/payment';
 
 var { ForceSync, AlterSync, IsLogger } = Config.Database;
 
@@ -35,7 +36,8 @@ class Database {
         { name: 'Card', entity: Card.sequelize },
         { name: 'Company', entity: Company.sequelize },
         { name: 'CompanyAdress', entity: CompanyAdress.sequelize },
-        { name: 'Employee', entity: Employee.sequelize }
+        { name: 'Employee', entity: Employee.sequelize },
+        { name: 'Payment', entity: Payment.sequelize }
       ];
 
       Logger.Info('Database', 'Table verification started!');
@@ -50,6 +52,10 @@ class Database {
       Employee.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' })
       UserAdress.belongsTo(User, { foreignKey: 'userId', as: 'User' });
       CompanyAdress.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' });
+
+      Payment.belongsTo(Card, {foreignKey: 'cardId', as: 'Card'});
+      //Payment.belongsTo(ParkingSpace, {foreignKey: 'parkingSpaceId', as: 'ParkingSpace'});
+      
       //Table relationchip End
 
       this.CreateDatabase(Models)
