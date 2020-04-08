@@ -1,10 +1,10 @@
-import { Model, DataTypes, BelongsToGetAssociationMixin } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 
 import { DbInstance } from '../../main/context';
 import { Attributes } from '../../commons/helpers';
 import User from './user';
 
-var _instance = new DbInstance().getInstance();
+var _instance = DbInstance.getInstance()
 
 /**
  * @description
@@ -15,12 +15,12 @@ var _instance = new DbInstance().getInstance();
 class Vehicle extends Model {
 
   id!: number;
-  status: string;
-  model: string;
-  color: string;
-  type: string;
-  licensePlate: string;
-  userId: number;
+  status!: string;
+  model!: string;
+  color!: string;
+  type!: string;
+  licensePlate!: string;
+  users: User[];
 
   /**
    *Creates an instance of Vehicle.
@@ -36,48 +36,41 @@ class Vehicle extends Model {
     this.color = Attributes.ReturnIfValid(json.color);
     this.type = Attributes.ReturnIfValid(json.type);
     this.licensePlate = Attributes.ReturnIfValid(json.licensePlate);
-    this.userId = Attributes.ReturnIfValid(json.userId);
+    this.users = Attributes.ReturnIfValid(json.users);
   }
 
-  public getUsers !: BelongsToGetAssociationMixin<User>;
 }
 
 Vehicle.init({
   id: {
-    type: new DataTypes.INTEGER,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
   status: {
-    type: new DataTypes.CHAR(2),
+    type: DataTypes.CHAR(2),
     allowNull: false
   },
   model: {
-    type: new DataTypes.STRING(12),
+    type: DataTypes.STRING(12),
     allowNull: false
   },
   color: {
-    type: new DataTypes.STRING(12),
+    type: DataTypes.STRING(12),
     allowNull: false
   },
   type: {
-    type: new DataTypes.STRING(50),
+    type: DataTypes.STRING(50),
     allowNull: false
   },
   licensePlate: {
-    type: new DataTypes.STRING(100),
+    type: DataTypes.STRING(100),
     allowNull: false
-  },
-  userId: {
-    type: new DataTypes.INTEGER,
-    references: {
-      model: 'User',
-      key: 'id'
-    }
   }
 }, {
   sequelize: _instance,
-  tableName: 'Vehicle'
+  tableName: 'Vehicle',
+  modelName: 'vehicle'
 });
 
 export default Vehicle;

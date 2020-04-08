@@ -7,7 +7,6 @@
       "password": "123456",
       "schema": "sstec"
     },
-
     "MSSQL": {
       "host": "DESKTOP-5BLVFSA",
       "port": 1433,
@@ -15,7 +14,6 @@
       "password": "Root1526",
       "schema": "sstec"
     },
-
     "PostgreSQL": {
       "host": "ec2-107-21-110-75.compute-1.amazonaws.com",
       "port": 5432,
@@ -24,7 +22,7 @@
       "schema": "d8crqilshjdjcp"
     },
     "ForceSync": false,
-    "AlterSync": false,
+    "AlterSync": true,
     "Logging": false,
     "IsLogger": false
   }

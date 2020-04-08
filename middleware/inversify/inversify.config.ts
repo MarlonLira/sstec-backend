@@ -10,6 +10,7 @@ import CompanyRepository from '../../data/repositories/companyRepository';
 import CompanyAdressRepository from '../../data/repositories/companyAdressRepository';
 import EmployeeRepository from '../../data/repositories/employeeRepository';
 import PaymentRepository from '../../data/repositories/paymentRepository';
+import VehicleRepository from '../../data/repositories/vehicleRepository';
 
 //Services
 import AuthService from '../../data/services/authService';
@@ -21,6 +22,7 @@ import ICompanyRepository from '../../data/interfaces/IRepositories/ICompanyRepo
 import ICompanyAdressRepository from '../../data/interfaces/IRepositories/ICompanyAdressRepository';
 import IEmployeeRepository from '../../data/interfaces/IRepositories/IEmployeeRepository';
 import IPaymentRepository from '../../data/interfaces/IRepositories/IPaymentRepository';
+import IVehicleRepository from '../../data/interfaces/IRepositories/IVehicleRepository';
 import IAuthService from '../../data/interfaces/IServices/IAuthService';
 
 const container = new Container();
@@ -30,6 +32,7 @@ container.bind<ICompanyRepository>(TYPES.ICompanyRepository).to(CompanyRepositor
 container.bind<ICompanyAdressRepository>(TYPES.ICompanyAdressRepository).to(CompanyAdressRepository);
 container.bind<IEmployeeRepository>(TYPES.IEmployeeRepository).to(EmployeeRepository);
 container.bind<IPaymentRepository>(TYPES.IPaymentRepository).to(PaymentRepository);
-container.bind<IAuthService>(TYPES.IAuthService, ).to(AuthService);
+container.bind<IAuthService>(TYPES.IAuthService).to(AuthService);
+container.bind<IVehicleRepository>(TYPES.IVehicleRepository).to(VehicleRepository);
 
 export default container;

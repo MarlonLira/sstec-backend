@@ -55,7 +55,6 @@ class Database {
 
       Payment.belongsTo(Card, {foreignKey: 'cardId', as: 'Card'});
       //Payment.belongsTo(ParkingSpace, {foreignKey: 'parkingSpaceId', as: 'ParkingSpace'});
-      
       //Table relationchip End
 
       this.CreateDatabase(Models)
@@ -96,10 +95,6 @@ class Database {
           if (errors > 0) {
             Logger.Error('Database', `${errors} errors in the models were found!`);
             Logger.Warn('Database', 'trying to fix the models');
-            sucess = 0;
-            errors = 0;
-            count = 0;
-
             await this.TryFixModels(modelsWithErrors, resolve);
           } else {
             resolve('finished successfully');
