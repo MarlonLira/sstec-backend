@@ -1,10 +1,13 @@
-import { Model, DataTypes, BelongsToGetAssociationMixin } from 'sequelize';
+import {
+  Model, DataTypes, BelongsToManyGetAssociationsMixin, BelongsToManyAddAssociationMixin, BelongsToManySetAssociationsMixin
+} from 'sequelize';
 
 import { DbInstance } from '../../main/context';
 import { Attributes } from '../../commons/helpers';
 import Vehicle from './vehicle';
 import Card from './card';
 import UserAdress from './userAdress';
+import UserVehicles from './userVehicles';
 
 var _instance = new DbInstance().getInstance();
 
@@ -23,9 +26,7 @@ class User extends Model {
   phone!: string;
   email!: string;
   password!: string;
-  vehicles!: BelongsToGetAssociationMixin<Vehicle>;
-  cards!: BelongsToGetAssociationMixin<Card>;
-  userAdress!: BelongsToGetAssociationMixin<UserAdress>;
+  vehicles!: Vehicle[];
 
   /**
    *Creates an instance of User.
@@ -44,6 +45,12 @@ class User extends Model {
     this.password = Attributes.ReturnIfValid(json.password);
     this.vehicles = Attributes.ReturnIfValid(json.vehicles);
   }
+
+  getVehicles!: BelongsToManyGetAssociationsMixin<Vehicle>;
+  addVehicles!: BelongsToManyAddAssociationMixin<Vehicle, number>;
+  setVehicles!: BelongsToManySetAssociationsMixin<Vehicle, number>;
+  cards!: BelongsToManyGetAssociationsMixin<Card>;
+  userAdress!: BelongsToManyGetAssociationsMixin<UserAdress>;
 }
 
 User.init({

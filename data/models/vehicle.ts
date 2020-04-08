@@ -20,7 +20,7 @@ class Vehicle extends Model {
   color: string;
   type: string;
   licensePlate: string;
-  userId: number;
+  users: User[];
 
   /**
    *Creates an instance of Vehicle.
@@ -36,10 +36,9 @@ class Vehicle extends Model {
     this.color = Attributes.ReturnIfValid(json.color);
     this.type = Attributes.ReturnIfValid(json.type);
     this.licensePlate = Attributes.ReturnIfValid(json.licensePlate);
-    this.userId = Attributes.ReturnIfValid(json.userId);
+    this.users = Attributes.ReturnIfValid(json.users);
   }
 
-  public getUsers !: BelongsToGetAssociationMixin<User>;
 }
 
 Vehicle.init({
@@ -67,13 +66,6 @@ Vehicle.init({
   licensePlate: {
     type: new DataTypes.STRING(100),
     allowNull: false
-  },
-  userId: {
-    type: new DataTypes.INTEGER,
-    references: {
-      model: 'User',
-      key: 'id'
-    }
   }
 }, {
   sequelize: _instance,
