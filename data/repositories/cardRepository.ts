@@ -22,7 +22,7 @@ class CardRepository implements ICardRepository {
    * @memberof CardRepository
    */
   Save(card: Card) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       Card.create({
         status: 'AT',
         holder: card.holder,

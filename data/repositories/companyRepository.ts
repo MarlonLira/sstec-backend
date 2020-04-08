@@ -23,7 +23,7 @@ class CompanyRepository implements ICompanyRepository {
    * @memberof CompanyRepository
    */
   Save(company: Company) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       Company.create({
         status: 'AT',
         name: company.name,
@@ -45,7 +45,7 @@ class CompanyRepository implements ICompanyRepository {
    * @memberof CompanyRepository
    */
   ToList() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       Company.findAll()
         .then(result => {
           resolve(result);
@@ -65,7 +65,7 @@ class CompanyRepository implements ICompanyRepository {
    * @memberof CompanyRepository
    */
   GetByName(companyName: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       Company.findAll({
         where: {
           name: {
@@ -91,7 +91,7 @@ class CompanyRepository implements ICompanyRepository {
    * @memberof CompanyRepository
    */
   GetByRegistryCode(registryCode: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       Company.findAll({
         where: {
           name: {
@@ -109,7 +109,7 @@ class CompanyRepository implements ICompanyRepository {
     })
   }
   Find(company: Company, properties: string[]) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let query: any;
       query = Querying.ReturnOrQuery(company, properties);
       Company.findAll({

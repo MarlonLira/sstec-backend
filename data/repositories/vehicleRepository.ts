@@ -25,11 +25,12 @@ class VehicleRepository implements IVehicleRepository {
    * @memberof VehicleRepository
    */
   Save(vehicle: Vehicle) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       User.findByPk(2).then((user: User) => {
         Vehicle.findByPk(2)
           .then((vehicle: Vehicle) => {
-            user.addVehicles(vehicle).then(result => resolve(result));
+
+            user.addVehicle(vehicle).then(result => resolve(result));
           }).catch(error => {
             throw error;
           })

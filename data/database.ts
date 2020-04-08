@@ -1,4 +1,4 @@
-import { Sequelize, Transaction, QueryInterface } from 'sequelize';
+import { Sequelize, Transaction, QueryInterface, BelongsToMany } from 'sequelize';
 import * as Config from '../config.json';
 import Logger from '../commons/logger';
 
@@ -28,7 +28,7 @@ class Database {
    */
   public Build() {
     if (ForceSync || AlterSync) {
-      //Order influences creation in the database
+      //The order influences creation in the database
       let Models = [
         { name: 'User', entity: User.sequelize },
         { name: 'Vehicle', entity: Vehicle.sequelize },
@@ -42,30 +42,35 @@ class Database {
 
       Logger.Info('Database', 'Table verification started!');
 
-      //Table relationchip
-      User.belongsToMany(Vehicle, { through: 'User_Vehicle', constraints: true, foreignKey: 'userId', otherKey: 'vehicleId' });
-      Vehicle.belongsToMany(User, { through: 'User_Vehicle', constraints: true, foreignKey: 'vehicleId', otherKey: 'userId' });
+      /* #region  Table Relationships */
 
-      User.belongsToMany(Card, { through: 'User_Card', constraints: true, foreignKey: 'userId', otherKey: 'cardId' });
-      Card.belongsToMany(User, { through: 'User_Card', constraints: true, foreignKey: 'cardId', otherKey: 'userId' });
+      // N:N
+      User.belongsToMany(Vehicle, { through: 'User_Vehicle' });
+      Vehicle.belongsToMany(User, { through: 'User_Vehicle' });
 
+      User.belongsToMany(Card, { through: 'User_Card' });
+      Card.belongsToMany(User, { through: 'User_Card' });
+
+      //1:N
       Employee.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' })
       UserAdress.belongsTo(User, { foreignKey: 'userId', as: 'User' });
       CompanyAdress.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' });
-
-      Payment.belongsTo(Card, {foreignKey: 'cardId', as: 'Card'});
+      Payment.belongsTo(Card, { foreignKey: 'cardId', as: 'Card' });
       //Payment.belongsTo(ParkingSpace, {foreignKey: 'parkingSpaceId', as: 'ParkingSpace'});
-      //Table relationchip End
 
-      this.CreateDatabase(Models)
+      //1:1
+
+      /* #endregion */
+
+      this.CreateTables(Models)
         .then(result => {
           Logger.Info('Database', `Table verification ${result}!`);
         });
     }
   }
 
-  private async CreateDatabase(models: { name: string, entity: Sequelize }[]) {
-    return new Promise(async (resolve, reject) => {
+  private async CreateTables(models: { name: string, entity: Sequelize }[]) {
+    return new Promise(async (resolve) => {
       let count = 0;
       let sucess = 0;
       let errors = 0;

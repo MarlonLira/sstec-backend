@@ -39,7 +39,7 @@ class UserController implements IUserController {
   @httpPost('/user')
   Save(@request() req: Request, @response() res: Response) {
     let _user = new User(req.body);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._userRepository.Find(_user, ['registryCode', 'email'])
         .then(found => {
           if (!Attributes.IsValid(found)) {
@@ -70,7 +70,7 @@ class UserController implements IUserController {
   @httpGet('/user/id/:id')
   Search(@request() req: Request, @response() res: Response) {
     let _user = new User(req.params);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._userRepository.Find(_user, ['registryCode', 'id'])
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, '', UserController, result));
@@ -88,7 +88,7 @@ class UserController implements IUserController {
    */
   @httpGet('/users')
   SearchAll(@request() req: Request, @response() res: Response) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._userRepository.ToList().then(result => {
         resolve(Http.SendMessage(res, HttpCode.Ok, '', UserController, result));
       });

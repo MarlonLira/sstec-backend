@@ -37,7 +37,7 @@ class VehicleController implements IVehicleController {
    */
   @httpPost('/vehicle')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let _vehicle = new Vehicle(req.body);
       this._VehicleRepository.Save(_vehicle)
         .then(result => {

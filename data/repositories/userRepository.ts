@@ -23,7 +23,7 @@ class UserRepository implements IUserRepository {
    * @memberof UserRepository
    */
   Find(user: User, properties: string[]) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let query: any;
       query = Querying.ReturnOrQuery(user, properties);
       User.findAll({
@@ -44,7 +44,7 @@ class UserRepository implements IUserRepository {
    * @memberof UserRepository
    */
   Save(user: any) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       User.create({
         name: user.name,
         registryCode: user.registryCode,
@@ -67,7 +67,7 @@ class UserRepository implements IUserRepository {
    * @memberof UserRepository
    */
   ToList() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       User.findAll()
         .then(result => {
           resolve(result);
@@ -87,7 +87,7 @@ class UserRepository implements IUserRepository {
    * @memberof UserRepository
    */
   GetByName(userName: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       User.findAll({
         where: {
           name: {
@@ -113,7 +113,7 @@ class UserRepository implements IUserRepository {
    * @memberof UserRepository
    */
   GetByRegistryCode(registryCode: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       User.findAll({
         where: {
           name: {
