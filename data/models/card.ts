@@ -4,7 +4,7 @@ import { DbInstance } from '../../main/context';
 import { Attributes } from '../../commons/helpers';
 import User from './user';
 
-var _instance = new DbInstance().getInstance();
+var _instance = DbInstance.getInstance()
 
 /**
  * @description

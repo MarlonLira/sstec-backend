@@ -4,7 +4,7 @@ import { DbInstance } from '../../main/context';
 import { Attributes } from '../../commons/helpers';
 import User from './user';
 
-var _instance = new DbInstance().getInstance();
+var _instance = DbInstance.getInstance()
 
 /**
  * @description
@@ -15,11 +15,11 @@ var _instance = new DbInstance().getInstance();
 class Vehicle extends Model {
 
   id!: number;
-  status: string;
-  model: string;
-  color: string;
-  type: string;
-  licensePlate: string;
+  status!: string;
+  model!: string;
+  color!: string;
+  type!: string;
+  licensePlate!: string;
   users: User[];
 
   /**
@@ -43,33 +43,34 @@ class Vehicle extends Model {
 
 Vehicle.init({
   id: {
-    type: new DataTypes.INTEGER,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
   status: {
-    type: new DataTypes.CHAR(2),
+    type: DataTypes.CHAR(2),
     allowNull: false
   },
   model: {
-    type: new DataTypes.STRING(12),
+    type: DataTypes.STRING(12),
     allowNull: false
   },
   color: {
-    type: new DataTypes.STRING(12),
+    type: DataTypes.STRING(12),
     allowNull: false
   },
   type: {
-    type: new DataTypes.STRING(50),
+    type: DataTypes.STRING(50),
     allowNull: false
   },
   licensePlate: {
-    type: new DataTypes.STRING(100),
+    type: DataTypes.STRING(100),
     allowNull: false
   }
 }, {
   sequelize: _instance,
-  tableName: 'Vehicle'
+  tableName: 'Vehicle',
+  modelName: 'vehicle'
 });
 
 export default Vehicle;

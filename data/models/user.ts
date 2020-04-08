@@ -1,15 +1,11 @@
-import {
-  Model, DataTypes, BelongsToManyGetAssociationsMixin, BelongsToManyAddAssociationMixin, BelongsToManySetAssociationsMixin
-} from 'sequelize';
+import { Model, DataTypes, BelongsToManyAddAssociationMixin } from 'sequelize';
 
 import { DbInstance } from '../../main/context';
 import { Attributes } from '../../commons/helpers';
 import Vehicle from './vehicle';
-import Card from './card';
-import UserAdress from './userAdress';
-import UserVehicles from './userVehicles';
 
-var _instance = new DbInstance().getInstance();
+
+var _instance = DbInstance.getInstance()
 
 /**
  * @description
@@ -17,16 +13,17 @@ var _instance = new DbInstance().getInstance();
  * @class User
  * @extends {Model}
  */
-class User extends Model {
+class User extends Model<User> {
 
   id!: number;
-  status: string;
-  name: string;
+  status!: string;
+  name!: string;
   registryCode!: string;
   phone!: string;
   email!: string;
   password!: string;
   vehicles!: Vehicle[];
+  public addVehicles!: BelongsToManyAddAssociationMixin<Vehicle, number>;
 
   /**
    *Creates an instance of User.
@@ -45,49 +42,39 @@ class User extends Model {
     this.password = Attributes.ReturnIfValid(json.password);
     this.vehicles = Attributes.ReturnIfValid(json.vehicles);
   }
-
-  getVehicles!: BelongsToManyGetAssociationsMixin<Vehicle>;
-  addVehicles!: BelongsToManyAddAssociationMixin<Vehicle, number>;
-  setVehicles!: BelongsToManySetAssociationsMixin<Vehicle, number>;
-  cards!: BelongsToManyGetAssociationsMixin<Card>;
-  userAdress!: BelongsToManyGetAssociationsMixin<UserAdress>;
 }
 
 User.init({
   id: {
-    type: new DataTypes.INTEGER,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
   status: {
-    type: new DataTypes.CHAR(2),
+    type: DataTypes.CHAR(2),
     allowNull: false
   },
   name: {
-    type: new DataTypes.STRING(30),
+    type: DataTypes.STRING(30),
     allowNull: false
   },
   registryCode: {
-    type: new DataTypes.STRING(12),
+    type: DataTypes.STRING(12),
     allowNull: false
   },
   phone: {
-    type: new DataTypes.STRING(12)
+    type: DataTypes.STRING(12)
   },
   email: {
-    type: new DataTypes.STRING(50)
+    type: DataTypes.STRING(50)
   },
   password: {
-    type: new DataTypes.STRING(100)
+    type: DataTypes.STRING(100)
   }
 }, {
   sequelize: _instance,
   tableName: 'User',
-  scopes: {
-    public: {
-      attributes: ['id', 'name', 'phone', 'email', 'registryCode']
-    }
-  }
+  modelName: 'user'
 });
 
 export default User;

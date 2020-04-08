@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize';
 import * as Config from '../config.json';
+import { Attributes } from '../commons/helpers';
 
 var _logging = Config.Database.Logging;
 var _dbConfig = Config.Database.MSSQL;
@@ -36,11 +37,11 @@ class Context {
    * @returns
    * @memberof Context
    */
-  CreateInstance() {
-    const sequelize = new Sequelize(this.Schema, this.userName, this.password,
+  static CreateInstance() {
+    const sequelize = new Sequelize(_dbConfig.schema, _dbConfig.username, _dbConfig.password,
       {
-        port: this.port,
-        host: this.host,
+        port: _dbConfig.port,
+        host: _dbConfig.host,
         dialect: 'mssql',
         logging: _logging,
         dialectOptions: {
@@ -63,11 +64,16 @@ class Context {
  */
 class DbInstance extends Context {
 
+  private static _instance: Sequelize;
+
   /**
    * @description
    * @memberof DbInstance
    */
-  getInstance = () => this.CreateInstance();
+  static getInstance() {
+    this._instance = !Attributes.IsValid(this._instance) ? this.CreateInstance() : this._instance;
+    return this._instance;
+  }
 }
 
 export { DbInstance }
