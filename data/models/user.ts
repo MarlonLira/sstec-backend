@@ -4,7 +4,6 @@ import { DbInstance } from '../../main/context';
 import { Attributes } from '../../commons/helpers';
 import Vehicle from './vehicle';
 
-
 var _instance = DbInstance.getInstance()
 
 /**
@@ -13,7 +12,7 @@ var _instance = DbInstance.getInstance()
  * @class User
  * @extends {Model}
  */
-class User extends Model<User> {
+class User extends Model {
 
   id!: number;
   status!: string;
@@ -23,6 +22,12 @@ class User extends Model<User> {
   email!: string;
   password!: string;
   vehicles!: Vehicle[];
+
+  /**
+   * @description
+   * @type {BelongsToManyAddAssociationMixin<Vehicle, number>}
+   * @memberof User
+   */
   public addVehicles!: BelongsToManyAddAssociationMixin<Vehicle, number>;
 
   /**

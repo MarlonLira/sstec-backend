@@ -17,6 +17,13 @@ import { resolve } from 'dns';
 @injectable()
 class VehicleRepository implements IVehicleRepository {
 
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Vehicle} vehicle
+   * @returns 
+   * @memberof VehicleRepository
+   */
   Save(vehicle: Vehicle) {
     return new Promise((resolve, reject) => {
       User.findByPk(2).then((user: User) => {
@@ -30,6 +37,14 @@ class VehicleRepository implements IVehicleRepository {
 
     })
   }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Vehicle} vehicle
+   * @param {string[]} properties
+   * @memberof VehicleRepository
+   */
   Find(vehicle: Vehicle, properties: string[]) {
     throw new Error("Method not implemented.");
   }
