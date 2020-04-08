@@ -24,30 +24,62 @@ class VehicleRepository implements IVehicleRepository {
    * @returns 
    * @memberof VehicleRepository
    */
-  Save(vehicle: Vehicle) {
-    return new Promise((resolve, reject) => {
-      User.findByPk(2).then((user: User) => {
-        Vehicle.findByPk(2)
-          .then((vehicle: Vehicle) => {
-            user.addVehicles(vehicle).then(result => resolve(result));
+  Save(vehicle: Vehicle, userId: number) {
+    return new Promise((resolve) => {
+      User.findByPk(userId)
+        .then((user: User) => {
+          Vehicle.create({
+            status: 'AT',
+            model: vehicle.model,
+            color: vehicle.color,
+            type: vehicle.type,
+            licensePlate: vehicle.licensePlate
+          }).then((vehicle: Vehicle) => {
+            user.addVehicle(vehicle)
+              .then(result => resolve(result));
           }).catch(error => {
             throw error;
           })
-      })
-
+        })
     })
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Vehicle} vehicle
-   * @param {string[]} properties
-   * @memberof VehicleRepository
-   */
-  Find(vehicle: Vehicle, properties: string[]) {
-    throw new Error("Method not implemented.");
+  Find(licensePlate: string, userId: number) {
+    return new Promise((resolve) => {
+      let count: number = 1;
+      User.findByPk(userId)
+        .then((user: User) => {
+          user.getVehicles()
+            .then((vehicles: Vehicle[]) => {
+              vehicles.forEach((vehicle: Vehicle) => {
+                if (vehicle.licensePlate == licensePlate) {
+                  resolve(vehicle);
+                } else if (vehicles.length == count) {
+                  resolve(undefined);
+                }
+                count++;
+              });
+            })
+            .catch(error => { throw error; })
+        });
+    })
   }
+
+  GetVehicles(userId: number) {
+    return new Promise((resolve) => {
+      User.findByPk(userId)
+        .then((user: User) => {
+          user.getVehicles()
+            .then((vehicles: Vehicle[]) => {
+              resolve(vehicles);
+            })
+            .catch(error => {
+              throw error;
+            })
+        });
+    });
+  }
+
 
 }
 

@@ -43,7 +43,7 @@ class AuthController implements IAuthController {
   @httpPost('/tokenValidate')
   TokenValidate(@request() req: Request, @response() res: Response) {
     let _auth = new Auth(req.body);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._authService.TokenValidate(_auth).then(result => {
         resolve(Http.SendSimpleMessage(res, HttpCode.Ok, { valid: !result }));
       })
@@ -74,7 +74,7 @@ class AuthController implements IAuthController {
   @httpPost('/signIn')
   SignIn(@request() req: Request, @response() res: Response) {
     let _auth = new Auth(req.body);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._userRepository.Find(_auth.user, ['registryCode', 'email'])
         .then(found => {
           if (Attributes.IsValid(found) && Crypto.Compare(_auth.user.password, found.password)) {

@@ -18,7 +18,7 @@ class EmployeeController implements IEmployeeController {
   @httpPost('/employee')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     let _employee = new Employee(req.body);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._employeeRepository.Save(_employee)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, 'Funcionario cadastrado com sucesso', EmployeeController, result));

@@ -9,6 +9,7 @@ import TYPES from '../types';
 import { Attributes, Crypto } from '../../commons/helpers';
 import { Http } from '../../commons/http';
 import { HttpCode } from '../../commons/enums/httpCode';
+import { CryptoType } from "../../commons/enums/cryptoType";
 
 /**
  * @description
@@ -26,7 +27,7 @@ class UserController implements IUserController {
    * @param {IUserRepository} userRepository
    * @memberof UserController
    */
-  constructor(@inject(TYPES.IUserRepository) private _userRepository: IUserRepository) {}
+  constructor(@inject(TYPES.IUserRepository) private _userRepository: IUserRepository) { }
 
   /**
    * @description
@@ -39,11 +40,11 @@ class UserController implements IUserController {
   @httpPost('/user')
   Save(@request() req: Request, @response() res: Response) {
     let _user = new User(req.body);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._userRepository.Find(_user, ['registryCode', 'email'])
         .then(found => {
           if (!Attributes.IsValid(found)) {
-            _user.password = Attributes.IsValid(_user.password) ? Crypto.Encrypt(_user.password) : undefined;
+            _user.password = Attributes.IsValid(_user.password) ? Crypto.Encrypt(_user.password, CryptoType.PASSWORD) : undefined;
             this._userRepository.Save(_user)
               .then(result => {
                 resolve(Http.SendMessage(res, HttpCode.Ok, 'Usuario criado com sucesso!', UserController, result));
@@ -70,7 +71,7 @@ class UserController implements IUserController {
   @httpGet('/user/id/:id')
   Search(@request() req: Request, @response() res: Response) {
     let _user = new User(req.params);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._userRepository.Find(_user, ['registryCode', 'id'])
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, '', UserController, result));
@@ -88,7 +89,7 @@ class UserController implements IUserController {
    */
   @httpGet('/users')
   SearchAll(@request() req: Request, @response() res: Response) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._userRepository.ToList().then(result => {
         resolve(Http.SendMessage(res, HttpCode.Ok, '', UserController, result));
       });

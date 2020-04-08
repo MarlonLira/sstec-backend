@@ -22,7 +22,7 @@ class CompanyAdressRepository implements ICompanyAdressRepository {
    * @memberof CompanyAdressRepository
    */
   Save(companyAdress: CompanyAdress) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       CompanyAdress.create({
         status: 'AT',
         country: companyAdress.country,

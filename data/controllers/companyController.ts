@@ -38,7 +38,7 @@ class CompanyController implements ICompanyController {
   @httpPost('/company')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     let _company = new Company(req.body);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._companyRepository.Save(_company)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, 'Empresa cadastrada com sucesso', CompanyController, result))

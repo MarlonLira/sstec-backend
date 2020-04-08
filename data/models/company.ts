@@ -61,12 +61,7 @@ Company.init({
   }
 }, {
   sequelize: _instance,
-  tableName: 'Company',
-  scopes: {
-    public: {
-      attributes: ['id', 'name', 'phone', 'email', 'registryCode']
-    }
-  }
+  tableName: 'Company'
 });
 
 export default Company;

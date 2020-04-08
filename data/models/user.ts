@@ -1,4 +1,4 @@
-import { Model, DataTypes, BelongsToManyAddAssociationMixin } from 'sequelize';
+import { Model, DataTypes, BelongsToManyAddAssociationMixin, BelongsToManyGetAssociationsMixin, BelongsToManyRemoveAssociationMixin } from 'sequelize';
 
 import { DbInstance } from '../../main/context';
 import { Attributes } from '../../commons/helpers';
@@ -25,10 +25,24 @@ class User extends Model {
 
   /**
    * @description
+   * @type {BelongsToManyGetAssociationsMixin<Vehicle>}
+   * @memberof User
+   */
+  public getVehicles!: BelongsToManyGetAssociationsMixin<Vehicle>;
+
+  /**
+   * @description
    * @type {BelongsToManyAddAssociationMixin<Vehicle, number>}
    * @memberof User
    */
-  public addVehicles!: BelongsToManyAddAssociationMixin<Vehicle, number>;
+  public addVehicle!: BelongsToManyAddAssociationMixin<Vehicle, number>;
+
+  /**
+   * @description
+   * @type {BelongsToManyRemoveAssociationMixin<Vehicle, number>}
+   * @memberof User
+   */
+  public removeVehicle!: BelongsToManyRemoveAssociationMixin<Vehicle, number>
 
   /**
    *Creates an instance of User.
@@ -78,8 +92,7 @@ User.init({
   }
 }, {
   sequelize: _instance,
-  tableName: 'User',
-  modelName: 'user'
+  tableName: 'User'
 });
 
 export default User;

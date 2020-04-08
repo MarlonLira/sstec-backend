@@ -2,7 +2,6 @@ import { Model, DataTypes } from 'sequelize';
 
 import { DbInstance } from '../../main/context';
 import { Attributes } from '../../commons/helpers';
-import User from './user';
 
 var _instance = DbInstance.getInstance()
 
@@ -20,7 +19,6 @@ class Vehicle extends Model {
   color!: string;
   type!: string;
   licensePlate!: string;
-  users: User[];
 
   /**
    *Creates an instance of Vehicle.
@@ -36,7 +34,6 @@ class Vehicle extends Model {
     this.color = Attributes.ReturnIfValid(json.color);
     this.type = Attributes.ReturnIfValid(json.type);
     this.licensePlate = Attributes.ReturnIfValid(json.licensePlate);
-    this.users = Attributes.ReturnIfValid(json.users);
   }
 
 }
@@ -69,8 +66,7 @@ Vehicle.init({
   }
 }, {
   sequelize: _instance,
-  tableName: 'Vehicle',
-  modelName: 'vehicle'
+  tableName: 'Vehicle'
 });
 
 export default Vehicle;
