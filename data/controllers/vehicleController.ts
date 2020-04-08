@@ -38,12 +38,24 @@ class VehicleController implements IVehicleController {
   @httpPost('/vehicle')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      let _vehicle = new Vehicle(req.body);
-      this._VehicleRepository.Save(_vehicle)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, '', Vehicle, result));
+      console.log(req.body)
+      let _vehicle = new Vehicle(req.body.vehicle);
+      let _userId: number = req.body.user.id;
+      this._VehicleRepository.Find(_vehicle.licensePlate, _userId)
+        .then(found => {
+          if (!Attributes.IsValid(found)) {
+            this._VehicleRepository.Save(_vehicle, _userId)
+              .then(result => {
+                resolve(Http.SendMessage(res, HttpCode.Ok, 'Veículo criado com sucesso!', VehicleController, result));
+              }).catch(error => {
+                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', VehicleController, error));
+              });
+          } else {
+            resolve(Http.SendMessage(res, HttpCode.Bad_Request, 'Já existe um cadastro desse veículo para o usuário!', VehicleController));
+
+          }
         }).catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', Vehicle));
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', VehicleController, error));
         })
 
     })
@@ -67,8 +79,19 @@ class VehicleController implements IVehicleController {
    * @param {Response<any>} res
    * @memberof VehicleController
    */
+  @httpPost('/vehicles/user/:id')
   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      console.log(req.params)
+      let _userId = req.params.id;
+      this._VehicleRepository.GetVehicles(_userId)
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, '', VehicleController, result));
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', VehicleController, error));
+        })
+    })
   }
 
   /**

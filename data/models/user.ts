@@ -23,7 +23,6 @@ class User extends Model {
   password!: string;
   vehicles!: Vehicle[];
 
-  
   /**
    * @description
    * @type {BelongsToManyGetAssociationsMixin<Vehicle>}
@@ -44,7 +43,6 @@ class User extends Model {
    * @memberof User
    */
   public removeVehicle!: BelongsToManyRemoveAssociationMixin<Vehicle, number>
-  
 
   /**
    *Creates an instance of User.
@@ -94,8 +92,7 @@ User.init({
   }
 }, {
   sequelize: _instance,
-  tableName: 'User',
-  modelName: 'user'
+  tableName: 'User'
 });
 
 export default User;

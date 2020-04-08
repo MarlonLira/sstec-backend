@@ -6,8 +6,9 @@ import Vehicle from '../../models/vehicle';
  * @interface IVehicleRepository
  */
 interface IVehicleRepository {
-  Save(vehicle : Vehicle);
-  Find(vehicle: Vehicle, properties: string[]);
+  Save(vehicle: Vehicle, userId: number);
+  Find(licensePlate: string, userId: number);
+  GetVehicles(userId: number);
 }
 
 export default IVehicleRepository;

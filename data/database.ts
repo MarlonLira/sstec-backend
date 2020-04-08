@@ -27,46 +27,44 @@ class Database {
    * @memberof Database
    */
   public Build() {
-    if (ForceSync || AlterSync) {
-      //The order influences creation in the database
-      let Models = [
-        { name: 'User', entity: User.sequelize },
-        { name: 'Vehicle', entity: Vehicle.sequelize },
-        { name: 'UserAdress', entity: UserAdress.sequelize },
-        { name: 'Card', entity: Card.sequelize },
-        { name: 'Company', entity: Company.sequelize },
-        { name: 'CompanyAdress', entity: CompanyAdress.sequelize },
-        { name: 'Employee', entity: Employee.sequelize },
-        { name: 'Payment', entity: Payment.sequelize }
-      ];
+    //The order influences creation in the database
+    let Models = [
+      { name: 'User', entity: User.sequelize },
+      { name: 'Vehicle', entity: Vehicle.sequelize },
+      { name: 'UserAdress', entity: UserAdress.sequelize },
+      { name: 'Card', entity: Card.sequelize },
+      { name: 'Company', entity: Company.sequelize },
+      { name: 'CompanyAdress', entity: CompanyAdress.sequelize },
+      { name: 'Employee', entity: Employee.sequelize },
+      { name: 'Payment', entity: Payment.sequelize }
+    ];
 
-      Logger.Info('Database', 'Table verification started!');
+    Logger.Info('Database', 'Table verification started!');
 
-      /* #region  Table Relationships */
+    /* #region  Table Relationships */
 
-      // N:N
-      User.belongsToMany(Vehicle, { through: 'User_Vehicle' });
-      Vehicle.belongsToMany(User, { through: 'User_Vehicle' });
+    // N:N
+    User.belongsToMany(Vehicle, { through: 'User_Vehicle' });
+    Vehicle.belongsToMany(User, { through: 'User_Vehicle' });
 
-      User.belongsToMany(Card, { through: 'User_Card' });
-      Card.belongsToMany(User, { through: 'User_Card' });
+    User.belongsToMany(Card, { through: 'User_Card' });
+    Card.belongsToMany(User, { through: 'User_Card' });
 
-      //1:N
-      Employee.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' })
-      UserAdress.belongsTo(User, { foreignKey: 'userId', as: 'User' });
-      CompanyAdress.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' });
-      Payment.belongsTo(Card, { foreignKey: 'cardId', as: 'Card' });
-      //Payment.belongsTo(ParkingSpace, {foreignKey: 'parkingSpaceId', as: 'ParkingSpace'});
+    //1:N
+    Employee.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' })
+    UserAdress.belongsTo(User, { foreignKey: 'userId', as: 'User' });
+    CompanyAdress.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' });
+    Payment.belongsTo(Card, { foreignKey: 'cardId', as: 'Card' });
+    //Payment.belongsTo(ParkingSpace, {foreignKey: 'parkingSpaceId', as: 'ParkingSpace'});
 
-      //1:1
+    //1:1
 
-      /* #endregion */
+    /* #endregion */
 
-      this.CreateTables(Models)
-        .then(result => {
-          Logger.Info('Database', `Table verification ${result}!`);
-        });
-    }
+    this.CreateTables(Models)
+      .then(result => {
+        Logger.Info('Database', `Table verification ${result}!`);
+      });
   }
 
   private async CreateTables(models: { name: string, entity: Sequelize }[]) {
