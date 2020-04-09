@@ -29,22 +29,22 @@ class EmployeeController implements IEmployeeController {
     })
   }
 
-  @httpGet('/company')
+  @httpGet('/employee')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
     throw new Error("Method not implemented.");
   }
 
-  @httpGet('/companies')
+  @httpGet('/employee')
   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
     throw new Error("Method not implemented.");
   }
 
-  @httpPut('/company')
+  @httpPut('/employee')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     throw new Error("Method not implemented.");
   }
 
-  @httpDelete('/company')
+  @httpDelete('/employee')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
     throw new Error("Method not implemented.");
   }
