@@ -3,7 +3,7 @@ import { Op } from 'sequelize';
 import ICardRepository from '../interfaces/IRepositories/ICardRepository';
 import User from '../models/user';
 import Card from '../models/card';
-import { Querying } from '../../commons/helpers';
+import Querying from '../../commons/core/querying';;
 import { injectable } from "inversify";
 
 /**
@@ -22,7 +22,7 @@ class CardRepository implements ICardRepository {
    * @memberof CardRepository
    */
   Save(card: Card) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       Card.create({
         status: 'AT',
         holder: card.holder,

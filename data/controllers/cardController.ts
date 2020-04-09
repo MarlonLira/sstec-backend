@@ -6,8 +6,8 @@ import ICardController from '../interfaces/IControllers/ICardController';
 import ICardRepository from '../interfaces/IRepositories/ICardRepository';
 import Card from "../models/card";
 import TYPES from '../types';
-import { Attributes, Crypto } from '../../commons/helpers';
-import { Http } from '../../commons/http';
+import Attributes from '../../commons/core/attributes';
+import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 
 /**
@@ -30,7 +30,7 @@ class CardController implements ICardController {
   @httpPost('/card')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     let _card = new Card(req.body);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._cardRepository.Save(_card)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, 'Cartão cadastrado com sucesso!', CardController, result))

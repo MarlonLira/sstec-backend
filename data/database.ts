@@ -1,6 +1,6 @@
-import { Sequelize, Transaction, QueryInterface } from 'sequelize';
+import { Sequelize, Transaction, QueryInterface, BelongsToMany } from 'sequelize';
 import * as Config from '../config.json';
-import Logger from '../commons/logger';
+import Logger from '../commons/core/logger';
 
 //Entities
 import User from './models/user';
@@ -27,46 +27,48 @@ class Database {
    * @memberof Database
    */
   public Build() {
-    if (ForceSync || AlterSync) {
-      //Order influences creation in the database
-      let Models = [
-        { name: 'User', entity: User.sequelize },
-        { name: 'Vehicle', entity: Vehicle.sequelize },
-        { name: 'UserAdress', entity: UserAdress.sequelize },
-        { name: 'Card', entity: Card.sequelize },
-        { name: 'Company', entity: Company.sequelize },
-        { name: 'CompanyAdress', entity: CompanyAdress.sequelize },
-        { name: 'Employee', entity: Employee.sequelize },
-        { name: 'Payment', entity: Payment.sequelize }
-      ];
+    //The order influences creation in the database
+    let Models = [
+      { name: 'User', entity: User.sequelize },
+      { name: 'Vehicle', entity: Vehicle.sequelize },
+      { name: 'UserAdress', entity: UserAdress.sequelize },
+      { name: 'Card', entity: Card.sequelize },
+      { name: 'Company', entity: Company.sequelize },
+      { name: 'CompanyAdress', entity: CompanyAdress.sequelize },
+      { name: 'Employee', entity: Employee.sequelize },
+      { name: 'Payment', entity: Payment.sequelize }
+    ];
 
-      Logger.Info('Database', 'Table verification started!');
+    Logger.Info('Database', 'Table verification started!');
 
-      //Table relationchip
-      User.belongsToMany(Vehicle, { through: 'User_Vehicle', constraints: true, foreignKey: 'userId', otherKey: 'vehicleId' });
-      Vehicle.belongsToMany(User, { through: 'User_Vehicle', constraints: true, foreignKey: 'vehicleId', otherKey: 'userId' });
+    /* #region  Table Relationships */
 
-      User.belongsToMany(Card, { through: 'User_Card', constraints: true, foreignKey: 'userId', otherKey: 'cardId' });
-      Card.belongsToMany(User, { through: 'User_Card', constraints: true, foreignKey: 'cardId', otherKey: 'userId' });
+    // N:N
+    User.belongsToMany(Vehicle, { through: 'UserVehicles' });
+    Vehicle.belongsToMany(User, { through: 'UserVehicles' });
 
-      Employee.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' })
-      UserAdress.belongsTo(User, { foreignKey: 'userId', as: 'User' });
-      CompanyAdress.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' });
+    User.belongsToMany(Card, { through: 'UserCards' });
+    Card.belongsToMany(User, { through: 'UserCards' });
 
-      Payment.belongsTo(Card, {foreignKey: 'cardId', as: 'Card'});
-      //Payment.belongsTo(ParkingSpace, {foreignKey: 'parkingSpaceId', as: 'ParkingSpace'});
-      
-      //Table relationchip End
+    //1:N
+    Employee.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' })
+    UserAdress.belongsTo(User, { foreignKey: 'userId', as: 'User' });
+    CompanyAdress.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' });
+    Payment.belongsTo(Card, { foreignKey: 'cardId', as: 'Card' });
+    //Payment.belongsTo(ParkingSpace, {foreignKey: 'parkingSpaceId', as: 'ParkingSpace'});
 
-      this.CreateDatabase(Models)
-        .then(result => {
-          Logger.Info('Database', `Table verification ${result}!`);
-        });
-    }
+    //1:1
+
+    /* #endregion */
+
+    this.CreateTables(Models)
+      .then(result => {
+        Logger.Info('Database', `Table verification ${result}!`);
+      });
   }
 
-  private async CreateDatabase(models: { name: string, entity: Sequelize }[]) {
-    return new Promise(async (resolve, reject) => {
+  private async CreateTables(models: { name: string, entity: Sequelize }[]) {
+    return new Promise(async (resolve) => {
       let count = 0;
       let sucess = 0;
       let errors = 0;
@@ -96,10 +98,6 @@ class Database {
           if (errors > 0) {
             Logger.Error('Database', `${errors} errors in the models were found!`);
             Logger.Warn('Database', 'trying to fix the models');
-            sucess = 0;
-            errors = 0;
-            count = 0;
-
             await this.TryFixModels(modelsWithErrors, resolve);
           } else {
             resolve('finished successfully');

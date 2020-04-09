@@ -5,7 +5,7 @@ import IPaymentRepository from '../interfaces/IRepositories/IPaymentRepository';
 import Payment from '../models/payment';
 import Card from '../models/card';
 import User from '../models/user';
-import { Querying } from '../../commons/helpers';
+import Querying from '../../commons/core/querying';;
 
 /**
  * @description

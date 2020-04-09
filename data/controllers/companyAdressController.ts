@@ -7,8 +7,8 @@ import ICompanyAdressRepository from '../interfaces/IRepositories/ICompanyAdress
 import CompanyAdress from "../models/companyAdress";
 import Company from "../models/company";
 import TYPES from '../types';
-import { Attributes, Crypto } from '../../commons/helpers';
-import { Http } from '../../commons/http';
+import Attributes from '../../commons/core/attributes';
+import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 
 /**
@@ -30,7 +30,7 @@ class CompanyAdressController implements ICompanyAdressController {
   @httpPost('/companyAdress')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     let _companyAdress = new CompanyAdress(req.body);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._companyAdressRepository.Save(_companyAdress)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, 'Entederço cadastrado com sucesso', CompanyAdressController, result))

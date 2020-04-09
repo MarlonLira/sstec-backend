@@ -23,7 +23,7 @@ class AuthService implements IAuthService {
    * @memberof AuthService
    */
   TokenValidate(auth: Auth) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       jwt.verify(auth.token, process.env.SECRET, (err, decoded) => {
         resolve(err)
       })
@@ -48,7 +48,7 @@ class AuthService implements IAuthService {
    * @memberof AuthService
    */
   SignIn(user: User) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let id = user.id;
       let name = user.name;
 

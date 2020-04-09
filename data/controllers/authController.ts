@@ -2,13 +2,14 @@ import { Response, Request } from "express";
 import { controller, httpPost, request, response } from "inversify-express-utils";
 import { inject } from "inversify";
 
+import TYPES from '../types';
 import IAuthService from '../interfaces/IServices/IAuthService';
 import IUserRepository from '../interfaces/IRepositories/IUserRepository';
-import TYPES from '../types';
 import Auth from "../models/auth";
-import { Http } from '../../commons/http';
+import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
-import { Attributes, Crypto } from '../../commons/helpers';
+import Attributes from '../../commons/core/attributes';
+import Crypto from '../../commons/core/crypto';
 import IAuthController from "../interfaces/IControllers/IAuthController";
 
 /**
@@ -43,7 +44,7 @@ class AuthController implements IAuthController {
   @httpPost('/tokenValidate')
   TokenValidate(@request() req: Request, @response() res: Response) {
     let _auth = new Auth(req.body);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._authService.TokenValidate(_auth).then(result => {
         resolve(Http.SendSimpleMessage(res, HttpCode.Ok, { valid: !result }));
       })
@@ -74,7 +75,7 @@ class AuthController implements IAuthController {
   @httpPost('/signIn')
   SignIn(@request() req: Request, @response() res: Response) {
     let _auth = new Auth(req.body);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._userRepository.Find(_auth.user, ['registryCode', 'email'])
         .then(found => {
           if (Attributes.IsValid(found) && Crypto.Compare(_auth.user.password, found.password)) {

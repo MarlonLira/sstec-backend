@@ -1,8 +1,8 @@
 import { Model, DataTypes } from 'sequelize';
 import { DbInstance } from '../../main/context';
-import { Attributes } from '../../commons/helpers';
+import Attributes from '../../commons/core/attributes';
 
-var _instance = new DbInstance().getInstance();
+var _instance = DbInstance.getInstance()
 
 /**
  * @description
@@ -61,12 +61,7 @@ Company.init({
   }
 }, {
   sequelize: _instance,
-  tableName: 'Company',
-  scopes: {
-    public: {
-      attributes: ['id', 'name', 'phone', 'email', 'registryCode']
-    }
-  }
+  tableName: 'Company'
 });
 
 export default Company;
