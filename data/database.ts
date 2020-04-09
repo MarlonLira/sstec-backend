@@ -11,6 +11,8 @@ import Company from './models/company';
 import CompanyAdress from './models/companyAdress';
 import Employee from './models/employee';
 import Payment from './models/payment';
+import Crypto from '../commons/core/crypto';
+import { CryptoType } from '../commons/enums/cryptoType';
 
 var { ForceSync, AlterSync, IsLogger } = Config.Database;
 

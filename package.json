@@ -9,6 +9,7 @@
     "start": "npm run app",
     "app": "node dist/src/app.js",
     "dev": "nodemon dist/src/app.js",
+    "dev-debugger": "nodemon --inspect dist/src/app.js",
     "watch-ts": "tsc -w"
   },
   "repository": {

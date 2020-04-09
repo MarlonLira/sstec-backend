@@ -1,9 +1,12 @@
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 
 import IEmployeeRepository from '../interfaces/IRepositories/IEmployeeRepository';
 import Employee from '../models/employee';
 import Querying from '../../commons/core/querying';;
 import { injectable } from "inversify";
+import Attributes from '../../commons/core/attributes';
+import { CryptoType } from '../../commons/enums/cryptoType';
+import Crypto from '../../commons/core/crypto';
 
 /**
  * @description
@@ -21,7 +24,21 @@ class EmployeeRepository implements IEmployeeRepository {
    * @memberof EmployeeRepository
    */
   Save(employee: Employee) {
-    throw new Error("Method not implemented.");
+    return new Promise(async (resolve) => {
+      const _transaction = await Employee.sequelize.transaction();
+      employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
+      employee.status = 'AT';
+      employee.id = 0;
+      Employee.create(employee, { transaction: _transaction })
+        .then(async (employee: Employee) => {
+          await _transaction.commit();
+          resolve(employee.id);
+        })
+        .catch(async error => {
+          await _transaction.rollback();
+          throw error;
+        });
+    });
   }
 
   /**
@@ -32,7 +49,17 @@ class EmployeeRepository implements IEmployeeRepository {
    * @memberof EmployeeRepository
    */
   Find(employee: Employee, properties: string[]) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      let query: any;
+      query = Querying.ReturnOrQuery(employee, properties);
+      Employee.findAll({
+        where: query
+      }).then((result: Employee[]) => {
+        resolve(result);
+      }).catch(error => {
+        throw (error);
+      })
+    });
   }
 
   /**
@@ -52,7 +79,18 @@ class EmployeeRepository implements IEmployeeRepository {
    * @memberof EmployeeRepository
    */
   GetByRegistryCode(registryCode: string) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      let query: any;
+      Employee.findOne({
+        where: {
+          registryCode: registryCode
+        }
+      }).then((result: Employee) => {
+        resolve(result);
+      }).catch(error => {
+        throw (error);
+      })
+    });
   }
 
   /**

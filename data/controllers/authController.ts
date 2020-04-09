@@ -11,6 +11,11 @@ import { HttpCode } from '../../commons/enums/httpCode';
 import Attributes from '../../commons/core/attributes';
 import Crypto from '../../commons/core/crypto';
 import IAuthController from "../interfaces/IControllers/IAuthController";
+import IEmployeeRepository from "../interfaces/IRepositories/IEmployeeRepository";
+import Employee from "../models/employee";
+import ICompanyRepository from "../interfaces/IRepositories/ICompanyRepository";
+import Company from "../models/company";
+import { AuthType } from "../../commons/enums/authType";
 
 /**
  * @description
@@ -30,7 +35,8 @@ class AuthController implements IAuthController {
    */
   constructor(
     @inject(TYPES.IAuthService) private _authService: IAuthService,
-    @inject(TYPES.IUserRepository) private _userRepository: IUserRepository
+    @inject(TYPES.IEmployeeRepository) private _employeeRepository: IEmployeeRepository,
+    @inject(TYPES.ICompanyRepository) private _companyRepository: ICompanyRepository,
   ) { }
 
   /**
@@ -49,7 +55,6 @@ class AuthController implements IAuthController {
         resolve(Http.SendSimpleMessage(res, HttpCode.Ok, { valid: !result }));
       })
     })
-
   }
 
   /**
@@ -76,10 +81,10 @@ class AuthController implements IAuthController {
   SignIn(@request() req: Request, @response() res: Response) {
     let _auth = new Auth(req.body);
     return new Promise((resolve) => {
-      this._userRepository.Find(_auth.user, ['registryCode', 'email'])
-        .then(found => {
-          if (Attributes.IsValid(found) && Crypto.Compare(_auth.user.password, found.password)) {
-            this._authService.SignIn(_auth.user).then(result => {
+      this._employeeRepository.GetByRegistryCode(_auth.employee.registryCode)
+        .then((found: Employee) => {
+          if (Attributes.IsValid(found.password) && Crypto.Compare(_auth.employee.password, found.password)) {
+            this._authService.SignIn(_auth.employee, AuthType.EMPLOYEE).then(result => {
               resolve(Http.SendMessage(res, HttpCode.Ok, 'Acesso bem sucedido!', AuthController, result))
             });
           } else {
@@ -88,8 +93,8 @@ class AuthController implements IAuthController {
         })
         .catch(error => {
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, 'Erro desconhecido, por favor reporte a equipe técnica!', AuthController))
-        })
-    })
+        });
+    });
   }
 
   /**
@@ -101,7 +106,29 @@ class AuthController implements IAuthController {
    */
   @httpPost('/signUp')
   SignUp(@request() req: Request, @response() res: Response) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      let _auth = new Auth(req.body);
+      this._companyRepository.GetByRegistryCode(_auth.company.registryCode)
+        .then(result => {
+          if (!Attributes.IsValid(result)) {
+            this._companyRepository.Save(_auth.company)
+              .then((companyId: number) => {
+                _auth.employee.companyId = companyId;
+                this._employeeRepository.Save(_auth.employee)
+                  .then(employeeId => {
+                    resolve(Http.SendMessage(res, HttpCode.Ok, 'Acesso bem sucedido!', AuthController, { "companyId": companyId, "employeeId": employeeId }));
+                  })
+                  .catch(error => {
+                    resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, 'Erro desconhecido, por favor reporte a equipe técnica!', AuthController));
+                  });
+              }).catch(error => {
+                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, 'Erro desconhecido, por favor reporte a equipe técnica!', AuthController));
+              })
+          } else {
+            resolve(Http.SendMessage(res, HttpCode.Bad_Request, 'A empresa já foi cadastrada!', AuthController));
+          }
+        })
+    });
   }
 
 }

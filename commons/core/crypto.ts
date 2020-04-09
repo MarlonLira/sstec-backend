@@ -1,6 +1,6 @@
 import { CryptoType } from '../enums/cryptoType';
-var bcrypt = require('bcrypt');
-const crypto = require("crypto");
+import * as crypto from 'crypto';
+import * as bcrypt from 'bcrypt'
 
 /**
  * @description
@@ -75,7 +75,7 @@ class Crypto {
   private static EncryptCard(card: string) {
     const cipher = crypto.createCipher(this.cryptographyData.algorithm, this.cryptographyData.secret);
     cipher.update(card);
-    return cipher.final(this.cryptographyData.type);
+    return cipher.final('hex');
   }
 
   /**
@@ -87,10 +87,10 @@ class Crypto {
    * @returns 
    * @memberof Crypto
    */
-  private static DecryptCard(value: string) {
+  private static DecryptCard(value: string): string {
     const decipher = crypto.createDecipher(this.cryptographyData.algorithm, this.cryptographyData.secret);
-    decipher.update(value, this.cryptographyData.type);
-    return decipher.final();
+    decipher.update(value, 'hex');
+    return decipher.final().toString();
   }
 
   /**
@@ -119,6 +119,14 @@ class Crypto {
     return hash;
   }
 
+  static ComparePassword(password: string, hash: string) {
+    let pass = '';
+    const decipher = crypto.createDecipher(this.cryptographyData.algorithm, this.cryptographyData.secret);
+    decipher.update(hash, 'hex');
+    pass = decipher.final().toString();
+    return pass;
+  }
+
   /**
    * @description
    * @author Marlon Lira
@@ -128,7 +136,7 @@ class Crypto {
    * @returns 
    * @memberof Crypto
    */
-  static Compare(password: string, hash: string) {
+  static Compare(password: string, hash: string): boolean {
     return bcrypt.compareSync(password, hash);
   }
 }
