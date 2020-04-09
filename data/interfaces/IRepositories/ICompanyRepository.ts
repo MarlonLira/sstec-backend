@@ -7,10 +7,9 @@ import Company from '../../models/company';
  */
 interface ICompanyRepository {
   Save(company: Company);
-  GetByName(companyName: string);
+  Update(company: Company);
   GetByRegistryCode(registryCode: string);
-  ToList();
-  Find(company: Company, properties: string[]);
+  Delete(id: number);
 }
 
 export default ICompanyRepository;
