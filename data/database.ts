@@ -1,6 +1,6 @@
 import { Sequelize, Transaction, QueryInterface, BelongsToMany } from 'sequelize';
 import * as Config from '../config.json';
-import Logger from '../commons/logger';
+import Logger from '../commons/core/logger';
 
 //Entities
 import User from './models/user';

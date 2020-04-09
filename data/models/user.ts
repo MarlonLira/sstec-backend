@@ -1,7 +1,7 @@
 import { Model, DataTypes, BelongsToManyAddAssociationMixin, BelongsToManyGetAssociationsMixin, BelongsToManyRemoveAssociationMixin } from 'sequelize';
 
 import { DbInstance } from '../../main/context';
-import { Attributes } from '../../commons/helpers';
+import Attributes from '../../commons/core/attributes';
 import Vehicle from './vehicle';
 
 var _instance = DbInstance.getInstance()

@@ -1,9 +1,9 @@
 import { Sequelize } from 'sequelize';
 import * as Config from '../config.json';
-import { Attributes } from '../commons/helpers';
+import Attributes from "../commons/core/attributes";;
 
 var _logging = Config.Database.Logging;
-var _dbConfig = Config.Database.MySql;
+var _dbConfig = Config.Database.MSSQL;
 
 /**
  * @description
@@ -12,6 +12,7 @@ var _dbConfig = Config.Database.MySql;
  */
 class Context {
 
+  protected static _instance: Sequelize;
   /**
    * @description
    * @author Marlon Lira
@@ -23,14 +24,14 @@ class Context {
       {
         port: _dbConfig.port,
         host: _dbConfig.host,
-        dialect: 'mysql',
+        dialect: 'mssql',
         logging: _logging,
-        // dialectOptions: {
-        //   options: {
-        //     trustServerCertificate: true
-        //   },
-        //   ssl: true
-        // }
+        dialectOptions: {
+          options: {
+            trustServerCertificate: true
+          },
+          ssl: true
+        }
       }
     );
     return sequelize;
@@ -45,14 +46,12 @@ class Context {
  */
 class DbInstance extends Context {
 
-  private static _instance: Sequelize;
-
   /**
    * @description
    * @memberof DbInstance
    */
   static getInstance() {
-    this._instance = !Attributes.IsValid(this._instance) ? this.CreateInstance() : this._instance;
+    this._instance = Attributes.ReturnIfValid(this._instance, this.CreateInstance());
     return this._instance;
   }
 }

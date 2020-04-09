@@ -1,4 +1,4 @@
-import { Attributes } from './helpers';
+import Attributes from './attributes';
 
 /**
  * @description

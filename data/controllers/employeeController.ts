@@ -6,8 +6,8 @@ import IEmployeeController from "../interfaces/IControllers/IEmployeeController"
 import IEmployeeRepository from '../interfaces/IRepositories/IEmployeeRepository';
 import Employee from "../models/employee";
 import TYPES from '../types';
-import { Attributes, Crypto } from '../../commons/helpers';
-import { Http } from '../../commons/http';
+import Attributes from '../../commons/core/attributes';
+import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 
 @controller('')

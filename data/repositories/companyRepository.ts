@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 
 import ICompanyRepository from '../interfaces/IRepositories/ICompanyRepository';
 import Company from '../models/company';
-import { Querying, Attributes } from '../../commons/helpers';
+import Attributes from '../../commons/core/attributes';
 import { injectable } from "inversify";
 
 /**

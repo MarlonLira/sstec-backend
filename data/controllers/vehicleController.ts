@@ -5,9 +5,9 @@ import { inject } from "inversify";
 import IVehicleRepository from '../interfaces/IRepositories/IVehicleRepository';
 import TYPES from '../types';
 import Vehicle from "../models/Vehicle";
-import { Http } from '../../commons/http';
+import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
-import { Attributes, Crypto } from '../../commons/helpers';
+import Attributes from '../../commons/core/attributes';
 import IVehicleController from "../interfaces/IControllers/IVehicleController";
 
 /**

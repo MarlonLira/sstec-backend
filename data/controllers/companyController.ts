@@ -6,7 +6,7 @@ import ICompanyController from "../interfaces/IControllers/ICompanyController";
 import ICompanyRepository from '../interfaces/IRepositories/ICompanyRepository';
 import Company from "../models/company";
 import TYPES from '../types';
-import { Http } from '../../commons/http';
+import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 
 /**
