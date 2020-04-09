@@ -42,7 +42,7 @@ class Server {
     this.inversifyExpress = new InversifyExpressServer(container);
     this.Middlewares()
       .then(() => this.Status()
-        .then(() => this.Database()))
+        .then(() => this.Database()));
   }
 
   /**

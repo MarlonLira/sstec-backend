@@ -12,25 +12,6 @@ var _dbConfig = Config.Database.MSSQL;
  */
 class Context {
 
-  private port: number;
-  private host: string;
-  private Schema: string;
-  private userName: string;
-  private password: string;
-
-  /**
-   *Creates an instance of Context.
-   * @author Marlon Lira
-   * @memberof Context
-   */
-  constructor() {
-    this.userName = _dbConfig.username;
-    this.password = _dbConfig.password;
-    this.host = _dbConfig.host;
-    this.Schema = _dbConfig.schema;
-    this.port = _dbConfig.port;
-  }
-
   /**
    * @description
    * @author Marlon Lira
