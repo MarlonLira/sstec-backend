@@ -44,11 +44,11 @@ class Database {
     /* #region  Table Relationships */
 
     // N:N
-    User.belongsToMany(Vehicle, { through: 'User_Vehicle' });
-    Vehicle.belongsToMany(User, { through: 'User_Vehicle' });
+    User.belongsToMany(Vehicle, { through: 'UserVehicles' });
+    Vehicle.belongsToMany(User, { through: 'UserVehicles' });
 
-    User.belongsToMany(Card, { through: 'User_Card' });
-    Card.belongsToMany(User, { through: 'User_Card' });
+    User.belongsToMany(Card, { through: 'UserCards' });
+    Card.belongsToMany(User, { through: 'UserCards' });
 
     //1:N
     Employee.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' })
