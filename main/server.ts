@@ -9,7 +9,7 @@ import { InversifyExpressServer } from 'inversify-express-utils';
 import * as swaggerDocument from '../middleware/swagger/swagger.json';
 import container from '../middleware/inversify/inversify.config';
 
-import Logger from '../commons/logger';
+import Logger from '../commons/core/logger';
 import Database from '../data/database';
 
 /**

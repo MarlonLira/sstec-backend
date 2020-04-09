@@ -2,13 +2,14 @@ import { Response, Request } from "express";
 import { controller, httpPost, request, response } from "inversify-express-utils";
 import { inject } from "inversify";
 
+import TYPES from '../types';
 import IAuthService from '../interfaces/IServices/IAuthService';
 import IUserRepository from '../interfaces/IRepositories/IUserRepository';
-import TYPES from '../types';
 import Auth from "../models/auth";
-import { Http } from '../../commons/http';
+import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
-import { Attributes, Crypto } from '../../commons/helpers';
+import Attributes from '../../commons/core/attributes';
+import Crypto from '../../commons/core/crypto';
 import IAuthController from "../interfaces/IControllers/IAuthController";
 
 /**

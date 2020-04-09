@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 
 import IEmployeeRepository from '../interfaces/IRepositories/IEmployeeRepository';
 import Employee from '../models/employee';
-import { Querying } from '../../commons/helpers';
+import Querying from '../../commons/core/querying';;
 import { injectable } from "inversify";
 
 /**

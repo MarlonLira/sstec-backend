@@ -6,8 +6,8 @@ import IPaymentController from "../interfaces/IControllers/IPaymentController";
 import IPaymentRepository from '../interfaces/IRepositories/IPaymentRepository';
 import Payment from "../models/payment";
 import TYPES from '../types';
-import { Attributes, Crypto } from '../../commons/helpers';
-import { Http } from '../../commons/http';
+import Attributes from '../../commons/core/attributes';
+import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 
 /**

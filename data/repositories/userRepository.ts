@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 
 import IUserRepository from '../interfaces/IRepositories/IUserRepository';
 import User from '../models/user';
-import { Querying } from '../../commons/helpers';
+import Querying from '../../commons/core/querying';;
 import { injectable } from "inversify";
 
 /**
@@ -34,6 +34,14 @@ class UserRepository implements IUserRepository {
         throw (error);
       })
     });
+  }
+
+  Update(user: User) {
+    User.update(user, {
+      where : {
+        id:  1
+      }
+    })
   }
 
   /**
