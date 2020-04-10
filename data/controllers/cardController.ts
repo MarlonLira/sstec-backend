@@ -46,14 +46,18 @@ class CardController implements ICardController {
     throw new Error("Method not implemented.");
   }
 
-  @httpGet('/cards')
-  SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
-  }
-
   @httpPut('/card')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      let _card = new Card(req.body);
+      this._cardRepository.update(_card)
+      .then(result =>{
+        resolve(Http.SendMessage(res, HttpCode.Ok, 'Cartão atualizado com sucesso', CardController, result));
+      })
+      .catch(error =>{
+        resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error));
+      })
+    })
   }
 
   @httpDelete('/card')

@@ -18,7 +18,7 @@ class Card extends Model {
   status: string;
   holder: string;
   number: string;
-  secureCode: string;
+  secureCode!: string;
   type: string;
   users!: BelongsToGetAssociationMixin<User>;
 
@@ -59,7 +59,7 @@ Card.init({
   },
   secureCode: {
     type: new DataTypes.CHAR(3),
-    allowNull: false
+    allowNull: true
   },
   type: {
     type: new DataTypes.STRING(10),

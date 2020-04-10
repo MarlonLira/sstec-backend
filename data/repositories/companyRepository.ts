@@ -52,8 +52,7 @@ class CompanyRepository implements ICompanyRepository {
             status: Attributes.ReturnIfValid(company.status, result.status),
             name: Attributes.ReturnIfValid(company.name, result.name),
             registryCode: Attributes.ReturnIfValid(company.registryCode, result.registryCode),
-            phone: Attributes.ReturnIfValid(company.phone, result.phone),
-            email: Attributes.ReturnIfValid(company.email, result.email)
+            phone: Attributes.ReturnIfValid(company.phone, result.phone)
           },
             {
               where: {
@@ -84,8 +83,7 @@ class CompanyRepository implements ICompanyRepository {
             status: 'EX',
             name: Attributes.ReturnIfValid(result.name),
             registryCode: Attributes.ReturnIfValid(result.registryCode),
-            phone: Attributes.ReturnIfValid(result.phone),
-            email: Attributes.ReturnIfValid(result.email)
+            phone: Attributes.ReturnIfValid(result.phone)
           },
             {
               where: {

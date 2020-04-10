@@ -14,6 +14,12 @@ import { injectable } from "inversify";
  */
 @injectable()
 class CardRepository implements ICardRepository {
+  delete(card: Card) {
+    throw new Error("Method not implemented.");
+  }
+  update(card: Card) {
+    throw new Error("Method not implemented.");
+  }
 
   /**
    * @description

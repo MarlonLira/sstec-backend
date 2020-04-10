@@ -48,6 +48,14 @@ class CompanyController implements ICompanyController {
     })
   }
 
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns
+   * @memberof CompanyController
+   */
   @httpGet('/company/registryCode/:registryCode')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
@@ -62,6 +70,14 @@ class CompanyController implements ICompanyController {
     })
   }
 
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns
+   * @memberof CompanyController
+   */
   @httpPut('/company')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
@@ -76,6 +92,14 @@ class CompanyController implements ICompanyController {
     })
   }
 
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns
+   * @memberof CompanyController
+   */
   @httpDelete('/company/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {

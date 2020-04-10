@@ -9,6 +9,8 @@ import Card from '../../models/card';
 interface ICardRepository {
   Save(card: Card);
   GetByUserCard(user: User);
+  delete(card: Card);
+  update(card: Card);
 }
 
 export default ICardRepository;
