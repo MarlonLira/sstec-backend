@@ -1,12 +1,7 @@
 import IAuthService from "../interfaces/IServices/IAuthService";
-import User from '../models/user';
-import Auth from '../models/auth';
-
 import { injectable } from "inversify";
-import Employee from "../models/employee";
-import { AuthType } from "../../commons/enums/authType";
-
-const jwt = require('jsonwebtoken')
+import * as jwt from 'jsonwebtoken';
+import Auth from '../models/auth';
 
 /**
  * @description
