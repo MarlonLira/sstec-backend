@@ -1,30 +1,28 @@
 import { Model, DataTypes } from 'sequelize';
 import { DbInstance } from '../../main/context';
-import * as Config from '../../config.json';
+import Attributes from '../../commons/core/attributes';
 
-var _reSync = Config.Database.ForceSync;
-
-var _instance = new DbInstance().getInstance();
+var _instance = DbInstance.getInstance()
 
 class Employee extends Model {
   public id!: number;
-  public status: number;
-  public firstName!: string;
-  public lastName!: string;
+  public status: string;
+  public name!: string;
   public registryCode!: string;
-  public phone!: string;
-  public salary: number;
+  public email!: string;
+  public password: string;
+  public companyId: number;
 
   constructor(json?: any) {
     super()
     if (json != undefined) {
-      this.id = json.id;
-      this.firstName = json.firstName;
-      this.lastName = json.lastName;
-      this.status = json.status;
-      this.registryCode = json.registryCode;
-      this.phone = json.phone;
-      this.salary = json.salary;
+      this.id = Attributes.ReturnIfValid(json.id, 0);
+      this.name = Attributes.ReturnIfValid(json.name);
+      this.status = Attributes.ReturnIfValid(json.status);
+      this.registryCode = Attributes.ReturnIfValid(json.registryCode);
+      this.password = Attributes.ReturnIfValid(json.password);
+      this.email = Attributes.ReturnIfValid(json.email);
+      this.companyId = Attributes.ReturnIfValid(json.companyId);
     }
   }
 }
@@ -36,31 +34,26 @@ Employee.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.INTEGER
-  },
-  firstName: {
-    type: new DataTypes.STRING(128),
+    type: new DataTypes.CHAR(2),
     allowNull: false
   },
-  lastName: {
-    type: new DataTypes.STRING(128),
+  name: {
+    type: new DataTypes.STRING(30),
     allowNull: false
   },
   registryCode: {
-    type: new DataTypes.STRING(12),
+    type: new DataTypes.STRING(14),
     allowNull: false
   },
-  phone: {
-    type: new DataTypes.STRING(12)
+  password: {
+    type: new DataTypes.STRING(100)
   },
-  salary: {
-    type: new DataTypes.FLOAT
+  email: {
+    type: new DataTypes.STRING(50)
   }
 }, {
   sequelize: _instance,
   tableName: 'Employee',
 });
 
-Employee.sync({ force: _reSync });
-
-export { Employee };
+export default Employee;

@@ -1,6 +1,8 @@
 import { Sequelize } from 'sequelize';
 import * as Config from '../config.json';
+import Attributes from "../commons/core/attributes";;
 
+var _logging = Config.Database.Logging;
 var _dbConfig = Config.Database.MSSQL;
 
 /**
@@ -10,38 +12,20 @@ var _dbConfig = Config.Database.MSSQL;
  */
 class Context {
 
-  private port: number;
-  private host: string;
-  private Schema: string;
-  private userName: string;
-  private password: string;
-
-
-  /**
-   *Creates an instance of Context.
-   * @author Marlon Lira
-   * @memberof Context
-   */
-  constructor() {
-    this.userName = _dbConfig.username;
-    this.password = _dbConfig.password;
-    this.host = _dbConfig.host;
-    this.Schema = _dbConfig.schema;
-    this.port = _dbConfig.port;
-  }
-
+  protected static _instance: Sequelize;
   /**
    * @description
    * @author Marlon Lira
    * @returns
    * @memberof Context
    */
-  CreateInstance() {
-    const sequelize = new Sequelize(this.Schema, this.userName, this.password,
+  static CreateInstance() {
+    const sequelize = new Sequelize(_dbConfig.schema, _dbConfig.username, _dbConfig.password,
       {
-        port: this.port,
-        host: this.host,
+        port: _dbConfig.port,
+        host: _dbConfig.host,
         dialect: 'mssql',
+        logging: _logging,
         dialectOptions: {
           options: {
             trustServerCertificate: true
@@ -66,7 +50,10 @@ class DbInstance extends Context {
    * @description
    * @memberof DbInstance
    */
-  getInstance = () => this.CreateInstance();
+  static getInstance() {
+    this._instance = Attributes.ReturnIfValid(this._instance, this.CreateInstance());
+    return this._instance;
+  }
 }
 
 export { DbInstance }

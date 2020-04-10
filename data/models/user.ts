@@ -1,11 +1,10 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, BelongsToManyAddAssociationMixin, BelongsToManyGetAssociationsMixin, BelongsToManyRemoveAssociationMixin } from 'sequelize';
 
 import { DbInstance } from '../../main/context';
-import { Attributes } from '../../commons/helpers';
-import * as Config from '../../config.json';
+import Attributes from '../../commons/core/attributes';
+import Vehicle from './vehicle';
 
-var _reSync = Config.Database.ForceSync;
-var _instance = new DbInstance().getInstance();
+var _instance = DbInstance.getInstance()
 
 /**
  * @description
@@ -16,13 +15,34 @@ var _instance = new DbInstance().getInstance();
 class User extends Model {
 
   id!: number;
-  status: string;
-  name: string;
+  status!: string;
+  name!: string;
   registryCode!: string;
   phone!: string;
   email!: string;
   password!: string;
-  vehicles!: {};
+  vehicles!: Vehicle[];
+
+  /**
+   * @description
+   * @type {BelongsToManyGetAssociationsMixin<Vehicle>}
+   * @memberof User
+   */
+  public getVehicles!: BelongsToManyGetAssociationsMixin<Vehicle>;
+
+  /**
+   * @description
+   * @type {BelongsToManyAddAssociationMixin<Vehicle, number>}
+   * @memberof User
+   */
+  public addVehicle!: BelongsToManyAddAssociationMixin<Vehicle, number>;
+
+  /**
+   * @description
+   * @type {BelongsToManyRemoveAssociationMixin<Vehicle, number>}
+   * @memberof User
+   */
+  public removeVehicle!: BelongsToManyRemoveAssociationMixin<Vehicle, number>
 
   /**
    *Creates an instance of User.
@@ -32,7 +52,7 @@ class User extends Model {
    */
   constructor(json?: any) {
     super()
-    this.id = Attributes.ReturnIfValid(json.id);
+    this.id = Attributes.ReturnIfValid(json.id, 0);
     this.name = Attributes.ReturnIfValid(json.name);
     this.status = Attributes.ReturnIfValid(json.status);
     this.registryCode = Attributes.ReturnIfValid(json.registryCode);
@@ -40,46 +60,39 @@ class User extends Model {
     this.email = Attributes.ReturnIfValid(json.email);
     this.password = Attributes.ReturnIfValid(json.password);
     this.vehicles = Attributes.ReturnIfValid(json.vehicles);
-
   }
 }
 
 User.init({
   id: {
-    type: new DataTypes.INTEGER,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
   status: {
-    type: new DataTypes.CHAR(2),
+    type: DataTypes.CHAR(2),
     allowNull: false
   },
   name: {
-    type: new DataTypes.STRING(30),
+    type: DataTypes.STRING(30),
     allowNull: false
   },
   registryCode: {
-    type: new DataTypes.STRING(12),
+    type: DataTypes.STRING(12),
     allowNull: false
   },
   phone: {
-    type: new DataTypes.STRING(12)
+    type: DataTypes.STRING(12)
   },
   email: {
-    type: new DataTypes.STRING(50)
+    type: DataTypes.STRING(50)
   },
   password: {
-    type: new DataTypes.STRING(100)
+    type: DataTypes.STRING(100)
   }
 }, {
   sequelize: _instance,
-  tableName: 'User',
-  scopes: {
-    public: {
-      attributes: ['id', 'name', 'phone', 'email', 'registryCode']
-    }
-  }
+  tableName: 'User'
 });
 
-User.sync({ force: _reSync });
 export default User;

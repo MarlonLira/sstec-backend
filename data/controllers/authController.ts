@@ -1,15 +1,18 @@
 import { Response, Request } from "express";
-import { interfaces, controller, httpPost, request, response } from "inversify-express-utils";
+import { controller, httpPost, request, response } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import IAuthService from '../interfaces/IAuthService';
-import IUserRepository from '../interfaces/IUserRepository';
-import AUTH_TYPES from '../types/authTypes';
-import USER_TYPES from '../types/userTypes';
+import TYPES from '../types';
+import IAuthService from '../interfaces/IServices/IAuthService';
 import Auth from "../models/auth";
-import { Http } from '../../commons/http';
+import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
-import { Attributes, Crypto } from '../../commons/helpers';
+import Attributes from '../../commons/core/attributes';
+import Crypto from '../../commons/core/crypto';
+import IAuthController from "../interfaces/IControllers/IAuthController";
+import IEmployeeRepository from "../interfaces/IRepositories/IEmployeeRepository";
+import Employee from "../models/employee";
+import ICompanyRepository from "../interfaces/IRepositories/ICompanyRepository";
 
 /**
  * @description
@@ -18,34 +21,20 @@ import { Attributes, Crypto } from '../../commons/helpers';
  * @implements {interfaces.Controller}
  */
 @controller('/auth')
-class AuthController implements interfaces.Controller {
-
-  /**
-   * @description
-   * @type {IAuthService}
-   * @memberof AuthController
-   */
-  readonly _authService: IAuthService;
-  /**
-   * @description
-   * @type {IUserRepository}
-   * @memberof AuthController
-   */
-  readonly _userRepository: IUserRepository;
+class AuthController implements IAuthController {
 
   /**
    *Creates an instance of AuthController.
    * @author Marlon Lira
-   * @param {IAuthService} authService
+   * @param {IAuthService} _authService
+   * @param {IUserRepository} _userRepository
    * @memberof AuthController
    */
   constructor(
-    @inject(AUTH_TYPES.IAuthService) private authService: IAuthService,
-    @inject(USER_TYPES.IUserRepository) private userRepository: IUserRepository
-  ) {
-    this._authService = authService;
-    this._userRepository = userRepository;
-  }
+    @inject(TYPES.IAuthService) private _authService: IAuthService,
+    @inject(TYPES.IEmployeeRepository) private _employeeRepository: IEmployeeRepository,
+    @inject(TYPES.ICompanyRepository) private _companyRepository: ICompanyRepository,
+  ) { }
 
   /**
    * @description
@@ -58,24 +47,11 @@ class AuthController implements interfaces.Controller {
   @httpPost('/tokenValidate')
   TokenValidate(@request() req: Request, @response() res: Response) {
     let _auth = new Auth(req.body);
-    return new Promise((resolve, reject) => {
-      this._authService.TokenValidate(_auth).then(result => {
+    return new Promise((resolve) => {
+      this._authService.CheckToken(_auth).then(result => {
         resolve(Http.SendSimpleMessage(res, HttpCode.Ok, { valid: !result }));
       })
     })
-
-  }
-
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Request} req
-   * @param {Response} res
-   * @memberof AuthController
-   */
-  @httpPost('/tokenGeneration')
-  TokenGeneration(@request() req: Request, @response() res: Response) {
-    throw new Error("Method not implemented.");
   }
 
   /**
@@ -86,24 +62,25 @@ class AuthController implements interfaces.Controller {
    * @returns 
    * @memberof AuthController
    */
-  @httpPost('/signIn')
+  @httpPost('/employee/signIn')
   SignIn(@request() req: Request, @response() res: Response) {
     let _auth = new Auth(req.body);
-    return new Promise((resolve, reject) => {
-      this._userRepository.Find(_auth.user, ['registryCode', 'email'])
-        .then(found => {
-          if (Attributes.IsValid(found) && Crypto.Compare(_auth.user.password, found.password)) {
-            this._authService.SignIn(_auth.user).then(result => {
-              resolve(Http.SendMessage(res, HttpCode.Ok, 'Acesso bem sucedido!', AuthController, result))
-            });
+    return new Promise((resolve) => {
+      this._employeeRepository.Find(_auth.employee, ['registryCode', 'email'])
+        .then((found: Employee) => {
+          if (Attributes.IsValid(found) && Crypto.Compare(_auth.employee.password, found.password)) {
+            this._authService.CreateToken(found)
+              .then(result => {
+                resolve(Http.SendMessage(res, HttpCode.Ok, 'Acesso bem sucedido!', AuthController, result))
+              });
           } else {
             resolve(Http.SendMessage(res, HttpCode.Unauthorized, 'A conta informada é inválida!', AuthController))
           }
         })
         .catch(error => {
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, 'Erro desconhecido, por favor reporte a equipe técnica!', AuthController))
-        })
-    })
+        });
+    });
   }
 
   /**
@@ -113,11 +90,32 @@ class AuthController implements interfaces.Controller {
    * @param {Response} res
    * @memberof AuthController
    */
-  @httpPost('/signUp')
+  @httpPost('/employee/signUp')
   SignUp(@request() req: Request, @response() res: Response) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      let _auth = new Auth(req.body);
+      this._companyRepository.GetByRegistryCode(_auth.company.registryCode)
+        .then(result => {
+          if (!Attributes.IsValid(result)) {
+            this._companyRepository.Save(_auth.company)
+              .then((companyId: number) => {
+                _auth.employee.companyId = companyId;
+                this._employeeRepository.Save(_auth.employee)
+                  .then(employeeId => {
+                    resolve(Http.SendMessage(res, HttpCode.Ok, 'Acesso bem sucedido!', AuthController, { "companyId": companyId, "employeeId": employeeId }));
+                  })
+                  .catch(error => {
+                    resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '[Employee] Erro desconhecido, por favor reporte a equipe técnica!', AuthController));
+                  });
+              }).catch(error => {
+                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '[Company] Erro desconhecido, por favor reporte a equipe técnica!', AuthController));
+              })
+          } else {
+            resolve(Http.SendMessage(res, HttpCode.Bad_Request, 'A empresa já foi cadastrada!', AuthController));
+          }
+        })
+    });
   }
-
 }
 
 export default AuthController;

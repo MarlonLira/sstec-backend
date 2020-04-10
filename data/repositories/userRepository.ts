@@ -1,8 +1,8 @@
 import { Op } from 'sequelize';
 
-import IUserRepository from '../interfaces/IUserRepository';
+import IUserRepository from '../interfaces/IRepositories/IUserRepository';
 import User from '../models/user';
-import { Querying } from '../../commons/helpers';
+import Querying from '../../commons/core/querying';;
 import { injectable } from "inversify";
 
 /**
@@ -23,7 +23,7 @@ class UserRepository implements IUserRepository {
    * @memberof UserRepository
    */
   Find(user: User, properties: string[]) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let query: any;
       query = Querying.ReturnOrQuery(user, properties);
       User.findAll({
@@ -36,6 +36,14 @@ class UserRepository implements IUserRepository {
     });
   }
 
+  Update(user: User) {
+    User.update(user, {
+      where : {
+        id:  1
+      }
+    })
+  }
+
   /**
    * @description
    * @author Marlon Lira
@@ -44,13 +52,13 @@ class UserRepository implements IUserRepository {
    * @memberof UserRepository
    */
   Save(user: any) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       User.create({
         name: user.name,
         registryCode: user.registryCode,
         phone: user.phone,
         email: user.email,
-        status: 1,
+        status: 'AT',
         password: user.password
       }).then(result => {
         resolve(result);
@@ -67,7 +75,7 @@ class UserRepository implements IUserRepository {
    * @memberof UserRepository
    */
   ToList() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       User.findAll()
         .then(result => {
           resolve(result);
@@ -87,7 +95,7 @@ class UserRepository implements IUserRepository {
    * @memberof UserRepository
    */
   GetByName(userName: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       User.findAll({
         where: {
           name: {
@@ -113,7 +121,7 @@ class UserRepository implements IUserRepository {
    * @memberof UserRepository
    */
   GetByRegistryCode(registryCode: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       User.findAll({
         where: {
           name: {

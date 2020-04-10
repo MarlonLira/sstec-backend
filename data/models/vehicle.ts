@@ -1,11 +1,9 @@
 import { Model, DataTypes } from 'sequelize';
 
 import { DbInstance } from '../../main/context';
-import { Attributes } from '../../commons/helpers';
-import * as Config from '../../config.json';
+import Attributes from '../../commons/core/attributes';
 
-var _reSync = Config.Database.ForceSync;
-var _instance = new DbInstance().getInstance();
+var _instance = DbInstance.getInstance()
 
 /**
  * @description
@@ -16,12 +14,11 @@ var _instance = new DbInstance().getInstance();
 class Vehicle extends Model {
 
   id!: number;
-  status: string;
-  model: string;
-  color: string;
-  type: string;
-  licensePlate: string;
-  userId: number;
+  status!: string;
+  model!: string;
+  color!: string;
+  type!: string;
+  licensePlate!: string;
 
   /**
    *Creates an instance of Vehicle.
@@ -31,55 +28,45 @@ class Vehicle extends Model {
    */
   constructor(json?: any) {
     super()
-    this.id = Attributes.ReturnIfValid(json.id);
+    this.id = Attributes.ReturnIfValid(json.id, 0);
     this.status = Attributes.ReturnIfValid(json.status);
     this.model = Attributes.ReturnIfValid(json.model);
     this.color = Attributes.ReturnIfValid(json.color);
     this.type = Attributes.ReturnIfValid(json.type);
     this.licensePlate = Attributes.ReturnIfValid(json.licensePlate);
-    this.userId = Attributes.ReturnIfValid(json.userId);
   }
 
 }
 
 Vehicle.init({
   id: {
-    type: new DataTypes.INTEGER,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
   status: {
-    type: new DataTypes.CHAR(2),
+    type: DataTypes.CHAR(2),
     allowNull: false
   },
   model: {
-    type: new DataTypes.STRING(12),
+    type: DataTypes.STRING(12),
     allowNull: false
   },
   color: {
-    type: new DataTypes.STRING(12),
+    type: DataTypes.STRING(12),
     allowNull: false
   },
   type: {
-    type: new DataTypes.STRING(50),
+    type: DataTypes.STRING(50),
     allowNull: false
   },
   licensePlate: {
-    type: new DataTypes.STRING(100),
+    type: DataTypes.STRING(100),
     allowNull: false
-  },
-  userId: {
-    type: new DataTypes.INTEGER,
-    references: {
-      model: 'User',
-      key: 'id'
-    }
   }
 }, {
   sequelize: _instance,
   tableName: 'Vehicle'
 });
-
-Vehicle.sync({ force: _reSync });
 
 export default Vehicle;

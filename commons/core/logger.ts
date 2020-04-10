@@ -1,8 +1,9 @@
-import { DateTimeNow } from "../data/models/innerDate";
-const clc = require("cli-color");
+import { DateTimeNow } from "./innerDate";
+import * as clc from 'cli-color';
+
 const error = clc.red.bold;
-const warn = clc.yellow;
-const info = clc.blue;
+const warn = clc.yellow.bold;
+const info = clc.blue.bold;
 
 /**
  * @description
@@ -20,7 +21,8 @@ class Logger {
    * @memberof Logger
    */
   static Info(entity: any, message: string) {
-    console.log(info(`${DateTimeNow()} INFO [${entity.constructor.name}] ${message}`));
+    let name = entity.constructor.name;
+    console.log(info(`${DateTimeNow()} INFO [${name == undefined || name == 'String' ? entity : name}] ${message}`));
   }
 
   /**
@@ -32,7 +34,8 @@ class Logger {
    * @memberof Logger
    */
   static Warn(entity: any, message: string) {
-    console.log(warn(`${DateTimeNow()} WARN [${entity.constructor.name}] ${message}`));
+    let name = entity.constructor.name;
+    console.log(warn(`${DateTimeNow()} WARN [${name == undefined || name == 'String' ? entity : name}] ${message}`));
   }
 
   /**
@@ -44,7 +47,8 @@ class Logger {
    * @memberof Logger
    */
   static Error(entity: any, message: string) {
-    console.log(error(`${DateTimeNow()} ERROR [${entity.constructor.name}] ${message}`));
+    let name = entity.constructor.name;
+    console.log(error(`${DateTimeNow()} ERROR [${name == undefined || name == 'String' ? entity : name}] ${message}`));
   }
 }
 

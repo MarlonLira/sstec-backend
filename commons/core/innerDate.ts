@@ -1,4 +1,4 @@
-import { Attributes } from '../../commons/helpers';
+import Attributes from './attributes';
 
 /**
  * @description
@@ -81,7 +81,7 @@ function DateTimeNow() {
   var Year = LeftZero(_date.getFullYear());
   var Month = LeftZero(_date.getMonth() + 1);
   var Day = LeftZero(_date.getDay());
-  var hours = _date.getUTCHours() - 3;
+  var hours = (_date.getUTCHours() == 1 || _date.getUTCHours() == 2) ? 24 - (3 - _date.getUTCHours()) : _date.getUTCHours() - 3;
   var minutes = _date.getUTCMinutes();
   var seconds = _date.getUTCSeconds();
   var build = `${Year}-${Month}-${Day} ${hours}:${minutes}:${seconds}`;

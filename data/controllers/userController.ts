@@ -1,31 +1,27 @@
 import { Response, Request } from "express";
-import { interfaces, controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
+import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import IUserRepository from '../interfaces/IUserRepository';
+import TYPES from '../types';
+import IUserController from '../interfaces/IControllers/IUserController';
+import IUserRepository from '../interfaces/IRepositories/IUserRepository';
 import User from "../models/user";
-import TYPES from '../types/userTypes';
-import { Attributes, Crypto } from '../../commons/helpers';
-import { Http } from '../../commons/http';
+import Attributes from '../../commons/core/attributes';
+import Crypto from '../../commons/core/crypto';
+import { CryptoType } from "../../commons/enums/cryptoType";
+import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
+
 
 /**
  * @description
  * @author Marlon Lira
  * @export
  * @class UserController
- * @implements {interfaces.Controller}
+ * @implements {IUserController}
  */
 @controller('')
-export default class UserController implements interfaces.Controller {
-
-
-  /**
-   * @description
-   * @type {IUserRepository}
-   * @memberof UserController
-   */
-  readonly _userRepository: IUserRepository;
+class UserController implements IUserController {
 
   /**
    *Creates an instance of UserController.
@@ -33,9 +29,7 @@ export default class UserController implements interfaces.Controller {
    * @param {IUserRepository} userRepository
    * @memberof UserController
    */
-  constructor(@inject(TYPES.IUserRepository) private userRepository: IUserRepository) {
-    this._userRepository = userRepository;
-  }
+  constructor(@inject(TYPES.IUserRepository) private _userRepository: IUserRepository) { }
 
   /**
    * @description
@@ -48,11 +42,11 @@ export default class UserController implements interfaces.Controller {
   @httpPost('/user')
   Save(@request() req: Request, @response() res: Response) {
     let _user = new User(req.body);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._userRepository.Find(_user, ['registryCode', 'email'])
         .then(found => {
           if (!Attributes.IsValid(found)) {
-            _user.password = Attributes.IsValid(_user.password) ? Crypto.Encrypt(_user.password) : undefined;
+            _user.password = Attributes.IsValid(_user.password) ? Crypto.Encrypt(_user.password, CryptoType.PASSWORD) : undefined;
             this._userRepository.Save(_user)
               .then(result => {
                 resolve(Http.SendMessage(res, HttpCode.Ok, 'Usuario criado com sucesso!', UserController, result));
@@ -79,7 +73,7 @@ export default class UserController implements interfaces.Controller {
   @httpGet('/user/id/:id')
   Search(@request() req: Request, @response() res: Response) {
     let _user = new User(req.params);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._userRepository.Find(_user, ['registryCode', 'id'])
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, '', UserController, result));
@@ -97,7 +91,7 @@ export default class UserController implements interfaces.Controller {
    */
   @httpGet('/users')
   SearchAll(@request() req: Request, @response() res: Response) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._userRepository.ToList().then(result => {
         resolve(Http.SendMessage(res, HttpCode.Ok, '', UserController, result));
       });
@@ -128,3 +122,5 @@ export default class UserController implements interfaces.Controller {
     throw new Error("Method not implemented.");
   }
 }
+
+export default UserController;
