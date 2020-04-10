@@ -12,6 +12,7 @@ import EmployeeRepository from '../../data/repositories/employeeRepository';
 import PaymentRepository from '../../data/repositories/paymentRepository';
 import VehicleRepository from '../../data/repositories/vehicleRepository';
 import ParkingRepository from '../../data/repositories/ParkingRepository';
+import RuleRepository from '../../data/repositories/RuleRepository';
 
 //Services
 import AuthService from '../../data/services/authService';
@@ -25,6 +26,7 @@ import IEmployeeRepository from '../../data/interfaces/IRepositories/IEmployeeRe
 import IPaymentRepository from '../../data/interfaces/IRepositories/IPaymentRepository';
 import IParkingRepository from '../../data/interfaces/IRepositories/IParkingRepository';
 import IVehicleRepository from '../../data/interfaces/IRepositories/IVehicleRepository';
+import IRuleRepository from '../../data/interfaces/IRepositories/IRuleRepository';
 import IAuthService from '../../data/interfaces/IServices/IAuthService';
 
 const container = new Container();
@@ -37,5 +39,6 @@ container.bind<IPaymentRepository>(TYPES.IPaymentRepository).to(PaymentRepositor
 container.bind<IAuthService>(TYPES.IAuthService).to(AuthService);
 container.bind<IVehicleRepository>(TYPES.IVehicleRepository).to(VehicleRepository);
 container.bind<IParkingRepository>(TYPES.IParkingRepository).to(ParkingRepository);
+container.bind<IRuleRepository>(TYPES.IRuleRepository).to(RuleRepository);
 
 export default container;
