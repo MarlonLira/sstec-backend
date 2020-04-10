@@ -69,7 +69,7 @@ class AuthController implements IAuthController {
       this._employeeRepository.Find(_auth.employee, ['registryCode', 'email'])
         .then((found: Employee) => {
           if (Attributes.IsValid(found) && Crypto.Compare(_auth.employee.password, found.password)) {
-            this._authService.CreateToken(_auth.employee)
+            this._authService.CreateToken(found)
               .then(result => {
                 resolve(Http.SendMessage(res, HttpCode.Ok, 'Acesso bem sucedido!', AuthController, result))
               });
