@@ -4,7 +4,6 @@ import { inject } from "inversify";
 
 import TYPES from '../types';
 import IAuthService from '../interfaces/IServices/IAuthService';
-import IUserRepository from '../interfaces/IRepositories/IUserRepository';
 import Auth from "../models/auth";
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
@@ -14,8 +13,6 @@ import IAuthController from "../interfaces/IControllers/IAuthController";
 import IEmployeeRepository from "../interfaces/IRepositories/IEmployeeRepository";
 import Employee from "../models/employee";
 import ICompanyRepository from "../interfaces/IRepositories/ICompanyRepository";
-import Company from "../models/company";
-import { AuthType } from "../../commons/enums/authType";
 
 /**
  * @description
@@ -71,8 +68,8 @@ class AuthController implements IAuthController {
     return new Promise((resolve) => {
       this._employeeRepository.Find(_auth.employee, ['registryCode', 'email'])
         .then((found: Employee) => {
-          if (Attributes.IsValid(found.password) && Crypto.Compare(_auth.employee.password, found.password)) {
-            this._authService.CreateToken(_auth.employee)
+          if (Attributes.IsValid(found) && Crypto.Compare(_auth.employee.password, found.password)) {
+            this._authService.CreateToken(found)
               .then(result => {
                 resolve(Http.SendMessage(res, HttpCode.Ok, 'Acesso bem sucedido!', AuthController, result))
               });

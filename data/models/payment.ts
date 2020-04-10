@@ -25,7 +25,7 @@ class Payment extends Model {
    */
   constructor(json?: any) {
     super()
-    this.id = Attributes.ReturnIfValid(json.id);
+    this.id = Attributes.ReturnIfValid(json.id, 0);
     this.status = Attributes.ReturnIfValid(json.status);
     this.value = Attributes.ReturnIfValid(json.value);
     this.cardId = Attributes.ReturnIfValid(json.cardId);
