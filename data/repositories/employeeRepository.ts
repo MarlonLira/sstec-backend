@@ -52,9 +52,9 @@ class EmployeeRepository implements IEmployeeRepository {
     return new Promise((resolve) => {
       let query: any;
       query = Querying.ReturnOrQuery(employee, properties);
-      Employee.findAll({
+      Employee.findOne({
         where: query
-      }).then((result: Employee[]) => {
+      }).then((result: Employee) => {
         resolve(result);
       }).catch(error => {
         throw (error);
@@ -80,7 +80,6 @@ class EmployeeRepository implements IEmployeeRepository {
    */
   GetByRegistryCode(registryCode: string) {
     return new Promise((resolve) => {
-      let query: any;
       Employee.findOne({
         where: {
           registryCode: registryCode

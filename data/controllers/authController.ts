@@ -69,7 +69,7 @@ class AuthController implements IAuthController {
   SignIn(@request() req: Request, @response() res: Response) {
     let _auth = new Auth(req.body);
     return new Promise((resolve) => {
-      this._employeeRepository.GetByRegistryCode(_auth.employee.registryCode)
+      this._employeeRepository.Find(_auth.employee, ['registryCode', 'email'])
         .then((found: Employee) => {
           if (Attributes.IsValid(found.password) && Crypto.Compare(_auth.employee.password, found.password)) {
             this._authService.CreateToken(_auth.employee)
@@ -119,7 +119,6 @@ class AuthController implements IAuthController {
         })
     });
   }
-
 }
 
 export default AuthController;

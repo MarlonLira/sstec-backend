@@ -1,6 +1,6 @@
 import { CryptoType } from '../enums/cryptoType';
-import * as crypto from 'crypto';
-import * as bcrypt from 'bcrypt'
+import * as CryptoJS from 'crypto-js'
+import * as bcrypt from 'bcrypt';
 
 /**
  * @description
@@ -17,7 +17,7 @@ class Crypto {
   static readonly cryptographyData = {
     algorithm: "aes256",
     coding: "utf8",
-    secret: "chaves",
+    secret: "|*#5522&*QWE?/",
     type: "hex"
   };
 
@@ -73,9 +73,7 @@ class Crypto {
    * @memberof Crypto
    */
   private static EncryptCard(card: string) {
-    const cipher = crypto.createCipher(this.cryptographyData.algorithm, this.cryptographyData.secret);
-    cipher.update(card);
-    return cipher.final('hex');
+    return CryptoJS.AES.encrypt(card, this.cryptographyData.secret).toString();
   }
 
   /**
@@ -87,10 +85,9 @@ class Crypto {
    * @returns 
    * @memberof Crypto
    */
-  private static DecryptCard(value: string): string {
-    const decipher = crypto.createDecipher(this.cryptographyData.algorithm, this.cryptographyData.secret);
-    decipher.update(value, 'hex');
-    return decipher.final().toString();
+  private static DecryptCard(hash: string): string {
+    var bytes = CryptoJS.AES.decrypt(hash, this.cryptographyData.secret);
+    return bytes.toString(CryptoJS.enc.Utf8);
   }
 
   /**
@@ -117,14 +114,6 @@ class Crypto {
     var salt = bcrypt.genSaltSync(10);
     var hash = bcrypt.hashSync(password, salt);
     return hash;
-  }
-
-  static ComparePassword(password: string, hash: string) {
-    let pass = '';
-    const decipher = crypto.createDecipher(this.cryptographyData.algorithm, this.cryptographyData.secret);
-    decipher.update(hash, 'hex');
-    pass = decipher.final().toString();
-    return pass;
   }
 
   /**
