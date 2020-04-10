@@ -1,8 +1,9 @@
 import { DateTimeNow } from "./innerDate";
-const clc = require("cli-color");
+import * as clc from 'cli-color';
+
 const error = clc.red.bold;
-const warn = clc.yellow;
-const info = clc.blue;
+const warn = clc.yellow.bold;
+const info = clc.blue.bold;
 
 /**
  * @description

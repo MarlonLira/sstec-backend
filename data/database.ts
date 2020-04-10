@@ -12,6 +12,7 @@ import CompanyAdress from './models/companyAdress';
 import Employee from './models/employee';
 import Payment from './models/payment';
 import Parking from './models/parking';
+import Rule from './models/rule';
 
 var { ForceSync, AlterSync, IsLogger } = Config.Database;
 
@@ -37,8 +38,8 @@ class Database {
       { name: 'Company', entity: Company.sequelize },
       { name: 'CompanyAdress', entity: CompanyAdress.sequelize },
       { name: 'Employee', entity: Employee.sequelize },
-      { name: 'Payment', entity: Payment.sequelize },
-      { name: 'Parking', entity: Parking.sequelize }
+      { name: 'Parking', entity: Parking.sequelize },
+      { name: 'Rule', entity: Rule.sequelize }
     ];
 
     Logger.Info('Database', 'Table verification started!');
@@ -53,13 +54,12 @@ class Database {
     Card.belongsToMany(User, { through: 'UserCards' });
 
     //1:N
-    Employee.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' })
-    UserAdress.belongsTo(User, { foreignKey: 'userId', as: 'User' });
-    CompanyAdress.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' });
-    Payment.belongsTo(Card, { foreignKey: 'cardId', as: 'Card' });
-    Parking.belongsTo(Company, {foreignKey: 'companyId', as: 'Company'});
+    Company.hasMany(Employee);
+    Company.hasMany(CompanyAdress);
+    Company.hasMany(Parking);
+    User.hasMany(UserAdress);
+    Rule.hasMany(Employee);
     //Payment.belongsTo(ParkingpacSe, {foreignKey: 'parkingSpaceId', as: 'ParkingSpace'});
-    
 
     //1:1
 
