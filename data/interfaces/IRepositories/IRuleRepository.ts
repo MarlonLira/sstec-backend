@@ -7,7 +7,10 @@ import Rule from '../../models/rule';
  */
 interface IRuleRepository {
   ToList();
-  Save(rule : Rule);
+  Save(rule: Rule);
+  Update(rule: Rule);
+  Delete(ruleId: number);
+  GetByName(ruleName: string);
   Find(rule: Rule, properties: string[]);
 }
 

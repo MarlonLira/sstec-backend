@@ -8,3 +8,4 @@ import '../../data/controllers/employeeController';
 import '../../data/controllers/paymentController';
 import '../../data/controllers/parkingController';
 import '../../data/controllers/vehicleController';
+import '../../data/controllers/ruleController';
