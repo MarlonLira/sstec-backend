@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import { DbInstance } from '../../main/context';
-import { Attributes } from '../../commons/helpers';
+import Attributes from '../../commons/core/attributes';
 
 var _instance = DbInstance.getInstance()
 
@@ -14,6 +14,8 @@ class Payment extends Model {
   id!: number;
   status: string;
   value: number;
+  cardId: number;
+  parkingSpaceId: number;
 
   /**
    *Creates an instance of Payment.
@@ -26,6 +28,8 @@ class Payment extends Model {
     this.id = Attributes.ReturnIfValid(json.id);
     this.status = Attributes.ReturnIfValid(json.status);
     this.value = Attributes.ReturnIfValid(json.value);
+    this.cardId = Attributes.ReturnIfValid(json.cardId);
+    this.parkingSpaceId = Attributes.ReturnIfValid(json.parkingSpaceId);
   }
 }
 

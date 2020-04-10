@@ -1,14 +1,15 @@
 import { Response, Request } from "express";
-import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
+import { controller, httpGet, httpPost, httpDelete, request, response, httpPut, results } from "inversify-express-utils";
 import { inject } from "inversify";
 
 import IPaymentController from "../interfaces/IControllers/IPaymentController";
 import IPaymentRepository from '../interfaces/IRepositories/IPaymentRepository';
 import Payment from "../models/payment";
 import TYPES from '../types';
-import { Attributes, Crypto } from '../../commons/helpers';
-import { Http } from '../../commons/http';
+import Attributes from '../../commons/core/attributes';
+import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
+import Card from "../models/card";
 
 /**
  * @description
@@ -36,7 +37,16 @@ class PaymentController implements IPaymentController {
    */
   @httpPost('/payment')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      let _payment = new Payment(req.body);
+      this._paymentRepository.Save(_payment)
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, 'Compra efetuada com sucesso!', PaymentController, result))
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', PaymentController, error))
+        })
+    })
   }
 
   /**

@@ -1,10 +1,7 @@
 import IAuthService from "../interfaces/IServices/IAuthService";
-import User from '../models/user';
-import Auth from '../models/auth';
-
 import { injectable } from "inversify";
-
-const jwt = require('jsonwebtoken')
+import * as jwt from 'jsonwebtoken';
+import Auth from '../models/auth';
 
 /**
  * @description
@@ -22,7 +19,7 @@ class AuthService implements IAuthService {
    * @returns 
    * @memberof AuthService
    */
-  TokenValidate(auth: Auth) {
+  CheckToken(auth: Auth) {
     return new Promise((resolve) => {
       jwt.verify(auth.token, process.env.SECRET, (err, decoded) => {
         resolve(err)
@@ -33,24 +30,14 @@ class AuthService implements IAuthService {
   /**
    * @description
    * @author Marlon Lira
-   * @param {Auth} auth
-   * @memberof AuthService
-   */
-  TokenGeneration(auth: Auth) {
-    throw new Error("Method not implemented.");
-  }
-
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {User} user
+   * @param {*} entity
    * @returns 
    * @memberof AuthService
    */
-  SignIn(user: User) {
+  CreateToken(entity: any) {
     return new Promise((resolve) => {
-      let id = user.id;
-      let name = user.name;
+      let id = entity.id;
+      let name = entity.name;
 
       //Geração do Token de acesso
       const token = jwt.sign({ id, name }, process.env.SECRET, {
@@ -60,23 +47,12 @@ class AuthService implements IAuthService {
       //objeto Json
       let result = {
         "token": token,
-        "name": user.name,
-        "email": user.email,
+        "name": entity.name,
+        "email": entity.email,
       }
       resolve(result);
     })
   }
-
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {User} user
-   * @memberof AuthService
-   */
-  SignUp(user: User) {
-    throw new Error("Method not implemented.");
-  }
-
 }
 
 export default AuthService;

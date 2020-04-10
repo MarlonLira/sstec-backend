@@ -5,8 +5,11 @@ import Attributes from '../../commons/core/attributes';
 
 var _instance = DbInstance.getInstance()
 
-class Rule {
-
+class ParkingSpace extends Model {
+  id!: number;
+  status: string;
+  description!: string;
+  value: number;
 }
 
-export default Rule;
+export default ParkingSpace;

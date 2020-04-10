@@ -6,8 +6,8 @@ import ICardController from '../interfaces/IControllers/ICardController';
 import ICardRepository from '../interfaces/IRepositories/ICardRepository';
 import Card from "../models/card";
 import TYPES from '../types';
-import { Attributes, Crypto } from '../../commons/helpers';
-import { Http } from '../../commons/http';
+import Attributes from '../../commons/core/attributes';
+import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 
 /**

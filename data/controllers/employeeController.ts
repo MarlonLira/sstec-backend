@@ -6,8 +6,8 @@ import IEmployeeController from "../interfaces/IControllers/IEmployeeController"
 import IEmployeeRepository from '../interfaces/IRepositories/IEmployeeRepository';
 import Employee from "../models/employee";
 import TYPES from '../types';
-import { Attributes, Crypto } from '../../commons/helpers';
-import { Http } from '../../commons/http';
+import Attributes from '../../commons/core/attributes';
+import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 
 @controller('')
@@ -29,22 +29,22 @@ class EmployeeController implements IEmployeeController {
     })
   }
 
-  @httpGet('/company')
+  @httpGet('/employee')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
     throw new Error("Method not implemented.");
   }
 
-  @httpGet('/companies')
+  @httpGet('/employee')
   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
     throw new Error("Method not implemented.");
   }
 
-  @httpPut('/company')
+  @httpPut('/employee')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     throw new Error("Method not implemented.");
   }
 
-  @httpDelete('/company')
+  @httpDelete('/employee')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
     throw new Error("Method not implemented.");
   }

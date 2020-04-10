@@ -1,7 +1,7 @@
 import { Model, DataTypes, BelongsToGetAssociationMixin } from 'sequelize';
 
 import { DbInstance } from '../../main/context';
-import { Attributes } from '../../commons/helpers';
+import Attributes from '../../commons/core/attributes';
 import User from './user';
 
 var _instance = DbInstance.getInstance()

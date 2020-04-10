@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 import * as Config from '../config.json';
-import { Attributes } from '../commons/helpers';
+import Attributes from "../commons/core/attributes";;
 
 var _logging = Config.Database.Logging;
 var _dbConfig = Config.Database.MSSQL;
@@ -12,25 +12,7 @@ var _dbConfig = Config.Database.MSSQL;
  */
 class Context {
 
-  private port: number;
-  private host: string;
-  private Schema: string;
-  private userName: string;
-  private password: string;
-
-  /**
-   *Creates an instance of Context.
-   * @author Marlon Lira
-   * @memberof Context
-   */
-  constructor() {
-    this.userName = _dbConfig.username;
-    this.password = _dbConfig.password;
-    this.host = _dbConfig.host;
-    this.Schema = _dbConfig.schema;
-    this.port = _dbConfig.port;
-  }
-
+  protected static _instance: Sequelize;
   /**
    * @description
    * @author Marlon Lira
@@ -64,14 +46,12 @@ class Context {
  */
 class DbInstance extends Context {
 
-  private static _instance: Sequelize;
-
   /**
    * @description
    * @memberof DbInstance
    */
   static getInstance() {
-    this._instance = !Attributes.IsValid(this._instance) ? this.CreateInstance() : this._instance;
+    this._instance = Attributes.ReturnIfValid(this._instance, this.CreateInstance());
     return this._instance;
   }
 }

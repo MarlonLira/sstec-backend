@@ -70,7 +70,7 @@
     }
   ],
   "paths": {
-    "/vehicle/user/{id}": {
+    "/vehicles/user/{id}": {
       "get": {
         "tags": [
           "vehicle"
@@ -159,7 +159,7 @@
             "description": "vehicle object",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Vehicle"
+              "$ref": "#/definitions/UserVehicles"
             }
           }
         ],
@@ -338,6 +338,52 @@
       },
       "xml": {
         "name": "Vehicle"
+      }
+    },
+    "UserVehicles": {
+      "type": "object",
+      "properties": {
+        "User": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        },
+        "Vehicle": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "status": {
+              "type": "string",
+              "format": "char(2)"
+            },
+            "model": {
+              "type": "string"
+            },
+            "color": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "licensePlate": {
+              "type": "string"
+            },
+            "userId": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "xml": {
+        "name": "UserVehicles"
       }
     },
     "Payment": {

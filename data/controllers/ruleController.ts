@@ -2,8 +2,8 @@ import { Response, Request } from 'express';
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import { Attributes, Crypto } from '../../commons/helpers';
-import { Http } from '../../commons/http';
+import Attributes from '../../commons/core/attributes';
+import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import IRuleController from '../interfaces/IControllers/IRuleController';
 

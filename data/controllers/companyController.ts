@@ -6,8 +6,7 @@ import ICompanyController from "../interfaces/IControllers/ICompanyController";
 import ICompanyRepository from '../interfaces/IRepositories/ICompanyRepository';
 import Company from "../models/company";
 import TYPES from '../types';
-import { Attributes, Crypto } from '../../commons/helpers';
-import { Http } from '../../commons/http';
+import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 
 /**
@@ -25,7 +24,7 @@ class CompanyController implements ICompanyController {
    * @param {ICompanyRepository} _companyRepository
    * @memberof CompanyController
    */
-  constructor(@inject(TYPES.ICompanyRepository) private _companyRepository: ICompanyRepository) {}
+  constructor(@inject(TYPES.ICompanyRepository) private _companyRepository: ICompanyRepository) { }
 
   /**
    * @description
@@ -41,32 +40,54 @@ class CompanyController implements ICompanyController {
     return new Promise((resolve) => {
       this._companyRepository.Save(_company)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, 'Empresa cadastrada com sucesso', CompanyController, result))
+          resolve(Http.SendMessage(res, HttpCode.Ok, 'Empresa cadastrada com sucesso!', CompanyController, result))
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error,''))
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error))
         })
     })
   }
 
-  @httpGet('/company')
+  @httpGet('/company/registryCode/:registryCode')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
-  }
-
-  @httpGet('/companies')
-  SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      let _registryCode: string = req.params.registryCode;
+      this._companyRepository.GetByRegistryCode(_registryCode)
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, 'Encontrado!', CompanyController, result));
+        })
+        .catch(error =>{
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error));
+        })
+    })
   }
 
   @httpPut('/company')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      let _company = new Company(req.body);
+      this._companyRepository.Update(_company)
+        .then(result =>{
+          resolve(Http.SendMessage(res, HttpCode.Ok, 'Empresa atualizada com sucesso!', CompanyController, result))
+        })
+        .catch(error =>{
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error));
+        })
+    })
   }
 
-  @httpDelete('/company')
+  @httpDelete('/company/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      let _id: number =  req.params.id;
+      this._companyRepository.Delete(_id)
+        .then(result =>{
+          resolve(Http.SendMessage(res, HttpCode.Ok, 'Empresa deletada com sucesso!', CompanyController, result))
+        })
+        .catch(error =>{
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error));
+        })
+    })
   }
 
 }

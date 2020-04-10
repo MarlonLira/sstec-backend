@@ -11,7 +11,7 @@ interface IPaymentRepository {
   Save(payment: Payment);
   GetPaymentsByCard(card: Card);
   GetPaymentsByUser(user: User);
-  GetPaymentById(id: number);  
+  GetPaymentById(id: number);
 }
 
 export default IPaymentRepository;

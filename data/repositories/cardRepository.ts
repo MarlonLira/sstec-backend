@@ -3,7 +3,7 @@ import { Op } from 'sequelize';
 import ICardRepository from '../interfaces/IRepositories/ICardRepository';
 import User from '../models/user';
 import Card from '../models/card';
-import { Querying } from '../../commons/helpers';
+import Querying from '../../commons/core/querying';;
 import { injectable } from "inversify";
 
 /**

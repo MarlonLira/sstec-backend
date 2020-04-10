@@ -1,4 +1,4 @@
-import { Attributes } from "../../commons/helpers";
+import Attributes from '../../commons/core/attributes';
 
 class Dashboard {
   credit!: number;
