@@ -6,7 +6,8 @@ const TYPES = {
   ICompanyAdressRepository: Symbol('ICompanyAdressRepository'),
   IEmployeeRepository: Symbol('IEmployeeRepository'),
   IPaymentRepository: Symbol('IPaymentRepository'),
-  IVehicleRepository: Symbol('IVehicleRepository')
+  IVehicleRepository: Symbol('IVehicleRepository'),
+  IParkingRepository: Symbol('IParkingeRepository')
 };
 
 export default TYPES;
