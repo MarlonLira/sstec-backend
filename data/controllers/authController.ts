@@ -51,7 +51,7 @@ class AuthController implements IAuthController {
   TokenValidate(@request() req: Request, @response() res: Response) {
     let _auth = new Auth(req.body);
     return new Promise((resolve) => {
-      this._authService.TokenValidate(_auth).then(result => {
+      this._authService.CheckToken(_auth).then(result => {
         resolve(Http.SendSimpleMessage(res, HttpCode.Ok, { valid: !result }));
       })
     })
@@ -62,31 +62,20 @@ class AuthController implements IAuthController {
    * @author Marlon Lira
    * @param {Request} req
    * @param {Response} res
-   * @memberof AuthController
-   */
-  @httpPost('/tokenGeneration')
-  TokenGeneration(@request() req: Request, @response() res: Response) {
-    throw new Error("Method not implemented.");
-  }
-
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Request} req
-   * @param {Response} res
    * @returns 
    * @memberof AuthController
    */
-  @httpPost('/signIn')
+  @httpPost('/employee/signIn')
   SignIn(@request() req: Request, @response() res: Response) {
     let _auth = new Auth(req.body);
     return new Promise((resolve) => {
       this._employeeRepository.GetByRegistryCode(_auth.employee.registryCode)
         .then((found: Employee) => {
           if (Attributes.IsValid(found.password) && Crypto.Compare(_auth.employee.password, found.password)) {
-            this._authService.SignIn(_auth.employee, AuthType.EMPLOYEE).then(result => {
-              resolve(Http.SendMessage(res, HttpCode.Ok, 'Acesso bem sucedido!', AuthController, result))
-            });
+            this._authService.CreateToken(_auth.employee)
+              .then(result => {
+                resolve(Http.SendMessage(res, HttpCode.Ok, 'Acesso bem sucedido!', AuthController, result))
+              });
           } else {
             resolve(Http.SendMessage(res, HttpCode.Unauthorized, 'A conta informada é inválida!', AuthController))
           }
@@ -104,7 +93,7 @@ class AuthController implements IAuthController {
    * @param {Response} res
    * @memberof AuthController
    */
-  @httpPost('/signUp')
+  @httpPost('/employee/signUp')
   SignUp(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
       let _auth = new Auth(req.body);
@@ -119,10 +108,10 @@ class AuthController implements IAuthController {
                     resolve(Http.SendMessage(res, HttpCode.Ok, 'Acesso bem sucedido!', AuthController, { "companyId": companyId, "employeeId": employeeId }));
                   })
                   .catch(error => {
-                    resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, 'Erro desconhecido, por favor reporte a equipe técnica!', AuthController));
+                    resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '[Employee] Erro desconhecido, por favor reporte a equipe técnica!', AuthController));
                   });
               }).catch(error => {
-                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, 'Erro desconhecido, por favor reporte a equipe técnica!', AuthController));
+                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '[Company] Erro desconhecido, por favor reporte a equipe técnica!', AuthController));
               })
           } else {
             resolve(Http.SendMessage(res, HttpCode.Bad_Request, 'A empresa já foi cadastrada!', AuthController));

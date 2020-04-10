@@ -9,8 +9,6 @@ import { AuthType } from '../../../commons/enums/authType';
  * @interface IAuthService
  */
 export default interface IAuthService {
-  TokenValidate(auth: Auth);
-  TokenGeneration(auth: Auth);
-  SignIn(entity: any, authType: AuthType);
-  SignUp(user: User);
+  CheckToken(auth: Auth);
+  CreateToken(entity: any);
 }
