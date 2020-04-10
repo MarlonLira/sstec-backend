@@ -18,6 +18,30 @@ class CompanyRepository implements ICompanyRepository {
    * @description
    * @author Gustavo Gusmão
    * @param {Company} company
+   * @returns
+   * @memberof CompanyRepository
+   */
+  Save(company: Company) {
+    return new Promise(async (resolve) => {
+      const _transaction = await Company.sequelize.transaction();
+      company.status = 'AT';
+      company.id = 0;
+
+      Company.create(company, { transaction: _transaction })
+        .then(async (result: Company) => {
+          await _transaction.commit();
+          resolve(result.id);
+        }).catch(async error => {
+          await _transaction.rollback();
+          throw error;
+        })
+    })
+  }
+
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {Company} company
    * @memberof CompanyRepository
    */
   Update(company: Company) {
@@ -75,29 +99,6 @@ class CompanyRepository implements ICompanyRepository {
               throw error;
             })
         })
-    })
-  }
-
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Company} company
-   * @returns
-   * @memberof CompanyRepository
-   */
-  Save(company: Company) {
-    return new Promise((resolve) => {
-      Company.create({
-        status: 'AT',
-        name: company.name,
-        registryCode: company.registryCode,
-        phone: company.phone,
-        email: company.email
-      }).then(result => {
-        resolve(result);
-      }).catch(error => {
-        throw (error);
-      })
     })
   }
 

@@ -5,7 +5,6 @@ import IPaymentRepository from '../interfaces/IRepositories/IPaymentRepository';
 import Payment from '../models/payment';
 import Card from '../models/card';
 import User from '../models/user';
-import Querying from '../../commons/core/querying';;
 
 /**
  * @description
@@ -15,7 +14,7 @@ import Querying from '../../commons/core/querying';;
  */
 @injectable()
 class PaymentRepository implements IPaymentRepository {
- 
+
   /**
    * @description
    * @author Emerson Souza
@@ -23,7 +22,18 @@ class PaymentRepository implements IPaymentRepository {
    * @memberof PaymentRepository
    */
   Save(payment: Payment) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      Payment.create({
+        status: 'AT',
+        value: payment.value,
+        cardId: payment.cardId,
+        parkingSpaceId: payment.parkingSpaceId
+      }).then(result => {
+        resolve(result);
+      }).catch(error => {
+        throw error;
+      })
+    })
   }
 
   /**

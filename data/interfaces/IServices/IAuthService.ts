@@ -1,5 +1,6 @@
 import Auth from '../../models/auth';
 import User from '../../models/user';
+import { AuthType } from '../../../commons/enums/authType';
 
 /**
  * @description
@@ -8,8 +9,6 @@ import User from '../../models/user';
  * @interface IAuthService
  */
 export default interface IAuthService {
-  TokenValidate(auth: Auth);
-  TokenGeneration(auth: Auth);
-  SignIn(user: User);
-  SignUp(user: User);
+  CheckToken(auth: Auth);
+  CreateToken(entity: any);
 }
