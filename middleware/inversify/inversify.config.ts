@@ -11,6 +11,7 @@ import CompanyAdressRepository from '../../data/repositories/companyAdressReposi
 import EmployeeRepository from '../../data/repositories/employeeRepository';
 import PaymentRepository from '../../data/repositories/paymentRepository';
 import VehicleRepository from '../../data/repositories/vehicleRepository';
+import ParkingRepository from '../../data/repositories/ParkingRepository';
 
 //Services
 import AuthService from '../../data/services/authService';
@@ -22,6 +23,7 @@ import ICompanyRepository from '../../data/interfaces/IRepositories/ICompanyRepo
 import ICompanyAdressRepository from '../../data/interfaces/IRepositories/ICompanyAdressRepository';
 import IEmployeeRepository from '../../data/interfaces/IRepositories/IEmployeeRepository';
 import IPaymentRepository from '../../data/interfaces/IRepositories/IPaymentRepository';
+import IParkingRepository from '../../data/interfaces/IRepositories/IParkingRepository';
 import IVehicleRepository from '../../data/interfaces/IRepositories/IVehicleRepository';
 import IAuthService from '../../data/interfaces/IServices/IAuthService';
 
@@ -34,5 +36,6 @@ container.bind<IEmployeeRepository>(TYPES.IEmployeeRepository).to(EmployeeReposi
 container.bind<IPaymentRepository>(TYPES.IPaymentRepository).to(PaymentRepository);
 container.bind<IAuthService>(TYPES.IAuthService).to(AuthService);
 container.bind<IVehicleRepository>(TYPES.IVehicleRepository).to(VehicleRepository);
+container.bind<IParkingRepository>(TYPES.IParkingRepository).to(ParkingRepository);
 
 export default container;

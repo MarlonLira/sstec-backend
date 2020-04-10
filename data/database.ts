@@ -11,8 +11,7 @@ import Company from './models/company';
 import CompanyAdress from './models/companyAdress';
 import Employee from './models/employee';
 import Payment from './models/payment';
-import Crypto from '../commons/core/crypto';
-import { CryptoType } from '../commons/enums/cryptoType';
+import Parking from './models/parking';
 
 var { ForceSync, AlterSync, IsLogger } = Config.Database;
 
@@ -38,7 +37,8 @@ class Database {
       { name: 'Company', entity: Company.sequelize },
       { name: 'CompanyAdress', entity: CompanyAdress.sequelize },
       { name: 'Employee', entity: Employee.sequelize },
-      { name: 'Payment', entity: Payment.sequelize }
+      { name: 'Payment', entity: Payment.sequelize },
+      { name: 'Parking', entity: Parking.sequelize }
     ];
 
     Logger.Info('Database', 'Table verification started!');
@@ -57,7 +57,9 @@ class Database {
     UserAdress.belongsTo(User, { foreignKey: 'userId', as: 'User' });
     CompanyAdress.belongsTo(Company, { foreignKey: 'companyId', as: 'Company' });
     Payment.belongsTo(Card, { foreignKey: 'cardId', as: 'Card' });
-    //Payment.belongsTo(ParkingSpace, {foreignKey: 'parkingSpaceId', as: 'ParkingSpace'});
+    Parking.belongsTo(Company, {foreignKey: 'companyId', as: 'Company'});
+    //Payment.belongsTo(ParkingpacSe, {foreignKey: 'parkingSpaceId', as: 'ParkingSpace'});
+    
 
     //1:1
 
