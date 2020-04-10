@@ -17,10 +17,11 @@ class Card extends Model {
   id!: number;
   status: string;
   holder: string;
+  flag: string;
   number: string;
+  expirationDate: string;
   secureCode!: string;
   type: string;
-  users!: BelongsToGetAssociationMixin<User>;
 
   /**
    *Creates an instance of Card.
@@ -33,7 +34,9 @@ class Card extends Model {
     this.id = Attributes.ReturnIfValid(json.id, 0);
     this.status = Attributes.ReturnIfValid(json.status);
     this.holder = Attributes.ReturnIfValid(json.holder);
+    this.flag = Attributes.ReturnIfValid(json.flag);
     this.number = Attributes.ReturnIfValid(json.number);
+    this.expirationDate = Attributes.ReturnIfValid(json.expirationDate);
     this.secureCode = Attributes.ReturnIfValid(json.secureCode);
     this.type = Attributes.ReturnIfValid(json.type);
   }
@@ -53,16 +56,23 @@ Card.init({
     type: new DataTypes.STRING(40),
     allowNull: false
   },
+  flag: {
+    type: new DataTypes.STRING(20),
+    allowNull: false
+  },
   number: {
     type: new DataTypes.STRING(20),
     allowNull: false
   },
+  expirationDate: {
+    type: new DataTypes.STRING(7),
+    allowNull: false
+  },
   secureCode: {
-    type: new DataTypes.CHAR(3),
-    allowNull: true
+    type: new DataTypes.CHAR(3)
   },
   type: {
-    type: new DataTypes.STRING(10),
+    type: new DataTypes.STRING(6),
     allowNull: false
   }
 }, {

@@ -37,7 +37,7 @@ class PaymentController implements IPaymentController {
    */
   @httpPost('/payment')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       let _payment = new Payment(req.body);
       this._paymentRepository.Save(_payment)
         .then(result => {

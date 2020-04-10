@@ -45,7 +45,7 @@ class CompanyRepository implements ICompanyRepository {
    * @memberof CompanyRepository
    */
   Update(company: Company) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       Company.findByPk(company.id)
         .then((result: Company) => {
           Company.update({
@@ -76,7 +76,7 @@ class CompanyRepository implements ICompanyRepository {
    * @memberof CompanyRepository
    */
   Delete(id: number) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       Company.findByPk(id)
         .then((result: Company) => {
           Company.update({
@@ -108,7 +108,7 @@ class CompanyRepository implements ICompanyRepository {
    * @memberof CompanyRepository
    */
   GetByRegistryCode(registryCode: string) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       Company.findOne({
         where: {
           registryCode: {
