@@ -11,6 +11,7 @@ class Employee extends Model {
   public registryCode!: string;
   public email!: string;
   public password: string;
+  public companyId: number;
 
   constructor(json?: any) {
     super()
@@ -21,6 +22,7 @@ class Employee extends Model {
       this.registryCode = Attributes.ReturnIfValid(json.registryCode);
       this.password = Attributes.ReturnIfValid(json.password);
       this.email = Attributes.ReturnIfValid(json.email);
+      this.companyId = Attributes.ReturnIfValid(json.companyId);
     }
   }
 }

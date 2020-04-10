@@ -18,21 +18,21 @@ class Company extends Model {
   phone!: string;
   email!: string;
 
-  /**
-   *Creates an instance of Company.
-   * @author Gustavo Gusmão
-   * @param {*} [json]
-   * @memberof Company
-   */
-  constructor(json?: any) {
-    super()
-    this.id = Attributes.ReturnIfValid(json.id);
-    this.name = Attributes.ReturnIfValid(json.name);
-    this.status = Attributes.ReturnIfValid(json.status);
-    this.registryCode = Attributes.ReturnIfValid(json.registryCode);
-    this.phone = Attributes.ReturnIfValid(json.phone);
-    this.email = Attributes.ReturnIfValid(json.email);
-  }
+    /**
+     *Creates an instance of Company.
+     * @author Gustavo Gusmão
+     * @param {*} [json]
+     * @memberof Company
+     */
+    constructor(json?: any) {
+      super()
+      this.id = Attributes.ReturnIfValid(json.id);
+      this.name = Attributes.ReturnIfValid(json.name);
+      this.status = Attributes.ReturnIfValid(json.status);
+      this.registryCode = Attributes.ReturnIfValid(json.registryCode);
+      this.phone = Attributes.ReturnIfValid(json.phone);
+      this.email = Attributes.ReturnIfValid(json.email);
+    }
 }
 
 Company.init({

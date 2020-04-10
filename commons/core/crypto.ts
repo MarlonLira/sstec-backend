@@ -1,6 +1,6 @@
 import { CryptoType } from '../enums/cryptoType';
-var bcrypt = require('bcrypt');
-const crypto = require("crypto");
+import * as CryptoJS from 'crypto-js'
+import * as bcrypt from 'bcrypt';
 
 /**
  * @description
@@ -17,7 +17,7 @@ class Crypto {
   static readonly cryptographyData = {
     algorithm: "aes256",
     coding: "utf8",
-    secret: "chaves",
+    secret: "|*#5522&*QWE?/",
     type: "hex"
   };
 
@@ -73,9 +73,7 @@ class Crypto {
    * @memberof Crypto
    */
   private static EncryptCard(card: string) {
-    const cipher = crypto.createCipher(this.cryptographyData.algorithm, this.cryptographyData.secret);
-    cipher.update(card);
-    return cipher.final(this.cryptographyData.type);
+    return CryptoJS.AES.encrypt(card, this.cryptographyData.secret).toString();
   }
 
   /**
@@ -87,10 +85,9 @@ class Crypto {
    * @returns 
    * @memberof Crypto
    */
-  private static DecryptCard(value: string) {
-    const decipher = crypto.createDecipher(this.cryptographyData.algorithm, this.cryptographyData.secret);
-    decipher.update(value, this.cryptographyData.type);
-    return decipher.final();
+  private static DecryptCard(hash: string): string {
+    var bytes = CryptoJS.AES.decrypt(hash, this.cryptographyData.secret);
+    return bytes.toString(CryptoJS.enc.Utf8);
   }
 
   /**
@@ -128,7 +125,7 @@ class Crypto {
    * @returns 
    * @memberof Crypto
    */
-  static Compare(password: string, hash: string) {
+  static Compare(password: string, hash: string): boolean {
     return bcrypt.compareSync(password, hash);
   }
 }
