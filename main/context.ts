@@ -25,13 +25,13 @@ class Context {
         port: _dbConfig.port,
         host: _dbConfig.host,
         dialect: 'postgres',
-        logging: _logging
-        // dialectOptions: {
-        //   options: {
-        //     trustServerCertificate: true
-        //   },
-        //   ssl: true
-        // }
+        logging: _logging,
+        native: false,
+        dialectOptions: {
+          ssl: {
+            rejectUnauthorized: false,
+          }
+        }
       }
     );
     return sequelize;
