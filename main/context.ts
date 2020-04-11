@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 import * as Config from '../config.json';
-import Attributes from "../commons/core/attributes";;
+import Attributes from "../commons/core/attributes";
 
 var _logging = Config.Database.Logging;
 var _dbConfig = Config.Database.MySql;

@@ -13,6 +13,8 @@ import Employee from './models/employee';
 import Payment from './models/payment';
 import Parking from './models/parking';
 import Rule from './models/rule';
+import ParkingPromotion from './models/parkingPromotion';
+import ParkingSpace from './models/parkingSpace';
 
 var { ForceSync, AlterSync, IsLogger } = Config.Database;
 
@@ -39,7 +41,8 @@ class Database {
       { name: 'CompanyAdress', entity: CompanyAdress.sequelize },
       { name: 'Employee', entity: Employee.sequelize },
       { name: 'Parking', entity: Parking.sequelize },
-      { name: 'Rule', entity: Rule.sequelize }
+      { name: 'Rule', entity: Rule.sequelize },
+      { name: 'parkingPromotion', entity: ParkingPromotion.sequelize }
     ];
 
     Logger.Info('Database', 'Table verification started!');
@@ -59,6 +62,7 @@ class Database {
     Company.hasMany(Parking);
     User.hasMany(UserAdress);
     Rule.hasMany(Employee);
+    Parking.hasMany(ParkingPromotion);
     //Payment.belongsTo(ParkingpacSe, {foreignKey: 'parkingSpaceId', as: 'ParkingSpace'});
 
     //1:1
