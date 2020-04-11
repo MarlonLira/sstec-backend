@@ -20,7 +20,7 @@ class AuthService implements IAuthService {
    * @memberof AuthService
    */
   CheckToken(auth: Auth) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       jwt.verify(auth.token, process.env.SECRET, (err, decoded) => {
         resolve(err)
       })
@@ -35,7 +35,7 @@ class AuthService implements IAuthService {
    * @memberof AuthService
    */
   CreateToken(entity: any) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       let id = entity.id;
       let name = entity.name;
 

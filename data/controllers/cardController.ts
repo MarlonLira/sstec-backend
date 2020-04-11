@@ -29,16 +29,17 @@ class CardController implements ICardController {
 
   @httpPost('/card')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
-    let _card = new Card(req.body);
-    return new Promise((resolve) => {
-      this._cardRepository.Save(_card)
+    let _card = new Card(req.body.card);
+    let _userId = req.body.user.id;
+    return new Promise((resolve, reject) => {
+      this._cardRepository.Save(_card, _userId)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, 'Cartão cadastrado com sucesso!', CardController, result))
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error,''))
-        })
-    })
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, error , CardController))
+        });
+    });
   }
 
   @httpGet('/card')
@@ -46,14 +47,18 @@ class CardController implements ICardController {
     throw new Error("Method not implemented.");
   }
 
-  @httpGet('/cards')
-  SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
-  }
-
   @httpPut('/card')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      let _card = new Card(req.body);
+      this._cardRepository.Update(_card)
+      .then(result =>{
+        resolve(Http.SendMessage(res, HttpCode.Ok, 'Cartão atualizado com sucesso', CardController, result));
+      })
+      .catch(error =>{
+        resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error));
+      })
+    })
   }
 
   @httpDelete('/card')

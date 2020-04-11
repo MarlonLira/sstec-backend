@@ -37,7 +37,7 @@ class CompanyController implements ICompanyController {
   @httpPost('/company')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     let _company = new Company(req.body);
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this._companyRepository.Save(_company)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, 'Empresa cadastrada com sucesso!', CompanyController, result))
@@ -48,9 +48,17 @@ class CompanyController implements ICompanyController {
     })
   }
 
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns
+   * @memberof CompanyController
+   */
   @httpGet('/company/registryCode/:registryCode')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       let _registryCode: string = req.params.registryCode;
       this._companyRepository.GetByRegistryCode(_registryCode)
         .then(result => {
@@ -62,9 +70,17 @@ class CompanyController implements ICompanyController {
     })
   }
 
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns
+   * @memberof CompanyController
+   */
   @httpPut('/company')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       let _company = new Company(req.body);
       this._companyRepository.Update(_company)
         .then(result =>{
@@ -76,9 +92,17 @@ class CompanyController implements ICompanyController {
     })
   }
 
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns
+   * @memberof CompanyController
+   */
   @httpDelete('/company/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       let _id: number =  req.params.id;
       this._companyRepository.Delete(_id)
         .then(result =>{

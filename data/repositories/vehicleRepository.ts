@@ -25,7 +25,7 @@ class VehicleRepository implements IVehicleRepository {
    * @memberof VehicleRepository
    */
   Save(vehicle: Vehicle, userId: number) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       User.findByPk(userId)
         .then((user: User) => {
           Vehicle.create({
@@ -45,7 +45,7 @@ class VehicleRepository implements IVehicleRepository {
   }
 
   Find(licensePlate: string, userId: number) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       let count: number = 1;
       User.findByPk(userId)
         .then((user: User) => {
@@ -66,7 +66,7 @@ class VehicleRepository implements IVehicleRepository {
   }
 
   GetVehicles(userId: number) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       User.findByPk(userId)
         .then((user: User) => {
           user.getVehicles()

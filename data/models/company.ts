@@ -16,7 +16,6 @@ class Company extends Model {
   name: string;
   registryCode!: string;
   phone!: string;
-  email!: string;
 
     /**
      *Creates an instance of Company.
@@ -31,7 +30,6 @@ class Company extends Model {
       this.status = Attributes.ReturnIfValid(json.status);
       this.registryCode = Attributes.ReturnIfValid(json.registryCode);
       this.phone = Attributes.ReturnIfValid(json.phone);
-      this.email = Attributes.ReturnIfValid(json.email);
     }
 }
 
@@ -55,9 +53,6 @@ Company.init({
   },
   phone: {
     type: new DataTypes.STRING(12)
-  },
-  email: {
-    type: new DataTypes.STRING(50)
   }
 }, {
   sequelize: _instance,
