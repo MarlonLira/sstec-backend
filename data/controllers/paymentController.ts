@@ -57,9 +57,19 @@ class PaymentController implements IPaymentController {
    * @memberof PaymentController
    */
   @httpGet('/payment')
-  Search(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
-  }
+    Search(@request() req: Request<any>, @response() res: Response<any>) {
+      return new Promise((resolve) => {
+        let _payment: number = req.params.Id;
+        this._paymentRepository.GetPaymentById(_payment)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, 'Pagamento Encontrado!', PaymentController, result));
+          })
+          .catch(error =>{
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error));
+          })
+      })
+    }
+  
 
   /**
    * @description
@@ -68,10 +78,10 @@ class PaymentController implements IPaymentController {
    * @param {Response<any>} res
    * @memberof PaymentController
    */
-  @httpGet('/payments')
-  SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
+   @httpGet('/payments')
+   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
     throw new Error("Method not implemented.");
-  }
+   }
 
   /**
    * @description
@@ -80,10 +90,10 @@ class PaymentController implements IPaymentController {
    * @param {Response<any>} res
    * @memberof PaymentController
    */
-  @httpPut('/payment')
-  Update(@request() req: Request<any>, @response() res: Response<any>) {
+   @httpPut('/payment')
+   Update(@request() req: Request<any>, @response() res: Response<any>) {
     throw new Error("Method not implemented.");
-  }
+   }
 
   /**
    * @description
@@ -92,9 +102,9 @@ class PaymentController implements IPaymentController {
    * @param {Response<any>} res
    * @memberof PaymentController
    */
-  @httpDelete('/payment')
-  Delete(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
+   @httpDelete('/payment')
+   Delete(@request() req: Request<any>, @response() res: Response<any>) {
+     throw new Error("Method not implemented.");
   }
 }
 
