@@ -37,7 +37,7 @@ class VehicleController implements IVehicleController {
    */
   @httpPost('/vehicle')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       console.log(req.body)
       let _vehicle = new Vehicle(req.body.vehicle);
       let _userId: number = req.body.user.id;
@@ -81,7 +81,7 @@ class VehicleController implements IVehicleController {
    */
   @httpPost('/vehicles/user/:id')
   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       console.log(req.params)
       let _userId = req.params.id;
       this._VehicleRepository.GetVehicles(_userId)

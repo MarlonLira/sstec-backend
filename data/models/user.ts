@@ -3,6 +3,7 @@ import { Model, DataTypes, BelongsToManyAddAssociationMixin, BelongsToManyGetAss
 import { DbInstance } from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import Vehicle from './vehicle';
+import Card from './card';
 
 var _instance = DbInstance.getInstance()
 
@@ -21,7 +22,6 @@ class User extends Model {
   phone!: string;
   email!: string;
   password!: string;
-  vehicles!: Vehicle[];
 
   /**
    * @description
@@ -45,6 +45,27 @@ class User extends Model {
   public removeVehicle!: BelongsToManyRemoveAssociationMixin<Vehicle, number>
 
   /**
+   * @description
+   * @type {BelongsToManyGetAssociationsMixin<Card>}
+   * @memberof User
+   */
+  public getCards!: BelongsToManyGetAssociationsMixin<Card>;
+
+  /**
+   * @description
+   * @type {BelongsToManyAddAssociationMixin<Card, number>}
+   * @memberof User
+   */
+  public addCard!: BelongsToManyAddAssociationMixin<Card, number>;
+
+  /**
+   * @description
+   * @type {BelongsToManyRemoveAssociationMixin<Card, number>}
+   * @memberof User
+   */
+  public removeCard!: BelongsToManyRemoveAssociationMixin<Card, number>
+
+  /**
    *Creates an instance of User.
    * @author Marlon Lira
    * @param {*} [json]
@@ -59,7 +80,6 @@ class User extends Model {
     this.phone = Attributes.ReturnIfValid(json.phone);
     this.email = Attributes.ReturnIfValid(json.email);
     this.password = Attributes.ReturnIfValid(json.password);
-    this.vehicles = Attributes.ReturnIfValid(json.vehicles);
   }
 }
 

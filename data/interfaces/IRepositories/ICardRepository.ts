@@ -7,8 +7,11 @@ import Card from '../../models/card';
  * @interface ICardRepository
  */
 interface ICardRepository {
-  Save(card: Card);
-  GetByUserCard(user: User);
+  Save(card: Card, userId: number);
+  GetByUser(user: User);
+  Find(card: Card, properties: string[]);
+  Delete(card: Card);
+  Update(card: Card);
 }
 
 export default ICardRepository;

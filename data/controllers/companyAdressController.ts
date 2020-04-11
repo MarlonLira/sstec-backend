@@ -30,7 +30,7 @@ class CompanyAdressController implements ICompanyAdressController {
   @httpPost('/companyAdress')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     let _companyAdress = new CompanyAdress(req.body);
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this._companyAdressRepository.Save(_companyAdress)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, 'Entederço cadastrado com sucesso', CompanyAdressController, result))

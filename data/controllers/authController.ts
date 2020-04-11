@@ -47,7 +47,7 @@ class AuthController implements IAuthController {
   @httpPost('/tokenValidate')
   TokenValidate(@request() req: Request, @response() res: Response) {
     let _auth = new Auth(req.body);
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this._authService.CheckToken(_auth).then(result => {
         resolve(Http.SendSimpleMessage(res, HttpCode.Ok, { valid: !result }));
       })
@@ -65,7 +65,7 @@ class AuthController implements IAuthController {
   @httpPost('/employee/signIn')
   SignIn(@request() req: Request, @response() res: Response) {
     let _auth = new Auth(req.body);
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this._employeeRepository.Find(_auth.employee, ['registryCode', 'email'])
         .then((found: Employee) => {
           if (Attributes.IsValid(found) && Crypto.Compare(_auth.employee.password, found.password)) {
@@ -92,7 +92,7 @@ class AuthController implements IAuthController {
    */
   @httpPost('/employee/signUp')
   SignUp(@request() req: Request, @response() res: Response) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       let _auth = new Auth(req.body);
       this._companyRepository.GetByRegistryCode(_auth.company.registryCode)
         .then(result => {
