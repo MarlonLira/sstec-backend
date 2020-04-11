@@ -9,10 +9,12 @@ import Card from '../../models/card';
  * @interface IParkingRepository
  */
 interface IParkingRepository {
-  Save(parking: Parking);
+  Save(parking: Parking, companyId: number);
   Update(parking: Parking);
+  ToList();
   GetByRegistryCode(registryCode: string);
   Delete(id: number);
+  Find(parking: Parking, properties: string[]);
 }
 
 export default IParkingRepository;
