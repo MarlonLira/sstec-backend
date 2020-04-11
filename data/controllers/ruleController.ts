@@ -31,7 +31,7 @@ class RuleController implements IRuleController {
    */
   @httpPost('/rule')
   Save(@request() req: Request, @response() res: Response) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       let _rule = new Rule(req.body);
       this._ruleRepository.Save(_rule)
         .then((ruleId: number) => {

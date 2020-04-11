@@ -23,7 +23,7 @@ class RuleRepository implements IRuleRepository {
    * @memberof RuleRepository
    */
   Find(rule: Rule, properties: string[]) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       let query: any;
       query = Querying.ReturnOrQuery(rule, properties);
       Rule.findAll({
@@ -31,7 +31,7 @@ class RuleRepository implements IRuleRepository {
       }).then(result => {
         resolve(result);
       }).catch(error => {
-        throw (error);
+        reject(error);
       })
     });
   }
@@ -58,13 +58,13 @@ class RuleRepository implements IRuleRepository {
    * @memberof RuleRepository
    */
   Save(rule: Rule) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       rule.status = 'AT';
       Rule.create(rule)
         .then((result: Rule) => {
           resolve(result.id);
         }).catch(error => {
-          throw (error);
+          reject(error);
         })
     })
   }
@@ -76,7 +76,7 @@ class RuleRepository implements IRuleRepository {
    * @memberof RuleRepository
    */
   ToList() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       Rule.findAll()
         .then(result => {
           resolve(result);
@@ -96,7 +96,7 @@ class RuleRepository implements IRuleRepository {
    * @memberof RuleRepository
    */
   GetByName(ruleName: string) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       Rule.findAll({
         where: {
           name: {

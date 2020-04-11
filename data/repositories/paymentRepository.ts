@@ -22,7 +22,7 @@ class PaymentRepository implements IPaymentRepository {
    * @memberof PaymentRepository
    */
   Save(payment: Payment) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       Payment.create({
         status: 'AT',
         value: payment.value,
