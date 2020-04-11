@@ -5,7 +5,6 @@
   "main": "dist/src/app.js",
   "scripts": {
     "build-ts": "tsc",
-    "postinstall": "npm run build-ts",
     "start": "npm run app",
     "app": "node dist/src/app.js",
     "dev": "nodemon dist/src/app.js",
