@@ -3,7 +3,7 @@ import * as Config from '../config.json';
 import Attributes from "../commons/core/attributes";
 
 var _logging = Config.Database.Logging;
-var _dbConfig = Config.Database.MSSQL;
+var _dbConfig = Config.Database.PostgreSQL;
 
 /**
  * @description
@@ -26,7 +26,7 @@ class Context {
       {
         port: _dbConfig.port,
         host: _dbConfig.host,
-        dialect: 'mssql',
+        dialect: 'postgres',
         logging: _logging,
         omitNull: true,
         dialectOptions: {

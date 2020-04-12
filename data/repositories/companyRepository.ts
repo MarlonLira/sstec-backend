@@ -30,7 +30,7 @@ class CompanyRepository implements ICompanyRepository {
       Company.create(company, { transaction: _transaction })
         .then(async (result: Company) => {
           await _transaction.commit();
-          resolve({ "companyId": result.id });
+          resolve({ "id": result.id });
         }).catch(async error => {
           await _transaction.rollback();
           reject(error);
