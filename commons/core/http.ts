@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { HttpCode } from '../enums/httpCode';
 import { HttpMessage } from "../enums/httpMessage";
+import ApiResponse from "./apiResponse";
 
 /**
  * @description
@@ -15,14 +16,14 @@ class Http {
    * @static
    * @param {Response} res
    * @param {HttpCode} code
-   * @param {string} [msg='']
-   * @param {*} [entity=null]
+   * @param {HttpMessage} msg
+   * @param {string} entity
    * @param {*} [result=null]
    * @returns 
    * @memberof Http
    */
   static SendMessage(res: Response, code: HttpCode, msg: HttpMessage, entity: string, result = null) {
-    return res.status(code).send(this.HttpMessage(code, entity, msg, result));
+    return res.status(code).send(this.CreateMessage(code, entity, msg, result));
   }
 
   /**
@@ -51,13 +52,13 @@ class Http {
    * @returns 
    * @memberof Http
    */
-  private static HttpMessage(value: HttpCode, entity: string, msg: HttpMessage, _result = null) {
-    var result;
+  private static CreateMessage(value: HttpCode, entity: string, msg: HttpMessage, _result = null): ApiResponse {
+    var result: ApiResponse;
     switch (value) {
       case HttpCode.Continue: {
         result = {
           code: 100,
-          message: `Continue - ${entity} ${msg}`,
+          message: `Continue - ${entity} - ${msg}`,
           result: _result
         };
         break;
@@ -65,7 +66,7 @@ class Http {
       case HttpCode.Processing: {
         result = {
           code: 102,
-          message: `Processing - ${entity} ${msg}`,
+          message: `Processing - ${entity} - ${msg}`,
           result: _result
         };
         break;
@@ -73,7 +74,7 @@ class Http {
       case HttpCode.Ok: {
         result = {
           code: 200,
-          message: `Ok - ${entity} ${msg}`,
+          message: `Ok - ${entity} - ${msg}`,
           result: _result
         };
         break;
@@ -81,7 +82,7 @@ class Http {
       case HttpCode.Created: {
         result = {
           code: 201,
-          message: `Created - ${entity} ${msg}`,
+          message: `Created - ${entity} - ${msg}`,
           result: _result
         };
         break;
@@ -89,7 +90,7 @@ class Http {
       case HttpCode.Accepted: {
         result = {
           code: 202,
-          message: `Accepted - ${entity} ${msg}`,
+          message: `Accepted - ${entity} - ${msg}`,
           result: _result
         };
         break;
@@ -97,7 +98,7 @@ class Http {
       case HttpCode.Found: {
         result = {
           code: 302,
-          message: `Found - ${entity} ${msg}`,
+          message: `Found - ${entity} - ${msg}`,
           result: _result
         };
         break;
@@ -105,7 +106,7 @@ class Http {
       case HttpCode.Bad_Request: {
         result = {
           code: 400,
-          message: `Bad Request - ${entity} ${msg}`,
+          message: `Bad Request - ${entity} - ${msg}`,
           result: _result
         };
         break;
@@ -113,7 +114,7 @@ class Http {
       case HttpCode.Unauthorized: {
         result = {
           code: 401,
-          message: `Unauthorized - ${entity} ${msg}`,
+          message: `Unauthorized - ${entity} - ${msg}`,
           result: _result
         }
         break;
@@ -121,7 +122,7 @@ class Http {
       case HttpCode.Forbidden: {
         result = {
           code: 403,
-          message: `Forbidden - ${entity} ${msg}`,
+          message: `Forbidden - ${entity} - ${msg}`,
           result: _result
         }
 
@@ -130,7 +131,7 @@ class Http {
       case HttpCode.Not_Found: {
         result = {
           code: 404,
-          message: `Not Found - ${entity} ${msg}`,
+          message: `Not Found - ${entity} - ${msg}`,
           result: _result
         };
         break;
@@ -138,7 +139,7 @@ class Http {
       case HttpCode.Expectation_Failed: {
         result = {
           code: 417,
-          message: `Expectation Failed - ${entity} ${msg}`,
+          message: `Expectation Failed - ${entity} - ${msg}`,
           result: _result
         };
         break;
@@ -146,7 +147,7 @@ class Http {
       case HttpCode.Internal_Server_Error: {
         result = {
           code: 500,
-          message: `Internal Server Error - ${entity} ${msg}`,
+          message: `Internal Server Error - ${entity} - ${msg}`,
           result: _result
         };
         break;
@@ -154,7 +155,7 @@ class Http {
       case HttpCode.Not_Implemented: {
         result = {
           code: 501,
-          message: `Not Implemented - ${entity} ${msg}`,
+          message: `Not Implemented - ${entity} - ${msg}`,
           result: _result
         };
         break;
@@ -162,7 +163,7 @@ class Http {
       case HttpCode.Bad_Gateway: {
         result = {
           code: 502,
-          message: `Bad Gateway - ${entity} ${msg}`,
+          message: `Bad Gateway - ${entity} - ${msg}`,
           result: _result
         };
         break;
@@ -170,7 +171,7 @@ class Http {
       case HttpCode.Service_Unavailable: {
         result = {
           code: 503,
-          message: `Service Unavailable - ${entity} ${msg}`,
+          message: `Service Unavailable - ${entity} - ${msg}`,
           result: _result
         };
         break;
@@ -178,11 +179,12 @@ class Http {
       default: {
         result = {
           code: 0,
-          message: `Internal Configuration Server Error - ${entity} ${msg}`,
+          message: `Internal Configuration Server Error - ${entity} - ${msg}`,
           result: _result
         };
       }
     }
+    result.message = result.message.replace('  ', ' ').replace('--', '-').replace('- -', '-').replace('-  -', '-').replace('  ', ' ');
     return result;
   }
 }

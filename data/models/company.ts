@@ -1,4 +1,4 @@
-import { Model, DataTypes, HasManyAddAssociationMixin } from 'sequelize';
+import { Model, DataTypes, HasManyAddAssociationMixin, HasManyCreateAssociationMixin } from 'sequelize';
 import { DbInstance } from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import Employee from './employee';
@@ -19,12 +19,8 @@ class Company extends Model {
   registryCode!: string;
   phone!: string;
 
-  /**
-   * @description
-   * @type {HasManyAddAssociationMixin<Employee, number>}
-   * @memberof Company
-   */
-  addEmployee!: HasManyAddAssociationMixin<Employee, number>
+  public addEmployee!: HasManyAddAssociationMixin<Employee, number>;
+  public createEmployee!: HasManyCreateAssociationMixin<Employee>;
 
   /**
    *Creates an instance of Company.

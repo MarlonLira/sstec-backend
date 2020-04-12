@@ -17,7 +17,8 @@ class Employee extends Model {
   public registryCode!: string;
   public email!: string;
   public password: string;
-  public companyId: number;
+  public companyId!: number;
+  public ruleId!: number;
 
   /**
    *Creates an instance of Employee.
@@ -35,6 +36,7 @@ class Employee extends Model {
       this.password = Attributes.ReturnIfValid(json.password);
       this.email = Attributes.ReturnIfValid(json.email);
       this.companyId = Attributes.ReturnIfValid(json.companyId);
+      this.ruleId = Attributes.ReturnIfValid(json.ruleId);
     }
   }
 }
@@ -64,6 +66,12 @@ Employee.init({
   email: {
     type: new DataTypes.STRING(50),
     validate: { isEmail: true }
+  },
+  companyId: {
+    type: new DataTypes.INTEGER
+  },
+  ruleId: {
+    type: new DataTypes.INTEGER
   }
 }, {
   sequelize: _instance,
