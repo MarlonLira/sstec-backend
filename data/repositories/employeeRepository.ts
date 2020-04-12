@@ -16,6 +16,9 @@ import Crypto from '../../commons/core/crypto';
  */
 @injectable()
 class EmployeeRepository implements IEmployeeRepository {
+  Delete(id: number) {
+    throw new Error("Method not implemented.");
+  }
 
   /**
    * @description

@@ -8,6 +8,7 @@ import Company from "../models/company";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
+import Attributes from "../../commons/core/attributes";
 
 /**
  * @description
@@ -38,14 +39,21 @@ class CompanyController implements ICompanyController {
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     let _company = new Company(req.body);
     return new Promise((resolve, reject) => {
-      this._companyRepository.Save(_company)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, 'Empresa cadastrada com sucesso!', CompanyController, result))
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error))
-        })
-    })
+      this._companyRepository.GetByRegistryCode(_company.registryCode)
+        .then((found: Company) => {
+          if (!Attributes.IsValid(found)) {
+            this._companyRepository.Save(_company)
+              .then(result => {
+                resolve(Http.SendMessage(res, HttpCode.Ok, 'Empresa cadastrada com sucesso!', CompanyController, result))
+              })
+              .catch(error => {
+                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', CompanyController))
+              })
+          } else {
+            resolve((Http.SendMessage(res, HttpCode.Bad_Request, 'Erro! Empresa já cadastrada!', CompanyController)))
+          }
+        });
+    });
   }
 
   /**
@@ -64,8 +72,8 @@ class CompanyController implements ICompanyController {
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, 'Encontrado!', CompanyController, result));
         })
-        .catch(error =>{
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error));
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', CompanyController));
         })
     })
   }
@@ -83,11 +91,11 @@ class CompanyController implements ICompanyController {
     return new Promise((resolve, reject) => {
       let _company = new Company(req.body);
       this._companyRepository.Update(_company)
-        .then(result =>{
+        .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, 'Empresa atualizada com sucesso!', CompanyController, result))
         })
-        .catch(error =>{
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error));
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', CompanyController));
         })
     })
   }
@@ -103,17 +111,16 @@ class CompanyController implements ICompanyController {
   @httpDelete('/company/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve, reject) => {
-      let _id: number =  req.params.id;
+      let _id: number = req.params.id;
       this._companyRepository.Delete(_id)
-        .then(result =>{
+        .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, 'Empresa deletada com sucesso!', CompanyController, result))
         })
-        .catch(error =>{
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error));
-        })
-    })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', CompanyController, error));
+        });
+    });
   }
-
 }
 
 export default CompanyController;

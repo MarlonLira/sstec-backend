@@ -3,7 +3,7 @@ import * as Config from '../config.json';
 import Attributes from "../commons/core/attributes";
 
 var _logging = Config.Database.Logging;
-var _dbConfig = Config.Database.PostgreSQL;
+var _dbConfig = Config.Database.MySql;
 
 /**
  * @description
@@ -24,16 +24,16 @@ class Context {
       {
         port: _dbConfig.port,
         host: _dbConfig.host,
-        dialect: 'postgres',
+        dialect: 'mysql',
         logging: _logging,
-        dialectOptions: {
-          options: {
-            trustServerCertificate: true
-          },
-          ssl: {
-            rejectUnauthorized: false,
-          }
-        }
+        // dialectOptions: {
+        //   options: {
+        //     trustServerCertificate: true
+        //   },
+        //   ssl: {
+        //     rejectUnauthorized: false,
+        //   }
+        // }
       }
     );
     return sequelize;

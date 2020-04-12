@@ -33,8 +33,9 @@ Rule.init({
     primaryKey: true
   },
   status: {
-    type: DataTypes.CHAR(2),
-    allowNull: false
+    type: new DataTypes.ENUM,
+    allowNull: true,
+    values: ['AT', 'PD', 'EX']
   },
   name: {
     type: DataTypes.STRING(30),

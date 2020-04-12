@@ -49,8 +49,9 @@ Card.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.CHAR(2),
-    allowNull: false
+    type: new DataTypes.ENUM,
+    allowNull: true,
+    values: ['AT', 'PD', 'EX']
   },
   holder: {
     type: new DataTypes.STRING(40),
@@ -62,7 +63,8 @@ Card.init({
   },
   number: {
     type: new DataTypes.STRING(20),
-    allowNull: false
+    allowNull: false,
+    validate: { isCreditCard: true }
   },
   expirationDate: {
     type: new DataTypes.STRING(7),
