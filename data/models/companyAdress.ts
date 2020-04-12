@@ -47,8 +47,9 @@ CompanyAdress.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.CHAR(2),
-    allowNull: false
+    type: new DataTypes.ENUM,
+    allowNull: true,
+    values: ['AT', 'PD', 'EX']
   },
   country: {
     type: new DataTypes.STRING(15)

@@ -4,6 +4,7 @@ import ICompanyRepository from '../interfaces/IRepositories/ICompanyRepository';
 import Company from '../models/company';
 import Attributes from '../../commons/core/attributes';
 import { injectable } from "inversify";
+import Logger from '../../commons/core/logger';
 
 /**
  * @description
@@ -22,20 +23,18 @@ class CompanyRepository implements ICompanyRepository {
    * @memberof CompanyRepository
    */
   Save(company: Company) {
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve, reject) => {
       const _transaction = await Company.sequelize.transaction();
       company.status = 'AT';
-      company.id = 0;
-
       Company.create(company, { transaction: _transaction })
         .then(async (result: Company) => {
           await _transaction.commit();
           resolve(result.id);
         }).catch(async error => {
           await _transaction.rollback();
-          throw error;
-        })
-    })
+          reject(error);
+        });
+    });
   }
 
   /**
@@ -45,7 +44,8 @@ class CompanyRepository implements ICompanyRepository {
    * @memberof CompanyRepository
    */
   Update(company: Company) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Company.sequelize.transaction();
       Company.findByPk(company.id)
         .then((result: Company) => {
           Company.update({
@@ -55,14 +55,14 @@ class CompanyRepository implements ICompanyRepository {
             phone: Attributes.ReturnIfValid(company.phone, result.phone)
           },
             {
-              where: {
-                id: company.id
-              }
+              where: { id: company.id }
             })
-            .then(result => {
+            .then(async result => {
+              await _transaction.commit();
               resolve(result);
             })
-            .catch(error => {
+            .catch(async error => {
+              await _transaction.rollback();
               throw error;
             })
         })
@@ -76,28 +76,22 @@ class CompanyRepository implements ICompanyRepository {
    * @memberof CompanyRepository
    */
   Delete(id: number) {
-    return new Promise((resolve, reject) => {
-      Company.findByPk(id)
-        .then((result: Company) => {
-          Company.update({
-            status: 'EX',
-            name: Attributes.ReturnIfValid(result.name),
-            registryCode: Attributes.ReturnIfValid(result.registryCode),
-            phone: Attributes.ReturnIfValid(result.phone)
-          },
-            {
-              where: {
-                id: id
-              }
-            })
-            .then(result => {
-              resolve(result);
-            })
-            .catch(error => {
-              throw error;
-            })
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Company.sequelize.transaction();
+      Company.update({ status: 'EE' },
+        {
+          where: { id: id },
+          transaction: _transaction
         })
-    })
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async error => {
+          await _transaction.rollback();
+          reject(error);
+        });
+    });
   }
 
   /**
