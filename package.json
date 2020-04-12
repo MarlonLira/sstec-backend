@@ -48,11 +48,12 @@
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.6",
     "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.3",
     "@types/jsonwebtoken": "^8.3.5",
     "@types/node": "^12.12.30",
     "@types/sequelize": "^4.28.8",
-    "@types/express": "^4.17.3",
     "swagger-ui-express": "^4.1.4",
+    "tslint-config-standard": "^9.0.0",
     "typescript": "^3.8.3"
   }
 }

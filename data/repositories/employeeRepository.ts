@@ -18,9 +18,6 @@ import { TransactionType } from '../../commons/enums/transactionType';
  */
 @injectable()
 class EmployeeRepository implements IEmployeeRepository {
-  Delete(id: number) {
-    throw new Error("Method not implemented.");
-  }
 
   /**
    * @description
@@ -39,22 +36,19 @@ class EmployeeRepository implements IEmployeeRepository {
           Employee.create(employee, { transaction: _transaction })
             .then((employee: Employee) => {
               company.addEmployee(employee)
-                .then(async result => {
+                .then(async () => {
                   await _transaction.commit();
                   resolve({
                     "CompanyId": company.id,
                     "EmployeeId": employee.id
                   })
-                })
-              resolve(employee.id);
+                });
             })
             .catch(async error => {
               await _transaction.rollback();
               throw error;
             });
-
-        })
-
+        });
     });
   }
 
@@ -75,7 +69,7 @@ class EmployeeRepository implements IEmployeeRepository {
         resolve(result);
       }).catch(error => {
         reject(error);
-      })
+      });
     });
   }
 
@@ -105,7 +99,7 @@ class EmployeeRepository implements IEmployeeRepository {
         resolve(result);
       }).catch(error => {
         reject(error);
-      })
+      });
     });
   }
 
@@ -115,6 +109,10 @@ class EmployeeRepository implements IEmployeeRepository {
    * @memberof EmployeeRepository
    */
   ToList() {
+    throw new Error("Method not implemented.");
+  }
+
+  Delete(id: number) {
     throw new Error("Method not implemented.");
   }
 }

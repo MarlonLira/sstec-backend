@@ -32,7 +32,7 @@ class RuleRepository implements IRuleRepository {
         resolve(result);
       }).catch(error => {
         reject(error);
-      })
+      });
     });
   }
 
@@ -65,8 +65,8 @@ class RuleRepository implements IRuleRepository {
           resolve(result.id);
         }).catch(error => {
           reject(error);
-        })
-    })
+        });
+    });
   }
 
   /**
@@ -80,12 +80,11 @@ class RuleRepository implements IRuleRepository {
       Rule.findAll()
         .then(result => {
           resolve(result);
-        }
-        )
-        .catch(error => {
-          throw error;
         })
-    })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 
   /**
@@ -106,12 +105,11 @@ class RuleRepository implements IRuleRepository {
       })
         .then(result => {
           resolve(result);
-        }
-        )
-        .catch(error => {
-          throw error;
         })
-    })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 
   /**
