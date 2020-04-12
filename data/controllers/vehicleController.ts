@@ -2,13 +2,14 @@ import { Response, Request } from "express";
 import { controller, httpPost, request, response } from "inversify-express-utils";
 import { inject } from "inversify";
 
+import IVehicleController from "../interfaces/IControllers/IVehicleController";
 import IVehicleRepository from '../interfaces/IRepositories/IVehicleRepository';
 import TYPES from '../types';
 import Vehicle from "../models/Vehicle";
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
+import { HttpMessage } from "../../commons/enums/httpMessage";
 import Attributes from '../../commons/core/attributes';
-import IVehicleController from "../interfaces/IControllers/IVehicleController";
 
 /**
  * @description
@@ -37,7 +38,7 @@ class VehicleController implements IVehicleController {
    */
   @httpPost('/vehicle')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       console.log(req.body)
       let _vehicle = new Vehicle(req.body.vehicle);
       let _userId: number = req.body.user.id;
@@ -46,19 +47,18 @@ class VehicleController implements IVehicleController {
           if (!Attributes.IsValid(found)) {
             this._VehicleRepository.Save(_vehicle, _userId)
               .then(result => {
-                resolve(Http.SendMessage(res, HttpCode.Ok, 'Veículo criado com sucesso!', VehicleController, result));
+                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Veiculo', result));
               }).catch(error => {
-                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', VehicleController, error));
+                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Veiculo', error));
               });
           } else {
-            resolve(Http.SendMessage(res, HttpCode.Bad_Request, 'Já existe um cadastro desse veículo para o usuário!', VehicleController));
+            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Veiculo'));
 
           }
         }).catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', VehicleController, error));
-        })
-
-    })
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Veiculo', error));
+        });
+    });
   }
 
   /**
@@ -81,17 +81,17 @@ class VehicleController implements IVehicleController {
    */
   @httpPost('/vehicles/user/:id')
   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       console.log(req.params)
       let _userId = req.params.id;
       this._VehicleRepository.GetVehicles(_userId)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, '', VehicleController, result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Veiculo', result));
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', VehicleController, error));
-        })
-    })
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Veiculo', error));
+        });
+    });
   }
 
   /**
@@ -115,7 +115,6 @@ class VehicleController implements IVehicleController {
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
     throw new Error("Method not implemented.");
   }
-
 }
 
 export default VehicleController;

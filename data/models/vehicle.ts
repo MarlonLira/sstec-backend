@@ -28,7 +28,7 @@ class Vehicle extends Model {
    */
   constructor(json?: any) {
     super()
-    this.id = Attributes.ReturnIfValid(json.id, 0);
+    this.id = Attributes.ReturnIfValid(json.id);
     this.status = Attributes.ReturnIfValid(json.status);
     this.model = Attributes.ReturnIfValid(json.model);
     this.color = Attributes.ReturnIfValid(json.color);

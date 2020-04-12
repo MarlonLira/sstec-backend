@@ -1,15 +1,15 @@
 import { Response, Request } from "express";
-import { controller, httpGet, httpPost, httpDelete, request, response, httpPut, results } from "inversify-express-utils";
+import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
 import IPaymentController from "../interfaces/IControllers/IPaymentController";
 import IPaymentRepository from '../interfaces/IRepositories/IPaymentRepository';
 import Payment from "../models/payment";
 import TYPES from '../types';
-import Attributes from '../../commons/core/attributes';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import Card from "../models/card";
+import { HttpMessage } from "../../commons/enums/httpMessage";
 
 /**
  * @description
@@ -37,14 +37,14 @@ class PaymentController implements IPaymentController {
    */
   @httpPost('/payment')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let _payment = new Payment(req.body);
       this._paymentRepository.Save(_payment)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, 'Compra efetuada com sucesso!', PaymentController, result))
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Pagamento', result));
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', PaymentController, error))
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Pagamento', error));
         })
     })
   }
@@ -57,19 +57,18 @@ class PaymentController implements IPaymentController {
    * @memberof PaymentController
    */
   @httpGet('/payment')
-    Search(@request() req: Request<any>, @response() res: Response<any>) {
-      return new Promise((resolve) => {
-        let _payment: number = req.params.Id;
-        this._paymentRepository.GetPaymentById(_payment)
-          .then(result => {
-            resolve(Http.SendMessage(res, HttpCode.Ok, 'Pagamento Encontrado!', PaymentController, result));
-          })
-          .catch(error =>{
-            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error));
-          })
-      })
-    }
-  
+  Search(@request() req: Request<any>, @response() res: Response<any>) {
+    return new Promise((resolve) => {
+      let _payment: number = req.params.Id;
+      this._paymentRepository.GetPaymentById(_payment)
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Pagamento', result))
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Pagamento', error));
+        })
+    })
+  }
 
   /**
    * @description
@@ -78,10 +77,10 @@ class PaymentController implements IPaymentController {
    * @param {Response<any>} res
    * @memberof PaymentController
    */
-   @httpGet('/payments')
-   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
+  @httpGet('/payments')
+  SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
     throw new Error("Method not implemented.");
-   }
+  }
 
   /**
    * @description
@@ -90,10 +89,10 @@ class PaymentController implements IPaymentController {
    * @param {Response<any>} res
    * @memberof PaymentController
    */
-   @httpPut('/payment')
-   Update(@request() req: Request<any>, @response() res: Response<any>) {
+  @httpPut('/payment')
+  Update(@request() req: Request<any>, @response() res: Response<any>) {
     throw new Error("Method not implemented.");
-   }
+  }
 
   /**
    * @description
@@ -102,9 +101,9 @@ class PaymentController implements IPaymentController {
    * @param {Response<any>} res
    * @memberof PaymentController
    */
-   @httpDelete('/payment')
-   Delete(@request() req: Request<any>, @response() res: Response<any>) {
-     throw new Error("Method not implemented.");
+  @httpDelete('/payment')
+  Delete(@request() req: Request<any>, @response() res: Response<any>) {
+    throw new Error("Method not implemented.");
   }
 }
 

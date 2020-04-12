@@ -2,11 +2,13 @@ import { Op, Sequelize } from 'sequelize';
 
 import IEmployeeRepository from '../interfaces/IRepositories/IEmployeeRepository';
 import Employee from '../models/employee';
-import Querying from '../../commons/core/querying';;
+import Querying from '../../commons/core/querying'
 import { injectable } from "inversify";
 import Attributes from '../../commons/core/attributes';
 import { CryptoType } from '../../commons/enums/cryptoType';
 import Crypto from '../../commons/core/crypto';
+import Company from '../models/company';
+import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
  * @description
@@ -30,17 +32,29 @@ class EmployeeRepository implements IEmployeeRepository {
     return new Promise(async (resolve) => {
       const _transaction = await Employee.sequelize.transaction();
       employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
-      employee.status = 'AT';
+      employee.status = TransactionType.ACTIVE;
       employee.id = 0;
-      Employee.create(employee, { transaction: _transaction })
-        .then(async (employee: Employee) => {
-          await _transaction.commit();
-          resolve(employee.id);
+      Company.findByPk(employee.companyId)
+        .then((company: Company) => {
+          Employee.create(employee, { transaction: _transaction })
+            .then((employee: Employee) => {
+              company.addEmployee(employee)
+                .then(async result => {
+                  await _transaction.commit();
+                  resolve({
+                    "CompanyId": company.id,
+                    "EmployeeId": employee.id
+                  })
+                })
+              resolve(employee.id);
+            })
+            .catch(async error => {
+              await _transaction.rollback();
+              throw error;
+            });
+
         })
-        .catch(async error => {
-          await _transaction.rollback();
-          throw error;
-        });
+
     });
   }
 

@@ -3,7 +3,7 @@ import { Op } from 'sequelize';
 import ICompanyAdressRepository from '../interfaces/IRepositories/ICompanyAdressRepository';
 import company from '../models/company';
 import CompanyAdress from '../models/companyAdress';
-import Querying from '../../commons/core/querying';;
+import Querying from '../../commons/core/querying'
 import { injectable } from "inversify";
 
 /**

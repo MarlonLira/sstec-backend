@@ -5,12 +5,10 @@ import { inject } from "inversify";
 import TYPES from '../types';
 import IRuleController from '../interfaces/IControllers/IRuleController';
 import IRuleRepository from '../interfaces/IRepositories/IRuleRepository';
-import Attributes from '../../commons/core/attributes';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import Rule from '../models/rule';
-
-
+import { HttpMessage } from '../../commons/enums/httpMessage';
 
 /**
  * @description
@@ -21,7 +19,14 @@ import Rule from '../models/rule';
 @controller('')
 class RuleController implements IRuleController {
 
+  /**
+   *Creates an instance of RuleController.
+   * @author Marlon Lira
+   * @param {IRuleRepository} _ruleRepository
+   * @memberof RuleController
+   */
   constructor(@inject(TYPES.IRuleRepository) private _ruleRepository: IRuleRepository) { }
+
   /**
    * @description
    * @author Marlon Lira
@@ -31,18 +36,16 @@ class RuleController implements IRuleController {
    */
   @httpPost('/rule')
   Save(@request() req: Request, @response() res: Response) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let _rule = new Rule(req.body);
       this._ruleRepository.Save(_rule)
-        .then((ruleId: number) => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, 'Nivel de acesso cadastrado com sucesso!', RuleController, ruleId))
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Nivel de Acesso', result));
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, 'Erro desconhecido, por favor reporte a equipe técnica!', RuleController))
-        })
-
-
-    })
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Nivel de Acesso', error));
+        });
+    });
   }
 
   /**
@@ -88,7 +91,6 @@ class RuleController implements IRuleController {
   Delete(@request() req: Request, @response() res: Response) {
     throw new Error("Method not implemented.");
   }
-
 }
 
 export default RuleController;

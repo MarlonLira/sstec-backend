@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 
 import IRuleRepository from '../interfaces/IRepositories/IRuleRepository';
 import Rule from '../models/rule';
-import Querying from '../../commons/core/querying';;
+import Querying from '../../commons/core/querying'
 import { injectable } from "inversify";
 
 /**

@@ -31,7 +31,7 @@ class Card extends Model {
    */
   constructor(json?: any) {
     super()
-    this.id = Attributes.ReturnIfValid(json.id, 0);
+    this.id = Attributes.ReturnIfValid(json.id);
     this.status = Attributes.ReturnIfValid(json.status);
     this.holder = Attributes.ReturnIfValid(json.holder);
     this.flag = Attributes.ReturnIfValid(json.flag);
