@@ -44,9 +44,26 @@ class EmployeeController implements IEmployeeController {
     throw new Error("Method not implemented.");
   }
 
-  @httpDelete('/employee')
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns
+   * @memberof EmployeeController
+   */
+  @httpDelete('/employee/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      let _id: number =  req.params.id;
+      this._employeeRepository.Delete(_id)
+        .then(result =>{
+          resolve(Http.SendMessage(res, HttpCode.Ok, 'Empregado deletado com sucesso!', EmployeeController, result))
+        })
+        .catch(error =>{
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', EmployeeController));
+        });
+    });
   }
 
 }

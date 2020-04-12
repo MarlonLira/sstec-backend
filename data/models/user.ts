@@ -90,8 +90,9 @@ User.init({
     primaryKey: true
   },
   status: {
-    type: DataTypes.CHAR(2),
-    allowNull: false
+    type: new DataTypes.ENUM,
+    allowNull: true,
+    values: ['AT', 'PD', 'EX']
   },
   name: {
     type: DataTypes.STRING(30),
@@ -105,7 +106,8 @@ User.init({
     type: DataTypes.STRING(12)
   },
   email: {
-    type: DataTypes.STRING(50)
+    type: new DataTypes.STRING(50),
+    validate: { isEmail: true }
   },
   password: {
     type: DataTypes.STRING(100)

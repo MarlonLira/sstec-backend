@@ -30,7 +30,9 @@ class Context {
         //   options: {
         //     trustServerCertificate: true
         //   },
-        //   ssl: true
+        //   ssl: {
+        //     rejectUnauthorized: false,
+        //   }
         // }
       }
     );
