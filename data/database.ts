@@ -15,7 +15,9 @@ import Parking from './models/parking';
 import Rule from './models/rule';
 import ParkingPromotion from './models/parkingPromotion';
 import ParkingSpace from './models/parkingSpace';
+import { DbInstance } from '../main/context';
 
+var _instance = DbInstance.getInstance();
 var { ForceSync, AlterSync, IsLogger } = Config.Database;
 
 /**
@@ -69,9 +71,17 @@ class Database {
 
     /* #endregion */
 
-    this.CreateTables(Models)
-      .then(result => {
-        Logger.Info('Database', `Table verification ${result}!`);
+    _instance.authenticate()
+      .then(() => {
+        Logger.Info('Database', 'Connection established successfully!');
+        this.CreateTables(Models)
+          .then(result => {
+            Logger.Info('Database', `Table verification ${result}!`);
+          });
+      })
+      .catch(error => {
+        Logger.Error('Database', 'Error when trying to connect to the database!');
+        Logger.Error('Database', error);
       });
   }
 

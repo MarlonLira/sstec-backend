@@ -8,6 +8,7 @@ import ParkingPromotion from '../../models/parkingPromotion';
 interface IParkingPromotionRepository {
   Save(parkingPromotion: ParkingPromotion, parkingId: number);
   Update(parkingPromotion: ParkingPromotion);
+  ToList();
   GetByName(name: string);
   Delete(id: number);
 }

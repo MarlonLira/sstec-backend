@@ -12,6 +12,7 @@ interface IEmployeeRepository {
   ToList();
   Save(employee : Employee);
   Find(employee: Employee, properties: string[]);
+  Delete(id: number);
 }
 
 export default IEmployeeRepository;
