@@ -4,6 +4,12 @@ import Attributes from '../../commons/core/attributes';
 
 var _instance = DbInstance.getInstance()
 
+/**
+ * @description
+ * @author Marlon Lira
+ * @class Employee
+ * @extends {Model}
+ */
 class Employee extends Model {
   public id!: number;
   public status: string;
@@ -13,10 +19,16 @@ class Employee extends Model {
   public password: string;
   public companyId: number;
 
+  /**
+   *Creates an instance of Employee.
+   * @author Marlon Lira
+   * @param {*} [json]
+   * @memberof Employee
+   */
   constructor(json?: any) {
     super()
     if (json != undefined) {
-      this.id = Attributes.ReturnIfValid(json.id, 0);
+      this.id = Attributes.ReturnIfValid(json.id);
       this.name = Attributes.ReturnIfValid(json.name);
       this.status = Attributes.ReturnIfValid(json.status);
       this.registryCode = Attributes.ReturnIfValid(json.registryCode);
@@ -34,8 +46,9 @@ Employee.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.CHAR(2),
-    allowNull: false
+    type: new DataTypes.ENUM,
+    allowNull: true,
+    values: ['AT', 'PD', 'EX']
   },
   name: {
     type: new DataTypes.STRING(30),
@@ -49,7 +62,8 @@ Employee.init({
     type: new DataTypes.STRING(100)
   },
   email: {
-    type: new DataTypes.STRING(50)
+    type: new DataTypes.STRING(50),
+    validate: { isEmail: true }
   }
 }, {
   sequelize: _instance,

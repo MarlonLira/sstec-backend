@@ -3,8 +3,8 @@ import { injectable } from "inversify";
 
 import IParkingRepository from '../interfaces/IRepositories/IParkingRepository';
 import Parking from '../models/Parking';
-import Card from '../models/card';
-import User from '../models/user';
+import Company from '../models/company';
+import Attributes from '../../commons/core/attributes';
 
 /**
  * @description
@@ -16,13 +16,71 @@ import User from '../models/user';
 class ParkingRepository implements IParkingRepository {
 
   /**
+  * @description
+  * @author Emerson Souza
+  * @param {Parking} parking
+  * @memberof ParkingRepository
+  */
+
+  Save(parking: Parking, companyId: number) {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Parking.sequelize.transaction();
+      Company.findByPk(companyId)
+        .then((company: Company) => {
+          parking.status = 'AT';
+          Parking.create(parking, { transaction: _transaction })
+            .then((createParking: Parking) => {
+              _transaction.commit();
+              resolve({ "parkingId": createParking.id });
+            }).catch(error => {
+              _transaction.rollback();
+              reject(error);
+            });
+        });
+    });
+  }
+
+  /**
    * @description
    * @author Emerson Souza
    * @param {Parking} parking
    * @memberof ParkingRepository
    */
   Update(parking: Parking) {
-    throw new Error("Method not implemented.");
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Parking.sequelize.transaction();
+      Parking.findByPk(parking.id)
+        .then((result: Parking) => {
+
+          if (!Attributes.IsValid(result)) {
+            reject('Cliente não encontrado!');
+          }
+
+          Parking.update({
+            status: Attributes.ReturnIfValid(parking.status, result.status),
+            name: Attributes.ReturnIfValid(parking.name, result.name),
+            registryCode: Attributes.ReturnIfValid(parking.registryCode, result.registryCode),
+            phone: Attributes.ReturnIfValid(parking.phone, result.phone),
+            email: Attributes.ReturnIfValid(parking.email, result.email),
+            amount: Attributes.ReturnIfValid(parking.amount, result.amount),
+            imgUrl: Attributes.ReturnIfValid(parking.imgUrl, result.imgUrl)
+          },
+            {
+              where: {
+                id: parking.id
+              },
+              transaction: _transaction
+            })
+            .then(result => {
+              _transaction.commit();
+              resolve(result);
+            })
+            .catch(error => {
+              _transaction.rollback();
+              reject(error);
+            });
+        });
+    });
   }
 
   /**
@@ -32,17 +90,36 @@ class ParkingRepository implements IParkingRepository {
    * @memberof ParkingRepository
    */
   Delete(id: number) {
-    throw new Error("Method not implemented.");
-  }
+    return new Promise((resolve,reject) => {
+      Parking.findByPk(id)
+        .then((result: Parking) => {
 
-  /**
-   * @description
-   * @author Emerson Souza
-   * @param {Parking} parking
-   * @memberof ParkingRepository
-   */
-  Save(parking: Parking) {
-    throw new Error("Method not implemented.");
+          if (!Attributes.IsValid(result)) {
+            reject('Cliente não encontrado!');
+          }
+          
+          Parking.update({
+            status: 'EX',
+            name: Attributes.ReturnIfValid(result.name),
+            registryCode: Attributes.ReturnIfValid(result.registryCode),
+            phone: Attributes.ReturnIfValid(result.phone),
+            email: Attributes.ReturnIfValid(result.email),
+            amount: Attributes.ReturnIfValid(result.amount),
+            imgUrl: Attributes.ReturnIfValid(result.imgUrl)
+          },
+            {
+              where: {
+                id: id
+              }
+            })
+            .then(result => {
+              resolve(result);
+            })
+            .catch(error => {
+              reject(error);
+            })
+        })
+    })
   }
 
   /**
@@ -62,9 +139,9 @@ class ParkingRepository implements IParkingRepository {
    * @param {string} parkingName
    * @memberof ParkingRepository
    */
-  GetByName(parkingName: string) {
-    throw new Error("Method not implemented.");
-  }
+  //GetByName(parkingName: string) {
+  //  throw new Error("Method not implemented.");
+  //}
 
   /**
    * @description
@@ -73,8 +150,24 @@ class ParkingRepository implements IParkingRepository {
    * @memberof ParkingRepository
    */
   GetByRegistryCode(registryCode: string) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      Parking.findOne({
+        where: {
+          registryCode: {
+            [Op.eq]: registryCode
+          }
+        }
+      })
+        .then(result => {
+          resolve(result);
+
+        })
+        .catch(error => {
+          throw error;
+        })
+    })
   }
+
 
   /**
    * @description

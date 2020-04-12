@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 import * as Config from '../config.json';
-import Attributes from "../commons/core/attributes";;
+import Attributes from "../commons/core/attributes";
 
 var _logging = Config.Database.Logging;
 var _dbConfig = Config.Database.PostgreSQL;
@@ -13,21 +13,26 @@ var _dbConfig = Config.Database.PostgreSQL;
 class Context {
 
   protected static _instance: Sequelize;
+
   /**
-   * @description
+   * @description Creates the database instance.
    * @author Marlon Lira
-   * @returns
+   * @static
+   * @returns {Sequelize}
    * @memberof Context
    */
-  static CreateInstance() {
+  static CreateInstance(): Sequelize {
     const sequelize = new Sequelize(_dbConfig.schema, _dbConfig.username, _dbConfig.password,
       {
         port: _dbConfig.port,
         host: _dbConfig.host,
         dialect: 'postgres',
         logging: _logging,
-        native: false,
+        omitNull: true,
         dialectOptions: {
+          options: {
+            trustServerCertificate: true
+          },
           ssl: {
             rejectUnauthorized: false,
           }
@@ -47,10 +52,13 @@ class Context {
 class DbInstance extends Context {
 
   /**
-   * @description
+   * @description Returns the database instance.
+   * @author Marlon Lira
+   * @static
+   * @returns {Sequelize}
    * @memberof DbInstance
    */
-  static getInstance() {
+  static getInstance(): Sequelize {
     this._instance = Attributes.ReturnIfValid(this._instance, this.CreateInstance());
     return this._instance;
   }

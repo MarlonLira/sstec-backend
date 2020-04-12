@@ -32,7 +32,7 @@ class UserAdress extends Model {
    */
   constructor(json?: any) {
     super()
-    this.id = Attributes.ReturnIfValid(json.id, 0);
+    this.id = Attributes.ReturnIfValid(json.id);
     this.status = Attributes.ReturnIfValid(json.status);
     this.country = Attributes.ReturnIfValid(json.country);
     this.state = Attributes.ReturnIfValid(json.state);
@@ -52,8 +52,9 @@ UserAdress.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.CHAR(2),
-    allowNull: false
+    type: new DataTypes.ENUM,
+    allowNull: true,
+    values: ['AT', 'PD', 'EX']
   },
   country: {
     type: new DataTypes.STRING(15)

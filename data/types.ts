@@ -8,7 +8,8 @@ const TYPES = {
   IPaymentRepository: Symbol('IPaymentRepository'),
   IVehicleRepository: Symbol('IVehicleRepository'),
   IParkingRepository: Symbol('IParkingeRepository'),
-  IRuleRepository: Symbol('IRuleRepository')
+  IRuleRepository: Symbol('IRuleRepository'),
+  IParkingPromotionRepository: Symbol('IParkingPromotionRepository')
 };
 
 export default TYPES;

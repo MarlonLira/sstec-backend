@@ -52,7 +52,7 @@ class Server {
    * @memberof Server
    */
   private Middlewares() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       dotenv.config();
       const allowCors = require('./Cors');
       const swaggerUi = require('swagger-ui-express');
@@ -87,7 +87,7 @@ class Server {
    */
   private Status() {
     const port = process.env.PORT || 4001;
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       if (!process.env.SECRET) {
         Logger.Error(this, 'Did not find the environment variables!');
       } else {

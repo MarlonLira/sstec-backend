@@ -25,7 +25,7 @@ class Payment extends Model {
    */
   constructor(json?: any) {
     super()
-    this.id = Attributes.ReturnIfValid(json.id, 0);
+    this.id = Attributes.ReturnIfValid(json.id);
     this.status = Attributes.ReturnIfValid(json.status);
     this.value = Attributes.ReturnIfValid(json.value);
     this.cardId = Attributes.ReturnIfValid(json.cardId);
@@ -40,8 +40,9 @@ Payment.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.CHAR(2),
-    allowNull: false
+    type: new DataTypes.ENUM,
+    allowNull: true,
+    values: ['AT', 'PD', 'EX']
   },
   value: {
     type: new DataTypes.DOUBLE,

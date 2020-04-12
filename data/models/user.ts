@@ -3,6 +3,7 @@ import { Model, DataTypes, BelongsToManyAddAssociationMixin, BelongsToManyGetAss
 import { DbInstance } from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import Vehicle from './vehicle';
+import Card from './card';
 
 var _instance = DbInstance.getInstance()
 
@@ -21,7 +22,6 @@ class User extends Model {
   phone!: string;
   email!: string;
   password!: string;
-  vehicles!: Vehicle[];
 
   /**
    * @description
@@ -45,6 +45,27 @@ class User extends Model {
   public removeVehicle!: BelongsToManyRemoveAssociationMixin<Vehicle, number>
 
   /**
+   * @description
+   * @type {BelongsToManyGetAssociationsMixin<Card>}
+   * @memberof User
+   */
+  public getCards!: BelongsToManyGetAssociationsMixin<Card>;
+
+  /**
+   * @description
+   * @type {BelongsToManyAddAssociationMixin<Card, number>}
+   * @memberof User
+   */
+  public addCard!: BelongsToManyAddAssociationMixin<Card, number>;
+
+  /**
+   * @description
+   * @type {BelongsToManyRemoveAssociationMixin<Card, number>}
+   * @memberof User
+   */
+  public removeCard!: BelongsToManyRemoveAssociationMixin<Card, number>
+
+  /**
    *Creates an instance of User.
    * @author Marlon Lira
    * @param {*} [json]
@@ -52,14 +73,13 @@ class User extends Model {
    */
   constructor(json?: any) {
     super()
-    this.id = Attributes.ReturnIfValid(json.id, 0);
+    this.id = Attributes.ReturnIfValid(json.id);
     this.name = Attributes.ReturnIfValid(json.name);
     this.status = Attributes.ReturnIfValid(json.status);
     this.registryCode = Attributes.ReturnIfValid(json.registryCode);
     this.phone = Attributes.ReturnIfValid(json.phone);
     this.email = Attributes.ReturnIfValid(json.email);
     this.password = Attributes.ReturnIfValid(json.password);
-    this.vehicles = Attributes.ReturnIfValid(json.vehicles);
   }
 }
 
@@ -70,8 +90,9 @@ User.init({
     primaryKey: true
   },
   status: {
-    type: DataTypes.CHAR(2),
-    allowNull: false
+    type: new DataTypes.ENUM,
+    allowNull: true,
+    values: ['AT', 'PD', 'EX']
   },
   name: {
     type: DataTypes.STRING(30),
@@ -85,7 +106,8 @@ User.init({
     type: DataTypes.STRING(12)
   },
   email: {
-    type: DataTypes.STRING(50)
+    type: new DataTypes.STRING(50),
+    validate: { isEmail: true }
   },
   password: {
     type: DataTypes.STRING(100)

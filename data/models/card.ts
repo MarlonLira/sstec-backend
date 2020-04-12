@@ -17,10 +17,11 @@ class Card extends Model {
   id!: number;
   status: string;
   holder: string;
+  flag: string;
   number: string;
-  secureCode: string;
+  expirationDate: string;
+  secureCode!: string;
   type: string;
-  users!: BelongsToGetAssociationMixin<User>;
 
   /**
    *Creates an instance of Card.
@@ -30,10 +31,12 @@ class Card extends Model {
    */
   constructor(json?: any) {
     super()
-    this.id = Attributes.ReturnIfValid(json.id, 0);
+    this.id = Attributes.ReturnIfValid(json.id);
     this.status = Attributes.ReturnIfValid(json.status);
     this.holder = Attributes.ReturnIfValid(json.holder);
+    this.flag = Attributes.ReturnIfValid(json.flag);
     this.number = Attributes.ReturnIfValid(json.number);
+    this.expirationDate = Attributes.ReturnIfValid(json.expirationDate);
     this.secureCode = Attributes.ReturnIfValid(json.secureCode);
     this.type = Attributes.ReturnIfValid(json.type);
   }
@@ -46,23 +49,32 @@ Card.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.CHAR(2),
-    allowNull: false
+    type: new DataTypes.ENUM,
+    allowNull: true,
+    values: ['AT', 'PD', 'EX']
   },
   holder: {
     type: new DataTypes.STRING(40),
     allowNull: false
   },
-  number: {
+  flag: {
     type: new DataTypes.STRING(20),
     allowNull: false
   },
-  secureCode: {
-    type: new DataTypes.CHAR(3),
+  number: {
+    type: new DataTypes.STRING(20),
+    allowNull: false,
+    validate: { isCreditCard: true }
+  },
+  expirationDate: {
+    type: new DataTypes.STRING(7),
     allowNull: false
   },
+  secureCode: {
+    type: new DataTypes.CHAR(3)
+  },
   type: {
-    type: new DataTypes.STRING(10),
+    type: new DataTypes.STRING(6),
     allowNull: false
   }
 }, {

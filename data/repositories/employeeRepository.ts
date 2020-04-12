@@ -2,11 +2,13 @@ import { Op, Sequelize } from 'sequelize';
 
 import IEmployeeRepository from '../interfaces/IRepositories/IEmployeeRepository';
 import Employee from '../models/employee';
-import Querying from '../../commons/core/querying';;
+import Querying from '../../commons/core/querying'
 import { injectable } from "inversify";
 import Attributes from '../../commons/core/attributes';
 import { CryptoType } from '../../commons/enums/cryptoType';
 import Crypto from '../../commons/core/crypto';
+import Company from '../models/company';
+import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
  * @description
@@ -27,16 +29,25 @@ class EmployeeRepository implements IEmployeeRepository {
     return new Promise(async (resolve) => {
       const _transaction = await Employee.sequelize.transaction();
       employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
-      employee.status = 'AT';
+      employee.status = TransactionType.ACTIVE;
       employee.id = 0;
-      Employee.create(employee, { transaction: _transaction })
-        .then(async (employee: Employee) => {
-          await _transaction.commit();
-          resolve(employee.id);
-        })
-        .catch(async error => {
-          await _transaction.rollback();
-          throw error;
+      Company.findByPk(employee.companyId)
+        .then((company: Company) => {
+          Employee.create(employee, { transaction: _transaction })
+            .then((employee: Employee) => {
+              company.addEmployee(employee)
+                .then(async () => {
+                  await _transaction.commit();
+                  resolve({
+                    "CompanyId": company.id,
+                    "EmployeeId": employee.id
+                  })
+                });
+            })
+            .catch(async error => {
+              await _transaction.rollback();
+              throw error;
+            });
         });
     });
   }
@@ -49,7 +60,7 @@ class EmployeeRepository implements IEmployeeRepository {
    * @memberof EmployeeRepository
    */
   Find(employee: Employee, properties: string[]) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       let query: any;
       query = Querying.ReturnOrQuery(employee, properties);
       Employee.findOne({
@@ -57,8 +68,8 @@ class EmployeeRepository implements IEmployeeRepository {
       }).then((result: Employee) => {
         resolve(result);
       }).catch(error => {
-        throw (error);
-      })
+        reject(error);
+      });
     });
   }
 
@@ -79,7 +90,7 @@ class EmployeeRepository implements IEmployeeRepository {
    * @memberof EmployeeRepository
    */
   GetByRegistryCode(registryCode: string) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       Employee.findOne({
         where: {
           registryCode: registryCode
@@ -87,8 +98,8 @@ class EmployeeRepository implements IEmployeeRepository {
       }).then((result: Employee) => {
         resolve(result);
       }).catch(error => {
-        throw (error);
-      })
+        reject(error);
+      });
     });
   }
 
@@ -98,6 +109,10 @@ class EmployeeRepository implements IEmployeeRepository {
    * @memberof EmployeeRepository
    */
   ToList() {
+    throw new Error("Method not implemented.");
+  }
+
+  Delete(id: number) {
     throw new Error("Method not implemented.");
   }
 }

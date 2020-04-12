@@ -28,7 +28,7 @@ class Vehicle extends Model {
    */
   constructor(json?: any) {
     super()
-    this.id = Attributes.ReturnIfValid(json.id, 0);
+    this.id = Attributes.ReturnIfValid(json.id);
     this.status = Attributes.ReturnIfValid(json.status);
     this.model = Attributes.ReturnIfValid(json.model);
     this.color = Attributes.ReturnIfValid(json.color);
@@ -45,8 +45,9 @@ Vehicle.init({
     primaryKey: true
   },
   status: {
-    type: DataTypes.CHAR(2),
-    allowNull: false
+    type: new DataTypes.ENUM,
+    allowNull: true,
+    values: ['AT', 'PD', 'EX']
   },
   model: {
     type: DataTypes.STRING(12),

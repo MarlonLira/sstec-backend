@@ -6,9 +6,9 @@ import IEmployeeController from "../interfaces/IControllers/IEmployeeController"
 import IEmployeeRepository from '../interfaces/IRepositories/IEmployeeRepository';
 import Employee from "../models/employee";
 import TYPES from '../types';
-import Attributes from '../../commons/core/attributes';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
+import { HttpMessage } from "../../commons/enums/httpMessage";
 
 @controller('')
 class EmployeeController implements IEmployeeController {
@@ -21,12 +21,12 @@ class EmployeeController implements IEmployeeController {
     return new Promise((resolve) => {
       this._employeeRepository.Save(_employee)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, 'Funcionario cadastrado com sucesso', EmployeeController, result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Funcionario', result))
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', EmployeeController, error));
-        })
-    })
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionario', error));
+        });
+    });
   }
 
   @httpGet('/employee')
@@ -44,9 +44,26 @@ class EmployeeController implements IEmployeeController {
     throw new Error("Method not implemented.");
   }
 
-  @httpDelete('/employee')
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns
+   * @memberof EmployeeController
+   */
+  @httpDelete('/employee/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      let _id: number =  req.params.id;
+      this._employeeRepository.Delete(_id)
+        .then(result =>{
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Funcionario', result));
+        })
+        .catch(error =>{
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionario', error));
+        });
+    });
   }
 
 }

@@ -1,9 +1,6 @@
-import { Op } from 'sequelize';
-
 import ICompanyAdressRepository from '../interfaces/IRepositories/ICompanyAdressRepository';
 import company from '../models/company';
 import CompanyAdress from '../models/companyAdress';
-import Querying from '../../commons/core/querying';;
 import { injectable } from "inversify";
 
 /**
@@ -12,6 +9,7 @@ import { injectable } from "inversify";
  * @class CompanyAdressRepository
  * @implements {ICompanyAdressRepository}
  */
+@injectable()
 class CompanyAdressRepository implements ICompanyAdressRepository {
 
   /**
@@ -22,7 +20,7 @@ class CompanyAdressRepository implements ICompanyAdressRepository {
    * @memberof CompanyAdressRepository
    */
   Save(companyAdress: CompanyAdress) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       CompanyAdress.create({
         status: 'AT',
         country: companyAdress.country,
@@ -34,9 +32,9 @@ class CompanyAdressRepository implements ICompanyAdressRepository {
       }).then(result => {
         resolve(result);
       }).catch(error => {
-        throw (error);
-      })
-    })
+        reject(error);
+      });
+    });
   }
 
   GetByCompany(company: company ) {
