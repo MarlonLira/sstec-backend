@@ -70,6 +70,17 @@
     }
   ],
   "paths": {
+    "/employee": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/vehicles/user/{id}": {
       "get": {
         "tags": [

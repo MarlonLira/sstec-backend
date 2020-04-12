@@ -9,6 +9,7 @@ import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import Attributes from "../../commons/core/attributes";
+import { HttpMessage } from "../../commons/enums/httpMessage";
 
 /**
  * @description
@@ -38,19 +39,19 @@ class CompanyController implements ICompanyController {
   @httpPost('/company')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     let _company = new Company(req.body);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._companyRepository.GetByRegistryCode(_company.registryCode)
         .then((found: Company) => {
           if (!Attributes.IsValid(found)) {
             this._companyRepository.Save(_company)
               .then(result => {
-                resolve(Http.SendMessage(res, HttpCode.Ok, 'Empresa cadastrada com sucesso!', CompanyController, result))
+                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Empresa', result));
               })
               .catch(error => {
-                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', CompanyController))
+                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Empresa', error));
               })
           } else {
-            resolve((Http.SendMessage(res, HttpCode.Bad_Request, 'Erro! Empresa já cadastrada!', CompanyController)))
+            resolve((Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Empresa')));
           }
         });
     });
@@ -66,14 +67,14 @@ class CompanyController implements ICompanyController {
    */
   @httpGet('/company/registryCode/:registryCode')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let _registryCode: string = req.params.registryCode;
       this._companyRepository.GetByRegistryCode(_registryCode)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, 'Encontrado!', CompanyController, result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Empresa', result))
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', CompanyController));
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Empresa', error));
         })
     })
   }
@@ -92,10 +93,10 @@ class CompanyController implements ICompanyController {
       let _company = new Company(req.body);
       this._companyRepository.Update(_company)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, 'Empresa atualizada com sucesso!', CompanyController, result))
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Empresa', result));
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', CompanyController));
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Empresa', error));
         })
     })
   }
@@ -114,10 +115,10 @@ class CompanyController implements ICompanyController {
       let _id: number = req.params.id;
       this._companyRepository.Delete(_id)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, 'Empresa deletada com sucesso!', CompanyController, result))
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Empresa', result));
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', CompanyController, error));
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Empresa', error));
         });
     });
   }

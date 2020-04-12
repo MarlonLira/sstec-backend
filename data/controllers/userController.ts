@@ -11,7 +11,7 @@ import Crypto from '../../commons/core/crypto';
 import { CryptoType } from "../../commons/enums/cryptoType";
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
-
+import { HttpMessage } from "../../commons/enums/httpMessage";
 
 /**
  * @description
@@ -42,23 +42,23 @@ class UserController implements IUserController {
   @httpPost('/user')
   Save(@request() req: Request, @response() res: Response) {
     let _user = new User(req.body);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._userRepository.Find(_user, ['registryCode', 'email'])
         .then(found => {
           if (!Attributes.IsValid(found)) {
             _user.password = Attributes.IsValid(_user.password) ? Crypto.Encrypt(_user.password, CryptoType.PASSWORD) : undefined;
             this._userRepository.Save(_user)
               .then(result => {
-                resolve(Http.SendMessage(res, HttpCode.Ok, 'Usuario criado com sucesso!', UserController, result));
+                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Usuario', result));
               })
               .catch(error => {
-                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', UserController, error));
+                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Usuario', error));
               });
           } else {
-            resolve(Http.SendMessage(res, HttpCode.Bad_Request, 'Já existe um cadastro para o usuário!', UserController));
+            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Usuario'));
           }
-        })
-    })
+        });
+    });
   }
 
   /**
@@ -73,12 +73,12 @@ class UserController implements IUserController {
   @httpGet('/user/id/:id')
   Search(@request() req: Request, @response() res: Response) {
     let _user = new User(req.params);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._userRepository.Find(_user, ['registryCode', 'id'])
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, '', UserController, result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Usuario', result));
         });
-    })
+    });
   }
 
   /**
@@ -91,11 +91,11 @@ class UserController implements IUserController {
    */
   @httpGet('/users')
   SearchAll(@request() req: Request, @response() res: Response) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._userRepository.ToList().then(result => {
-        resolve(Http.SendMessage(res, HttpCode.Ok, '', UserController, result));
+        resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Usuario', result));
       });
-    })
+    });
   }
 
   /**

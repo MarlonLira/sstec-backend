@@ -13,6 +13,7 @@ import IAuthController from "../interfaces/IControllers/IAuthController";
 import IEmployeeRepository from "../interfaces/IRepositories/IEmployeeRepository";
 import Employee from "../models/employee";
 import ICompanyRepository from "../interfaces/IRepositories/ICompanyRepository";
+import { HttpMessage } from "../../commons/enums/httpMessage";
 
 /**
  * @description
@@ -71,14 +72,14 @@ class AuthController implements IAuthController {
           if (Attributes.IsValid(found) && Crypto.Compare(_auth.employee.password, found.password)) {
             this._authService.CreateToken(found)
               .then(result => {
-                resolve(Http.SendMessage(res, HttpCode.Ok, 'Acesso bem sucedido!', AuthController, result))
+                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Login_Authorized, 'Login', result));
               });
           } else {
-            resolve(Http.SendMessage(res, HttpCode.Unauthorized, 'A conta informada é inválida!', AuthController))
+            resolve(Http.SendMessage(res, HttpCode.Unauthorized, HttpMessage.Login_Unauthorized, 'Login'));
           }
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, 'Erro desconhecido, por favor reporte a equipe técnica!', AuthController))
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Login', error));
         });
     });
   }
@@ -102,16 +103,16 @@ class AuthController implements IAuthController {
                 _auth.employee.companyId = companyId;
                 this._employeeRepository.Save(_auth.employee)
                   .then(employeeId => {
-                    resolve(Http.SendMessage(res, HttpCode.Ok, 'Acesso bem sucedido!', AuthController, { "companyId": companyId, "employeeId": employeeId }));
+                    resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Account_Created, 'Funcionario', { "companyId": companyId, "employeeId": employeeId }));
                   })
                   .catch(error => {
-                    resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '[Employee] Erro desconhecido, por favor reporte a equipe técnica!', AuthController));
+                    resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionario', error));
                   });
               }).catch(error => {
-                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '[Company] Erro desconhecido, por favor reporte a equipe técnica!', AuthController));
+                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Empresa', error));
               })
           } else {
-            resolve(Http.SendMessage(res, HttpCode.Bad_Request, 'A empresa já foi cadastrada!', AuthController));
+            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Empresa'));
           }
         })
     });

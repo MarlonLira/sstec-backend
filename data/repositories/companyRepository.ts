@@ -5,6 +5,7 @@ import Company from '../models/company';
 import Attributes from '../../commons/core/attributes';
 import { injectable } from "inversify";
 import Logger from '../../commons/core/logger';
+import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
  * @description
@@ -25,11 +26,11 @@ class CompanyRepository implements ICompanyRepository {
   Save(company: Company) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Company.sequelize.transaction();
-      company.status = 'AT';
+      company.status = TransactionType.ACTIVE;
       Company.create(company, { transaction: _transaction })
         .then(async (result: Company) => {
           await _transaction.commit();
-          resolve(result.id);
+          resolve({ "companyId": result.id });
         }).catch(async error => {
           await _transaction.rollback();
           reject(error);
@@ -48,12 +49,7 @@ class CompanyRepository implements ICompanyRepository {
       const _transaction = await Company.sequelize.transaction();
       Company.findByPk(company.id)
         .then((result: Company) => {
-          Company.update({
-            status: Attributes.ReturnIfValid(company.status, result.status),
-            name: Attributes.ReturnIfValid(company.name, result.name),
-            registryCode: Attributes.ReturnIfValid(company.registryCode, result.registryCode),
-            phone: Attributes.ReturnIfValid(company.phone, result.phone)
-          },
+          Company.update(company,
             {
               where: { id: company.id }
             })
@@ -63,7 +59,7 @@ class CompanyRepository implements ICompanyRepository {
             })
             .catch(async error => {
               await _transaction.rollback();
-              throw error;
+              reject(error);
             })
         })
     })
@@ -78,7 +74,7 @@ class CompanyRepository implements ICompanyRepository {
   Delete(id: number) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Company.sequelize.transaction();
-      Company.update({ status: 'EE' },
+      Company.update({ status: TransactionType.DELETED },
         {
           where: { id: id },
           transaction: _transaction
@@ -115,7 +111,7 @@ class CompanyRepository implements ICompanyRepository {
 
         })
         .catch(error => {
-          throw error;
+          reject(error);
         })
     })
   }

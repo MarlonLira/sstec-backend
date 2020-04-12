@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 
 import IVehicleRepository from '../interfaces/IRepositories/IVehicleRepository';
 import Vehicle from '../models/vehicle';
-import Querying from '../../commons/core/querying';;
+import Querying from '../../commons/core/querying'
 import { injectable } from "inversify";
 import User from '../models/user';
 import Logger from '../../commons/core/logger';
