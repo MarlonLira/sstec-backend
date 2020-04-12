@@ -2,13 +2,11 @@ import { Op, Transaction } from 'sequelize';
 import { injectable } from "inversify";
 
 import IParkingPromotionRepository from '../interfaces/IRepositories/IParkingPromotionRepository';
-import Card from '../models/card';
-import User from '../models/user';
 import ParkingPromotion from '../models/parkingPromotion';
-import parking from '../models/parking'
 import { resolve } from 'dns';
 import Parking from '../models/parking';
-import { results } from 'inversify-express-utils';
+import Attributes from '../../commons/core/attributes';
+import Querying from '../../commons/core/querying';
 
 /**
  * @description
@@ -26,7 +24,37 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
    * @memberof ParkingPromotionRepository
    */
   Update(parkingPromotion: ParkingPromotion) {
-    throw new Error("Method not implemented.");
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await ParkingPromotion.sequelize.transaction();
+      ParkingPromotion.findByPk(parkingPromotion.id)
+        .then((result: ParkingPromotion) => {
+          if (!Attributes.ReturnIfValid(result)) {
+            reject('Promoção não encontrada');
+          }
+          ParkingPromotion.update({
+            status: Attributes.ReturnIfValid(parkingPromotion.status, result.status),
+            name: Attributes.ReturnIfValid(parkingPromotion.name, result.name),
+            description: Attributes.ReturnIfValid(parkingPromotion.description, result.description),
+            days: Attributes.ReturnIfValid(parkingPromotion.days, result.days),
+            hours: Attributes.ReturnIfValid(parkingPromotion.hours, result.hours),
+            discount: Attributes.ReturnIfValid(parkingPromotion.discount, result.discount)
+          },
+            {
+              where: {
+                id: parkingPromotion.id
+              },
+              transaction: _transaction
+            })
+            .then(result => {
+              _transaction.commit();
+              resolve(result);
+            })
+            .catch(error => {
+              _transaction.rollback();
+              reject(error);
+            });
+        });
+    });
   }
 
   /**
@@ -36,7 +64,37 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
    * @memberof ParkingPromotionRepository
    */
   Delete(id: number) {
-    throw new Error("Method not implemented.");
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await ParkingPromotion.sequelize.transaction();
+      ParkingPromotion.findByPk(id)
+        .then((result: ParkingPromotion) => {
+          if (!Attributes.IsValid(result)) {
+            reject('Promoção não encontrada')
+          }
+          ParkingPromotion.update({
+            status: 'EX',
+            name: Attributes.ReturnIfValid(result.name),
+            description: Attributes.ReturnIfValid(result.description),
+            days: Attributes.ReturnIfValid(result.days),
+            hours: Attributes.ReturnIfValid(result.hours),
+            discount: Attributes.ReturnIfValid(result.discount)
+          },
+            {
+              where: {
+                id: id
+              },
+              transaction: _transaction
+            })
+            .then(result => {
+              _transaction.commit();
+              resolve(result);
+            })
+            .catch(error => {
+              _transaction.rollback();
+              reject(error);
+            })
+        })
+    })
   }
 
 
@@ -74,7 +132,19 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
    * @memberof ParkingPromotionRepository
    */
   Find(parkingPromotion: ParkingPromotion, properties: string[]) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      let query: any;
+      query = Querying.ReturnOrQuery(ParkingPromotion, properties);
+      ParkingPromotion.findAll({
+        where: query
+      })
+        .then(result => {
+          resolve(result);
+        })
+        .catch(error => {
+          reject(error);
+        })
+    });
   }
 
   /**
@@ -84,7 +154,21 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
    * @memberof ParkingPromotionRepository
    */
   GetByName(parkingPromotionName: string) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      ParkingPromotion.findAll({
+        where: {
+          name: {
+            [Op.like]: `${parkingPromotionName}%`
+          }
+        }
+      })
+        .then(result => {
+          resolve(result);
+        })
+        .catch(error => {
+          throw error;
+        })
+    })
   }
 
   /**
@@ -93,7 +177,15 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
    * @memberof ParkingPromotionRepository
    */
   ToList() {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, rejects) => {
+      ParkingPromotion.findAll()
+        .then(result => {
+          resolve(result);
+        })
+        .catch(error => {
+          throw error;
+        })
+    })
   }
 }
 
