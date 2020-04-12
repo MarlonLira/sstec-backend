@@ -29,7 +29,7 @@ class Parking extends Model {
    */
   constructor(json?: any) {
     super()
-    this.id = Attributes.ReturnIfValid(json.id, 0);
+    this.id = Attributes.ReturnIfValid(json.id);
     this.status = Attributes.ReturnIfValid(json.status);
     this.name = Attributes.ReturnIfValid(json.name);
     this.registryCode = Attributes.ReturnIfValid(json.registryCode);

@@ -7,9 +7,9 @@ import ICompanyAdressRepository from '../interfaces/IRepositories/ICompanyAdress
 import CompanyAdress from "../models/companyAdress";
 import Company from "../models/company";
 import TYPES from '../types';
-import Attributes from '../../commons/core/attributes';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
+import { HttpMessage } from "../../commons/enums/httpMessage";
 
 /**
  * @description
@@ -17,6 +17,7 @@ import { HttpCode } from '../../commons/enums/httpCode';
  * @class CompanyAdressController
  * @implements {ICompanyAdressController}
  */
+@controller('')
 class CompanyAdressController implements ICompanyAdressController {
 
   /**
@@ -25,20 +26,20 @@ class CompanyAdressController implements ICompanyAdressController {
    * @param {ICompanyAdressRepository} _companyAdressRepository
    * @memberof CompanyAdressController
    */
-  constructor(@inject(TYPES.ICompanyAdressRepository) private _companyAdressRepository: ICompanyAdressRepository) {}
+  constructor(@inject(TYPES.ICompanyAdressRepository) private _companyAdressRepository: ICompanyAdressRepository) { }
 
   @httpPost('/companyAdress')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     let _companyAdress = new CompanyAdress(req.body);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._companyAdressRepository.Save(_companyAdress)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, 'Entederço cadastrado com sucesso', CompanyAdressController, result))
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Endereço', result));
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error,''))
-        })
-    })
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço', error));
+        });
+    });
   }
 
   @httpGet('/companyAdress')
@@ -60,7 +61,6 @@ class CompanyAdressController implements ICompanyAdressController {
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
     throw new Error("Method not implemented.");
   }
-
 }
 
 export default CompanyAdressController;
