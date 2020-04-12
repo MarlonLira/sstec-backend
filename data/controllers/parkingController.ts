@@ -10,6 +10,7 @@ import Attributes from '../../commons/core/attributes';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import Company from "../models/company";
+import { HttpMessage } from "../../commons/enums/httpMessage";
 
 /**
  * @description
@@ -36,10 +37,10 @@ class ParkingController implements IParkingController {
       let _companyId = req.body.company.Id;
       this._parkingRepository.Save(_parking, _companyId)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, 'Estacionamento cadastrasdo com sucesso!', ParkingController, result))
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento', result));
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', ParkingController, error))
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
         })
     })
   }
@@ -57,10 +58,10 @@ class ParkingController implements IParkingController {
       let _registryCode: string = req.params.registryCode;
       this._parkingRepository.GetByRegistryCode(_registryCode)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, 'Encontrado!', ParkingController, result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result));
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error));
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
         })
     })
   }
@@ -90,10 +91,10 @@ class ParkingController implements IParkingController {
       let _parking = new Parking(req.body);
       this._parkingRepository.Update(_parking)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, 'Estacionamento atualizado com sucesso!', ParkingController, result))
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Estacionamento', result))
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, '', ParkingController, error));
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
         })
     })
   }
@@ -108,13 +109,13 @@ class ParkingController implements IParkingController {
   @httpDelete('/parking/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      let _id: number =  req.params.id;
+      let _id: number = req.params.id;
       this._parkingRepository.Delete(_id)
-        .then(result =>{
-          resolve(Http.SendMessage(res, HttpCode.Ok, 'Estacionamento deletado com sucesso!', ParkingController, result))
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Estacionamento', result))
         })
-        .catch(error =>{
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error));
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
         })
     })
   }
