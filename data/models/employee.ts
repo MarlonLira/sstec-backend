@@ -34,8 +34,9 @@ Employee.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.CHAR(2),
-    allowNull: false
+    type: new DataTypes.ENUM,
+    allowNull: true,
+    values: ['AT', 'PD', 'EX']
   },
   name: {
     type: new DataTypes.STRING(30),
@@ -49,7 +50,8 @@ Employee.init({
     type: new DataTypes.STRING(100)
   },
   email: {
-    type: new DataTypes.STRING(50)
+    type: new DataTypes.STRING(50),
+    validate: { isEmail: true }
   }
 }, {
   sequelize: _instance,
