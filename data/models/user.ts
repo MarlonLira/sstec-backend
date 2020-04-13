@@ -16,7 +16,7 @@ var _instance = DbInstance.getInstance()
 class User extends Model {
 
   id!: number;
-  status!: string;
+  status!: 'AT' | 'PD' | 'EX';
   name!: string;
   registryCode!: string;
   phone!: string;
