@@ -37,7 +37,7 @@ class RuleController implements IRuleController {
   @httpPost('/rule')
   Save(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
-      let _rule = new Rule(req.body);
+      const _rule = new Rule(req.body);
       this._ruleRepository.Save(_rule)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Nivel de Acesso', result));

@@ -5,6 +5,7 @@ import IParkingRepository from '../interfaces/IRepositories/IParkingRepository';
 import Parking from '../models/Parking';
 import Company from '../models/company';
 import Attributes from '../../commons/core/attributes';
+import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
  * @description
@@ -27,7 +28,7 @@ class ParkingRepository implements IParkingRepository {
       const _transaction = await Parking.sequelize.transaction();
       Company.findByPk(companyId)
         .then((company: Company) => {
-          parking.status = 'AT';
+          parking.status = TransactionType.ACTIVE;
           Parking.create(parking, { transaction: _transaction })
             .then((createParking: Parking) => {
               _transaction.commit();
@@ -51,11 +52,9 @@ class ParkingRepository implements IParkingRepository {
       const _transaction = await Parking.sequelize.transaction();
       Parking.findByPk(parking.id)
         .then((result: Parking) => {
-
           if (!Attributes.IsValid(result)) {
             reject('Cliente não encontrado!');
           }
-
           Parking.update({
             status: Attributes.ReturnIfValid(parking.status, result.status),
             name: Attributes.ReturnIfValid(parking.name, result.name),

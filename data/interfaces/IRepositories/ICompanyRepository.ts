@@ -9,6 +9,7 @@ interface ICompanyRepository {
   Save(company: Company);
   Update(company: Company);
   GetByRegistryCode(registryCode: string);
+  GetById(id: number);
   Delete(id: number);
 }
 

@@ -4,7 +4,6 @@ import ICompanyRepository from '../interfaces/IRepositories/ICompanyRepository';
 import Company from '../models/company';
 import Attributes from '../../commons/core/attributes';
 import { injectable } from "inversify";
-import Logger from '../../commons/core/logger';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
@@ -30,7 +29,7 @@ class CompanyRepository implements ICompanyRepository {
       Company.create(company, { transaction: _transaction })
         .then(async (result: Company) => {
           await _transaction.commit();
-          resolve({ "companyId": result.id });
+          resolve({ "id": result.id });
         }).catch(async error => {
           await _transaction.rollback();
           reject(error);
@@ -47,22 +46,19 @@ class CompanyRepository implements ICompanyRepository {
   Update(company: Company) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Company.sequelize.transaction();
-      Company.findByPk(company.id)
-        .then((result: Company) => {
-          Company.update(company,
-            {
-              where: { id: company.id }
-            })
-            .then(async result => {
-              await _transaction.commit();
-              resolve(result);
-            })
-            .catch(async error => {
-              await _transaction.rollback();
-              reject(error);
-            })
+      Company.update(company,
+        {
+          where: { id: company.id }
         })
-    })
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async error => {
+          await _transaction.rollback();
+          reject(error);
+        });
+    });
   }
 
   /**
@@ -112,8 +108,27 @@ class CompanyRepository implements ICompanyRepository {
         })
         .catch(error => {
           reject(error);
+        });
+    });
+  }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} id
+   * @returns
+   * @memberof CompanyRepository
+   */
+  GetById(id: number) {
+    return new Promise((resolve, reject) => {
+      Company.findByPk(id)
+        .then(result => {
+          resolve(result);
         })
-    })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 }
 

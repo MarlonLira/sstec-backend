@@ -39,9 +39,8 @@ class VehicleController implements IVehicleController {
   @httpPost('/vehicle')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      console.log(req.body)
-      let _vehicle = new Vehicle(req.body.vehicle);
-      let _userId: number = req.body.user.id;
+      const _vehicle = new Vehicle(req.body.vehicle);
+      const _userId: number = req.body.user.id;
       this._VehicleRepository.Find(_vehicle.licensePlate, _userId)
         .then(found => {
           if (!Attributes.IsValid(found)) {
@@ -82,8 +81,7 @@ class VehicleController implements IVehicleController {
   @httpPost('/vehicles/user/:id')
   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      console.log(req.params)
-      let _userId = req.params.id;
+      const _userId = req.params.id;
       this._VehicleRepository.GetVehicles(_userId)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Veiculo', result));

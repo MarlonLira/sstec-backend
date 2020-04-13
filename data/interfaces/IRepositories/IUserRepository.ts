@@ -9,8 +9,9 @@ import User from '../../models/user';
 interface IUserRepository {
   GetByName(userName: string);
   GetByRegistryCode(registryCode: string);
+  GetById(id: number);
   ToList();
-  Save(user : User);
+  Save(user: User);
   Find(user: User, properties: string[]);
 }
 

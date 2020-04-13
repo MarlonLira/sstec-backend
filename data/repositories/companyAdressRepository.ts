@@ -2,6 +2,7 @@ import ICompanyAdressRepository from '../interfaces/IRepositories/ICompanyAdress
 import company from '../models/company';
 import CompanyAdress from '../models/companyAdress';
 import { injectable } from "inversify";
+import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
  * @description
@@ -21,26 +22,20 @@ class CompanyAdressRepository implements ICompanyAdressRepository {
    */
   Save(companyAdress: CompanyAdress) {
     return new Promise((resolve, reject) => {
-      CompanyAdress.create({
-        status: 'AT',
-        country: companyAdress.country,
-        city: companyAdress.city,
-        street: companyAdress.street,
-        number: companyAdress.number,
-        zipCode: companyAdress.zipCode,
-        complement: companyAdress.complement,
-      }).then(result => {
-        resolve(result);
-      }).catch(error => {
-        reject(error);
-      });
+      companyAdress.status = TransactionType.ACTIVE;
+      CompanyAdress.create(companyAdress)
+        .then(result => {
+          resolve(result);
+        }).catch(error => {
+          reject(error);
+        });
     });
   }
 
-  GetByCompany(company: company ) {
+  GetByCompany(company: company) {
     throw new Error("Method not implemented.");
   }
-  
+
 }
 
 export default CompanyAdressRepository;
