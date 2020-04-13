@@ -34,8 +34,8 @@ class EmployeeRepository implements IEmployeeRepository {
         .then(async (createdEmployee: Employee) => {
           await _transaction.commit();
           resolve({
-            "CompanyId": createdEmployee.companyId,
-            "EmployeeId": createdEmployee.id
+            "companyId": createdEmployee.companyId,
+            "employeeId": createdEmployee.id
           })
         })
         .catch(async error => {
@@ -55,7 +55,7 @@ class EmployeeRepository implements IEmployeeRepository {
   Find(employee: Employee, properties: string[]) {
     return new Promise((resolve, reject) => {
       let query: any;
-      query = Querying.ReturnOrQuery(employee, properties);
+      query = Querying.Or(employee, properties);
       Employee.findOne({
         where: query
       }).then((result: Employee) => {

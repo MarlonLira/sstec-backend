@@ -3,6 +3,7 @@ import { Model, DataTypes, BelongsToGetAssociationMixin } from 'sequelize';
 import { DbInstance } from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import User from './user';
+import { TransactionType } from '../../commons/enums/transactionType';
 
 var _instance = DbInstance.getInstance()
 
@@ -15,7 +16,7 @@ var _instance = DbInstance.getInstance()
 class Card extends Model {
 
   id!: number;
-  status: string;
+  status!: TransactionType;
   holder: string;
   flag: string;
   number: string;

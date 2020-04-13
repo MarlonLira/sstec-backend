@@ -1,12 +1,9 @@
-import { Op } from 'sequelize';
-
 import IVehicleRepository from '../interfaces/IRepositories/IVehicleRepository';
 import Vehicle from '../models/vehicle';
 import Querying from '../../commons/core/querying'
 import { injectable } from "inversify";
 import User from '../models/user';
-import Logger from '../../commons/core/logger';
-import { resolve } from 'dns';
+import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
  * @description
@@ -28,18 +25,16 @@ class VehicleRepository implements IVehicleRepository {
     return new Promise((resolve, reject) => {
       User.findByPk(userId)
         .then((user: User) => {
-          Vehicle.create({
-            status: 'AT',
-            model: vehicle.model,
-            color: vehicle.color,
-            type: vehicle.type,
-            licensePlate: vehicle.licensePlate
-          }).then((vehicle: Vehicle) => {
-            user.addVehicle(vehicle)
-              .then(result => resolve(result));
-          }).catch(error => {
-            throw error;
-          })
+          vehicle.status = TransactionType.ACTIVE;
+          Vehicle.create(vehicle)
+            .then((_vehicle: Vehicle) => {
+              user.addVehicle(_vehicle)
+                .then(result => {
+                  resolve(result)
+                });
+            }).catch(error => {
+              reject(error);
+            })
         })
     })
   }
@@ -59,8 +54,11 @@ class VehicleRepository implements IVehicleRepository {
                 }
                 count++;
               });
+              resolve(undefined);
             })
-            .catch(error => { throw error; })
+            .catch(error => {
+              reject(error);
+            })
         });
     })
   }

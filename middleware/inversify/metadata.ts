@@ -10,3 +10,4 @@ import '../../data/controllers/parkingController';
 import '../../data/controllers/vehicleController';
 import '../../data/controllers/ruleController';
 import '../../data/controllers/parkingPromotionController';
+import '../../data/controllers/parkingSpaceController';

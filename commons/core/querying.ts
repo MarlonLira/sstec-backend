@@ -17,7 +17,7 @@ class Querying {
    * @returns 
    * @memberof Querying
    */
-  static ReturnLikeQuery(entity, properties: Array<string>) {
+  static Like(entity, properties: Array<string>) {
     let query: any = {};
     properties.forEach(property => {
       if (Attributes.IsValid(entity[property])) {
@@ -35,10 +35,10 @@ class Querying {
    * @static
    * @param {*} entity
    * @param {Array<string>} properties
-   * @returns 
+   * @returns
    * @memberof Querying
    */
-  static ReturnEqualQuery(entity, properties: Array<string>) {
+  static Equal(entity, properties: Array<string>) {
     let query: any = {};
     properties.forEach(property => {
       if (Attributes.IsValid(entity[property])) {
@@ -56,10 +56,10 @@ class Querying {
    * @static
    * @param {*} entity
    * @param {Array<string>} properties
-   * @returns 
+   * @returns
    * @memberof Querying
    */
-  static ReturnOrQuery(entity, properties: Array<string>) {
+  static Or(entity, properties: Array<string>) {
     let query: any = {};
     properties.forEach(property => {
       if (Attributes.IsValid(entity[property])) {
