@@ -4,6 +4,7 @@ import IUserRepository from '../interfaces/IRepositories/IUserRepository';
 import User from '../models/user';
 import Querying from '../../commons/core/querying'
 import { injectable } from "inversify";
+import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
  * @description
@@ -17,6 +18,25 @@ class UserRepository implements IUserRepository {
   /**
    * @description
    * @author Marlon Lira
+   * @param {number} id
+   * @returns
+   * @memberof UserRepository
+   */
+  GetById(id: number) {
+    return new Promise((resolve, reject) => {
+      User.findByPk(id)
+        .then((user: User) => {
+          resolve(user);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+  /**
+   * @description
+   * @author Marlon Lira
    * @param {User} user
    * @param {string[]} properties
    * @returns 
@@ -25,7 +45,7 @@ class UserRepository implements IUserRepository {
   Find(user: User, properties: string[]) {
     return new Promise((resolve, reject) => {
       let query: any;
-      query = Querying.ReturnOrQuery(user, properties);
+      query = Querying.Or(user, properties);
       User.findAll({
         where: query
       }).then(result => {
@@ -38,10 +58,10 @@ class UserRepository implements IUserRepository {
 
   Update(user: User) {
     User.update(user, {
-      where : {
-        id:  1
+      where: {
+        id: 1
       }
-    })
+    });
   }
 
   /**
@@ -53,19 +73,14 @@ class UserRepository implements IUserRepository {
    */
   Save(user: any) {
     return new Promise((resolve, reject) => {
-      User.create({
-        name: user.name,
-        registryCode: user.registryCode,
-        phone: user.phone,
-        email: user.email,
-        status: 'AT',
-        password: user.password
-      }).then(result => {
-        resolve(result);
-      }).catch(error => {
-        reject(error);
-      })
-    })
+      user.status = TransactionType.ACTIVE;
+      User.create(user)
+        .then(result => {
+          resolve(result);
+        }).catch(error => {
+          reject(error);
+        });
+    });
   }
 
   /**
@@ -79,12 +94,11 @@ class UserRepository implements IUserRepository {
       User.findAll()
         .then(result => {
           resolve(result);
-        }
-        )
-        .catch(error => {
-          throw error;
         })
-    })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 
   /**
@@ -131,12 +145,11 @@ class UserRepository implements IUserRepository {
       })
         .then(result => {
           resolve(result);
-        }
-        )
-        .catch(error => {
-          throw error;
         })
-    })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 }
 

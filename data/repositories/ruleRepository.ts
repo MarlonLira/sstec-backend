@@ -26,7 +26,7 @@ class RuleRepository implements IRuleRepository {
   Find(rule: Rule, properties: string[]) {
     return new Promise((resolve, reject) => {
       let query: any;
-      query = Querying.ReturnOrQuery(rule, properties);
+      query = Querying.Or(rule, properties);
       Rule.findAll({
         where: query
       }).then(result => {
