@@ -26,28 +26,21 @@ class EmployeeRepository implements IEmployeeRepository {
    * @memberof EmployeeRepository
    */
   Save(employee: Employee) {
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve, reject) => {
       const _transaction = await Employee.sequelize.transaction();
       employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
       employee.status = TransactionType.ACTIVE;
-      employee.id = 0;
-      Company.findByPk(employee.companyId)
-        .then((company: Company) => {
-          Employee.create(employee, { transaction: _transaction })
-            .then((employee: Employee) => {
-              company.addEmployee(employee)
-                .then(async () => {
-                  await _transaction.commit();
-                  resolve({
-                    "CompanyId": company.id,
-                    "EmployeeId": employee.id
-                  })
-                });
-            })
-            .catch(async error => {
-              await _transaction.rollback();
-              throw error;
-            });
+      Employee.create(employee, { transaction: _transaction })
+        .then(async (createdEmployee: Employee) => {
+          await _transaction.commit();
+          resolve({
+            "companyId": createdEmployee.companyId,
+            "employeeId": createdEmployee.id
+          })
+        })
+        .catch(async error => {
+          await _transaction.rollback();
+          reject(error);
         });
     });
   }
