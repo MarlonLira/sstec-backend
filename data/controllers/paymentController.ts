@@ -38,7 +38,7 @@ class PaymentController implements IPaymentController {
   @httpPost('/payment')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      let _payment = new Payment(req.body);
+      const _payment = new Payment(req.body);
       this._paymentRepository.Save(_payment)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Pagamento', result));
@@ -59,7 +59,7 @@ class PaymentController implements IPaymentController {
   @httpGet('/payment')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      let _payment: number = req.params.Id;
+      const _payment: number = req.params.Id;
       this._paymentRepository.GetPaymentById(_payment)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Pagamento', result))

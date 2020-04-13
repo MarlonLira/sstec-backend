@@ -37,14 +37,12 @@ class ParkingPromotionController implements IParkingPromotionController {
   @httpGet('/parkingPromotion/Search/:name')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      let _name: string = req.params.name;
+      const _name: string = req.params.name;
       this._parkingPromotionRepository.GetByName(_name)
         .then(result => {
-          console.log(_name);
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Promoção', result));
         })
         .catch(error => {
-          console.log(_name);
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Promoção', error));
         });
     });
@@ -60,14 +58,13 @@ class ParkingPromotionController implements IParkingPromotionController {
   @httpPost('/parkingPromotion')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      let _parkingPromotion = new ParkingPromotion(req.body.parkingPromotion);
-      let _parkingId = req.body.parking.id;
+      const _parkingPromotion = new ParkingPromotion(req.body.parkingPromotion);
+      const _parkingId = req.body.parking.id;
       this._parkingPromotionRepository.Save(_parkingPromotion, _parkingId)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Promoção', result));
         })
         .catch(error => {
-          console.log(error);
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Promoção', error));
         });
     });
@@ -100,7 +97,7 @@ class ParkingPromotionController implements IParkingPromotionController {
   @httpPut('/ParkingPromotion/Update')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      let _parkingPromotion = new ParkingPromotion(req.body);
+      const _parkingPromotion = new ParkingPromotion(req.body);
       this._parkingPromotionRepository.Update(_parkingPromotion)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Promoção', result));
@@ -118,7 +115,7 @@ class ParkingPromotionController implements IParkingPromotionController {
   @httpDelete('/ParkingPromotion/Delete/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      let _id: number = req.params.id;
+      const _id: number = req.params.id;
       this._parkingPromotionRepository.Delete(_id)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Promoção', result));

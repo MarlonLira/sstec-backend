@@ -17,7 +17,7 @@ class EmployeeController implements IEmployeeController {
 
   @httpPost('/employee')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
-    let _employee = new Employee(req.body);
+    const _employee = new Employee(req.body);
     return new Promise((resolve) => {
       this._employeeRepository.Save(_employee)
         .then(result => {
@@ -55,7 +55,7 @@ class EmployeeController implements IEmployeeController {
   @httpDelete('/employee/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      let _id: number =  req.params.id;
+      const _id: number =  req.params.id;
       this._employeeRepository.Delete(_id)
         .then(result =>{
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Funcionario', result));
