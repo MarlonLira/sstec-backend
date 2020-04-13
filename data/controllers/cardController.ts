@@ -36,16 +36,16 @@ class CardController implements ICardController {
 
   @httpPost('/card')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
-    let _card = new Card(req.body.card);
-    let _userId = req.body.user.id;
+    const _card = new Card(req.body.card);
+    const _userId = req.body.user.id;
     return new Promise((resolve) => {
       this._userRepository.GetById(_userId)
         .then((userFound: User) => {
           if (Attributes.IsValid(userFound)) {
             this._cardRepository.Find(_card, ['number', 'flag'], 'Equal')
-              .then(async (cardFound: Card) => {
-                if (!Attributes.IsValid(cardFound)) {
-                  this._cardRepository.Save(_card, _userId)
+              .then(async (cardFound: Card[]) => {
+                if (!Attributes.IsValid(cardFound[0])) {
+                  this._cardRepository.Save(_card, userFound)
                     .then(result => {
                       resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Cartão', result));
                     })
@@ -55,21 +55,26 @@ class CardController implements ICardController {
                 } else {
                   await userFound.getCards()
                     .then((cardsFound: Card[]) => {
-                      cardsFound.forEach(cardF => {
-                        this._cardRepository.Find(cardF, ['number', 'flag'], 'Equal')
-                          .then(cFound => {
-                            if (Attributes.IsValid(cFound)) {
-                              resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Cartão'));
-                            }
-                          });
+                      let _number: string;
+                      let _count: number = 0;
+                      let _completed: boolean = false;
+                      cardsFound.forEach((cardF: Card) => {
+                        _number = cardFound[0].number;
+                        _count++;
+                        if (cardF.number === _number && !_completed) {
+                          _completed = true;
+                          resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Cartão', ''));
+                        }
                       });
+                      if (_count === cardsFound.length && !_completed) {
+                        this._cardRepository.SaveInUser(cardFound[0], userFound)
+                          .then(result => {
+                            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Cartão', result))
+                          }).catch(error => {
+                            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Cartão', error))
+                          });
+                      }
                     });
-                  this._cardRepository.SaveInUser(cardFound, userFound)
-                    .then(result => {
-                      resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Cartão', result))
-                    }).catch(error => {
-                      resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Usuário', error))
-                    })
                 }
               });
           } else {
@@ -87,7 +92,7 @@ class CardController implements ICardController {
   @httpPut('/card')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      let _card = new Card(req.body);
+      const _card = new Card(req.body);
       this._cardRepository.Update(_card)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Cartão', result));
