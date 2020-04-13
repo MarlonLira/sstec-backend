@@ -1,10 +1,10 @@
-import { Op } from 'sequelize';
 import { injectable } from "inversify";
 
 import IPaymentRepository from '../interfaces/IRepositories/IPaymentRepository';
 import Payment from '../models/payment';
 import Card from '../models/card';
 import User from '../models/user';
+import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
  * @description
@@ -23,17 +23,14 @@ class PaymentRepository implements IPaymentRepository {
    */
   Save(payment: Payment) {
     return new Promise((resolve, reject) => {
-      Payment.create({
-        status: 'AT',
-        value: payment.value,
-        cardId: payment.cardId,
-        parkingSpaceId: payment.parkingSpaceId
-      }).then(result => {
-        resolve(result);
-      }).catch(error => {
-        throw error;
-      })
-    })
+      payment.status = TransactionType.ACTIVE;
+      Payment.create(payment)
+        .then(result => {
+          resolve(result);
+        }).catch(error => {
+          reject(error);
+        });
+    });
   }
 
   /**

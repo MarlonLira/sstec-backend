@@ -52,11 +52,9 @@ class ParkingRepository implements IParkingRepository {
       const _transaction = await Parking.sequelize.transaction();
       Parking.findByPk(parking.id)
         .then((result: Parking) => {
-
           if (!Attributes.IsValid(result)) {
             reject('Cliente não encontrado!');
           }
-
           Parking.update({
             status: Attributes.ReturnIfValid(parking.status, result.status),
             name: Attributes.ReturnIfValid(parking.name, result.name),

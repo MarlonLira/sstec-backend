@@ -1,4 +1,3 @@
-import { Op } from 'sequelize';
 import { injectable } from "inversify";
 
 import IParkingSpaceRepository from '../interfaces/IRepositories/IParkingSpaceRepository';

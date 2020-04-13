@@ -38,7 +38,7 @@ class CompanyController implements ICompanyController {
    */
   @httpPost('/company')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
-    let _company = new Company(req.body);
+    const _company = new Company(req.body);
     return new Promise((resolve) => {
       this._companyRepository.GetByRegistryCode(_company.registryCode)
         .then((found: Company) => {
@@ -68,7 +68,7 @@ class CompanyController implements ICompanyController {
   @httpGet('/company/registryCode/:registryCode')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      let _registryCode: string = req.params.registryCode;
+      const _registryCode: string = req.params.registryCode;
       this._companyRepository.GetByRegistryCode(_registryCode)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Empresa', result))
@@ -89,16 +89,23 @@ class CompanyController implements ICompanyController {
    */
   @httpPut('/company')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise((resolve, reject) => {
-      let _company = new Company(req.body);
-      this._companyRepository.Update(_company)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Empresa', result));
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Empresa', error));
-        })
-    })
+    return new Promise((resolve) => {
+      const _company = new Company(req.body);
+      this._companyRepository.GetById(_company.id)
+        .then((found: Company) => {
+          if (Attributes.IsValid(found)) {
+            this._companyRepository.Update(_company)
+              .then(result => {
+                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Empresa', result));
+              })
+              .catch(error => {
+                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Empresa', error));
+              });
+          } else {
+            resolve(Http.SendMessage(res, HttpCode.Not_Found, HttpMessage.Not_Found, 'Empresa'));
+          }
+        });
+    });
   }
 
   /**
@@ -111,8 +118,8 @@ class CompanyController implements ICompanyController {
    */
   @httpDelete('/company/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise((resolve, reject) => {
-      let _id: number = req.params.id;
+    return new Promise((resolve) => {
+      const _id: number = req.params.id;
       this._companyRepository.Delete(_id)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Empresa', result));

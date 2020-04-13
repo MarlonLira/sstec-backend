@@ -135,7 +135,7 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
   Find(parkingPromotion: ParkingPromotion, properties: string[]) {
     return new Promise((resolve, reject) => {
       let query: any;
-      query = Querying.ReturnOrQuery(ParkingPromotion, properties);
+      query = Querying.Or(ParkingPromotion, properties);
       ParkingPromotion.findAll({
         where: query
       })
