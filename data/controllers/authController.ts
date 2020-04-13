@@ -65,7 +65,6 @@ class AuthController implements IAuthController {
    */
   @httpPost('/employee/signIn')
   SignIn(@request() req: Request, @response() res: Response) {
-    console.log(req.body)
     let _auth = new Auth(req.body);
     return new Promise((resolve) => {
       this._employeeRepository.Find(_auth.employee, ['registryCode', 'email'])

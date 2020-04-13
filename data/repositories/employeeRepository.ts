@@ -34,8 +34,8 @@ class EmployeeRepository implements IEmployeeRepository {
         .then(async (createdEmployee: Employee) => {
           await _transaction.commit();
           resolve({
-            "CompanyId": createdEmployee.companyId,
-            "EmployeeId": createdEmployee.id
+            "companyId": createdEmployee.companyId,
+            "employeeId": createdEmployee.id
           })
         })
         .catch(async error => {
