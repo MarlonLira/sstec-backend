@@ -48,7 +48,7 @@ class AuthController implements IAuthController {
   @httpPost('/tokenValidate')
   TokenValidate(@request() req: Request, @response() res: Response) {
     let _auth = new Auth(req.body);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._authService.CheckToken(_auth).then(result => {
         resolve(Http.SendSimpleMessage(res, HttpCode.Ok, { valid: !result }));
       })
@@ -66,7 +66,7 @@ class AuthController implements IAuthController {
   @httpPost('/employee/signIn')
   SignIn(@request() req: Request, @response() res: Response) {
     let _auth = new Auth(req.body);
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this._employeeRepository.Find(_auth.employee, ['registryCode', 'email'])
         .then((found: Employee) => {
           if (Attributes.IsValid(found) && Crypto.Compare(_auth.employee.password, found.password)) {
@@ -93,28 +93,28 @@ class AuthController implements IAuthController {
    */
   @httpPost('/employee/signUp')
   SignUp(@request() req: Request, @response() res: Response) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let _auth = new Auth(req.body);
       this._companyRepository.GetByRegistryCode(_auth.company.registryCode)
         .then(result => {
           if (!Attributes.IsValid(result)) {
             this._companyRepository.Save(_auth.company)
-              .then((companyId: number) => {
-                _auth.employee.companyId = companyId;
+              .then(createdCompany => {
+                _auth.employee.companyId = createdCompany.id;
                 this._employeeRepository.Save(_auth.employee)
-                  .then(employeeId => {
-                    resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Account_Created, 'Funcionario', { "companyId": companyId, "employeeId": employeeId }));
+                  .then(result => {
+                    resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Account_Created, 'Login', result));
                   })
                   .catch(error => {
-                    resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionario', error));
+                    resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Login', error));
                   });
               }).catch(error => {
-                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Empresa', error));
+                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Login', error));
               })
           } else {
-            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Empresa'));
+            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Login'));
           }
-        })
+        });
     });
   }
 }
