@@ -6,6 +6,7 @@ import Parking from '../models/Parking';
 import Company from '../models/company';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
+import Querying from '../../commons/core/querying';
 
 /**
  * @description
@@ -129,18 +130,18 @@ class ParkingRepository implements IParkingRepository {
    * @memberof ParkingRepository
    */
   Find(parking: Parking, properties: string[]) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      let query: any;
+      query = Querying.Or(parking, properties);
+      Parking.findAll({
+        where: query
+      }).then(result => {
+        resolve(result);
+      }).catch(error => {
+        reject(error);
+      })
+    });
   }
-
-  /**
-   * @description
-   * @author Emerson Souza
-   * @param {string} parkingName
-   * @memberof ParkingRepository
-   */
-  //GetByName(parkingName: string) {
-  //  throw new Error("Method not implemented.");
-  //}
 
   /**
    * @description
@@ -174,7 +175,15 @@ class ParkingRepository implements IParkingRepository {
    * @memberof ParkingRepository
    */
   ToList() {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      Parking.findAll()
+        .then(result => {
+          resolve(result);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 }
 

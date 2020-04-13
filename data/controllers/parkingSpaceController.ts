@@ -30,9 +30,29 @@ class ParkingSpaceController implements IParkingSpaceController {
    */
   constructor(@inject(TYPES.IParkingSpaceRepository) private _parkingSpaceRepository: IParkingSpaceRepository) { }
   
-  Save(req: Request<any>, res: Response<any>) {
-    throw new Error("Method not implemented.");
+  /**
+   * @description
+   * @author Emerson Souza
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns
+   * @memberof ParkingSpaceController
+   */
+  @httpPost('/parkingSpace')
+  Save(@request() req: Request<any>, @response() res: Response<any>) {
+    return new Promise((resolve) => {
+      let _parkingSpace = new ParkingSpace(req.body.parkingSpace);
+      let _parkingId = req.body.parking.Id;
+      this._parkingSpaceRepository.Save(_parkingSpace, _parkingId)
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento', result));
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
+        })
+    })
   }
+
   Search(req: Request<any>, res: Response<any>) {
     throw new Error("Method not implemented.");
   }

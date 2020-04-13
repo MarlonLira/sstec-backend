@@ -37,10 +37,10 @@ class ParkingController implements IParkingController {
       let _companyId = req.body.company.Id;
       this._parkingRepository.Save(_parking, _companyId)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento', result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento Cadastrado!', result));
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Erro ao Cadastrar!', error));
         })
     })
   }
@@ -73,9 +73,13 @@ class ParkingController implements IParkingController {
    * @param {Response<any>} res
    * @memberof ParkingController
    */
-  @httpGet('/parkings')
-  SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
+  @httpGet('/parking')
+  SearchAll(@request() req: Request, @response() res: Response) {
+    return new Promise((resolve) => {
+      this._parkingRepository.ToList().then(result => {
+        resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento', result));
+      });
+    });
   }
 
   /**
