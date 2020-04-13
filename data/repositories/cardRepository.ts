@@ -6,6 +6,7 @@ import Card from '../models/card';
 import Querying from '../../commons/core/querying';
 import { injectable } from "inversify";
 import Attributes from '../../commons/core/attributes';
+import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
  * @description
@@ -63,7 +64,7 @@ class CardRepository implements ICardRepository {
           this.Find(card, ['number', 'flag'])
             .then(async (foundCard: Card) => {
               if (!Attributes.IsValid(foundCard)) {
-                card.status = 'AT'
+                card.status = TransactionType.ACTIVE;
                 this.SaveCard(card, _transaction, _user)
                   .then(resolveCardId => {
                     resolve(resolveCardId);
@@ -83,7 +84,7 @@ class CardRepository implements ICardRepository {
                     })
                   })
                 _user.addCard(foundCard, { transaction: _transaction })
-                  .then(async (relation) => {
+                  .then(async () => {
                     await _transaction.commit();
                     resolve({ "cardId": foundCard.id });
                   })

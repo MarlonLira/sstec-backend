@@ -44,7 +44,8 @@ class Database {
       { name: 'Employee', entity: Employee.sequelize },
       { name: 'Parking', entity: Parking.sequelize },
       { name: 'Rule', entity: Rule.sequelize },
-      { name: 'parkingPromotion', entity: ParkingPromotion.sequelize }
+      { name: 'parkingPromotion', entity: ParkingPromotion.sequelize },
+      { name: 'parkingSpace', entity: ParkingSpace.sequelize },
     ];
 
     Logger.Info('Database', 'Table verification started!');
@@ -65,6 +66,7 @@ class Database {
     User.hasMany(UserAdress, { foreignKey: 'userId', as: 'UserAdress' });
     Rule.hasMany(Employee, { foreignKey: 'ruleId', as: 'Employee' });
     Parking.hasMany(ParkingPromotion, { foreignKey: 'parkingId', as: 'ParkingPromotion' });
+    ParkingSpace.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'Parking' });
     //Payment.belongsTo(ParkingpacSe, {foreignKey: 'parkingSpaceId', as: 'ParkingSpace'});
 
     //1:1

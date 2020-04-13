@@ -7,6 +7,7 @@ import { resolve } from 'dns';
 import Parking from '../models/parking';
 import Attributes from '../../commons/core/attributes';
 import Querying from '../../commons/core/querying';
+import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
  * @description
@@ -111,7 +112,7 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
         .then((parking: Parking) => {
           console.log(parking);
           console.log(parkingPromotion);
-          parkingPromotion.status = 'AT'
+          parkingPromotion.status = TransactionType.ACTIVE;
           ParkingPromotion.create(parkingPromotion, { transaction: _transaction })
             .then((createPromotion: ParkingPromotion) => {
               _transaction.commit();

@@ -4,6 +4,7 @@ import IRuleRepository from '../interfaces/IRepositories/IRuleRepository';
 import Rule from '../models/rule';
 import Querying from '../../commons/core/querying'
 import { injectable } from "inversify";
+import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
  * @description
@@ -59,7 +60,7 @@ class RuleRepository implements IRuleRepository {
    */
   Save(rule: Rule) {
     return new Promise((resolve, reject) => {
-      rule.status = 'AT';
+      rule.status = TransactionType.ACTIVE;
       Rule.create(rule)
         .then((result: Rule) => {
           resolve(result.id);
