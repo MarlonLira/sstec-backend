@@ -1,6 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 import { DbInstance } from '../../main/context';
 import Attributes from '../../commons/core/attributes';
+import { TransactionType } from '../../commons/enums/transactionType';
 
 var _instance = DbInstance.getInstance()
 
@@ -12,7 +13,7 @@ var _instance = DbInstance.getInstance()
  */
 class Payment extends Model {
   id!: number;
-  status: string;
+  status!: TransactionType;
   value: number;
   cardId: number;
   parkingSpaceId: number;
