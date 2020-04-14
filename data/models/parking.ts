@@ -53,8 +53,7 @@ Parking.init({
     values: ['AT', 'PD', 'EX']
   },
   name: {
-    type: new DataTypes.STRING(30),
-    allowNull: false
+    type: new DataTypes.STRING(30)
   },
   registryCode: {
     type: new DataTypes.STRING(14)

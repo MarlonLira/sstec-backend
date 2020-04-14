@@ -81,8 +81,7 @@ class VehicleController implements IVehicleController {
   @httpPost('/vehicles/user/:id')
   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      console.log(req.params)
-      let _userId = req.params.id;
+      const _userId = req.params.id;
       this._VehicleRepository.GetVehicles(_userId)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Veiculo', result));

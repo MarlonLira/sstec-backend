@@ -41,7 +41,7 @@ class UserController implements IUserController {
    */
   @httpPost('/user')
   Save(@request() req: Request, @response() res: Response) {
-    let _user = new User(req.body);
+    const _user = new User(req.body);
     return new Promise((resolve) => {
       this._userRepository.Find(_user, ['registryCode', 'email'])
         .then(found => {
@@ -72,7 +72,7 @@ class UserController implements IUserController {
   @httpGet('/user/registryCode/:registryCode')
   @httpGet('/user/id/:id')
   Search(@request() req: Request, @response() res: Response) {
-    let _user = new User(req.params);
+    const _user = new User(req.params);
     return new Promise((resolve) => {
       this._userRepository.Find(_user, ['registryCode', 'id'])
         .then(result => {
@@ -86,7 +86,7 @@ class UserController implements IUserController {
    * @author Marlon Lira
    * @param {Request} req
    * @param {Response} res
-   * @returns 
+   * @returns
    * @memberof UserController
    */
   @httpGet('/users')
