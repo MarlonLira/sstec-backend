@@ -166,7 +166,7 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
           resolve(result);
         })
         .catch(error => {
-          throw error;
+          reject(error);
         })
     })
   }
@@ -183,7 +183,7 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
           resolve(result);
         })
         .catch(error => {
-          throw error;
+          rejects(error);
         })
     })
   }
