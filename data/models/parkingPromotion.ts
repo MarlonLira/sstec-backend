@@ -1,9 +1,9 @@
 import { Model, DataTypes } from 'sequelize';
-import { DbInstance } from '../../main/context';
+import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
 
-var _instance = DbInstance.getInstance()
+const _instance = Context.getInstance();
 
 /**
  * @description
@@ -21,7 +21,7 @@ class ParkingPromotion extends Model {
     discount!: number;
 
   /**
-   *Creates an instance of Parking.
+   * Creates an instance of Parking.
    * @author Felipe Seabra
    * @param {*} [json]
    * @memberof Parking
@@ -40,12 +40,12 @@ class ParkingPromotion extends Model {
 
 ParkingPromotion.init({
   id: {
-    type: new DataTypes.INTEGER,
+    type: new DataTypes.INTEGER(),
     autoIncrement: true,
     primaryKey: true
   },
   status: {
-    type: new DataTypes.ENUM,
+    type: new DataTypes.ENUM(),
     allowNull: true,
     values: ['AT', 'PD', 'EX']
   },
@@ -57,13 +57,13 @@ ParkingPromotion.init({
     type: new DataTypes.STRING(50)
   },
   days: {
-    type: new DataTypes.INTEGER
+    type: new DataTypes.INTEGER()
   },
   hours: {
-    type: new DataTypes.INTEGER
+    type: new DataTypes.INTEGER()
   },
   discount: {
-    type: new DataTypes.DOUBLE,
+    type: new DataTypes.DOUBLE(),
     allowNull: false
   }
 }, {

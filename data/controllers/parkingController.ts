@@ -10,6 +10,8 @@ import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
+import { TransactionType } from "../../commons/enums/transactionType";
+import Attributes from "../../commons/core/attributes";
 
 /**
  * @description
@@ -36,7 +38,7 @@ class ParkingController implements IParkingController {
       const _companyId = req.body.company.Id;
       this._parkingRepository.Save(_parking, _companyId)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento', result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento Cadastrado!', result));
         })
         .catch(error => {
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
@@ -73,8 +75,13 @@ class ParkingController implements IParkingController {
    * @memberof ParkingController
    */
   @httpGet('/parkings')
-  SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
+  SearchAll(@request() req: Request, @response() res: Response) {
+    return new Promise((resolve) => {
+      this._parkingRepository.ToList()
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento', result));
+        });
+    });
   }
 
   /**
@@ -88,12 +95,19 @@ class ParkingController implements IParkingController {
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _parking = new Parking(req.body);
-      this._parkingRepository.Update(_parking)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Estacionamento', result))
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
+      this._parkingRepository.GetById(_parking.id)
+        .then((resultparking: Parking) => {
+          if (Attributes.IsValid(resultparking)) {
+            this._parkingRepository.Update(_parking)
+              .then(result => {
+                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Estacionamento', result))
+              })
+              .catch(error => {
+                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
+              });
+          } else {
+            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Estacionamento'))
+          }
         });
     });
   }
@@ -109,12 +123,19 @@ class ParkingController implements IParkingController {
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _id: number = req.params.id;
-      this._parkingRepository.Delete(_id)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Estacionamento', result))
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
+      this._parkingRepository.GetById(_id)
+        .then((resultparking: Parking) => {
+          if (Attributes.IsValid(resultparking)) {
+            this._parkingRepository.Delete(_id)
+              .then(result => {
+                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Estacionamento', result))
+              })
+              .catch(error => {
+                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
+              });
+          } else {
+            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Estacionamento'));
+          }
         });
     });
   }

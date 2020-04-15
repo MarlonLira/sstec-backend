@@ -19,7 +19,7 @@ class Http {
    * @param {HttpMessage} msg
    * @param {string} entity
    * @param {*} [result=null]
-   * @returns 
+   * @returns
    * @memberof Http
    */
   static SendMessage(res: Response, code: HttpCode, msg: HttpMessage, entity: string, result = null) {
@@ -33,7 +33,7 @@ class Http {
    * @param {Response} res
    * @param {HttpCode} code
    * @param {*} json
-   * @returns 
+   * @returns
    * @memberof Http
    */
   static SendSimpleMessage(res: Response, code: HttpCode, json: any) {
@@ -49,11 +49,11 @@ class Http {
    * @param {*} [entitie=null]
    * @param {*} [_result=null]
    * @param {string} [msg='']
-   * @returns 
+   * @returns
    * @memberof Http
    */
   private static CreateMessage(value: HttpCode, entity: string, msg: HttpMessage, _result = null): ApiResponse {
-    var result: ApiResponse;
+    let result: ApiResponse;
     switch (value) {
       case HttpCode.Continue: {
         result = {

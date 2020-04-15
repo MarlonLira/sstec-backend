@@ -12,7 +12,7 @@ class ApiResponse {
   result: any;
 
   /**
-   *Creates an instance of ApiResponse.
+   * Creates an instance of ApiResponse.
    * @author Marlon Lira
    * @param {*} [json]
    * @memberof ApiResponse

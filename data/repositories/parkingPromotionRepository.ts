@@ -3,7 +3,6 @@ import { injectable } from "inversify";
 
 import IParkingPromotionRepository from '../interfaces/IRepositories/IParkingPromotionRepository';
 import ParkingPromotion from '../models/parkingPromotion';
-import { resolve } from 'dns';
 import Parking from '../models/parking';
 import Attributes from '../../commons/core/attributes';
 import Querying from '../../commons/core/querying';
@@ -46,9 +45,9 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
               },
               transaction: _transaction
             })
-            .then(result => {
+            .then(_result => {
               _transaction.commit();
-              resolve(result);
+              resolve(_result);
             })
             .catch(error => {
               _transaction.rollback();
@@ -64,10 +63,10 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
    * @param {number} id
    * @memberof ParkingPromotionRepository
    */
-  Delete(id: number) {
+  Delete(_id: number) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingPromotion.sequelize.transaction();
-      ParkingPromotion.findByPk(id)
+      ParkingPromotion.findByPk(_id)
         .then((result: ParkingPromotion) => {
           if (!Attributes.IsValid(result)) {
             reject('Promoção não encontrada')
@@ -82,13 +81,13 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
           },
             {
               where: {
-                id: id
+                id: _id
               },
               transaction: _transaction
             })
-            .then(result => {
+            .then(_result => {
               _transaction.commit();
-              resolve(result);
+              resolve(_result);
             })
             .catch(error => {
               _transaction.rollback();
@@ -110,8 +109,6 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
       const _transaction = await ParkingPromotion.sequelize.transaction();
       Parking.findByPk(parkingId)
         .then((parking: Parking) => {
-          console.log(parking);
-          console.log(parkingPromotion);
           parkingPromotion.status = TransactionType.ACTIVE;
           ParkingPromotion.create(parkingPromotion, { transaction: _transaction })
             .then((createPromotion: ParkingPromotion) => {

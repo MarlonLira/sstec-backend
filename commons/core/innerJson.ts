@@ -11,13 +11,13 @@ class InnerJson {
    * @static
    * @param {*} json
    * @param {string[]} requiredAttributes
-   * @returns 
+   * @returns
    * @memberof InnerJson
    */
   static IsValid(json: any, requiredAttributes: string[]) {
     let result = false;
     let count = 0;
-    if (json != undefined && json != '' && json != null) {
+    if (json !== undefined && json !== '' && json != null) {
       result = true;
     }
     requiredAttributes.forEach(element => {
