@@ -69,7 +69,7 @@ class Crypto {
    * @private
    * @static
    * @param {string} card
-   * @returns 
+   * @returns
    * @memberof Crypto
    */
   private static EncryptCard(card: string) {
@@ -82,11 +82,11 @@ class Crypto {
    * @private
    * @static
    * @param {string} value
-   * @returns 
+   * @returns
    * @memberof Crypto
    */
   private static DecryptCard(hash: string): string {
-    var bytes = CryptoJS.AES.decrypt(hash, this.cryptographyData.secret);
+    const bytes = CryptoJS.AES.decrypt(hash, this.cryptographyData.secret);
     return bytes.toString(CryptoJS.enc.Utf8);
   }
 
@@ -107,12 +107,12 @@ class Crypto {
    * @private
    * @static
    * @param {string} password
-   * @returns 
+   * @returns
    * @memberof Crypto
    */
   private static EncryptPassword(password: string) {
-    var salt = bcrypt.genSaltSync(10);
-    var hash = bcrypt.hashSync(password, salt);
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
     return hash;
   }
 
@@ -122,7 +122,7 @@ class Crypto {
    * @static
    * @param {string} password
    * @param {string} hash
-   * @returns 
+   * @returns
    * @memberof Crypto
    */
   static Compare(password: string, hash: string): boolean {

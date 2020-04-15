@@ -21,8 +21,9 @@ class Logger {
    * @memberof Logger
    */
   static Info(entity: any, message: string) {
-    let name = entity.constructor.name;
-    console.log(info(`${DateTimeNow()} INFO [${name == undefined || name == 'String' ? entity : name}] ${message}`));
+    const name = entity.constructor.name;
+    // tslint:disable-next-line: no-console
+    console.log(info(`${DateTimeNow()} INFO [${name === undefined || name === 'String' ? entity : name}] ${message}`));
   }
 
   /**
@@ -34,8 +35,9 @@ class Logger {
    * @memberof Logger
    */
   static Warn(entity: any, message: string) {
-    let name = entity.constructor.name;
-    console.log(warn(`${DateTimeNow()} WARN [${name == undefined || name == 'String' ? entity : name}] ${message}`));
+    const name = entity.constructor.name;
+    // tslint:disable-next-line: no-console
+    console.log(warn(`${DateTimeNow()} WARN [${name === undefined || name === 'String' ? entity : name}] ${message}`));
   }
 
   /**
@@ -47,8 +49,9 @@ class Logger {
    * @memberof Logger
    */
   static Error(entity: any, message: string) {
-    let name = entity.constructor.name;
-    console.log(error(`${DateTimeNow()} ERROR [${name == undefined || name == 'String' ? entity : name}] ${message}`));
+    const name = entity.constructor.name;
+    // tslint:disable-next-line: no-console
+    console.log(error(`${DateTimeNow()} ERROR [${name === undefined || name === 'String' ? entity : name}] ${message}`));
   }
 }
 

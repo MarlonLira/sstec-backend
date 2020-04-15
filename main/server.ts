@@ -34,7 +34,7 @@ class Server {
   public express: express.Application;
 
   /**
-   *Creates an instance of Server.
+   * Creates an instance of Server.
    * @author Marlon Lira
    * @memberof Server
    */
@@ -93,13 +93,11 @@ class Server {
       } else {
         Logger.Info(this, 'Environment variables loaded!');
       }
-
       this.express.listen(port, function () {
         Logger.Info(this, `Backend is running on port ${port}.`);
         resolve();
       });
-    })
-
+    });
   }
 }
 

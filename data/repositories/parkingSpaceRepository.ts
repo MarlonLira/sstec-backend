@@ -5,7 +5,6 @@ import Parking from '../models/Parking';
 import ParkingSpace from '../models/ParkingSpace';
 import Attributes from '../../commons/core/attributes';
 
-
 @injectable()
 class ParkingSpaceRepository implements IParkingSpaceRepository {
   Save(parkingSpace: Parking, parking: number) {

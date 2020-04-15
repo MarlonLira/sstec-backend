@@ -96,7 +96,6 @@ class ParkingRepository implements IParkingRepository {
           if (!Attributes.IsValid(result)) {
             reject('Cliente não encontrado!');
           }
-          
           Parking.update({
             status: 'EX',
             name: Attributes.ReturnIfValid(result.name),

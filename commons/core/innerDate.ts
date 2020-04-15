@@ -13,14 +13,14 @@ class InnerDate {
   public _isValidDate!: boolean;
 
   /**
-   *Creates an instance of InnerDate.
+   * Creates an instance of InnerDate.
    * @author Marlon Lira
    * @param {*} [fullDate]
    * @memberof InnerDate
    */
   public constructor(fullDate?: any) {
     this._isValidDate = true;
-    let datePart = Attributes.IsValid(fullDate) ? fullDate.split('-') : undefined;
+    const datePart = Attributes.IsValid(fullDate) ? fullDate.split('-') : undefined;
 
     if (Attributes.IsValid(datePart)) {
       this.Year = LeftZero(datePart[0]);
@@ -35,7 +35,7 @@ class InnerDate {
   /**
    * @description returns the built date in the constructor
    * @author Marlon Lira
-   * @returns 
+   * @returns
    * @memberof InnerDate
    */
   getFullDate() {
@@ -45,11 +45,11 @@ class InnerDate {
   /**
    * @description Loads the entity with the current date
    * @author Marlon Lira
-   * @returns 
+   * @returns
    * @memberof InnerDate
    */
   public Now() {
-    let _date = new Date();
+    const _date = new Date();
     this.Year = LeftZero(_date.getFullYear());
     this.Month = LeftZero(_date.getMonth() + 1);
     this.Day = LeftZero(_date.getDay());
@@ -64,10 +64,10 @@ class InnerDate {
  * @returns Current date
  */
 function DateNow() {
-  var _date = new Date();
-  var Year = LeftZero(_date.getFullYear());
-  var Month = LeftZero(_date.getMonth() + 1);
-  var Day = LeftZero(_date.getDay());
+  const _date = new Date();
+  const Year = LeftZero(_date.getFullYear());
+  const Month = LeftZero(_date.getMonth() + 1);
+  const Day = LeftZero(_date.getDay());
   return `${Year}-${Month}-${Day}`;
 }
 
@@ -77,14 +77,14 @@ function DateNow() {
  * @returns Current date with time
  */
 function DateTimeNow() {
-  var _date = new Date();
-  var Year = LeftZero(_date.getFullYear());
-  var Month = LeftZero(_date.getMonth() + 1);
-  var Day = LeftZero(_date.getDay());
-  var hours = (_date.getUTCHours() == 1 || _date.getUTCHours() == 2) ? 24 - (3 - _date.getUTCHours()) : _date.getUTCHours() - 3;
-  var minutes = _date.getUTCMinutes();
-  var seconds = _date.getUTCSeconds();
-  var build = `${Year}-${Month}-${Day} ${hours}:${minutes}:${seconds}`;
+  const _date = new Date();
+  const Year = LeftZero(_date.getFullYear());
+  const Month = LeftZero(_date.getMonth() + 1);
+  const Day = LeftZero(_date.getDay());
+  const hours = (_date.getUTCHours() === 1 || _date.getUTCHours() === 2) ? 24 - (3 - _date.getUTCHours()) : _date.getUTCHours() - 3;
+  const minutes = _date.getUTCMinutes();
+  const seconds = _date.getUTCSeconds();
+  const build = `${Year}-${Month}-${Day} ${hours}:${minutes}:${seconds}`;
   return build;
 }
 
@@ -92,13 +92,13 @@ function DateTimeNow() {
  * @description
  * @author Marlon Lira
  * @param {*} value
- * @returns 
+ * @returns
  */
 function LeftZero(value: any) {
   let result: string = ' ';
-  if (value != undefined && value != null) {
+  if (value !== undefined && value != null) {
     result = value.toString();
-    if (value.toString().length == 1) {
+    if (value.toString().length === 1) {
       result = `0${value.toString()}`;
     }
   }
