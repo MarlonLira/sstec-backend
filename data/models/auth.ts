@@ -3,6 +3,11 @@ import Employee from './employee';
 import Attributes from '../../commons/core/attributes';
 import Company from './company';
 
+/**
+ * @description
+ * @author Marlon Lira
+ * @class Auth
+ */
 class Auth {
 
   token!: string;
@@ -11,6 +16,12 @@ class Auth {
   employee!: Employee;
   company!: Company;
 
+  /**
+   * Creates an instance of Auth.
+   * @author Marlon Lira
+   * @param {*} [json]
+   * @memberof Auth
+   */
   constructor(json?: any) {
     this.token = Attributes.ReturnIfValid(json.token);
     this.user = Attributes.IsValid(json.user) ? new User(json.user) : undefined;

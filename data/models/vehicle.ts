@@ -1,9 +1,9 @@
 import { Model, DataTypes } from 'sequelize';
 
-import { DbInstance } from '../../main/context';
+import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 
-var _instance = DbInstance.getInstance()
+const _instance = Context.getInstance();
 
 /**
  * @description
@@ -21,7 +21,7 @@ class Vehicle extends Model {
   licensePlate!: string;
 
   /**
-   *Creates an instance of Vehicle.
+   * Creates an instance of Vehicle.
    * @author Marlon Lira
    * @param {*} [json]
    * @memberof Vehicle
@@ -40,12 +40,12 @@ class Vehicle extends Model {
 
 Vehicle.init({
   id: {
-    type: DataTypes.INTEGER,
+    type: new DataTypes.INTEGER(),
     autoIncrement: true,
     primaryKey: true
   },
   status: {
-    type: new DataTypes.ENUM,
+    type: new DataTypes.ENUM(),
     allowNull: true,
     values: ['AT', 'PD', 'EX']
   },

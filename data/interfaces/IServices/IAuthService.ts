@@ -1,6 +1,4 @@
 import Auth from '../../models/auth';
-import User from '../../models/user';
-import { AuthType } from '../../../commons/enums/authType';
 
 /**
  * @description

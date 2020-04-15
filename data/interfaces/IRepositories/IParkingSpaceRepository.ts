@@ -4,7 +4,7 @@ import ParkingSpace from '../../models/parkingSpace';
 
 
 interface IParkingSpaceRepository {
-  Save(parkingSpace: Parking, parking: number);
+  Save(parkingSpace: ParkingSpace, parkingId: number);
   Update(parkingSpace: Parking);
   ToList();
   GetByRegistryCode(registryCode: string);

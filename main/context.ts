@@ -2,8 +2,8 @@ import { Sequelize } from 'sequelize';
 import * as Config from '../config.json';
 import Attributes from "../commons/core/attributes";
 
-var _logging = Config.Database.Logging;
-var _dbConfig = Config.Database.MSSQL;
+const _logging = Config.Database.Logging;
+const _dbConfig = Config.Database.MSSQL;
 
 /**
  * @description
@@ -12,7 +12,7 @@ var _dbConfig = Config.Database.MSSQL;
  */
 class Context {
 
-  protected static _instance: Sequelize;
+  private static _instance: Sequelize;
 
   /**
    * @description Creates the database instance.
@@ -21,47 +21,38 @@ class Context {
    * @returns {Sequelize}
    * @memberof Context
    */
-  static CreateInstance(): Sequelize {
+  private static CreateInstance(): Sequelize {
     const sequelize = new Sequelize(_dbConfig.schema, _dbConfig.username, _dbConfig.password,
       {
         port: _dbConfig.port,
         host: _dbConfig.host,
-        dialect: 'mssql',
+        dialect: 'mysql',
         logging: _logging,
         omitNull: true,
-        dialectOptions: {
-          options: {
-            trustServerCertificate: true
-          },
-          ssl: {
-            rejectUnauthorized: false,
-          }
-        }
+        // dialectOptions: {
+        //   options: {
+        //     trustServerCertificate: true
+        //   },
+        //   ssl: {
+        //     rejectUnauthorized: false,
+        //   }
+        // }
       }
     );
     return sequelize;
   }
-}
-
-/**
- * @description
- * @author Marlon Lira
- * @class DbInstance
- * @extends {Context}
- */
-class DbInstance extends Context {
 
   /**
-   * @description Returns the database instance.
+   * @description
    * @author Marlon Lira
    * @static
    * @returns {Sequelize}
-   * @memberof DbInstance
+   * @memberof Context
    */
-  static getInstance(): Sequelize {
+  public static getInstance(): Sequelize {
     this._instance = Attributes.ReturnIfValid(this._instance, this.CreateInstance());
     return this._instance;
   }
 }
 
-export { DbInstance }
+export default Context;

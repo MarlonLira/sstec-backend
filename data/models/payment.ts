@@ -1,9 +1,9 @@
 import { Model, DataTypes } from 'sequelize';
-import { DbInstance } from '../../main/context';
+import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
 
-var _instance = DbInstance.getInstance()
+const _instance = Context.getInstance();
 
 /**
  * @description
@@ -19,7 +19,7 @@ class Payment extends Model {
   parkingSpaceId: number;
 
   /**
-   *Creates an instance of Payment.
+   * Creates an instance of Payment.
    * @author Emerson Souza
    * @param {*} [json]
    * @memberof Payment
@@ -36,17 +36,17 @@ class Payment extends Model {
 
 Payment.init({
   id: {
-    type: new DataTypes.INTEGER,
+    type: new DataTypes.INTEGER(),
     autoIncrement: true,
     primaryKey: true
   },
   status: {
-    type: new DataTypes.ENUM,
+    type: new DataTypes.ENUM(),
     allowNull: true,
     values: ['AT', 'PD', 'EX']
   },
   value: {
-    type: new DataTypes.DOUBLE,
+    type: new DataTypes.DOUBLE(),
     allowNull: false
   }
 }, {
