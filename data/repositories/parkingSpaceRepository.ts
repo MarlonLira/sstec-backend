@@ -6,7 +6,6 @@ import ParkingSpace from '../models/ParkingSpace';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from "../../commons/enums/transactionType";
 
-
 @injectable()
 class ParkingSpaceRepository implements IParkingSpaceRepository {
 

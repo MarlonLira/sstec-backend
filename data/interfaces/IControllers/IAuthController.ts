@@ -8,9 +8,9 @@ import { Response, Request } from "express";
  * @extends {interfaces.Controller}
  */
 interface IAuthController extends interfaces.Controller {
-  TokenValidate(req: Request<any>, res: Response<any>)
-  SignIn(req: Request<any>, res: Response<any>)
-  SignUp(req: Request<any>, res: Response<any>)
+  TokenValidate(req: Request<any>, res: Response<any>);
+  SignIn(req: Request<any>, res: Response<any>);
+  SignUp(req: Request<any>, res: Response<any>);
 }
 
 export default IAuthController;

@@ -36,10 +36,22 @@ class CardRepository implements ICardRepository {
     });
   }
 
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Card} card
+   * @memberof CardRepository
+   */
   Delete(card: Card) {
     throw new Error("Method not implemented.");
   }
 
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Card} card
+   * @memberof CardRepository
+   */
   Update(card: Card) {
     throw new Error("Method not implemented.");
   }
