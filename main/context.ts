@@ -26,17 +26,17 @@ class Context {
       {
         port: _dbConfig.port,
         host: _dbConfig.host,
-        dialect: 'mssql',
+        dialect: 'mysql',
         logging: _logging,
         omitNull: true,
-        dialectOptions: {
-          options: {
-            trustServerCertificate: true
-          },
-          ssl: {
-            rejectUnauthorized: false,
-          }
-        }
+        // dialectOptions: {
+        //   options: {
+        //     trustServerCertificate: true
+        //   },
+        //   ssl: {
+        //     rejectUnauthorized: false,
+        //   }
+        // }
       }
     );
     return sequelize;
