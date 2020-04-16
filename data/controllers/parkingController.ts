@@ -10,7 +10,6 @@ import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
-import { TransactionType } from "../../commons/enums/transactionType";
 import Attributes from "../../commons/core/attributes";
 
 /**
@@ -24,7 +23,7 @@ class ParkingController implements IParkingController {
 
   constructor(@inject(TYPES.IParkingRepository) private _parkingRepository: IParkingRepository) { }
 
-  /**
+/**
  * @description
  * @author Emerson Souza
  * @param {Request<any>} req
@@ -35,8 +34,7 @@ class ParkingController implements IParkingController {
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _parking = new Parking(req.body.parking);
-      const _companyId = req.body.company.Id;
-      this._parkingRepository.Save(_parking, _companyId)
+      this._parkingRepository.Save(_parking)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento Cadastrado!', result));
         })
@@ -94,7 +92,7 @@ class ParkingController implements IParkingController {
   @httpPut('/parking')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      const _parking = new Parking(req.body);
+      const _parking = new Parking(req.body.parking);
       this._parkingRepository.GetById(_parking.id)
         .then((resultparking: Parking) => {
           if (Attributes.IsValid(resultparking)) {
