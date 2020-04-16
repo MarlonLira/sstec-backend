@@ -1,9 +1,9 @@
 import { Model, DataTypes } from 'sequelize';
 
-import { DbInstance } from '../../main/context';
+import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 
-var _instance = DbInstance.getInstance();
+const _instance = Context.getInstance();
 
 /**
  * @description
@@ -17,6 +17,12 @@ class Rule extends Model {
   name!: string
   level!: number
 
+  /**
+   * Creates an instance of Rule.
+   * @author Marlon Lira
+   * @param {*} [json]
+   * @memberof Rule
+   */
   constructor(json?: any) {
     super()
     this.id = Attributes.ReturnIfValid(json.id);
@@ -33,7 +39,7 @@ Rule.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.ENUM,
+    type: new DataTypes.ENUM(),
     allowNull: true,
     values: ['AT', 'PD', 'EX']
   },

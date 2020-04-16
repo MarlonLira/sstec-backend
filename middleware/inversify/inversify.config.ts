@@ -1,9 +1,9 @@
 import { Container } from 'inversify';
 
-//Types
+// Types
 import TYPES from '../../data/types';
 
-//Repositories
+// Repositories
 import UserRepository from '../../data/repositories/userRepository';
 import CardRepository from '../../data/repositories/cardRepository';
 import CompanyRepository from '../../data/repositories/companyRepository';
@@ -16,10 +16,10 @@ import RuleRepository from '../../data/repositories/RuleRepository';
 import ParkingPromotionRepository from '../../data/repositories/parkingPromotionRepository';
 import ParkingSpaceRepository from '../../data/repositories/parkingSpaceRepository';
 
-//Services
+// Services
 import AuthService from '../../data/services/authService';
 
-//interfaces
+// interfaces
 import IUserRepository from '../../data/interfaces/IRepositories/IUserRepository';
 import ICardRepository from '../../data/interfaces/IRepositories/ICardRepository';
 import ICompanyRepository from '../../data/interfaces/IRepositories/ICompanyRepository';

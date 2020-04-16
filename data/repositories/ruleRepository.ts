@@ -46,16 +46,16 @@ class RuleRepository implements IRuleRepository {
   Update(rule: Rule) {
     Rule.update(rule, {
       where: {
-        id: 1
+        id: rule.id
       }
-    })
+    });
   }
 
   /**
    * @description
    * @author Marlon Lira
    * @param {Rule} Rule
-   * @returns 
+   * @returns
    * @memberof RuleRepository
    */
   Save(rule: Rule) {

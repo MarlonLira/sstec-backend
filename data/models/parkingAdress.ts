@@ -1,32 +1,40 @@
-import { Model, DataTypes, BelongsToGetAssociationMixin } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
-import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
 
+
 /**
  * @description
- * @author Gustavo Gusmão
- * @class CompanyAdress
+ * @author Felipe Seabra
+ * @class ParkingAdress
  * @extends {Model}
  */
-class CompanyAdress extends Model {
-
+class ParkingAdress extends Model {
   id!: number;
-  status!: TransactionType;
+  status!: string;
   country!: string;
   state!: string;
   city!: string;
   street!: string;
   number: number;
-  zipCode: string;
-  complement!: string;
-  companyId!: number;
+  zipCode!: string;
+  latitude: string;
+  longitude: string;
+  complement: string;
+  parkingId!: number;
 
+
+  /**
+   * Creates an instance of ParkingAdress.
+   * @author Felipe Seabra
+   * @param {*} [json]
+   * @memberof ParkingAdress
+   */
   constructor(json?: any) {
-    super()
+    super();
     this.id = Attributes.ReturnIfValid(json.id);
     this.status = Attributes.ReturnIfValid(json.status);
     this.country = Attributes.ReturnIfValid(json.country);
@@ -35,13 +43,14 @@ class CompanyAdress extends Model {
     this.street = Attributes.ReturnIfValid(json.street);
     this.number = Attributes.ReturnIfValid(json.number);
     this.zipCode = Attributes.ReturnIfValid(json.zipCode);
+    this.latitude = Attributes.ReturnIfValid(json.latitude);
+    this.longitude = Attributes.ReturnIfValid(json.longitude);
     this.complement = Attributes.ReturnIfValid(json.complement);
-    this.companyId = Attributes.ReturnIfValid(json.companyId);
+    this.parkingId = Attributes.ReturnIfValid(json.parkingId);
   }
 }
 
-
-CompanyAdress.init({
+ParkingAdress.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,
@@ -53,31 +62,49 @@ CompanyAdress.init({
     values: ['AT', 'PD', 'EX']
   },
   country: {
-    type: new DataTypes.STRING(15)
+    type: new DataTypes.STRING(30),
+    allowNull: false
   },
   state: {
-    type: new DataTypes.STRING(30)
+    type: new DataTypes.STRING(30),
+    allowNull: false
   },
   city: {
-    type: new DataTypes.STRING(30)
+    type: new DataTypes.STRING(30),
+    allowNull: false
   },
   street: {
-    type: new DataTypes.STRING(50)
+    type: new DataTypes.STRING(30),
+    allowNull: false
   },
   number: {
     type: new DataTypes.INTEGER(),
     allowNull: false
   },
   zipCode: {
-    type: new DataTypes.STRING(20),
+    type: new DataTypes.STRING(8),
+    allowNull: false
+  },
+  latitude: {
+    type: new DataTypes.STRING(5),
+    allowNull: false
+  },
+  longitude: {
+    type: new DataTypes.STRING(5),
     allowNull: false
   },
   complement: {
-    type: new DataTypes.STRING(10)
+    type: new DataTypes.STRING(40),
+    allowNull: false
+  },
+  parkingId: {
+    type: new DataTypes.INTEGER(),
+    allowNull: false
   }
-}, {
+},
+{
   sequelize: _instance,
-  tableName: 'CompanyAdress'
+  tableName: 'ParkingAdress'
 });
 
-export default CompanyAdress;
+export default ParkingAdress;

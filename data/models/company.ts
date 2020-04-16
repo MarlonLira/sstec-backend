@@ -1,10 +1,10 @@
 import { Model, DataTypes, HasManyAddAssociationMixin, HasManyCreateAssociationMixin } from 'sequelize';
-import { DbInstance } from '../../main/context';
+import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import Employee from './employee';
 import { TransactionType } from '../../commons/enums/transactionType';
 
-var _instance = DbInstance.getInstance()
+const _instance = Context.getInstance();
 
 /**
  * @description
@@ -23,7 +23,7 @@ class Company extends Model {
   public createEmployee!: HasManyCreateAssociationMixin<Employee>;
 
   /**
-   *Creates an instance of Company.
+   * Creates an instance of Company.
    * @author Gustavo Gusmão
    * @param {*} [json]
    * @memberof Company
@@ -41,12 +41,12 @@ class Company extends Model {
 // Todos os atributos tem que ter 'allowNull: true'
 Company.init({
   id: {
-    type: new DataTypes.INTEGER,
+    type: new DataTypes.INTEGER(),
     autoIncrement: true,
     primaryKey: true,
   },
   status: {
-    type: new DataTypes.ENUM,
+    type: new DataTypes.ENUM(),
     allowNull: true,
     values: ['AT', 'PD', 'EX']
   },

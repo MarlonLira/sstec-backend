@@ -2,7 +2,6 @@ import { Op } from 'sequelize';
 
 import ICompanyRepository from '../interfaces/IRepositories/ICompanyRepository';
 import Company from '../models/company';
-import Attributes from '../../commons/core/attributes';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 
@@ -67,12 +66,12 @@ class CompanyRepository implements ICompanyRepository {
    * @param {number} id
    * @memberof CompanyRepository
    */
-  Delete(id: number) {
+  Delete(_id: number) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Company.sequelize.transaction();
       Company.update({ status: TransactionType.DELETED },
         {
-          where: { id: id },
+          where: { id: _id },
           transaction: _transaction
         })
         .then(async result => {

@@ -1,7 +1,4 @@
 import Parking from '../../models/parking';
-import User from '../../models/user';
-import Card from '../../models/card';
-
 
 /**
  * @description
@@ -9,9 +6,10 @@ import Card from '../../models/card';
  * @interface IParkingRepository
  */
 interface IParkingRepository {
-  Save(parking: Parking, companyId: number);
+  Save(parking: Parking);
   Update(parking: Parking);
   ToList();
+  GetById(id: number);
   GetByRegistryCode(registryCode: string);
   Delete(id: number);
   Find(parking: Parking, properties: string[]);

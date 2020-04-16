@@ -34,7 +34,7 @@ class Server {
   public express: express.Application;
 
   /**
-   *Creates an instance of Server.
+   * Creates an instance of Server.
    * @author Marlon Lira
    * @memberof Server
    */
@@ -87,19 +87,17 @@ class Server {
    */
   private Status() {
     const port = process.env.PORT || 4001;
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       if (!process.env.SECRET) {
         Logger.Error(this, 'Did not find the environment variables!');
       } else {
         Logger.Info(this, 'Environment variables loaded!');
       }
-
       this.express.listen(port, function () {
         Logger.Info(this, `Backend is running on port ${port}.`);
         resolve();
       });
-    })
-
+    });
   }
 }
 
