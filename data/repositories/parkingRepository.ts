@@ -27,14 +27,14 @@ class ParkingRepository implements IParkingRepository {
     });
   }
 
-  /**
+ /**
   * @description
   * @author Emerson Souza
   * @param {Parking} parking
   * @memberof ParkingRepository
   */
 
-  Save(parking: Parking, companyId: number) {
+  Save(parking: Parking) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
       parking.status = TransactionType.ACTIVE;
@@ -81,14 +81,14 @@ class ParkingRepository implements IParkingRepository {
    * @param {number} id
    * @memberof ParkingRepository
    */
-  Delete(id: number) {
+  Delete(_id: number) {
     return new Promise((resolve, reject) => {
       Parking.update({
         status: TransactionType.DELETED
       },
         {
           where: {
-            id: id
+            id: _id
           }
         })
         .then(result => {

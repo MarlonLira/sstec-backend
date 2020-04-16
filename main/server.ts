@@ -87,7 +87,7 @@ class Server {
    */
   private Status() {
     const port = process.env.PORT || 4001;
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       if (!process.env.SECRET) {
         Logger.Error(this, 'Did not find the environment variables!');
       } else {
