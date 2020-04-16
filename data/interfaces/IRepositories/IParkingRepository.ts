@@ -6,7 +6,7 @@ import Parking from '../../models/parking';
  * @interface IParkingRepository
  */
 interface IParkingRepository {
-  Save(parking: Parking, companyId: number);
+  Save(parking: Parking);
   Update(parking: Parking);
   ToList();
   GetById(id: number);
