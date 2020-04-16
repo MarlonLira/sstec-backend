@@ -2,6 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
+import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
 
@@ -14,7 +15,7 @@ const _instance = Context.getInstance();
 class Vehicle extends Model {
 
   id!: number;
-  status!: string;
+  status!: TransactionType;
   model!: string;
   color!: string;
   type!: string;

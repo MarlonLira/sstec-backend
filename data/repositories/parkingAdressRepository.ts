@@ -1,13 +1,10 @@
 import { Op, Transaction } from 'sequelize';
-import { injectable, id } from "inversify";
+import { injectable } from "inversify";
 import IparkingAdressRepository from '../interfaces/IRepositories/IParkingAdressRepository';
 import ParkingAdress from '../models/parkingAdress';
 import Parking from '../models/parking';
 import Attributes from '../../commons/core/attributes';
-import Querying from '../../commons/core/querying';
-import { rejects } from 'assert';
 import { TransactionType } from '../../commons/enums/transactionType';
-import { resolve } from 'dns';
 
 @injectable()
 class ParkingAdressRepository implements IparkingAdressRepository {
@@ -72,22 +69,22 @@ class ParkingAdressRepository implements IparkingAdressRepository {
 
 
     Delete(id: number) {
-      return new Promise(async (resolve, reject) => {
-          const _transaction = await ParkingAdress.sequelize.transaction();
-          ParkingAdress.update({ status: TransactionType.DELETED },
-        {
-            where: { id: id },
-            transaction: _transaction
+        return new Promise(async (resolve, reject) => {
+            const _transaction = await ParkingAdress.sequelize.transaction();
+            ParkingAdress.update({ status: TransactionType.DELETED },
+                {
+                    where: { id: id },
+                    transaction: _transaction
+                })
+                .then(async result => {
+                    await _transaction.commit();
+                    resolve(result);
+                })
+                .catch(async error => {
+                    await _transaction.rollback();
+                    reject(error);
+                });
         })
-       .then(async result =>{
-           await _transaction.commit();
-           resolve(result);
-       })  
-       .catch(async error => {
-           await _transaction.rollback();
-           reject(error);
-       });
-      })
     }
 
     GetById(parkingAdressId: number) {

@@ -3,7 +3,6 @@ import { Op } from 'sequelize';
 import IVehicleRepository from '../interfaces/IRepositories/IVehicleRepository';
 import Vehicle from '../models/vehicle';
 import { injectable } from "inversify";
-import User from '../models/user';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
@@ -14,10 +13,25 @@ import { TransactionType } from '../../commons/enums/transactionType';
  */
 @injectable()
 class VehicleRepository implements IVehicleRepository {
-  
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} id
+   * @returns {Promise<Vehicle[]>}
+   * @memberof VehicleRepository
+   */
   GetById(id: number): Promise<Vehicle[]> {
     throw new Error("Method not implemented.");
   }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} userId
+   * @returns {Promise<Vehicle[]>}
+   * @memberof VehicleRepository
+   */
   GetByUserId(userId: number): Promise<Vehicle[]> {
     throw new Error("Method not implemented.");
   }
@@ -41,28 +55,6 @@ class VehicleRepository implements IVehicleRepository {
         .catch(async error => {
           await _transaction.rollback();
           reject(error);
-        });
-    });
-  }
-
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} userId
-   * @returns {Promise<Vehicle[]>}
-   * @memberof VehicleRepository
-   */
-  GetVehicles(userId: number): Promise<Vehicle[]> {
-    return new Promise((resolve, reject) => {
-      User.findByPk(userId)
-        .then((user: User) => {
-          user.getVehicles()
-            .then((vehicles: Vehicle[]) => {
-              resolve(vehicles);
-            })
-            .catch(error => {
-              reject(error);
-            });
         });
     });
   }
