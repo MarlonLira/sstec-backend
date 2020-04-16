@@ -10,7 +10,6 @@ import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import Attributes from '../../commons/core/attributes';
-import IUserRepository from "../interfaces/IRepositories/IUserRepository";
 import User from "../models/user";
 
 /**
@@ -29,10 +28,7 @@ class VehicleController implements IVehicleController {
    * @param {IUserRepository} _userRepository
    * @memberof VehicleController
    */
-  constructor(
-    @inject(TYPES.IVehicleRepository) private _vehicleRepository: IVehicleRepository,
-    @inject(TYPES.IUserRepository) private _userRepository: IUserRepository
-  ) { }
+  constructor(@inject(TYPES.IVehicleRepository) private _vehicleRepository: IVehicleRepository) { }
 
   /**
    * @description
@@ -46,33 +42,27 @@ class VehicleController implements IVehicleController {
   Save(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise(async (resolve) => {
       const _vehicle = new Vehicle(req.body.vehicle);
-      const _user: User = await this._userRepository.GetById(req.body.user.id);
-      // Checks if the vehicle already exists
-      this._vehicleRepository.GetByLicensePlate(_vehicle.licensePlate)
-        .then((foundVehicle: Vehicle) => {
-          if (Attributes.IsValid(foundVehicle)) {
-            // Check user vehicles
-            this._vehicleRepository.GetVehicles(_user.id)
-              .then(async (foundVehicles: Vehicle[]) => {
-                if (Attributes.IsValid(foundVehicles)) {
-                  const findVehicle = foundVehicles.find(v => v.licensePlate === _vehicle.licensePlate);
-                  if (!Attributes.IsValid(findVehicle)) {
-                    this._vehicleRepository.Save(_vehicle, _user)
-                      .then(result => {
-                        resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Veículo', result));
-                      }).catch(error => {
-                        resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Veículo', error));
-                      });
-                  } else {
-                    resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Veículo'));
-                  }
-                }
-              });
+      this._vehicleRepository.GetByUserId(_vehicle.userId)
+        .then((foundVehicles: Vehicle[]) => {
+          if (foundVehicles.length > 0) {
+            const foundVehicle = foundVehicles.find(v => v.licensePlate === _vehicle.licensePlate);
+            if (!Attributes.IsValid(foundVehicle)) {
+              this._vehicleRepository.Save(_vehicle)
+                .then(result => {
+                  resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Veículo', result));
+                })
+                .catch(error => {
+                  resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Veículo', error));
+                })
+            } else {
+              resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Veículo'));
+            }
           } else {
-            this._vehicleRepository.Save(_vehicle, _user)
+            this._vehicleRepository.Save(_vehicle)
               .then(result => {
                 resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Veículo', result));
-              }).catch(error => {
+              })
+              .catch(error => {
                 resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Veículo', error));
               });
           }
@@ -147,19 +137,13 @@ class VehicleController implements IVehicleController {
   Delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _vehicleId = req.body.vehicle.id;
-      const _userId = req.body.user.id;
-      this._userRepository.GetById(_userId)
-        .then((foundUser: User) => {
-          if (Attributes.IsValid(foundUser)) {
-            this._vehicleRepository.Delete(_vehicleId, foundUser)
-              .then(() => {
-                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Veículo'))
-              })
-          }
-          else {
-            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Usuário'))
-          }
-        });
+      this._vehicleRepository.Delete(_vehicleId)
+        .then(() => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Veículo'))
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Veículo', error));
+        })
     });
   }
 }

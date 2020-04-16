@@ -1,5 +1,4 @@
 import Vehicle from '../../models/vehicle';
-import User from '../../models/user';
 
 /**
  * @description
@@ -7,10 +6,37 @@ import User from '../../models/user';
  * @interface IVehicleRepository
  */
 interface IVehicleRepository {
-  Save(vehicle: Vehicle, user: User): Promise<any>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Vehicle} vehicle
+   * @returns {Promise<any>}
+   * @memberof IVehicleRepository
+   */
+  Save(vehicle: Vehicle): Promise<any>;
+
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} userId
+   * @returns {Promise<Vehicle[]>}
+   * @memberof IVehicleRepository
+   */
   GetVehicles(userId: number): Promise<Vehicle[]>;
+  GetById(id: number): Promise<Vehicle[]>
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} userId
+   * @returns {Promise<Vehicle[]>}
+   * @memberof IVehicleRepository
+   */
+  GetByUserId(userId: number): Promise<Vehicle[]>;
   GetByLicensePlate(licensePlate: string): Promise<Vehicle>;
-  Delete(id: number, user: User): Promise<any>;
+  Delete(id: number): Promise<any>;
   Update(vehicle: Vehicle): Promise<any>;
 }
 

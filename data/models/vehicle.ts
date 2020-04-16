@@ -19,6 +19,7 @@ class Vehicle extends Model {
   color!: string;
   type!: string;
   licensePlate!: string;
+  userId!: number;
 
   /**
    * Creates an instance of Vehicle.
@@ -34,6 +35,7 @@ class Vehicle extends Model {
     this.color = Attributes.ReturnIfValid(json.color);
     this.type = Attributes.ReturnIfValid(json.type);
     this.licensePlate = Attributes.ReturnIfValid(json.licensePlate);
+    this.userId = Attributes.ReturnIfValid(json.userId);
   }
 
 }
@@ -50,11 +52,11 @@ Vehicle.init({
     values: ['AT', 'PD', 'EX']
   },
   model: {
-    type: DataTypes.STRING(12),
+    type: new DataTypes.STRING(12),
     allowNull: false
   },
   color: {
-    type: DataTypes.STRING(12),
+    type: new DataTypes.STRING(12),
     allowNull: false
   },
   type: {
@@ -62,7 +64,11 @@ Vehicle.init({
     allowNull: false
   },
   licensePlate: {
-    type: DataTypes.STRING(100),
+    type: new DataTypes.STRING(100),
+    allowNull: false
+  },
+  userId :{
+    type: new DataTypes.INTEGER(),
     allowNull: false
   }
 }, {

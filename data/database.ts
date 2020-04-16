@@ -53,9 +53,6 @@ class Database {
     /* #region  Table Relationships */
 
     // N:N
-    User.belongsToMany(Vehicle, { through: 'UserVehicles' });
-    Vehicle.belongsToMany(User, { through: 'UserVehicles' });
-
     User.belongsToMany(Card, { through: 'UserCards' });
     Card.belongsToMany(User, { through: 'UserCards' });
 
@@ -64,6 +61,7 @@ class Database {
     Company.hasMany(CompanyAdress, { foreignKey: 'companyId', as: 'CompanyAdress' });
     Company.hasMany(Parking, { foreignKey: 'companyId', as: 'Parking' });
     User.hasMany(UserAdress, { foreignKey: 'userId', as: 'UserAdress' });
+    User.hasMany(Vehicle, { foreignKey: 'userId', as: 'Vehicle' });
     Rule.hasMany(Employee, { foreignKey: 'ruleId', as: 'Employee' });
     Parking.hasMany(ParkingPromotion, { foreignKey: 'parkingId', as: 'ParkingPromotion' });
     Parking.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'ParkingSpace' });

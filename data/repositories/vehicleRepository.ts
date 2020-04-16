@@ -14,6 +14,13 @@ import { TransactionType } from '../../commons/enums/transactionType';
  */
 @injectable()
 class VehicleRepository implements IVehicleRepository {
+  
+  GetById(id: number): Promise<Vehicle[]> {
+    throw new Error("Method not implemented.");
+  }
+  GetByUserId(userId: number): Promise<Vehicle[]> {
+    throw new Error("Method not implemented.");
+  }
   /**
    * @description
    * @author Marlon Lira
@@ -22,16 +29,17 @@ class VehicleRepository implements IVehicleRepository {
    * @returns {Promise<any>}
    * @memberof VehicleRepository
    */
-  Save(vehicle: Vehicle, user: User): Promise<any> {
-    return new Promise((resolve, reject) => {
+  Save(vehicle: Vehicle): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Vehicle.sequelize.transaction();
       vehicle.status = TransactionType.ACTIVE;
-      Vehicle.create(vehicle)
-        .then((_vehicle: Vehicle) => {
-          user.addVehicle(_vehicle)
-            .then(result => {
-              resolve(result);
-            });
-        }).catch(error => {
+      Vehicle.create(vehicle, { transaction: _transaction })
+        .then(async (_vehicle: Vehicle) => {
+          await _transaction.commit();
+          resolve({ "vehicleId": _vehicle.id })
+        })
+        .catch(async error => {
+          await _transaction.rollback();
           reject(error);
         });
     });
@@ -102,9 +110,16 @@ class VehicleRepository implements IVehicleRepository {
    * @returns {Promise<any>}
    * @memberof VehicleRepository
    */
-  Delete(id: number, user: User): Promise<any> {
+  Delete(_id: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      user.removeVehicle(id)
+      Vehicle.update({
+        status: TransactionType.DELETED
+      },
+        {
+          where: {
+            id: _id
+          }
+        })
         .then(() => {
           resolve(true);
         })
