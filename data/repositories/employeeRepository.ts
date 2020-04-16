@@ -1,13 +1,9 @@
-import { Op, Sequelize } from 'sequelize';
-
 import IEmployeeRepository from '../interfaces/IRepositories/IEmployeeRepository';
 import Employee from '../models/employee';
 import Querying from '../../commons/core/querying'
 import { injectable } from "inversify";
-import Attributes from '../../commons/core/attributes';
 import { CryptoType } from '../../commons/enums/cryptoType';
 import Crypto from '../../commons/core/crypto';
-import Company from '../models/company';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
@@ -105,6 +101,12 @@ class EmployeeRepository implements IEmployeeRepository {
     throw new Error("Method not implemented.");
   }
 
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} id
+   * @memberof EmployeeRepository
+   */
   Delete(id: number) {
     throw new Error("Method not implemented.");
   }

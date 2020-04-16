@@ -56,10 +56,16 @@ class UserRepository implements IUserRepository {
     });
   }
 
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {User} user
+   * @memberof UserRepository
+   */
   Update(user: User) {
     User.update(user, {
       where: {
-        id: 1
+        id: user.id
       }
     });
   }
@@ -123,8 +129,8 @@ class UserRepository implements IUserRepository {
         )
         .catch(error => {
           throw error;
-        })
-    })
+        });
+    });
   }
 
   /**

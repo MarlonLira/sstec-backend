@@ -1,8 +1,8 @@
-import { Sequelize, Transaction, QueryInterface, BelongsToMany } from 'sequelize';
+import { Sequelize } from 'sequelize';
 import * as Config from '../config.json';
 import Logger from '../commons/core/logger';
 
-//Entities
+// Entities
 import User from './models/user';
 import Vehicle from './models/vehicle'
 import UserAdress from './models/userAdress';
@@ -16,10 +16,10 @@ import Rule from './models/rule';
 import ParkingPromotion from './models/parkingPromotion';
 import ParkingSpace from './models/parkingSpace';
 import ParkingAdress from './models/parkingAdress';
-import { DbInstance } from '../main/context';
+import Context from '../main/context';
 
-var _instance = DbInstance.getInstance();
-var { ForceSync, AlterSync, IsLogger } = Config.Database;
+const _instance = Context.getInstance();
+const { ForceSync, AlterSync, IsLogger } = Config.Database;
 
 /**
  * @description
@@ -34,8 +34,8 @@ class Database {
    * @memberof Database
    */
   public Build() {
-    //The order influences creation in the database
-    let Models = [
+    // The order influences creation in the database
+    const Models = [
       { name: 'User', entity: User.sequelize },
       { name: 'Vehicle', entity: Vehicle.sequelize },
       { name: 'UserAdress', entity: UserAdress.sequelize },
@@ -61,7 +61,7 @@ class Database {
     User.belongsToMany(Card, { through: 'UserCards' });
     Card.belongsToMany(User, { through: 'UserCards' });
 
-    //1:N
+    // 1:N
     Company.hasMany(Employee, { foreignKey: 'companyId', as: 'Employee' });
     Company.hasMany(CompanyAdress, { foreignKey: 'companyId', as: 'CompanyAdress' });
     Company.hasMany(Parking, { foreignKey: 'companyId', as: 'Parking' });
@@ -72,7 +72,7 @@ class Database {
     Parking.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'ParkingSpace' });
     //Payment.belongsTo(ParkingpacSe, {foreignKey: 'parkingSpaceId', as: 'ParkingSpace'});
 
-    //1:1
+    // 1:1
 
     /* #endregion */
 
@@ -96,7 +96,7 @@ class Database {
       let sucess = 0;
       let errors = 0;
       let total = 0;
-      let modelsWithErrors = [];
+      const modelsWithErrors = [];
 
       if (ForceSync) {
         await this.DropAllTables(models);
@@ -104,7 +104,7 @@ class Database {
 
       while (count < models.length) {
         await models[count].entity.sync({ alter: AlterSync, logging: (IsLogger ? msg => Logger.Info(models[count].name, msg) : IsLogger) })
-          .then(result => {
+          .then(() => {
             Logger.Info(models[count].name, 'verification finished!')
             sucess++;
           })
@@ -115,7 +115,7 @@ class Database {
           });
         count++;
         total = sucess + errors;
-        if (total == models.length) {
+        if (total === models.length) {
           Logger.Info('Database', `verification result => Sucess: ${sucess} | Errors: ${errors} | Total: ${models.length}`);
 
           if (errors > 0) {
@@ -132,14 +132,14 @@ class Database {
   }
 
   private async TryFixModels(modelsWithErrors: any[], resolve: (value?: unknown) => void) {
-    let attempts = 0
+    let attempts = 0;
     let count = 0;
     let sucess = 0;
     let errors = 0;
 
     while (count < modelsWithErrors.length) {
       await modelsWithErrors[count].entity.sync({ alter: AlterSync, logging: IsLogger ? msg => Logger.Info(modelsWithErrors[count].name, msg) : IsLogger })
-        .then(result => {
+        .then(() => {
           Logger.Info(modelsWithErrors[count].name, 'correction completed!');
           sucess++;
         })
@@ -149,7 +149,7 @@ class Database {
         });
       count++;
       attempts = sucess + errors;
-      if (attempts == modelsWithErrors.length) {
+      if (attempts === modelsWithErrors.length) {
         Logger.Info('Database', `correction attempts => Sucess: ${sucess} | Errors: ${errors} | Total: ${attempts}`);
         if (errors > 0) {
           resolve('finished with errors');
@@ -162,9 +162,9 @@ class Database {
   }
 
   private async DropAllTables(models: { name: string; entity: Sequelize; }[]) {
-    let queryInterface = models[0].entity.getQueryInterface();
+    const queryInterface = models[0].entity.getQueryInterface();
     await queryInterface.dropAllTables()
-      .then(result => {
+      .then(() => {
         Logger.Warn('Database', 'drop all the table finished!');
       }).catch(error => {
         Logger.Error('Database', error);

@@ -18,7 +18,7 @@ class VehicleRepository implements IVehicleRepository {
    * @description
    * @author Marlon Lira
    * @param {Vehicle} vehicle
-   * @returns 
+   * @returns
    * @memberof VehicleRepository
    */
   Save(vehicle: Vehicle, userId: number) {
@@ -30,13 +30,13 @@ class VehicleRepository implements IVehicleRepository {
             .then((_vehicle: Vehicle) => {
               user.addVehicle(_vehicle)
                 .then(result => {
-                  resolve(result)
+                  resolve(result);
                 });
             }).catch(error => {
               reject(error);
-            })
-        })
-    })
+            });
+        });
+    });
   }
 
   Find(licensePlate: string, userId: number) {
@@ -47,9 +47,9 @@ class VehicleRepository implements IVehicleRepository {
           user.getVehicles()
             .then((vehicles: Vehicle[]) => {
               vehicles.forEach((vehicle: Vehicle) => {
-                if (vehicle.licensePlate == licensePlate) {
+                if (vehicle.licensePlate === licensePlate) {
                   resolve(vehicle);
-                } else if (vehicles.length == count) {
+                } else if (vehicles.length === count) {
                   resolve(undefined);
                 }
                 count++;
@@ -58,7 +58,7 @@ class VehicleRepository implements IVehicleRepository {
             })
             .catch(error => {
               reject(error);
-            })
+            });
         });
     })
   }
@@ -73,12 +73,10 @@ class VehicleRepository implements IVehicleRepository {
             })
             .catch(error => {
               throw error;
-            })
+            });
         });
     });
   }
-
-
 }
 
 export default VehicleRepository;

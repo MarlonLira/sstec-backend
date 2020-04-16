@@ -21,7 +21,7 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
 class CompanyController implements ICompanyController {
 
   /**
-   *Creates an instance of CompanyController.
+   * Creates an instance of CompanyController.
    * @author Gustavo Gusmão
    * @param {ICompanyRepository} _companyRepository
    * @memberof CompanyController
@@ -38,7 +38,7 @@ class CompanyController implements ICompanyController {
    */
   @httpPost('/company')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
-    const _company = new Company(req.body);
+    const _company = new Company(req.body.company);
     return new Promise((resolve) => {
       this._companyRepository.GetByRegistryCode(_company.registryCode)
         .then((found: Company) => {
@@ -75,8 +75,8 @@ class CompanyController implements ICompanyController {
         })
         .catch(error => {
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Empresa', error));
-        })
-    })
+        });
+    });
   }
 
   /**

@@ -1,11 +1,11 @@
 import { Model, DataTypes } from 'sequelize';
 
-import { DbInstance } from '../../main/context';
+import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
-import { interfaces } from 'inversify';
-import { json } from 'express';
 
-const _instance = DbInstance.getInstance()
+const _instance = Context.getInstance();
+
+
 /**
  * @description
  * @author Felipe Seabra
@@ -28,7 +28,7 @@ class ParkingAdress extends Model {
 
 
   /**
-   *Creates an instance of ParkingAdress.
+   * Creates an instance of ParkingAdress.
    * @author Felipe Seabra
    * @param {*} [json]
    * @memberof ParkingAdress
@@ -98,7 +98,8 @@ ParkingAdress.init({
     allowNull: false
   },
   parkingId: {
-    type: new DataTypes.INTEGER()
+    type: new DataTypes.INTEGER(),
+    allowNull: false
   }
 },
 {

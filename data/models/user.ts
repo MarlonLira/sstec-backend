@@ -1,11 +1,11 @@
 import { Model, DataTypes, BelongsToManyAddAssociationMixin, BelongsToManyGetAssociationsMixin, BelongsToManyRemoveAssociationMixin } from 'sequelize';
 
-import { DbInstance } from '../../main/context';
+import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import Vehicle from './vehicle';
 import Card from './card';
 
-var _instance = DbInstance.getInstance()
+const _instance = Context.getInstance();
 
 /**
  * @description
@@ -66,7 +66,7 @@ class User extends Model {
   public removeCard!: BelongsToManyRemoveAssociationMixin<Card, number>
 
   /**
-   *Creates an instance of User.
+   * Creates an instance of User.
    * @author Marlon Lira
    * @param {*} [json]
    * @memberof User
@@ -90,7 +90,7 @@ User.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.ENUM,
+    type: new DataTypes.ENUM(),
     allowNull: true,
     values: ['AT', 'PD', 'EX']
   },
