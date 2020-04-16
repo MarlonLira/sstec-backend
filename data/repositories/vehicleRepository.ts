@@ -21,8 +21,16 @@ class VehicleRepository implements IVehicleRepository {
    * @returns {Promise<Vehicle[]>}
    * @memberof VehicleRepository
    */
-  GetById(id: number): Promise<Vehicle[]> {
-    throw new Error("Method not implemented.");
+  GetById(id: number): Promise<Vehicle> {
+    return new Promise((resolve, reject) => {
+      Vehicle.findByPk(id)
+        .then((foundVehicle: Vehicle) => {
+          resolve(foundVehicle);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 
   /**
@@ -32,9 +40,25 @@ class VehicleRepository implements IVehicleRepository {
    * @returns {Promise<Vehicle[]>}
    * @memberof VehicleRepository
    */
-  GetByUserId(userId: number): Promise<Vehicle[]> {
-    throw new Error("Method not implemented.");
+  GetByUserId(_userId: number): Promise<Vehicle[]> {
+    return new Promise((resolve, reject) => {
+      Vehicle.findAll({
+        where: {
+          userId: _userId,
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      })
+        .then((foundVehicles: Vehicle[]) => {
+          resolve(foundVehicles);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
+
   /**
    * @description
    * @author Marlon Lira
@@ -92,7 +116,21 @@ class VehicleRepository implements IVehicleRepository {
    * @memberof VehicleRepository
    */
   Update(vehicle: Vehicle): Promise<any> {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      Vehicle.update(vehicle.toJSON(),
+        {
+          where:
+          {
+            id: vehicle.id
+          }
+        })
+        .then(result => {
+          resolve(result);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 
   /**
