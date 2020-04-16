@@ -44,12 +44,12 @@ class Employee extends Model {
 
 Employee.init({
   id: {
-    type: new DataTypes.INTEGER,
+    type: new DataTypes.INTEGER(),
     autoIncrement: true,
     primaryKey: true
   },
   status: {
-    type: new DataTypes.ENUM,
+    type: new DataTypes.ENUM(),
     allowNull: true,
     values: ['AT', 'PD', 'EX']
   },
@@ -69,10 +69,10 @@ Employee.init({
     validate: { isEmail: true }
   },
   companyId: {
-    type: new DataTypes.INTEGER
+    type: new DataTypes.INTEGER()
   },
   ruleId: {
-    type: new DataTypes.INTEGER
+    type: new DataTypes.INTEGER()
   }
 }, {
   sequelize: _instance,

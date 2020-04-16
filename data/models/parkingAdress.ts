@@ -5,9 +5,7 @@ import Attributes from '../../commons/core/attributes';
 import { interfaces } from 'inversify';
 import { json } from 'express';
 
-var _instance = DbInstance.getInstance()
-
-
+const _instance = DbInstance.getInstance()
 /**
  * @description
  * @author Felipe Seabra
@@ -54,12 +52,12 @@ class ParkingAdress extends Model {
 
 ParkingAdress.init({
   id: {
-    type: new DataTypes.INTEGER,
+    type: new DataTypes.INTEGER(),
     autoIncrement: true,
     primaryKey: true
   },
   status: {
-    type: new DataTypes.ENUM,
+    type: new DataTypes.ENUM(),
     allowNull: true,
     values: ['AT', 'PD', 'EX']
   },
@@ -80,7 +78,7 @@ ParkingAdress.init({
     allowNull: false
   },
   number: {
-    type: new DataTypes.INTEGER,
+    type: new DataTypes.INTEGER(),
     allowNull: false
   },
   zipCode: {
@@ -100,8 +98,7 @@ ParkingAdress.init({
     allowNull: false
   },
   parkingId: {
-    type: new DataTypes.INTEGER,
-    allowNull: false
+    type: new DataTypes.INTEGER()
   }
 },
 {

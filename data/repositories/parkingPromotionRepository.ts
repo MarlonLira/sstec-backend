@@ -93,9 +93,9 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
             .catch(error => {
               _transaction.rollback();
               reject(error);
-            })
-        })
-    })
+            });
+        });
+    });
   }
 
 
@@ -110,15 +110,13 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
       const _transaction = await ParkingPromotion.sequelize.transaction();
       Parking.findByPk(parkingId)
         .then((parking: Parking) => {
-          console.log(parking);
-          console.log(parkingPromotion);
           parkingPromotion.status = TransactionType.ACTIVE;
           ParkingPromotion.create(parkingPromotion, { transaction: _transaction })
-            .then((createPromotion: ParkingPromotion) => {
-              _transaction.commit();
+            .then(async(createPromotion: ParkingPromotion) => {
+              await _transaction.commit();
               resolve({ "parkingPromotionId": createPromotion.id })
-            }).catch(error => {
-              _transaction.rollback();
+            }).catch(async error => {
+              await _transaction.rollback();
               reject(error);
             });
         });
@@ -178,13 +176,13 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
    * @memberof ParkingPromotionRepository
    */
   ToList() {
-    return new Promise((resolve, rejects) => {
+    return new Promise((resolve, reject) => {
       ParkingPromotion.findAll()
         .then(result => {
           resolve(result);
         })
         .catch(error => {
-          rejects(error);
+          reject(error);
         })
     })
   }
