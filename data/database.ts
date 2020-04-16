@@ -55,22 +55,18 @@ class Database {
     /* #region  Table Relationships */
 
     // N:N
-    User.belongsToMany(Vehicle, { through: 'UserVehicles' });
-    Vehicle.belongsToMany(User, { through: 'UserVehicles' });
-
-    User.belongsToMany(Card, { through: 'UserCards' });
-    Card.belongsToMany(User, { through: 'UserCards' });
 
     // 1:N
     Company.hasMany(Employee, { foreignKey: 'companyId', as: 'Employee' });
     Company.hasMany(CompanyAdress, { foreignKey: 'companyId', as: 'CompanyAdress' });
     Company.hasMany(Parking, { foreignKey: 'companyId', as: 'Parking' });
     User.hasMany(UserAdress, { foreignKey: 'userId', as: 'UserAdress' });
+    User.hasMany(Vehicle, { foreignKey: 'userId', as: 'Vehicle' });
+    User.hasMany(Card, { foreignKey: 'userId', as: 'Card' })
     Rule.hasMany(Employee, { foreignKey: 'ruleId', as: 'Employee' });
     Parking.hasMany(ParkingPromotion, { foreignKey: 'parkingId', as: 'ParkingPromotion' });
     Parking.hasMany(ParkingAdress, { foreignKey: 'parkingId', as: 'ParkingAdress' });
     Parking.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'ParkingSpace' });
-    //Payment.belongsTo(ParkingpacSe, {foreignKey: 'parkingSpaceId', as: 'ParkingSpace'});
 
     // 1:1
 

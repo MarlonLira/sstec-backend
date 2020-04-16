@@ -2,6 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
+import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
 
@@ -13,7 +14,7 @@ const _instance = Context.getInstance();
  */
 class Rule extends Model {
   id!: number
-  status!: string
+  status!: TransactionType
   name!: string
   level!: number
 

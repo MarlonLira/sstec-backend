@@ -1,4 +1,5 @@
 import { injectable, id } from "inversify";
+
 import IParkingAdressRepository from '../interfaces/IRepositories/IParkingAdressRepository';
 import ParkingAdress from '../models/parkingAdress';
 import Attributes from '../../commons/core/attributes';
@@ -75,37 +76,24 @@ class ParkingAdressRepository implements IParkingAdressRepository {
     });
   }
 
-
-  /**
-   * @description
-   * @author Felipe Seabra
-   * @param {number} id
-   * @returns
-   * @memberof ParkingAdressRepository
-   */
-  Delete(_id: number) {
-    return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingAdress.sequelize.transaction();
-      this.GetById(_id)
-        .then((result: ParkingAdress) => {
-          result.status = TransactionType.DELETED
-          ParkingAdress.update(result.toJSON(),
-            {
-              where: { id: _id },
-              transaction: _transaction
-            })
-            .then(async result => {
-              await _transaction.commit();
-              resolve(result);
-            })
-            .catch(async error => {
-              await _transaction.rollback();
-              reject(error);
-            });
-        });
-    });
-  }
-
+    Delete(id: number) {
+        return new Promise(async (resolve, reject) => {
+            const _transaction = await ParkingAdress.sequelize.transaction();
+            ParkingAdress.update({ status: TransactionType.DELETED },
+                {
+                    where: { id: id },
+                    transaction: _transaction
+                })
+                .then(async result => {
+                    await _transaction.commit();
+                    resolve(result);
+                })
+                .catch(async error => {
+                    await _transaction.rollback();
+                    reject(error);
+                });
+        })
+    }
 
   /**
    * @description
