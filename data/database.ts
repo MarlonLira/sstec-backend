@@ -15,6 +15,7 @@ import Parking from './models/parking';
 import Rule from './models/rule';
 import ParkingPromotion from './models/parkingPromotion';
 import ParkingSpace from './models/parkingSpace';
+import ParkingAdress from './models/parkingAdress';
 import Context from '../main/context';
 
 const _instance = Context.getInstance();
@@ -46,6 +47,7 @@ class Database {
       { name: 'Rule', entity: Rule.sequelize },
       { name: 'parkingPromotion', entity: ParkingPromotion.sequelize },
       { name: 'parkingSpace', entity: ParkingSpace.sequelize },
+      { name: 'parkingAdress', entity: ParkingAdress.sequelize }
     ];
 
     Logger.Info('Database', 'Table verification started!');
@@ -63,6 +65,7 @@ class Database {
     User.hasMany(Card, { foreignKey: 'userId', as: 'Card' })
     Rule.hasMany(Employee, { foreignKey: 'ruleId', as: 'Employee' });
     Parking.hasMany(ParkingPromotion, { foreignKey: 'parkingId', as: 'ParkingPromotion' });
+    Parking.hasMany(ParkingAdress, { foreignKey: 'parkingId', as: 'ParkingAdress' });
     Parking.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'ParkingSpace' });
 
     // 1:1

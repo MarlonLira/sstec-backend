@@ -15,6 +15,7 @@ import ParkingRepository from '../../data/repositories/ParkingRepository';
 import RuleRepository from '../../data/repositories/RuleRepository';
 import ParkingPromotionRepository from '../../data/repositories/parkingPromotionRepository';
 import ParkingSpaceRepository from '../../data/repositories/parkingSpaceRepository';
+import ParkingAdressRepository from '../../data/repositories/parkingAdressRepository';
 
 // Services
 import AuthService from '../../data/services/authService';
@@ -31,6 +32,7 @@ import IParkingSpaceRepository from '../../data/interfaces/IRepositories/IParkin
 import IVehicleRepository from '../../data/interfaces/IRepositories/IVehicleRepository';
 import IRuleRepository from '../../data/interfaces/IRepositories/IRuleRepository';
 import IParkingPromotionRepository from '../../data/interfaces/IRepositories/IParkingPromotionRepository';
+import IParkingAdressRepository from '../../data/interfaces/IRepositories/IParkingAdressRepository';
 import IAuthService from '../../data/interfaces/IServices/IAuthService';
 
 
@@ -47,5 +49,6 @@ container.bind<IParkingRepository>(TYPES.IParkingRepository).to(ParkingRepositor
 container.bind<IRuleRepository>(TYPES.IRuleRepository).to(RuleRepository);
 container.bind<IParkingPromotionRepository>(TYPES.IParkingPromotionRepository).to(ParkingPromotionRepository);
 container.bind<IParkingSpaceRepository>(TYPES.IParkingSpaceRepository).to(ParkingSpaceRepository);
+container.bind<IParkingAdressRepository>(TYPES.IParkingAdressRepository).to(ParkingAdressRepository);
 
 export default container;
