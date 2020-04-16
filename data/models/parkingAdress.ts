@@ -26,7 +26,6 @@ class ParkingAdress extends Model {
   complement: string;
   parkingId!: number;
 
-
   /**
    * Creates an instance of ParkingAdress.
    * @author Felipe Seabra
