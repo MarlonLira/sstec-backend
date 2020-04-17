@@ -34,7 +34,7 @@ class Company extends Model {
   }
 }
 
-// Todos os atributos tem que ter 'allowNull: true'
+// Todos os atributos que não podem ser nulos no banco tem que ter 'allowNull: false'
 Company.init({
   id: {
     type: new DataTypes.INTEGER(),
@@ -48,11 +48,11 @@ Company.init({
   },
   name: {
     type: new DataTypes.STRING(30),
-    allowNull: true
+    allowNull: false
   },
   registryCode: {
     type: new DataTypes.STRING(14),
-    allowNull: true
+    allowNull: false
   },
   phone: {
     type: new DataTypes.STRING(12)

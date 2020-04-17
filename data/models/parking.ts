@@ -76,7 +76,7 @@ Parking.init({
   },
   companyId: {
     type: new DataTypes.INTEGER(),
-    allowNull:false
+    allowNull: false
   }
 }, {
   sequelize: _instance,

@@ -116,18 +116,23 @@ class VehicleRepository implements IVehicleRepository {
    * @memberof VehicleRepository
    */
   Update(vehicle: Vehicle): Promise<any> {
-    return new Promise((resolve, reject) => {
-      Vehicle.update(vehicle.toJSON(),
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Vehicle.sequelize.transaction();
+      Vehicle.update(vehicle,
         {
           where:
           {
             id: vehicle.id
-          }
+          },
+          transaction: _transaction,
+          validate: false
         })
-        .then(result => {
+        .then(async result => {
+          await _transaction.commit();
           resolve(result);
         })
-        .catch(error => {
+        .catch(async error => {
+          await _transaction.rollback();
           reject(error);
         });
     });
@@ -141,14 +146,17 @@ class VehicleRepository implements IVehicleRepository {
    * @memberof VehicleRepository
    */
   Delete(_id: number): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Vehicle.sequelize.transaction();
       Vehicle.update({
         status: TransactionType.DELETED
       },
         {
           where: {
             id: _id
-          }
+          },
+          transaction: _transaction,
+          validate: false
         })
         .then(() => {
           resolve(true);
