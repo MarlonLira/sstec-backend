@@ -33,7 +33,6 @@ class ParkingRepository implements IParkingRepository {
   * @param {Parking} parking
   * @memberof ParkingRepository
   */
-
   Save(parking: Parking) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();

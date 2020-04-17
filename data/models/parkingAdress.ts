@@ -2,6 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
+import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
 
@@ -14,7 +15,7 @@ const _instance = Context.getInstance();
  */
 class ParkingAdress extends Model {
   id!: number;
-  status!: string;
+  status!: TransactionType;
   country!: string;
   state!: string;
   city!: string;
@@ -25,7 +26,6 @@ class ParkingAdress extends Model {
   longitude: string;
   complement: string;
   parkingId!: number;
-
 
   /**
    * Creates an instance of ParkingAdress.

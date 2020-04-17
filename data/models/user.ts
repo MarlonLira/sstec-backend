@@ -1,9 +1,8 @@
-import { Model, DataTypes, BelongsToManyAddAssociationMixin, BelongsToManyGetAssociationsMixin, BelongsToManyRemoveAssociationMixin } from 'sequelize';
+import { Model, DataTypes} from 'sequelize';
 
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
-import Vehicle from './vehicle';
-import Card from './card';
+import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
 
@@ -16,54 +15,12 @@ const _instance = Context.getInstance();
 class User extends Model {
 
   id!: number;
-  status!: 'AT' | 'PD' | 'EX';
+  status!: TransactionType;
   name!: string;
   registryCode!: string;
   phone!: string;
   email!: string;
   password!: string;
-
-  /**
-   * @description
-   * @type {BelongsToManyGetAssociationsMixin<Vehicle>}
-   * @memberof User
-   */
-  public getVehicles!: BelongsToManyGetAssociationsMixin<Vehicle>;
-
-  /**
-   * @description
-   * @type {BelongsToManyAddAssociationMixin<Vehicle, number>}
-   * @memberof User
-   */
-  public addVehicle!: BelongsToManyAddAssociationMixin<Vehicle, number>;
-
-  /**
-   * @description
-   * @type {BelongsToManyRemoveAssociationMixin<Vehicle, number>}
-   * @memberof User
-   */
-  public removeVehicle!: BelongsToManyRemoveAssociationMixin<Vehicle, number>
-
-  /**
-   * @description
-   * @type {BelongsToManyGetAssociationsMixin<Card>}
-   * @memberof User
-   */
-  public getCards!: BelongsToManyGetAssociationsMixin<Card>;
-
-  /**
-   * @description
-   * @type {BelongsToManyAddAssociationMixin<Card, number>}
-   * @memberof User
-   */
-  public addCard!: BelongsToManyAddAssociationMixin<Card, number>;
-
-  /**
-   * @description
-   * @type {BelongsToManyRemoveAssociationMixin<Card, number>}
-   * @memberof User
-   */
-  public removeCard!: BelongsToManyRemoveAssociationMixin<Card, number>
 
   /**
    * Creates an instance of User.
@@ -85,7 +42,7 @@ class User extends Model {
 
 User.init({
   id: {
-    type: DataTypes.INTEGER,
+    type: new DataTypes.INTEGER(),
     autoIncrement: true,
     primaryKey: true
   },
@@ -95,22 +52,22 @@ User.init({
     values: ['AT', 'PD', 'EX']
   },
   name: {
-    type: DataTypes.STRING(30),
+    type: new DataTypes.STRING(30),
     allowNull: false
   },
   registryCode: {
-    type: DataTypes.STRING(12),
+    type: new DataTypes.STRING(12),
     allowNull: false
   },
   phone: {
-    type: DataTypes.STRING(12)
+    type: new DataTypes.STRING(12)
   },
   email: {
     type: new DataTypes.STRING(50),
     validate: { isEmail: true }
   },
   password: {
-    type: DataTypes.STRING(100)
+    type: new DataTypes.STRING(100)
   }
 }, {
   sequelize: _instance,
