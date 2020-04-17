@@ -21,6 +21,7 @@ class Parking extends Model {
   email: string;
   amount: number;
   imgUrl: string;
+  companyId: number;
 
   /**
    * Creates an instance of Parking.
@@ -38,6 +39,7 @@ class Parking extends Model {
     this.email = Attributes.ReturnIfValid(json.email);
     this.amount = Attributes.ReturnIfValid(json.amount);
     this.imgUrl = Attributes.ReturnIfValid(json.imgUrl);
+    this.companyId = Attributes.ReturnIfValid(json.companyId);
   }
 }
 
@@ -49,7 +51,7 @@ Parking.init({
   },
   status: {
     type: new DataTypes.ENUM(),
-    allowNull: true,
+    allowNull: false,
     values: ['AT', 'PD', 'EX']
   },
   name: {
@@ -71,6 +73,10 @@ Parking.init({
   imgUrl: {
     type: new DataTypes.STRING(100),
     validate: { isUrl: true }
+  },
+  companyId: {
+    type: new DataTypes.INTEGER(),
+    allowNull:false
   }
 }, {
   sequelize: _instance,
