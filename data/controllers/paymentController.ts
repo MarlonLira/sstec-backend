@@ -8,7 +8,6 @@ import Payment from "../models/payment";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
-import Card from "../models/card";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 
 /**
@@ -21,7 +20,7 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
 class PaymentController implements IPaymentController {
 
   /**
-   *Creates an instance of PaymentController.
+   * Creates an instance of PaymentController.
    * @author Emerson Souza
    * @param {IPaymentRepository} _paymentRepository
    * @memberof PaymentController
@@ -45,8 +44,8 @@ class PaymentController implements IPaymentController {
         })
         .catch(error => {
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Pagamento', error));
-        })
-    })
+        });
+    });
   }
 
   /**
@@ -66,8 +65,8 @@ class PaymentController implements IPaymentController {
         })
         .catch(error => {
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Pagamento', error));
-        })
-    })
+        });
+    });
   }
 
   /**

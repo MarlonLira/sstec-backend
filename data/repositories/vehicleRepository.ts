@@ -1,8 +1,8 @@
+import { Op } from 'sequelize';
+
 import IVehicleRepository from '../interfaces/IRepositories/IVehicleRepository';
 import Vehicle from '../models/vehicle';
-import Querying from '../../commons/core/querying'
 import { injectable } from "inversify";
-import User from '../models/user';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
@@ -17,63 +17,106 @@ class VehicleRepository implements IVehicleRepository {
   /**
    * @description
    * @author Marlon Lira
-   * @param {Vehicle} vehicle
-   * @returns
+   * @param {number} id
+   * @returns {Promise<Vehicle[]>}
    * @memberof VehicleRepository
    */
-  Save(vehicle: Vehicle, userId: number) {
-    return new Promise((resolve, reject) => {
-      User.findByPk(userId)
-        .then((user: User) => {
-          vehicle.status = TransactionType.ACTIVE;
-          Vehicle.create(vehicle)
-            .then((_vehicle: Vehicle) => {
-              user.addVehicle(_vehicle)
-                .then(result => {
-                  resolve(result);
-                });
-            }).catch(error => {
-              reject(error);
-            });
+  GetById(id: number): Promise<Vehicle[]> {
+    throw new Error("Method not implemented.");
+  }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} userId
+   * @returns {Promise<Vehicle[]>}
+   * @memberof VehicleRepository
+   */
+  GetByUserId(userId: number): Promise<Vehicle[]> {
+    throw new Error("Method not implemented.");
+  }
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Vehicle} vehicle
+   * @param {User} user
+   * @returns {Promise<any>}
+   * @memberof VehicleRepository
+   */
+  Save(vehicle: Vehicle): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Vehicle.sequelize.transaction();
+      vehicle.status = TransactionType.ACTIVE;
+      Vehicle.create(vehicle, { transaction: _transaction })
+        .then(async (_vehicle: Vehicle) => {
+          await _transaction.commit();
+          resolve({ "vehicleId": _vehicle.id })
+        })
+        .catch(async error => {
+          await _transaction.rollback();
+          reject(error);
         });
     });
   }
 
-  Find(licensePlate: string, userId: number) {
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {string} licensePlate
+   * @returns {Promise<Vehicle>}
+   * @memberof VehicleRepository
+   */
+  GetByLicensePlate(_licensePlate: string): Promise<Vehicle> {
     return new Promise((resolve, reject) => {
-      let count: number = 1;
-      User.findByPk(userId)
-        .then((user: User) => {
-          user.getVehicles()
-            .then((vehicles: Vehicle[]) => {
-              vehicles.forEach((vehicle: Vehicle) => {
-                if (vehicle.licensePlate === licensePlate) {
-                  resolve(vehicle);
-                } else if (vehicles.length === count) {
-                  resolve(undefined);
-                }
-                count++;
-              });
-              resolve(undefined);
-            })
-            .catch(error => {
-              reject(error);
-            });
+      Vehicle.findOne({
+        where: {
+          licensePlate: _licensePlate,
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      })
+        .then((foundVehicle: Vehicle) => {
+          resolve(foundVehicle);
+        }).catch(error => {
+          reject(error);
         });
-    })
+    });
   }
 
-  GetVehicles(userId: number) {
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Vehicle} vehicle
+   * @returns {Promise<any>}
+   * @memberof VehicleRepository
+   */
+  Update(vehicle: Vehicle): Promise<any> {
+    throw new Error("Method not implemented.");
+  }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} id
+   * @returns {Promise<any>}
+   * @memberof VehicleRepository
+   */
+  Delete(_id: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      User.findByPk(userId)
-        .then((user: User) => {
-          user.getVehicles()
-            .then((vehicles: Vehicle[]) => {
-              resolve(vehicles);
-            })
-            .catch(error => {
-              throw error;
-            });
+      Vehicle.update({
+        status: TransactionType.DELETED
+      },
+        {
+          where: {
+            id: _id
+          }
+        })
+        .then(() => {
+          resolve(true);
+        })
+        .catch(error => {
+          reject(error);
         });
     });
   }
