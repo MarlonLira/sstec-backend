@@ -1,7 +1,6 @@
-import { Model, DataTypes, HasManyAddAssociationMixin, HasManyCreateAssociationMixin } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
-import Employee from './employee';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
@@ -18,9 +17,6 @@ class Company extends Model {
   name!: string;
   registryCode!: string;
   phone!: string;
-
-  public addEmployee!: HasManyAddAssociationMixin<Employee, number>;
-  public createEmployee!: HasManyCreateAssociationMixin<Employee>;
 
   /**
    * Creates an instance of Company.
