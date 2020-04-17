@@ -11,6 +11,7 @@ import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import Attributes from "../../commons/core/attributes";
+import { promises } from "dns";
 
 /**
  * @description
@@ -94,8 +95,8 @@ class ParkingController implements IParkingController {
     return new Promise((resolve) => {
       const _parking = new Parking(req.body.parking);
       this._parkingRepository.GetById(_parking.id)
-        .then((resultparking: Parking) => {
-          if (Attributes.IsValid(resultparking)) {
+        .then((parking: Parking) => {
+          if (Attributes.IsValid(parking)) {
             this._parkingRepository.Update(_parking)
               .then(result => {
                 resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Estacionamento', result))
@@ -122,8 +123,8 @@ class ParkingController implements IParkingController {
     return new Promise((resolve) => {
       const _id: number = req.params.id;
       this._parkingRepository.GetById(_id)
-        .then((resultparking: Parking) => {
-          if (Attributes.IsValid(resultparking)) {
+        .then((parking: Parking) => {
+          if (Attributes.IsValid(parking)) {
             this._parkingRepository.Delete(_id)
               .then(result => {
                 resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Estacionamento', result))
