@@ -9,7 +9,6 @@ import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 
-
 /**
  * @description
  * @author Felipe Seabra

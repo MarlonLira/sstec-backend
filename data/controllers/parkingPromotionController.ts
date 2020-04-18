@@ -20,7 +20,7 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
 class ParkingPromotionController implements IParkingPromotionController {
 
   /**
-   *Creates an instance of ParkingPromotionController.
+   * Creates an instance of ParkingPromotionController.
    * @author Felipe Seabra
    * @param {IParkingPromotionRepository} _parkingPromotionRepository
    * @memberof ParkingPromotionController

@@ -10,11 +10,31 @@ import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 
+/**
+ * @description
+ * @author Marlon Lira
+ * @class EmployeeController
+ * @implements {IEmployeeController}
+ */
 @controller('')
 class EmployeeController implements IEmployeeController {
 
+  /**
+   * Creates an instance of EmployeeController.
+   * @author Marlon Lira
+   * @param {IEmployeeRepository} _employeeRepository
+   * @memberof EmployeeController
+   */
   constructor(@inject(TYPES.IEmployeeRepository) private _employeeRepository: IEmployeeRepository) { }
 
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns
+   * @memberof EmployeeController
+   */
   @httpPost('/employee')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     const _employee = new Employee(req.body);
@@ -29,16 +49,37 @@ class EmployeeController implements IEmployeeController {
     });
   }
 
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @memberof EmployeeController
+   */
   @httpGet('/employee')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
     throw new Error("Method not implemented.");
   }
 
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @memberof EmployeeController
+   */
   @httpGet('/employee')
   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
     throw new Error("Method not implemented.");
   }
 
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @memberof EmployeeController
+   */
   @httpPut('/employee')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     throw new Error("Method not implemented.");
@@ -65,7 +106,6 @@ class EmployeeController implements IEmployeeController {
         });
     });
   }
-
 }
 
 export default EmployeeController;
