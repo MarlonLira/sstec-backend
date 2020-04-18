@@ -1,4 +1,4 @@
-import { Model, DataTypes, BelongsToGetAssociationMixin } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
@@ -79,6 +79,10 @@ UserAdress.init({
   },
   complement: {
     type: new DataTypes.STRING(10)
+  },
+  userId: {
+    type: new DataTypes.INTEGER(),
+    allowNull: false
   }
 }, {
   sequelize: _instance,

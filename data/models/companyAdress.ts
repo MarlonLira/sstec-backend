@@ -33,7 +33,7 @@ class CompanyAdress extends Model {
     this.state = Attributes.ReturnIfValid(json.state);
     this.city = Attributes.ReturnIfValid(json.city);
     this.street = Attributes.ReturnIfValid(json.street);
-    this.number = Attributes.ReturnIfValid(json.number);
+    this.number = Attributes.ReturnIfValid(json.snumber);
     this.zipCode = Attributes.ReturnIfValid(json.zipCode);
     this.complement = Attributes.ReturnIfValid(json.complement);
     this.companyId = Attributes.ReturnIfValid(json.companyId);
@@ -74,6 +74,10 @@ CompanyAdress.init({
   },
   complement: {
     type: new DataTypes.STRING(10)
+  },
+  companyId: {
+    type: new DataTypes.INTEGER(),
+    allowNull: false
   }
 }, {
   sequelize: _instance,

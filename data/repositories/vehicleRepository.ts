@@ -21,8 +21,16 @@ class VehicleRepository implements IVehicleRepository {
    * @returns {Promise<Vehicle[]>}
    * @memberof VehicleRepository
    */
-  GetById(id: number): Promise<Vehicle[]> {
-    throw new Error("Method not implemented.");
+  GetById(id: number): Promise<Vehicle> {
+    return new Promise((resolve, reject) => {
+      Vehicle.findByPk(id)
+        .then((foundVehicle: Vehicle) => {
+          resolve(foundVehicle);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 
   /**
@@ -32,9 +40,25 @@ class VehicleRepository implements IVehicleRepository {
    * @returns {Promise<Vehicle[]>}
    * @memberof VehicleRepository
    */
-  GetByUserId(userId: number): Promise<Vehicle[]> {
-    throw new Error("Method not implemented.");
+  GetByUserId(_userId: number): Promise<Vehicle[]> {
+    return new Promise((resolve, reject) => {
+      Vehicle.findAll({
+        where: {
+          userId: _userId,
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      })
+        .then((foundVehicles: Vehicle[]) => {
+          resolve(foundVehicles);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
+
   /**
    * @description
    * @author Marlon Lira
@@ -92,7 +116,26 @@ class VehicleRepository implements IVehicleRepository {
    * @memberof VehicleRepository
    */
   Update(vehicle: Vehicle): Promise<any> {
-    throw new Error("Method not implemented.");
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Vehicle.sequelize.transaction();
+      Vehicle.update(vehicle,
+        {
+          where:
+          {
+            id: vehicle.id
+          },
+          transaction: _transaction,
+          validate: false
+        })
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async error => {
+          await _transaction.rollback();
+          reject(error);
+        });
+    });
   }
 
   /**
@@ -103,14 +146,17 @@ class VehicleRepository implements IVehicleRepository {
    * @memberof VehicleRepository
    */
   Delete(_id: number): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Vehicle.sequelize.transaction();
       Vehicle.update({
         status: TransactionType.DELETED
       },
         {
           where: {
             id: _id
-          }
+          },
+          transaction: _transaction,
+          validate: false
         })
         .then(() => {
           resolve(true);
