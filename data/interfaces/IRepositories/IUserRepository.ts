@@ -7,12 +7,12 @@ import User from '../../models/user';
  * @interface IUserRepository
  */
 interface IUserRepository {
-  GetByName(userName: string);
-  GetByRegistryCode(registryCode: string);
-  GetById(id: number);
-  ToList();
-  Save(user: User);
-  Find(user: User, properties: string[]);
+  GetByName(userName: string): Promise<User[]>;
+  GetByRegistryCode(registryCode: string): Promise<User[]>;
+  GetById(id: number): Promise<User>;
+  ToList(): Promise<User[]>;
+  Save(user: User): Promise<any>;
+  Update(user: User): Promise<any>;
 }
 
 export default IUserRepository;

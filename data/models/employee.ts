@@ -29,7 +29,7 @@ class Employee extends Model {
    */
   constructor(json?: any) {
     super()
-    if (json != undefined) {
+    if (json !== undefined) {
       this.id = Attributes.ReturnIfValid(json.id);
       this.name = Attributes.ReturnIfValid(json.name);
       this.status = Attributes.ReturnIfValid(json.status);
