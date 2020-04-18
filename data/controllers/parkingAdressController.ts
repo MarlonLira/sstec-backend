@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
-import { inject, id } from "inversify";
+import { inject } from "inversify";
 import IParkingAdressController from "../interfaces/IControllers/IParkingAdressController";
 import IParkingAdressRepository from '../interfaces/IRepositories/IParkingAdressRepository';
 import ParkingAdress from "../models/parkingAdress";
@@ -20,7 +20,7 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
 class ParkingAdressController implements IParkingAdressController{
 
   /**
-   *Creates an instance of ParkingPromotionController.
+   * Creates an instance of ParkingPromotionController.
    * @author Felipe Seabra
    * @param {IParkingAdressRepository} _parkingAdressRepository
    * @memberof ParkingAdressController
@@ -34,7 +34,7 @@ class ParkingAdressController implements IParkingAdressController{
    * @param {Response<any>} res
    * @memberof ParkingAdressController
    */
-  @httpGet('/parkingAdress/Search/:id')
+  @httpGet('/parkingAdress/:id')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _id: number = req.params.id;
@@ -77,7 +77,7 @@ class ParkingAdressController implements IParkingAdressController{
    * @param {Response<any>} res
    * @memberof ParkingAdressController
    */
-  @httpGet('/ParkingsAdress/SearchAll')
+  @httpGet('/ParkingsAdresses')
   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       this._parkingAdressRepository.ToList()
@@ -94,7 +94,7 @@ class ParkingAdressController implements IParkingAdressController{
    * @param {Response<any>} res
    * @memberof ParkingAdressController
    */
-  @httpPut('/ParkingAdress/Update')
+  @httpPut('/ParkingAdress')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _parkingAdress = new ParkingAdress(req.body);
@@ -112,7 +112,7 @@ class ParkingAdressController implements IParkingAdressController{
    * @param {Response<any>} res
    * @memberof ParkingAdressController
    */
-  @httpDelete('/ParkingAdress/Delete/:id')
+  @httpDelete('/ParkingAdress/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _id: number = req.params.id;

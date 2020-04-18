@@ -23,7 +23,7 @@ interface IVehicleRepository {
    * @returns {Promise<Vehicle[]>}
    * @memberof IVehicleRepository
    */
-  GetById(id: number): Promise<Vehicle[]>
+  GetById(id: number): Promise<Vehicle>
 
   /**
    * @description

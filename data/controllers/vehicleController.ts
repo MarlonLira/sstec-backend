@@ -10,7 +10,6 @@ import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import Attributes from '../../commons/core/attributes';
-import User from "../models/user";
 
 /**
  * @description
@@ -123,7 +122,16 @@ class VehicleController implements IVehicleController {
    * @memberof VehicleController
    */
   Update(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      const _vehicle = new Vehicle(req.body.vehicle);
+      this._vehicleRepository.Update(_vehicle)
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Veículo', result));
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Veículo', error));
+        });
+    });
   }
 
   /**

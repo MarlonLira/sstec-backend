@@ -27,13 +27,12 @@ class ParkingRepository implements IParkingRepository {
     });
   }
 
-  /**
+ /**
   * @description
   * @author Emerson Souza
   * @param {Parking} parking
   * @memberof ParkingRepository
   */
-
   Save(parking: Parking) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
@@ -58,11 +57,12 @@ class ParkingRepository implements IParkingRepository {
   Update(parking: Parking): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
-      Parking.update(parking.toJSON(), {
+      Parking.update(parking, {
         where: {
           id: parking.id
         },
-        transaction: _transaction
+        transaction: _transaction,
+        validate: false
       })
         .then(async result => {
           await _transaction.commit();

@@ -19,6 +19,7 @@ class ParkingPromotion extends Model {
     days!: number;
     hours!: number;
     discount!: number;
+    parkingId!: number;
 
   /**
    * Creates an instance of Parking.
@@ -35,6 +36,7 @@ class ParkingPromotion extends Model {
     this.days = Attributes.ReturnIfValid(json.days);
     this.hours = Attributes.ReturnIfValid(json.hours);
     this.discount = Attributes.ReturnIfValid(json.discount);
+    this.parkingId = Attributes.ReturnIfValid(json.parkingId);
   }
 }
 
@@ -65,10 +67,14 @@ ParkingPromotion.init({
   discount: {
     type: new DataTypes.DOUBLE(),
     allowNull: false
+  },
+  parkingId: {
+    type: new DataTypes.INTEGER(),
+    allowNull: false
   }
 }, {
   sequelize: _instance,
   tableName: 'ParkingPromotion',
 });
-  
+
 export default ParkingPromotion;
