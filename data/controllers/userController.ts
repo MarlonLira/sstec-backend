@@ -43,7 +43,7 @@ class UserController implements IUserController {
   Save(@request() req: Request, @response() res: Response) {
     const _user = new User(req.body.user);
     return new Promise((resolve) => {
-      this._userRepository.Find(_user, ['registryCode', 'email'])
+      this._userRepository.GetByRegistryCode(_user.registryCode)
         .then(found => {
           if (!Attributes.IsValid(found)) {
             _user.password = Attributes.IsValid(_user.password) ? Crypto.Encrypt(_user.password, CryptoType.PASSWORD) : undefined;
@@ -74,10 +74,17 @@ class UserController implements IUserController {
   Search(@request() req: Request, @response() res: Response) {
     const _user = new User(req.params);
     return new Promise((resolve) => {
-      this._userRepository.Find(_user, ['registryCode', 'id'])
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Usuario', result));
-        });
+      if (Attributes.IsValid(_user.registryCode)) {
+        this._userRepository.GetByRegistryCode(_user.registryCode)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Usuario', result));
+          });
+      } else if (Attributes.IsValid(_user.id)) {
+        this._userRepository.GetById(_user.id)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Usuario', result));
+          });
+      }
     });
   }
 

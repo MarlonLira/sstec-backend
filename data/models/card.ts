@@ -22,6 +22,7 @@ class Card extends Model {
   expirationDate: string;
   secureCode!: string;
   type: string;
+  userId: number;
 
   /**
    * Creates an instance of Card.
@@ -39,6 +40,7 @@ class Card extends Model {
     this.expirationDate = Attributes.ReturnIfValid(json.expirationDate);
     this.secureCode = Attributes.ReturnIfValid(json.secureCode);
     this.type = Attributes.ReturnIfValid(json.type);
+    this.userId = Attributes.ReturnIfValid(json.userId);
   }
 }
 
@@ -75,6 +77,10 @@ Card.init({
   },
   type: {
     type: new DataTypes.STRING(6),
+    allowNull: false
+  },
+  useId:{
+    type: new DataTypes.INTEGER(),
     allowNull: false
   }
 }, {

@@ -1,7 +1,6 @@
-import { Model, DataTypes, HasManyAddAssociationMixin, HasManyCreateAssociationMixin } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
-import Employee from './employee';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
@@ -19,9 +18,6 @@ class Company extends Model {
   registryCode!: string;
   phone!: string;
 
-  public addEmployee!: HasManyAddAssociationMixin<Employee, number>;
-  public createEmployee!: HasManyCreateAssociationMixin<Employee>;
-
   /**
    * Creates an instance of Company.
    * @author Gustavo Gusmão
@@ -38,7 +34,7 @@ class Company extends Model {
   }
 }
 
-// Todos os atributos tem que ter 'allowNull: true'
+// Todos os atributos que não podem ser nulos no banco tem que ter 'allowNull: false'
 Company.init({
   id: {
     type: new DataTypes.INTEGER(),
@@ -52,11 +48,11 @@ Company.init({
   },
   name: {
     type: new DataTypes.STRING(30),
-    allowNull: true
+    allowNull: false
   },
   registryCode: {
     type: new DataTypes.STRING(14),
-    allowNull: true
+    allowNull: false
   },
   phone: {
     type: new DataTypes.STRING(12)
