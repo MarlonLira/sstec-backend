@@ -23,7 +23,7 @@ import Attributes from "../../commons/core/attributes";
 class CardController implements ICardController {
 
   /**
-   *Creates an instance of CardController.
+   * Creates an instance of CardController.
    * @author Marlon Lira
    * @param {ICardRepository} _cardRepository
    * @param {IUserRepository} _userRepository

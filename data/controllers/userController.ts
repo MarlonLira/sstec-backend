@@ -24,7 +24,7 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
 class UserController implements IUserController {
 
   /**
-   *Creates an instance of UserController.
+   * Creates an instance of UserController.
    * @author Marlon Lira
    * @param {IUserRepository} userRepository
    * @memberof UserController
@@ -36,12 +36,12 @@ class UserController implements IUserController {
    * @author Marlon Lira
    * @param {Request} req
    * @param {Response} res
-   * @returns 
+   * @returns
    * @memberof UserController
    */
   @httpPost('/user')
   Save(@request() req: Request, @response() res: Response) {
-    const _user = new User(req.body);
+    const _user = new User(req.body.user);
     return new Promise((resolve) => {
       this._userRepository.Find(_user, ['registryCode', 'email'])
         .then(found => {
@@ -66,7 +66,7 @@ class UserController implements IUserController {
    * @author Marlon Lira
    * @param {Request} req
    * @param {Response} res
-   * @returns 
+   * @returns
    * @memberof UserController
    */
   @httpGet('/user/registryCode/:registryCode')

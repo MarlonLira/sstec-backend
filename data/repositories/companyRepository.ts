@@ -45,7 +45,7 @@ class CompanyRepository implements ICompanyRepository {
   Update(company: Company) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Company.sequelize.transaction();
-      Company.update(company,
+      Company.update(company.toJSON(),
         {
           where: { id: company.id }
         })

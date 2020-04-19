@@ -21,7 +21,7 @@ import Attributes from '../../commons/core/attributes';
 class VehicleController implements IVehicleController {
 
   /**
-   *Creates an instance of VehicleController.
+   * Creates an instance of VehicleController.
    * @author Marlon Lira
    * @param {IVehicleRepository} _VehicleRepository
    * @memberof VehicleController
@@ -33,7 +33,7 @@ class VehicleController implements IVehicleController {
    * @author Marlon Lira
    * @param {Request<any>} req
    * @param {Response<any>} res
-   * @returns 
+   * @returns
    * @memberof VehicleController
    */
   @httpPost('/vehicle')
