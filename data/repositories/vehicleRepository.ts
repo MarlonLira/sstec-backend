@@ -158,11 +158,13 @@ class VehicleRepository implements IVehicleRepository {
           transaction: _transaction,
           validate: false
         })
-        .then(() => {
-          resolve(true);
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
         })
-        .catch(error => {
-          reject(error);
+        .catch(async error => {
+          await _transaction.rollback()
+          reject(error);;
         });
     });
   }
