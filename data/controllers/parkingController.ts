@@ -2,7 +2,6 @@ import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut, results } from "inversify-express-utils";
 import { inject } from "inversify";
 
-
 import IParkingController from "../interfaces/IControllers/IParkingController";
 import IParkingRepository from '../interfaces/IRepositories/IParkingRepository';
 import Parking from "../models/Parking";
@@ -11,7 +10,6 @@ import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import Attributes from "../../commons/core/attributes";
-import { promises } from "dns";
 
 /**
  * @description

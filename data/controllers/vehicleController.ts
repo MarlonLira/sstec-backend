@@ -99,7 +99,7 @@ class VehicleController implements IVehicleController {
    * @returns {Promise<any>}
    * @memberof VehicleController
    */
-  @httpGet('/vehicles/user/:id')
+  @httpGet('/vehicles/userId/:id')
   SearchAll(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _userId = req.params.id;

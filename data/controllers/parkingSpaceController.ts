@@ -39,8 +39,8 @@ class ParkingSpaceController implements IParkingSpaceController {
   @httpPost('/parkingSpace')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      let _parkingSpace = new ParkingSpace(req.body.parkingSpace);
-      let _parkingId = req.body.parking.Id;
+      const _parkingSpace = new ParkingSpace(req.body.parkingSpace);
+      const _parkingId = req.body.parking.Id;
       this._parkingSpaceRepository.Save(_parkingSpace, _parkingId)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento', result));

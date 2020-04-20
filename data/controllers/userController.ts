@@ -84,6 +84,8 @@ class UserController implements IUserController {
           .then(result => {
             resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Usuario', result));
           });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Usuario'));
       }
     });
   }

@@ -33,7 +33,7 @@ class ParkingAdressController implements IParkingAdressController{
    * @param {Response<any>} res
    * @memberof ParkingAdressController
    */
-  @httpGet('/parkingAdress/:id')
+  @httpGet('/parkingAdress/id/:id')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _id: number = req.params.id;
