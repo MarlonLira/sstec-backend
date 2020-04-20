@@ -41,6 +41,10 @@ class Parking extends Model {
     this.imgUrl = Attributes.ReturnIfValid(json.imgUrl);
     this.companyId = Attributes.ReturnIfValid(json.companyId);
   }
+  
+  ToModify(){
+    return this.toJSON();
+  }
 }
 
 Parking.init({

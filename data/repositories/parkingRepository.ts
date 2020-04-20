@@ -4,7 +4,6 @@ import { injectable } from "inversify";
 import IParkingRepository from '../interfaces/IRepositories/IParkingRepository';
 import Parking from '../models/Parking';
 import { TransactionType } from '../../commons/enums/transactionType';
-import Querying from '../../commons/core/querying';
 
 /**
  * @description
