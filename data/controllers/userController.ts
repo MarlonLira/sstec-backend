@@ -49,13 +49,13 @@ class UserController implements IUserController {
             _user.password = Attributes.IsValid(_user.password) ? Crypto.Encrypt(_user.password, CryptoType.PASSWORD) : undefined;
             this._userRepository.Save(_user)
               .then(result => {
-                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Usuario', result));
+                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Usuário', result));
               })
               .catch(error => {
-                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Usuario', error));
+                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Usuário', error));
               });
           } else {
-            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Usuario'));
+            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Usuário'));
           }
         });
     });
@@ -77,15 +77,15 @@ class UserController implements IUserController {
       if (Attributes.IsValid(_user.registryCode)) {
         this._userRepository.GetByRegistryCode(_user.registryCode)
           .then(result => {
-            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Usuario', result));
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Usuário', result));
           });
       } else if (Attributes.IsValid(_user.id)) {
         this._userRepository.GetById(_user.id)
           .then(result => {
-            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Usuario', result));
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Usuário', result));
           });
       } else {
-        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Usuario'));
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Usuário'));
       }
     });
   }
@@ -102,7 +102,7 @@ class UserController implements IUserController {
   SearchAll(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
       this._userRepository.ToList().then(result => {
-        resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Usuario', result));
+        resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Usuário', result));
       });
     });
   }
@@ -116,7 +116,16 @@ class UserController implements IUserController {
    */
   @httpPut('/user')
   Update(@request() req: Request, @response() res: Response) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      const _user = new User(req.body.user);
+      this._userRepository.Update(_user)
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Usuário', result));
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Usuário', error));
+        });
+    });
   }
 
   /**
@@ -126,9 +135,18 @@ class UserController implements IUserController {
    * @param {Response} res
    * @memberof UserController
    */
-  @httpDelete('/user')
+  @httpDelete('/user/:id')
   Delete(@request() req: Request, @response() res: Response) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      const _user = new User(req.params);
+      this._userRepository.Delete(_user.id)
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Usuário', result));
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Usuário', error));
+        });
+    });
   }
 }
 
