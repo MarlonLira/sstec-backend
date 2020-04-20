@@ -1472,32 +1472,37 @@
     "Card": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
+        "card": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "status": {
+              "type": "string",
+              "format": "char(2)",
+              "example": "AT"
+            },
+            "holder": {
+              "type": "string"
+            },
+            "number": {
+              "type": "string"
+            },
+            "secureCode": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "userId": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+          }
         },
-        "status": {
-          "type": "string",
-          "format": "char(2)",
-          "example": "AT"
-        },
-        "holder": {
-          "type": "string"
-        },
-        "number": {
-          "type": "string"
-        },
-        "secureCode": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "userId": {
-          "type": "integer",
-          "format": "int64"
-        }
-      },
       "xml": {
         "name": "Card"
       }

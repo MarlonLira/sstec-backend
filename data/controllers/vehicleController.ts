@@ -34,11 +34,7 @@ class VehicleController implements IVehicleController {
    * @author Marlon Lira
    * @param {Request<any>} req
    * @param {Response<any>} res
-<<<<<<< HEAD
    * @returns
-=======
-   * @returns {Promise<any>}
->>>>>>> 85c06aa4439ec1df3b75831d48ac052afbfd0085
    * @memberof VehicleController
    */
   @httpPost('/vehicle')
