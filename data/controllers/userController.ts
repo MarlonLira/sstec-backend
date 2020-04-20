@@ -41,7 +41,7 @@ class UserController implements IUserController {
    */
   @httpPost('/user')
   Save(@request() req: Request, @response() res: Response) {
-    const _user = new User(req.body);
+    const _user = new User(req.body.user);
     return new Promise((resolve) => {
       this._userRepository.GetByRegistryCode(_user.registryCode)
         .then(found => {
@@ -72,8 +72,8 @@ class UserController implements IUserController {
   @httpGet('/user/registryCode/:registryCode')
   @httpGet('/user/id/:id')
   Search(@request() req: Request, @response() res: Response) {
-    const _user = new User(req.params);
     return new Promise((resolve) => {
+      const _user = new User(req.params);
       if (Attributes.IsValid(_user.registryCode)) {
         this._userRepository.GetByRegistryCode(_user.registryCode)
           .then(result => {

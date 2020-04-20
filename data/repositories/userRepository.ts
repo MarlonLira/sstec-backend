@@ -139,8 +139,11 @@ class UserRepository implements IUserRepository {
     return new Promise((resolve, reject) => {
       User.findAll({
         where: {
-          name: {
+          registryCode: {
             [Op.like]: `${registryCode}%`
+          },
+          status: {
+            [Op.ne]: TransactionType.DELETED
           }
         }
       })
