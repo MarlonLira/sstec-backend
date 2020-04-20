@@ -42,6 +42,10 @@ class Card extends Model {
     this.type = Attributes.ReturnIfValid(json.type);
     this.userId = Attributes.ReturnIfValid(json.userId);
   }
+  
+  ToModify(){
+    return this.toJSON();
+  }
 }
 
 Card.init({

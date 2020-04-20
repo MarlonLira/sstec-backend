@@ -39,6 +39,9 @@ class Vehicle extends Model {
     this.userId = Attributes.ReturnIfValid(json.userId);
   }
 
+  ToModify(){
+    return this.toJSON();
+  }
 }
 
 Vehicle.init({

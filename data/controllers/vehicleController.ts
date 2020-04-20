@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { controller, httpPost, request, response, httpGet } from "inversify-express-utils";
+import { controller, httpPost, request, response, httpGet, httpDelete, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
 import IVehicleController from "../interfaces/IControllers/IVehicleController";
@@ -121,6 +121,7 @@ class VehicleController implements IVehicleController {
    * @returns {Promise<any>}
    * @memberof VehicleController
    */
+  @httpPut('/vehicle')
   Update(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _vehicle = new Vehicle(req.body.vehicle);
@@ -142,9 +143,10 @@ class VehicleController implements IVehicleController {
    * @returns {Promise<any>}
    * @memberof VehicleController
    */
+  @httpDelete('/vehicles/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
-      const _vehicleId = req.body.vehicle.id;
+      const _vehicleId = req.params.id;
       this._vehicleRepository.Delete(_vehicleId)
         .then(() => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Veículo'))

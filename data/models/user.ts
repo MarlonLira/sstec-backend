@@ -38,6 +38,10 @@ class User extends Model {
     this.email = Attributes.ReturnIfValid(json.email);
     this.password = Attributes.ReturnIfValid(json.password);
   }
+  
+  ToModify(){
+    return this.toJSON();
+  }
 }
 
 User.init({
