@@ -20,7 +20,7 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
 class ParkingPromotionController implements IParkingPromotionController {
 
   /**
-   *Creates an instance of ParkingPromotionController.
+   * Creates an instance of ParkingPromotionController.
    * @author Felipe Seabra
    * @param {IParkingPromotionRepository} _parkingPromotionRepository
    * @memberof ParkingPromotionController
@@ -34,7 +34,7 @@ class ParkingPromotionController implements IParkingPromotionController {
    * @param {Response<any>} res
    * @memberof ParkingPromotionController
    */
-  @httpGet('/parkingPromotion/Search/:name')
+  @httpGet('/parkingPromotion/name/:name')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _name: string = req.params.name;
@@ -77,7 +77,7 @@ class ParkingPromotionController implements IParkingPromotionController {
    * @param {Response<any>} res
    * @memberof ParkingPromotionController
    */
-  @httpGet('/ParkingsPromotion/SearchAll')
+  @httpGet('/ParkingsPromotion')
   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       this._parkingPromotionRepository.ToList()
@@ -94,7 +94,7 @@ class ParkingPromotionController implements IParkingPromotionController {
    * @param {Response<any>} res
    * @memberof ParkingPromotionController
    */
-  @httpPut('/ParkingPromotion/Update')
+  @httpPut('/ParkingPromotion')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _parkingPromotion = new ParkingPromotion(req.body);
@@ -112,7 +112,7 @@ class ParkingPromotionController implements IParkingPromotionController {
    * @param {Response<any>} res
    * @memberof ParkingPromotionController
    */
-  @httpDelete('/ParkingPromotion/Delete/:id')
+  @httpDelete('/ParkingPromotion/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _id: number = req.params.id;

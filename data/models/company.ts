@@ -32,6 +32,10 @@ class Company extends Model {
     this.registryCode = Attributes.ReturnIfValid(json.registryCode);
     this.phone = Attributes.ReturnIfValid(json.phone);
   }
+  
+  ToModify(){
+    return this.toJSON();
+  }
 }
 
 // Todos os atributos que não podem ser nulos no banco tem que ter 'allowNull: false'

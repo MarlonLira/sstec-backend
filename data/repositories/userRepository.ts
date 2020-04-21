@@ -2,7 +2,6 @@ import { Op } from 'sequelize';
 
 import IUserRepository from '../interfaces/IRepositories/IUserRepository';
 import User from '../models/user';
-import Querying from '../../commons/core/querying'
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 
@@ -109,12 +108,12 @@ class UserRepository implements IUserRepository {
    * @returns {Promise}
    * @memberof UserRepository
    */
-  GetByName(userName: string): Promise<any> {
+  GetByName(name: string): Promise<any> {
     return new Promise((resolve, reject) => {
       User.findAll({
         where: {
           name: {
-            [Op.like]: `${userName}%`
+            [Op.like]: `${name}%`
           }
         }
       })
@@ -123,7 +122,7 @@ class UserRepository implements IUserRepository {
         }
         )
         .catch(error => {
-          throw error;
+          reject(error);
         });
     });
   }
@@ -135,12 +134,15 @@ class UserRepository implements IUserRepository {
    * @returns {Promise<User[]>}
    * @memberof UserRepository
    */
-  GetByRegistryCode(registryCode: string) : Promise<User[]> {
+  GetByRegistryCode(registryCode: string): Promise<User[]> {
     return new Promise((resolve, reject) => {
       User.findAll({
         where: {
-          name: {
+          registryCode: {
             [Op.like]: `${registryCode}%`
+          },
+          status: {
+            [Op.ne]: TransactionType.DELETED
           }
         }
       })
@@ -152,6 +154,38 @@ class UserRepository implements IUserRepository {
         });
     });
   }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} _id
+   * @returns {Promise<any>}
+   * @memberof UserRepository
+   */
+  Delete(_id: number): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await User.sequelize.transaction();
+      User.update({
+        status: TransactionType.DELETED
+      },
+        {
+          where: {
+            id: _id
+          },
+          transaction: _transaction,
+          validate: false
+        })
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async error => {
+          await _transaction.rollback()
+          reject(error);;
+        });
+    });
+  }
+
 }
 
 export default UserRepository;

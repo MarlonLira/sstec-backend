@@ -38,6 +38,10 @@ class CompanyAdress extends Model {
     this.complement = Attributes.ReturnIfValid(json.complement);
     this.companyId = Attributes.ReturnIfValid(json.companyId);
   }
+  
+  ToModify(){
+    return this.toJSON();
+  }
 }
 
 

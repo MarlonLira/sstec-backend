@@ -21,7 +21,7 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
 class CompanyAdressController implements ICompanyAdressController {
 
   /**
-   *Creates an instance of CompanyAdressController.
+   * Creates an instance of CompanyAdressController.
    * @author Gustavo Gusmão
    * @param {ICompanyAdressRepository} _companyAdressRepository
    * @memberof CompanyAdressController

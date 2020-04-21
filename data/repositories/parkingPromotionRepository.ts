@@ -1,11 +1,10 @@
-import { Op, Transaction } from 'sequelize';
+import { Op } from 'sequelize';
 import { injectable } from "inversify";
 
 import IParkingPromotionRepository from '../interfaces/IRepositories/IParkingPromotionRepository';
 import ParkingPromotion from '../models/parkingPromotion';
 import Parking from '../models/parking';
 import Attributes from '../../commons/core/attributes';
-import Querying from '../../commons/core/querying';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
@@ -97,7 +96,6 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
     });
   }
 
-
   /**
    * @description
    * @author Felipe Seabra
@@ -119,29 +117,6 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
               reject(error);
             });
         });
-    });
-  }
-
-  /**
-   * @description
-   * @author Felipe Seabra
-   * @param {ParkingPromotion} parkingPromotion
-   * @param {string[]} properties
-   * @memberof ParkingPromotionRepository
-   */
-  Find(parkingPromotion: ParkingPromotion, properties: string[]) {
-    return new Promise((resolve, reject) => {
-      let query: any;
-      query = Querying.Or(ParkingPromotion, properties);
-      ParkingPromotion.findAll({
-        where: query
-      })
-        .then(result => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        })
     });
   }
 

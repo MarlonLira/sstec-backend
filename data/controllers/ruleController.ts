@@ -20,7 +20,7 @@ import { HttpMessage } from '../../commons/enums/httpMessage';
 class RuleController implements IRuleController {
 
   /**
-   *Creates an instance of RuleController.
+   * Creates an instance of RuleController.
    * @author Marlon Lira
    * @param {IRuleRepository} _ruleRepository
    * @memberof RuleController

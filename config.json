@@ -23,7 +23,7 @@
     },
     "ForceSync": false,
     "AlterSync": false,
-    "Logging": false,
+    "Logging": true,
     "IsLogger": false
   }
 }
