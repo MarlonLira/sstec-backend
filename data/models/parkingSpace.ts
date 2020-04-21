@@ -43,7 +43,7 @@ ParkingSpace.init({
   },
   status: {
     type: new DataTypes.ENUM(),
-    allowNull: true,
+    allowNull: false,
     values: ['AT', 'PD', 'EX']
   },
   description: {

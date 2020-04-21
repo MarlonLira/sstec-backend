@@ -24,15 +24,16 @@ class ParkingController implements IParkingController {
 
   constructor(@inject(TYPES.IParkingRepository) private _parkingRepository: IParkingRepository) { }
 
-/**
- * @description
- * @author Emerson Souza
- * @param {Request<any>} req
- * @param {Response<any>} res
- * @memberof ParkingController
- */
+  /**
+   * @description
+   * @author Emerson Souza
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns {Promise<any>}
+   * @memberof ParkingController
+   */
   @httpPost('/parking')
-  Save(@request() req: Request<any>, @response() res: Response<any>) {
+  Save(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _parking = new Parking(req.body.parking);
       this._parkingRepository.Save(_parking)
@@ -44,16 +45,18 @@ class ParkingController implements IParkingController {
         });
     });
   }
-
+  
+ 
   /**
    * @description
    * @author Emerson Souza
    * @param {Request<any>} req
    * @param {Response<any>} res
+   * @returns {Promise<any>}
    * @memberof ParkingController
    */
   @httpGet('/parking/registryCode/:registryCode')
-  Search(@request() req: Request<any>, @response() res: Response<any>) {
+  Search(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _registryCode: string = req.params.registryCode;
       this._parkingRepository.GetByRegistryCode(_registryCode)
@@ -69,12 +72,13 @@ class ParkingController implements IParkingController {
   /**
    * @description
    * @author Emerson Souza
-   * @param {Request<any>} req
-   * @param {Response<any>} res
+   * @param {Request} req
+   * @param {Response} res
+   * @returns {Promise<any>}
    * @memberof ParkingController
    */
   @httpGet('/parkings')
-  SearchAll(@request() req: Request, @response() res: Response) {
+  SearchAll(@request() req: Request, @response() res: Response): Promise<any> {
     return new Promise((resolve) => {
       this._parkingRepository.ToList()
         .then(result => {
@@ -83,15 +87,17 @@ class ParkingController implements IParkingController {
     });
   }
 
+
   /**
    * @description
    * @author Emerson Souza
    * @param {Request<any>} req
    * @param {Response<any>} res
+   * @returns {Promise<any>}
    * @memberof ParkingController
    */
   @httpPut('/parking')
-  Update(@request() req: Request<any>, @response() res: Response<any>) {
+  Update(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _parking = new Parking(req.body.parking);
       this._parkingRepository.GetById(_parking.id)
@@ -116,10 +122,11 @@ class ParkingController implements IParkingController {
    * @author Emerson Souza
    * @param {Request<any>} req
    * @param {Response<any>} res
+   * @returns {Promise<any>}
    * @memberof ParkingController
    */
   @httpDelete('/parking/:id')
-  Delete(@request() req: Request<any>, @response() res: Response<any>) {
+  Delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _id: number = req.params.id;
       this._parkingRepository.GetById(_id)
