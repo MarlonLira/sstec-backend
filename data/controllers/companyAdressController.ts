@@ -6,6 +6,7 @@ import ICompanyAdressController from "../interfaces/IControllers/ICompanyAdressC
 import ICompanyAdressRepository from '../interfaces/IRepositories/ICompanyAdressRepository';
 import CompanyAdress from "../models/companyAdress";
 import Company from "../models/company";
+import Attributes from "../../commons/core/attributes";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
@@ -30,7 +31,7 @@ class CompanyAdressController implements ICompanyAdressController {
 
   @httpPost('/companyAdress')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
-    const _companyAdress = new CompanyAdress(req.body);
+    const _companyAdress = new CompanyAdress(req.body.companyAdress);
     return new Promise((resolve) => {
       this._companyAdressRepository.Save(_companyAdress)
         .then(result => {
@@ -42,24 +43,53 @@ class CompanyAdressController implements ICompanyAdressController {
     });
   }
 
-  @httpGet('/companyAdress')
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @memberof CompanyAdressController
+   */
+  @httpGet('/companyAdress/companyId/:companyId')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
-  }
-
-  @httpGet('/companiesAdress')
-  SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      const _companyId: number = req.params.companyId;
+      this._companyAdressRepository.GetByCompanyId(_companyId)
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Endereço da empresa', result))
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço da empresa', error));
+        });
+    });
   }
 
   @httpPut('/companyAdress')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      const _companyAdress = new CompanyAdress(req.body.companyAdress);
+      this._companyAdressRepository.Update(_companyAdress)
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Endereço da empresa', result));
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço da empresa', error));
+        });
+    });
   }
 
-  @httpDelete('/companyAdress')
+  @httpDelete('/companyAdress/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      const _companyAdressId: number = req.params.id;
+      this._companyAdressRepository.Delete(_companyAdressId)
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Endereço da empresa', result));
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço da empresa', error));
+        });
+    });
   }
 }
 
