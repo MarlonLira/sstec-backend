@@ -5,7 +5,6 @@ import { inject } from "inversify";
 import IParkingSpaceController from "../interfaces/IControllers/IParkingSpaceController";
 import IParkingSpaceRepository from '../interfaces/IRepositories/IParkingSpaceRepository';
 import ParkingSpace from "../models/ParkingSpace";
-import Parking from "../models/Parking";
 import TYPES from '../types';
 import Attributes from "../../commons/core/attributes";
 import Http from '../../commons/core/http';
@@ -23,13 +22,12 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
 class ParkingSpaceController implements IParkingSpaceController {
 
   /**
-   *Creates an instance of ParkingSpaceController.
+   * Creates an instance of ParkingSpaceController.
    * @author Emerson Souza
    * @param {IParkingSpaceRepository} _parkingSpaceRepository
    * @memberof ParkingSpaceController
    */
   constructor(@inject(TYPES.IParkingSpaceRepository) private _parkingSpaceRepository: IParkingSpaceRepository) { }
-
 
   /**
    * @description
@@ -49,8 +47,8 @@ class ParkingSpaceController implements IParkingSpaceController {
         })
         .catch(error => {
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
-        })
-    })
+        });
+    });
   }
 
   /**

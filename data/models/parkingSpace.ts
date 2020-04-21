@@ -33,6 +33,10 @@ class ParkingSpace extends Model {
     this.value = Attributes.ReturnIfValid(json.value);
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
   }
+  
+  ToModify(){
+    return this.toJSON();
+  }
 }
 
 ParkingSpace.init({

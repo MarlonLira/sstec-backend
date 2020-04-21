@@ -42,6 +42,10 @@ class Card extends Model {
     this.type = Attributes.ReturnIfValid(json.type);
     this.userId = Attributes.ReturnIfValid(json.userId);
   }
+              
+  ToModify(){
+    return this.toJSON();
+  }
 }
 
 Card.init({
@@ -64,22 +68,21 @@ Card.init({
     allowNull: false
   },
   number: {
-    type: new DataTypes.STRING(20),
-    allowNull: false,
-    validate: { isCreditCard: true }
+    type: new DataTypes.STRING(100),
+    allowNull: false
   },
   expirationDate: {
-    type: new DataTypes.STRING(7),
+    type: new DataTypes.STRING(100),
     allowNull: false
   },
   secureCode: {
-    type: new DataTypes.CHAR(3)
+    type: new DataTypes.STRING(100),
   },
   type: {
     type: new DataTypes.STRING(6),
     allowNull: false
   },
-  useId:{
+  userId:{
     type: new DataTypes.INTEGER(),
     allowNull: false
   }

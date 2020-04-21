@@ -71,7 +71,7 @@ class CompanyController implements ICompanyController {
       const _registryCode: string = req.params.registryCode;
       this._companyRepository.GetByRegistryCode(_registryCode)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Empresa', result))
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Empresa', result))
         })
         .catch(error => {
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Empresa', error));
@@ -90,13 +90,13 @@ class CompanyController implements ICompanyController {
   @httpPut('/company')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      const _company = new Company(req.body);
+      const _company = new Company(req.body.company);
       this._companyRepository.GetById(_company.id)
         .then((found: Company) => {
           if (Attributes.IsValid(found)) {
             this._companyRepository.Update(_company)
               .then(result => {
-                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Empresa', result));
+                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Empresa', result));
               })
               .catch(error => {
                 resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Empresa', error));
@@ -122,7 +122,7 @@ class CompanyController implements ICompanyController {
       const _id: number = req.params.id;
       this._companyRepository.Delete(_id)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Empresa', result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Empresa', result));
         })
         .catch(error => {
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Empresa', error));
