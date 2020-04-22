@@ -118,7 +118,7 @@ class VehicleRepository implements IVehicleRepository {
   Update(vehicle: Vehicle): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Vehicle.sequelize.transaction();
-      Vehicle.update(vehicle,
+      Vehicle.update(vehicle.ToModify(),
         {
           where:
           {
