@@ -2,10 +2,10 @@ import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import ICompanyAdressController from "../interfaces/IControllers/ICompanyAdressController";
-import ICompanyAdressRepository from '../interfaces/IRepositories/ICompanyAdressRepository';
-import CompanyAdress from "../models/companyAdress";
-import Company from "../models/company";
+import IUserAdressController from "../interfaces/IControllers/IUserAdressController";
+import IUserAdressRepository from '../interfaces/IRepositories/IUserAdressRepository';
+import UserAdress from "../models/userAdress";
+import User from "../models/user";
 import Attributes from "../../commons/core/attributes";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
@@ -15,25 +15,25 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
 /**
  * @description
  * @author Gustavo Gusmão
- * @class CompanyAdressController
- * @implements {ICompanyAdressController}
+ * @class UserAdressController
+ * @implements {IUserAdressController}
  */
 @controller('')
-class CompanyAdressController implements ICompanyAdressController {
+class UserAdressController implements IUserAdressController {
 
   /**
-   * Creates an instance of CompanyAdressController.
+   * Creates an instance of UserAdressController.
    * @author Gustavo Gusmão
-   * @param {ICompanyAdressRepository} _companyAdressRepository
-   * @memberof CompanyAdressController
+   * @param {IUserAdressRepository} _userAdressRepository
+   * @memberof UserAdressController
    */
-  constructor(@inject(TYPES.ICompanyAdressRepository) private _companyAdressRepository: ICompanyAdressRepository) { }
+  constructor(@inject(TYPES.IUserAdressRepository) private _userAdressRepository: IUserAdressRepository) { }
 
-  @httpPost('/companyAdress')
+  @httpPost('/userAdress')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
-    const _companyAdress = new CompanyAdress(req.body.companyAdress);
+    const _userAdress = new UserAdress(req.body.userAdress);
     return new Promise((resolve) => {
-      this._companyAdressRepository.Save(_companyAdress)
+      this._userAdressRepository.Save(_userAdress)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Endereço', result));
         })
@@ -48,13 +48,13 @@ class CompanyAdressController implements ICompanyAdressController {
    * @author Gustavo Gusmão
    * @param {Request<any>} req
    * @param {Response<any>} res
-   * @memberof CompanyAdressController
+   * @memberof UserAdressController
    */
-  @httpGet('/companyAdress/companyId/:companyId')
+  @httpGet('/userAdress/userId/:userId')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      const _companyId: number = req.params.companyId;
-      this._companyAdressRepository.GetByCompanyId(_companyId)
+      const _userId: number = req.params.userId;
+      this._userAdressRepository.GetByUserId(_userId)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Endereço da empresa', result))
         })
@@ -64,11 +64,11 @@ class CompanyAdressController implements ICompanyAdressController {
     });
   }
 
-  @httpPut('/companyAdress')
+  @httpPut('/userAdress')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      const _companyAdress = new CompanyAdress(req.body.companyAdress);
-      this._companyAdressRepository.Update(_companyAdress)
+      const _userAdress = new UserAdress(req.body.userAdress);
+      this._userAdressRepository.Update(_userAdress)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Endereço da empresa', result));
         })
@@ -78,11 +78,11 @@ class CompanyAdressController implements ICompanyAdressController {
     });
   }
 
-  @httpDelete('/companyAdress/:id')
+  @httpDelete('/userAdress/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      const _companyAdressId: number = req.params.id;
-      this._companyAdressRepository.Delete(_companyAdressId)
+      const _userAdressId: number = req.params.id;
+      this._userAdressRepository.Delete(_userAdressId)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Endereço da empresa', result));
         })
@@ -93,4 +93,4 @@ class CompanyAdressController implements ICompanyAdressController {
   }
 }
 
-export default CompanyAdressController;
+export default UserAdressController;

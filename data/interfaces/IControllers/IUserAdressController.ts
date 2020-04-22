@@ -4,14 +4,14 @@ import { Response, Request } from "express";
 /**
  * @description
  * @author Gustavo Gusmão
- * @interface ICompanyAdressController
+ * @interface IUserAdressController
  * @extends {interfaces.Controller}
  */
-interface ICompanyAdressController extends interfaces.Controller {
+interface IUserAdressController extends interfaces.Controller {
   Save(req: Request<any>, res: Response<any>);
   Search(req: Request<any>, res: Response<any>);
   Update(req: Request<any>, res: Response<any>);
   Delete(req: Request<any>, res: Response<any>);
 }
 
-export default ICompanyAdressController;
+export default IUserAdressController;

@@ -5,6 +5,7 @@ import TYPES from '../../data/types';
 
 // Repositories
 import UserRepository from '../../data/repositories/userRepository';
+import UserAdressRepository from '../../data/repositories/userAdressRepository';
 import CardRepository from '../../data/repositories/cardRepository';
 import CompanyRepository from '../../data/repositories/companyRepository';
 import CompanyAdressRepository from '../../data/repositories/companyAdressRepository';
@@ -22,6 +23,7 @@ import AuthService from '../../data/services/authService';
 
 // interfaces
 import IUserRepository from '../../data/interfaces/IRepositories/IUserRepository';
+import IUserAdressRepository from '../../data/interfaces/IRepositories/IUserAdressRepository';
 import ICardRepository from '../../data/interfaces/IRepositories/ICardRepository';
 import ICompanyRepository from '../../data/interfaces/IRepositories/ICompanyRepository';
 import ICompanyAdressRepository from '../../data/interfaces/IRepositories/ICompanyAdressRepository';
@@ -38,6 +40,7 @@ import IAuthService from '../../data/interfaces/IServices/IAuthService';
 
 const container = new Container();
 container.bind<IUserRepository>(TYPES.IUserRepository).to(UserRepository);
+container.bind<IUserAdressRepository>(TYPES.IUserAdressRepository).to(UserAdressRepository);
 container.bind<ICardRepository>(TYPES.ICardRepository).to(CardRepository);
 container.bind<ICompanyRepository>(TYPES.ICompanyRepository).to(CompanyRepository);
 container.bind<ICompanyAdressRepository>(TYPES.ICompanyAdressRepository).to(CompanyAdressRepository);

@@ -1,6 +1,6 @@
-import ICompanyAdressRepository from '../interfaces/IRepositories/ICompanyAdressRepository';
-import Company from '../models/company';
-import CompanyAdress from '../models/companyAdress';
+import IUserAdressRepository from '../interfaces/IRepositories/IUserAdressRepository';
+import User from '../models/user';
+import UserAdress from '../models/userAdress';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 import { Op } from 'sequelize';
@@ -9,32 +9,32 @@ import { cpus } from 'os';
 /**
  * @description
  * @author Gustavo Gusmão
- * @class CompanyAdressRepository
- * @implements {ICompanyAdressRepository}
+ * @class UserAdressRepository
+ * @implements {IUserAdressRepository}
  */
 @injectable()
-class CompanyAdressRepository implements ICompanyAdressRepository {
+class UserAdressRepository implements IUserAdressRepository {
   /**
    * @description
    * @author Gustavo Gusmão
-   * @param {number} _companyId
-   * @returns {Promise<CompanyAdress[]>}
-   * @memberof CompanyAdressRepository
+   * @param {number} _userId
+   * @returns {Promise<UserAdress[]>}
+   * @memberof UserAdressRepository
    */
-  GetByCompanyId(_companyId: number): Promise<CompanyAdress[]> {
+  GetByUserId(_userId: number): Promise<UserAdress[]> {
     return new Promise(async (resolve, reject) => {
-      CompanyAdress.findAll(
+      UserAdress.findAll(
         {
           where: {
-            companyId: _companyId,
+            userId: _userId,
             status: {
               [Op.ne]: TransactionType.DELETED
             }
           }
         }
       )
-        .then((foundCompanyAdress: CompanyAdress[]) => {
-          resolve(foundCompanyAdress);
+        .then((foundUserAdress: UserAdress[]) => {
+          resolve(foundUserAdress);
         })
         .catch(error => {
           reject(error);
@@ -44,17 +44,17 @@ class CompanyAdressRepository implements ICompanyAdressRepository {
   /**
    * @description
    * @author Gustavo Gusmão
-   * @param {company} company
-   * @memberof CompanyAdressRepository
+   * @param {user} user
+   * @memberof UserAdressRepository
    */
-  Update(_companyAdress: CompanyAdress): Promise<any> {
+  Update(_userAdress: UserAdress): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await CompanyAdress.sequelize.transaction();
-      CompanyAdress.update(_companyAdress.ToModify(),
+      const _transaction = await UserAdress.sequelize.transaction();
+      UserAdress.update(_userAdress.ToModify(),
         {
           where:
           {
-            id: _companyAdress.companyId
+            id: _userAdress.userId
           },
           transaction: _transaction,
           validate: false
@@ -74,12 +74,12 @@ class CompanyAdressRepository implements ICompanyAdressRepository {
    * @description
    * @author Gustavo Gusmão
    * @param {number} id
-   * @memberof CompanyAdressRepository
+   * @memberof UserAdressRepository
    */
   Delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await CompanyAdress.sequelize.transaction();
-      CompanyAdress.update({
+      const _transaction = await UserAdress.sequelize.transaction();
+      UserAdress.update({
         status: TransactionType.DELETED
       },
         {
@@ -103,14 +103,14 @@ class CompanyAdressRepository implements ICompanyAdressRepository {
   /**
    * @description
    * @author Gustavo Gusmão
-   * @param {CompanyAdress} companyAdress
+   * @param {UserAdress} userAdress
    * @returns
-   * @memberof CompanyAdressRepository
+   * @memberof UserAdressRepository
    */
-  Save(companyAdress: CompanyAdress) {
+  Save(userAdress: UserAdress) {
     return new Promise((resolve, reject) => {
-      companyAdress.status = TransactionType.ACTIVE;
-      CompanyAdress.create(companyAdress)
+      userAdress.status = TransactionType.ACTIVE;
+      UserAdress.create(userAdress)
         .then(result => {
           resolve(result);
         }).catch(error => {
@@ -120,4 +120,4 @@ class CompanyAdressRepository implements ICompanyAdressRepository {
   }
 }
 
-export default CompanyAdressRepository;
+export default UserAdressRepository;

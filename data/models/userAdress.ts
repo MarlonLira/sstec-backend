@@ -44,7 +44,6 @@ class UserAdress extends Model {
     this.complement = Attributes.ReturnIfValid(json.complement);
     this.userId = Attributes.ReturnIfValid(json.userId);
   }
-  
   ToModify(){
     return this.toJSON();
   }
