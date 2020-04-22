@@ -1,4 +1,4 @@
-import { Model, DataTypes, BelongsToGetAssociationMixin } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
@@ -25,6 +25,12 @@ class CompanyAdress extends Model {
   complement!: string;
   companyId!: number;
 
+  /**
+   * Creates an instance of CompanyAdress.
+   * @author Gustavo Gusmão
+   * @param {*} [json]
+   * @memberof CompanyAdress
+   */
   constructor(json?: any) {
     super()
     this.id = Attributes.ReturnIfValid(json.id);
@@ -38,7 +44,7 @@ class CompanyAdress extends Model {
     this.complement = Attributes.ReturnIfValid(json.complement);
     this.companyId = Attributes.ReturnIfValid(json.companyId);
   }
-  ToModify(){
+  ToModify() {
     return this.toJSON();
   }
 }
