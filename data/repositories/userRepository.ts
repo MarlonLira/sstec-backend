@@ -91,7 +91,13 @@ class UserRepository implements IUserRepository {
    */
   ToList(): Promise<User[]> {
     return new Promise((resolve, reject) => {
-      User.findAll()
+      User.findAll({
+        where: {
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      })
         .then((result: User[]) => {
           resolve(result);
         })
@@ -114,6 +120,9 @@ class UserRepository implements IUserRepository {
         where: {
           name: {
             [Op.like]: `${name}%`
+          },
+          status: {
+            [Op.ne]: TransactionType.DELETED
           }
         }
       })

@@ -2,7 +2,6 @@ import { Op } from 'sequelize';
 
 import IRuleRepository from '../interfaces/IRepositories/IRuleRepository';
 import Rule from '../models/rule';
-import Querying from '../../commons/core/querying'
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 
@@ -18,53 +17,20 @@ class RuleRepository implements IRuleRepository {
   /**
    * @description
    * @author Marlon Lira
-   * @param {Rule} rule
-   * @param {string[]} properties
-   * @returns 
-   * @memberof RuleRepository
-   */
-  Find(rule: Rule, properties: string[]) {
-    return new Promise((resolve, reject) => {
-      let query: any;
-      query = Querying.Or(rule, properties);
-      Rule.findAll({
-        where: query
-      }).then(result => {
-        resolve(result);
-      }).catch(error => {
-        reject(error);
-      });
-    });
-  }
-
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Rule} rule
-   * @memberof RuleRepository
-   */
-  Update(rule: Rule) {
-    Rule.update(rule, {
-      where: {
-        id: rule.id
-      }
-    });
-  }
-
-  /**
-   * @description
-   * @author Marlon Lira
    * @param {Rule} Rule
    * @returns
    * @memberof RuleRepository
    */
-  Save(rule: Rule) {
-    return new Promise((resolve, reject) => {
+  Save(rule: Rule): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Rule.sequelize.transaction();
       rule.status = TransactionType.ACTIVE;
-      Rule.create(rule)
-        .then((result: Rule) => {
+      Rule.create(rule, { transaction: _transaction })
+        .then(async (result: Rule) => {
+          await _transaction.commit();
           resolve(result.id);
-        }).catch(error => {
+        }).catch(async error => {
+          await _transaction.rollback();
           reject(error);
         });
     });
@@ -73,12 +39,67 @@ class RuleRepository implements IRuleRepository {
   /**
    * @description
    * @author Marlon Lira
-   * @returns 
+   * @param {string} _id
+   * @returns {Promise<Rule>}
    * @memberof RuleRepository
    */
-  ToList() {
+  GetById(_id: number): Promise<Rule> {
     return new Promise((resolve, reject) => {
-      Rule.findAll()
+      Rule.findByPk(_id)
+        .then((foundVehicle: Rule) => {
+          resolve(foundVehicle);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Rule} rule
+   * @returns {Promise<any>}
+   * @memberof RuleRepository
+   */
+  Update(rule: Rule): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Rule.sequelize.transaction();
+      Rule.update(rule.ToModify(),
+        {
+          where:
+          {
+            id: rule.id
+          },
+          transaction: _transaction,
+          validate: false
+        })
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async error => {
+          await _transaction.rollback();
+          reject(error);
+        });
+    });
+  }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @returns {Promise<Rule[]>}
+   * @memberof RuleRepository
+   */
+  ToList(): Promise<Rule[]> {
+    return new Promise((resolve, reject) => {
+      Rule.findAll({
+        where: {
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      })
         .then(result => {
           resolve(result);
         })
@@ -91,16 +112,19 @@ class RuleRepository implements IRuleRepository {
   /**
    * @description
    * @author Marlon Lira
-   * @param {string} RuleName
-   * @returns {Promise}
+   * @param {string} ruleName
+   * @returns {Promise<Rule[]>}
    * @memberof RuleRepository
    */
-  GetByName(ruleName: string) {
+  GetByName(_name: string): Promise<Rule[]> {
     return new Promise((resolve, reject) => {
       Rule.findAll({
         where: {
           name: {
-            [Op.like]: `${ruleName}%`
+            [Op.like]: `${_name}%`
+          },
+          status: {
+            [Op.ne]: TransactionType.DELETED
           }
         }
       })
@@ -117,10 +141,31 @@ class RuleRepository implements IRuleRepository {
    * @description
    * @author Marlon Lira
    * @param {number} ruleId
+   * @returns {Promise<any>}
    * @memberof RuleRepository
    */
-  Delete(ruleId: number) {
-    throw new Error("Method not implemented.");
+  Delete(_id: number): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Rule.sequelize.transaction();
+      Rule.update({
+        status: TransactionType.DELETED
+      },
+        {
+          where: {
+            id: _id
+          },
+          transaction: _transaction,
+          validate: false
+        })
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async error => {
+          await _transaction.rollback()
+          reject(error);;
+        });
+    });
   }
 }
 

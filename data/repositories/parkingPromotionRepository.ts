@@ -3,8 +3,6 @@ import { injectable } from "inversify";
 
 import IParkingPromotionRepository from '../interfaces/IRepositories/IParkingPromotionRepository';
 import ParkingPromotion from '../models/parkingPromotion';
-import Parking from '../models/parking';
-import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
@@ -22,36 +20,24 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
    * @param {ParkingPromotion} parkingPromotion
    * @memberof ParkingPromotionRepository
    */
-  Update(parkingPromotion: ParkingPromotion) {
+  Update(parkingPromotion: ParkingPromotion): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingPromotion.sequelize.transaction();
-      ParkingPromotion.findByPk(parkingPromotion.id)
-        .then((result: ParkingPromotion) => {
-          if (!Attributes.ReturnIfValid(result)) {
-            reject('Promoção não encontrada');
-          }
-          ParkingPromotion.update({
-            status: Attributes.ReturnIfValid(parkingPromotion.status, result.status),
-            name: Attributes.ReturnIfValid(parkingPromotion.name, result.name),
-            description: Attributes.ReturnIfValid(parkingPromotion.description, result.description),
-            days: Attributes.ReturnIfValid(parkingPromotion.days, result.days),
-            hours: Attributes.ReturnIfValid(parkingPromotion.hours, result.hours),
-            discount: Attributes.ReturnIfValid(parkingPromotion.discount, result.discount)
+      ParkingPromotion.update(parkingPromotion.ToModify(),
+        {
+          where: {
+            id: parkingPromotion.id
           },
-            {
-              where: {
-                id: parkingPromotion.id
-              },
-              transaction: _transaction
-            })
-            .then(_result => {
-              _transaction.commit();
-              resolve(_result);
-            })
-            .catch(error => {
-              _transaction.rollback();
-              reject(error);
-            });
+          transaction: _transaction,
+          validate: false
+        })
+        .then(async _result => {
+          await _transaction.commit();
+          resolve(_result);
+        })
+        .catch(async error => {
+          await _transaction.rollback();
+          reject(error);
         });
     });
   }
@@ -62,36 +48,25 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
    * @param {number} id
    * @memberof ParkingPromotionRepository
    */
-  Delete(_id: number) {
+  Delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingPromotion.sequelize.transaction();
-      ParkingPromotion.findByPk(_id)
-        .then((result: ParkingPromotion) => {
-          if (!Attributes.IsValid(result)) {
-            reject('Promoção não encontrada')
-          }
-          ParkingPromotion.update({
-            status: 'EX',
-            name: Attributes.ReturnIfValid(result.name),
-            description: Attributes.ReturnIfValid(result.description),
-            days: Attributes.ReturnIfValid(result.days),
-            hours: Attributes.ReturnIfValid(result.hours),
-            discount: Attributes.ReturnIfValid(result.discount)
+      ParkingPromotion.update({
+        status: TransactionType.DELETED,
+      },
+        {
+          where: {
+            id: _id
           },
-            {
-              where: {
-                id: _id
-              },
-              transaction: _transaction
-            })
-            .then(_result => {
-              _transaction.commit();
-              resolve(_result);
-            })
-            .catch(error => {
-              _transaction.rollback();
-              reject(error);
-            });
+          transaction: _transaction
+        })
+        .then(async _result => {
+          await _transaction.commit();
+          resolve(_result);
+        })
+        .catch(async error => {
+          await _transaction.rollback();
+          reject(error);
         });
     });
   }
@@ -102,20 +77,17 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
    * @param {ParkingPromotion} parkingPromotion
    * @memberof ParkingPromotionRepository
    */
-  Save(parkingPromotion: ParkingPromotion, parkingId: number) {
+  Save(parkingPromotion: ParkingPromotion): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingPromotion.sequelize.transaction();
-      Parking.findByPk(parkingId)
-        .then((parking: Parking) => {
-          parkingPromotion.status = TransactionType.ACTIVE;
-          ParkingPromotion.create(parkingPromotion, { transaction: _transaction })
-            .then(async(createPromotion: ParkingPromotion) => {
-              await _transaction.commit();
-              resolve({ "parkingPromotionId": createPromotion.id })
-            }).catch(async error => {
-              await _transaction.rollback();
-              reject(error);
-            });
+      parkingPromotion.status = TransactionType.ACTIVE;
+      ParkingPromotion.create(parkingPromotion, { transaction: _transaction })
+        .then(async (createPromotion: ParkingPromotion) => {
+          await _transaction.commit();
+          resolve({ "parkingPromotionId": createPromotion.id })
+        }).catch(async error => {
+          await _transaction.rollback();
+          reject(error);
         });
     });
   }
@@ -126,22 +98,25 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
    * @param {string} parkingPromotionName
    * @memberof ParkingPromotionRepository
    */
-  GetByName(parkingPromotionName: string) {
+  GetByName(parkingPromotionName: string): Promise<ParkingPromotion[]> {
     return new Promise((resolve, reject) => {
       ParkingPromotion.findAll({
         where: {
           name: {
             [Op.like]: `${parkingPromotionName}%`
+          },
+          status: {
+            [Op.ne]: TransactionType.DELETED
           }
         }
       })
-        .then(result => {
+        .then((result: ParkingPromotion[]) => {
           resolve(result);
         })
         .catch(error => {
           reject(error);
-        })
-    })
+        });
+    });
   }
 
   /**
@@ -149,16 +124,22 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
    * @author Felipe Seabra
    * @memberof ParkingPromotionRepository
    */
-  ToList() {
+  ToList(): Promise<ParkingPromotion[]> {
     return new Promise((resolve, reject) => {
-      ParkingPromotion.findAll()
-        .then(result => {
+      ParkingPromotion.findAll({
+        where: {
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      })
+        .then((result: ParkingPromotion[]) => {
           resolve(result);
         })
         .catch(error => {
           reject(error);
-        })
-    })
+        });
+    });
   }
 }
 

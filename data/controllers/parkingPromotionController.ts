@@ -9,6 +9,7 @@ import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
+import Attributes from "../../commons/core/attributes";
 
 /**
  * @description
@@ -37,14 +38,18 @@ class ParkingPromotionController implements IParkingPromotionController {
   @httpGet('/parkingPromotion/name/:name')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      const _name: string = req.params.name;
-      this._parkingPromotionRepository.GetByName(_name)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Promoção', result));
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Promoção', error));
-        });
+      const _parkingPromotion = new ParkingPromotion(req.params);
+      if (Attributes.IsValid(_parkingPromotion.name)) {
+        this._parkingPromotionRepository.GetByName(_parkingPromotion.name)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Promoção', result));
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Promoção', error));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Promoção'));
+      }
     });
   }
 
@@ -59,8 +64,7 @@ class ParkingPromotionController implements IParkingPromotionController {
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _parkingPromotion = new ParkingPromotion(req.body.parkingPromotion);
-      const _parkingId = req.body.parking.id;
-      this._parkingPromotionRepository.Save(_parkingPromotion, _parkingId)
+      this._parkingPromotionRepository.Save(_parkingPromotion)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Promoção', result));
         })
@@ -97,11 +101,15 @@ class ParkingPromotionController implements IParkingPromotionController {
   @httpPut('/ParkingPromotion')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      const _parkingPromotion = new ParkingPromotion(req.body);
-      this._parkingPromotionRepository.Update(_parkingPromotion)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Promoção', result));
-        });
+      const _parkingPromotion = new ParkingPromotion(req.body.parkingPromotion);
+      if (Attributes.IsValid(_parkingPromotion.id)) {
+        this._parkingPromotionRepository.Update(_parkingPromotion)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Promoção', result));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Promoção'));
+      }
     });
   }
 
@@ -115,14 +123,18 @@ class ParkingPromotionController implements IParkingPromotionController {
   @httpDelete('/ParkingPromotion/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      const _id: number = req.params.id;
-      this._parkingPromotionRepository.Delete(_id)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Promoção', result));
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Promoção', error));
-        });
+      const _parkingPromotion = new ParkingPromotion(req.params);
+      if (Attributes.IsValid(_parkingPromotion.id)) {
+        this._parkingPromotionRepository.Delete(_parkingPromotion.id)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Promoção', result));
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Promoção', error));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Promoção'));
+      }
     });
   }
 }
