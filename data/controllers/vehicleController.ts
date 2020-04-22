@@ -125,13 +125,17 @@ class VehicleController implements IVehicleController {
   Update(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _vehicle = new Vehicle(req.body.vehicle);
-      this._vehicleRepository.Update(_vehicle)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Veículo', result));
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Veículo', error));
-        });
+      if (Attributes.IsValid(_vehicle.id)) {
+        this._vehicleRepository.Update(_vehicle)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Veículo', result));
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Veículo', error));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Veículo'));
+      }
     });
   }
 
@@ -153,7 +157,7 @@ class VehicleController implements IVehicleController {
         })
         .catch(error => {
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Veículo', error));
-        })
+        });
     });
   }
 }

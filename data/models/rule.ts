@@ -31,7 +31,7 @@ class Rule extends Model {
     this.status = Attributes.ReturnIfValid(json.status);
     this.level = Attributes.ReturnIfValid(json.level);
   }
-  
+
   ToModify(){
     return this.toJSON();
   }

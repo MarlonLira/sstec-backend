@@ -1,8 +1,8 @@
-import { injectable, id } from "inversify";
+import { Op } from 'sequelize';
+import { injectable } from "inversify";
 
 import IParkingAdressRepository from '../interfaces/IRepositories/IParkingAdressRepository';
 import ParkingAdress from '../models/parkingAdress';
-import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 @injectable()
@@ -19,37 +19,21 @@ class ParkingAdressRepository implements IParkingAdressRepository {
   Update(parkingAdress: ParkingAdress) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingAdress.sequelize.transaction();
-      ParkingAdress.findByPk(parkingAdress.id)
-        .then((result: ParkingAdress) => {
-          if (!Attributes.ReturnIfValid(result)) {
-            reject('Endereço do Parking não cadastrado')
-          }
-          ParkingAdress.update({
-            status: Attributes.ReturnIfValid(parkingAdress.status),
-            country: Attributes.ReturnIfValid(parkingAdress.country),
-            state: Attributes.ReturnIfValid(parkingAdress.state),
-            city: Attributes.ReturnIfValid(parkingAdress.city),
-            street: Attributes.ReturnIfValid(parkingAdress.street),
-            number: Attributes.ReturnIfValid(parkingAdress.number),
-            zipCode: Attributes.ReturnIfValid(parkingAdress.zipCode),
-            latitude: Attributes.ReturnIfValid(parkingAdress.latitude),
-            longitude: Attributes.ReturnIfValid(parkingAdress.longitude),
-            complement: Attributes.ReturnIfValid(parkingAdress.complement)
+      ParkingAdress.update(parkingAdress.ToModify(),
+        {
+          where: {
+            id: parkingAdress.id
           },
-            {
-              where: {
-                id: parkingAdress.id
-              },
-              transaction: _transaction
-            })
-            .then(result => {
-              _transaction.commit();
-              resolve(result);
-            })
-            .catch(error => {
-              _transaction.rollback();
-              reject(error);
-            });
+          transaction: _transaction,
+          validate: false
+        })
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async error => {
+          await _transaction.rollback();
+          reject(error);
         });
     });
   }
@@ -76,24 +60,24 @@ class ParkingAdressRepository implements IParkingAdressRepository {
     });
   }
 
-    Delete(id: number) {
-        return new Promise(async (resolve, reject) => {
-            const _transaction = await ParkingAdress.sequelize.transaction();
-            ParkingAdress.update({ status: TransactionType.DELETED },
-                {
-                    where: { id: id },
-                    transaction: _transaction
-                })
-                .then(async result => {
-                    await _transaction.commit();
-                    resolve(result);
-                })
-                .catch(async error => {
-                    await _transaction.rollback();
-                    reject(error);
-                });
+  Delete(_id: number) {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await ParkingAdress.sequelize.transaction();
+      ParkingAdress.update({ status: TransactionType.DELETED },
+        {
+          where: { id: _id },
+          transaction: _transaction
         })
-    }
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async error => {
+          await _transaction.rollback();
+          reject(error);
+        });
+    })
+  }
 
   /**
    * @description
@@ -105,7 +89,7 @@ class ParkingAdressRepository implements IParkingAdressRepository {
   GetById(parkingAdressId: number) {
     return new Promise((resolve, reject) => {
       ParkingAdress.findByPk(parkingAdressId)
-        .then(result => {
+        .then((result: ParkingAdress) => {
           resolve(result);
         })
         .catch(error => {
@@ -116,7 +100,13 @@ class ParkingAdressRepository implements IParkingAdressRepository {
 
   ToList() {
     return new Promise((resolve, reject) => {
-      ParkingAdress.findAll()
+      ParkingAdress.findAll({
+        where: {
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      })
         .then(result => {
           resolve(result);
         })

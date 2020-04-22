@@ -41,8 +41,8 @@ class UserController implements IUserController {
    */
   @httpPost('/user')
   Save(@request() req: Request, @response() res: Response) {
-    const _user = new User(req.body.user);
     return new Promise((resolve) => {
+      const _user = new User(req.body.user);
       this._userRepository.GetByRegistryCode(_user.registryCode)
         .then(found => {
           if (!Attributes.IsValid(found)) {
@@ -139,13 +139,17 @@ class UserController implements IUserController {
   Delete(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
       const _user = new User(req.params);
-      this._userRepository.Delete(_user.id)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Usuário', result));
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Usuário', error));
-        });
+      if (Attributes.IsValid(_user.id)) {
+        this._userRepository.Delete(_user.id)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Usuário', result));
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Usuário', error));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Usuário'));
+      }
     });
   }
 }
