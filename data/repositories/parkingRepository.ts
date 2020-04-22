@@ -26,12 +26,12 @@ class ParkingRepository implements IParkingRepository {
     });
   }
 
- /**
-  * @description
-  * @author Emerson Souza
-  * @param {Parking} parking
-  * @memberof ParkingRepository
-  */
+  /**
+   * @description
+   * @author Emerson Souza
+   * @param {Parking} parking
+   * @memberof ParkingRepository
+   */
   Save(parking: Parking) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
@@ -56,19 +56,21 @@ class ParkingRepository implements IParkingRepository {
   Update(parking: Parking): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
-      Parking.update(parking, {
-        where: {
-          id: parking.id
-        },
-        transaction: _transaction,
-        validate: false
-      })
+      Parking.update(parking,
+        {
+          where:
+          {
+            id: parking.id
+          },
+          transaction: _transaction,
+          validate: false
+        })
         .then(async result => {
           await _transaction.commit();
           resolve(result);
         })
         .catch(async error => {
-         await _transaction.rollback();
+          await _transaction.rollback();
           reject(error);
         });
     });
@@ -81,14 +83,17 @@ class ParkingRepository implements IParkingRepository {
    * @memberof ParkingRepository
    */
   Delete(id: number) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Parking.sequelize.transaction();
       Parking.update({
         status: TransactionType.DELETED
       },
         {
           where: {
             id: id
-          }
+          },
+          transaction: _transaction,
+          validate: false
         })
         .then(result => {
           resolve(result);
@@ -132,7 +137,7 @@ class ParkingRepository implements IParkingRepository {
    * @author Emerson Souza
    * @memberof ParkingRepository
    */
-  ToList():Promise<Parking[]> {
+  ToList(): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       Parking.findAll({
         where: {

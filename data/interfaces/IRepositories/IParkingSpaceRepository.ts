@@ -4,12 +4,50 @@ import ParkingSpace from '../../models/parkingSpace';
 
 
 interface IParkingSpaceRepository {
-  Save(parkingSpace: ParkingSpace, parkingId: number);
-  Update(parkingSpace: Parking);
-  ToList();
-  GetByRegistryCode(registryCode: string);
-  Delete(id: number);
-  Find(parkingSpace: Parking, properties: string[]);
+
+  /**
+   * @description
+   * @author Emerson Souza
+   * @param {ParkingSpace} parkingSpace
+   * @returns {Promise<any>}
+   * @memberof IParkingSpaceRepository
+   */
+  Save(parkingSpace: ParkingSpace): Promise<any>;
+
+  /**
+   * @description
+   * @author Emerson Souza
+   * @param {ParkingSpace} parkingSpace
+   * @returns {Promise<any>}
+   * @memberof IParkingSpaceRepository
+   */
+  Update(parkingSpace: ParkingSpace): Promise<any>;
+
+  /**
+   * @description
+   * @author Emerson Souza
+   * @returns {Promise<ParkingSpace[]>}
+   * @memberof IParkingSpaceRepository
+   */
+  ToList(): Promise<ParkingSpace[]>;
+
+  /**
+   * @description
+   * @author Emerson Souza
+   * @param {number} id
+   * @returns {Promise<ParkingSpace>}
+   * @memberof IParkingSpaceRepository
+   */
+  GetByParkingSpaceId(id: number): Promise<ParkingSpace>;
+
+  /**
+   * @description
+   * @author Emerson Souza
+   * @param {number} id
+   * @returns {Promise<any>}
+   * @memberof IParkingSpaceRepository
+   */
+  Delete(id: number): Promise<any>;
 }
 
 export default IParkingSpaceRepository;
