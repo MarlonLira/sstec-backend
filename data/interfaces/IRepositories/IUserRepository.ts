@@ -7,12 +7,67 @@ import User from '../../models/user';
  * @interface IUserRepository
  */
 interface IUserRepository {
-  GetByName(userName: string);
-  GetByRegistryCode(registryCode: string);
-  GetById(id: number);
-  ToList();
-  Save(user: User);
-  Find(user: User, properties: string[]);
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {string} name
+   * @returns {Promise<User[]>}
+   * @memberof IUserRepository
+   */
+  GetByName(name: string): Promise<User[]>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {string} registryCode
+   * @returns {Promise<User[]>}
+   * @memberof IUserRepository
+   */
+  GetByRegistryCode(registryCode: string): Promise<User[]>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} id
+   * @returns {Promise<User>}
+   * @memberof IUserRepository
+   */
+  GetById(_id: number): Promise<User>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @returns {Promise<User[]>}
+   * @memberof IUserRepository
+   */
+  ToList(): Promise<User[]>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {User} user
+   * @returns {Promise<any>}
+   * @memberof IUserRepository
+   */
+  Save(user: User): Promise<any>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {User} user
+   * @returns {Promise<any>}
+   * @memberof IUserRepository
+   */
+  Update(user: User): Promise<any>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} _id
+   * @returns {Promise<any>}
+   * @memberof IUserRepository
+   */
+  Delete(_id: number): Promise<any>;
 }
 
 export default IUserRepository;

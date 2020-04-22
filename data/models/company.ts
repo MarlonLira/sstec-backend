@@ -1,7 +1,6 @@
-import { Model, DataTypes, HasManyAddAssociationMixin, HasManyCreateAssociationMixin } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
-import Employee from './employee';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
@@ -19,9 +18,6 @@ class Company extends Model {
   registryCode!: string;
   phone!: string;
 
-  public addEmployee!: HasManyAddAssociationMixin<Employee, number>;
-  public createEmployee!: HasManyCreateAssociationMixin<Employee>;
-
   /**
    * Creates an instance of Company.
    * @author Gustavo Gusmão
@@ -36,27 +32,31 @@ class Company extends Model {
     this.registryCode = Attributes.ReturnIfValid(json.registryCode);
     this.phone = Attributes.ReturnIfValid(json.phone);
   }
+  
+  ToModify(){
+    return this.toJSON();
+  }
 }
 
-// Todos os atributos tem que ter 'allowNull: true'
+// Todos os atributos que não podem ser nulos no banco tem que ter 'allowNull: false'
 Company.init({
   id: {
-    type: new DataTypes.INTEGER,
+    type: new DataTypes.INTEGER(),
     autoIncrement: true,
     primaryKey: true,
   },
   status: {
-    type: new DataTypes.ENUM,
+    type: new DataTypes.ENUM(),
     allowNull: true,
     values: ['AT', 'PD', 'EX']
   },
   name: {
     type: new DataTypes.STRING(30),
-    allowNull: true
+    allowNull: false
   },
   registryCode: {
     type: new DataTypes.STRING(14),
-    allowNull: true
+    allowNull: false
   },
   phone: {
     type: new DataTypes.STRING(12)

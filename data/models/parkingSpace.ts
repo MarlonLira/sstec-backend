@@ -17,6 +17,7 @@ class ParkingSpace extends Model {
   status!: TransactionType;
   description!: string;
   value: number;
+  parkingId!: number;
 
   /**
    * Creates an instance of ParkingSpace.
@@ -30,6 +31,11 @@ class ParkingSpace extends Model {
     this.status = Attributes.ReturnIfValid(json.status);
     this.description = Attributes.ReturnIfValid(json.description);
     this.value = Attributes.ReturnIfValid(json.value);
+    this.parkingId = Attributes.ReturnIfValid(json.parkingId);
+  }
+  
+  ToModify(){
+    return this.toJSON();
   }
 }
 
@@ -41,7 +47,7 @@ ParkingSpace.init({
   },
   status: {
     type: new DataTypes.ENUM(),
-    allowNull: true,
+    allowNull: false,
     values: ['AT', 'PD', 'EX']
   },
   description: {
@@ -50,6 +56,10 @@ ParkingSpace.init({
   },
   value: {
     type: new DataTypes.DOUBLE(),
+    allowNull: false
+  },
+  parkingId: {
+    type: new DataTypes.INTEGER(),
     allowNull: false
   }
 }, {

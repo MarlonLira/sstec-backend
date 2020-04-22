@@ -2,7 +2,6 @@ import { Op } from 'sequelize';
 
 import IUserRepository from '../interfaces/IRepositories/IUserRepository';
 import User from '../models/user';
-import Querying from '../../commons/core/querying'
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 
@@ -19,10 +18,10 @@ class UserRepository implements IUserRepository {
    * @description
    * @author Marlon Lira
    * @param {number} id
-   * @returns
+   * @returns {Promise<User>}
    * @memberof UserRepository
    */
-  GetById(id: number) {
+  GetById(id: number): Promise<User> {
     return new Promise((resolve, reject) => {
       User.findByPk(id)
         .then((user: User) => {
@@ -38,52 +37,25 @@ class UserRepository implements IUserRepository {
    * @description
    * @author Marlon Lira
    * @param {User} user
-   * @param {string[]} properties
-   * @returns 
+   * @returns {Promise<any>}
    * @memberof UserRepository
    */
-  Find(user: User, properties: string[]) {
-    return new Promise((resolve, reject) => {
-      let query: any;
-      query = Querying.Or(user, properties);
-      User.findAll({
-        where: query
-      }).then(result => {
-        resolve(result);
-      }).catch(error => {
-        reject(error);
+  Update(user: User): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await User.sequelize.transaction();
+      User.update(user, {
+        where: {
+          id: user.id
+        },
+        transaction: _transaction,
+        validate: false
       })
-    });
-  }
-
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {User} user
-   * @memberof UserRepository
-   */
-  Update(user: User) {
-    User.update(user, {
-      where: {
-        id: user.id
-      }
-    });
-  }
-
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {User} user
-   * @returns 
-   * @memberof UserRepository
-   */
-  Save(user: any) {
-    return new Promise((resolve, reject) => {
-      user.status = TransactionType.ACTIVE;
-      User.create(user)
-        .then(result => {
+        .then(async result => {
+          await _transaction.commit();
           resolve(result);
-        }).catch(error => {
+        })
+        .catch(async error => {
+          await _transaction.rollback();
           reject(error);
         });
     });
@@ -92,13 +64,41 @@ class UserRepository implements IUserRepository {
   /**
    * @description
    * @author Marlon Lira
-   * @returns 
+   * @param {*} user
+   * @returns {Promise<any>}
    * @memberof UserRepository
    */
-  ToList() {
+  Save(user: any): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await User.sequelize.transaction();
+      user.status = TransactionType.ACTIVE;
+      User.create(user, { transaction: _transaction })
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        }).catch(async error => {
+          await _transaction.rollback();
+          reject(error);
+        });
+    });
+  }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @returns {Promise<User[]>}
+   * @memberof UserRepository
+   */
+  ToList(): Promise<User[]> {
     return new Promise((resolve, reject) => {
-      User.findAll()
-        .then(result => {
+      User.findAll({
+        where: {
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      })
+        .then((result: User[]) => {
           resolve(result);
         })
         .catch(error => {
@@ -114,12 +114,15 @@ class UserRepository implements IUserRepository {
    * @returns {Promise}
    * @memberof UserRepository
    */
-  GetByName(userName: string) {
+  GetByName(name: string): Promise<any> {
     return new Promise((resolve, reject) => {
       User.findAll({
         where: {
           name: {
-            [Op.like]: `${userName}%`
+            [Op.like]: `${name}%`
+          },
+          status: {
+            [Op.ne]: TransactionType.DELETED
           }
         }
       })
@@ -128,7 +131,7 @@ class UserRepository implements IUserRepository {
         }
         )
         .catch(error => {
-          throw error;
+          reject(error);
         });
     });
   }
@@ -137,19 +140,22 @@ class UserRepository implements IUserRepository {
    * @description
    * @author Marlon Lira
    * @param {string} registryCode
-   * @returns 
+   * @returns {Promise<User[]>}
    * @memberof UserRepository
    */
-  GetByRegistryCode(registryCode: string) {
+  GetByRegistryCode(registryCode: string): Promise<User[]> {
     return new Promise((resolve, reject) => {
       User.findAll({
         where: {
-          name: {
+          registryCode: {
             [Op.like]: `${registryCode}%`
+          },
+          status: {
+            [Op.ne]: TransactionType.DELETED
           }
         }
       })
-        .then(result => {
+        .then((result: User[]) => {
           resolve(result);
         })
         .catch(error => {
@@ -157,6 +163,38 @@ class UserRepository implements IUserRepository {
         });
     });
   }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} _id
+   * @returns {Promise<any>}
+   * @memberof UserRepository
+   */
+  Delete(_id: number): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await User.sequelize.transaction();
+      User.update({
+        status: TransactionType.DELETED
+      },
+        {
+          where: {
+            id: _id
+          },
+          transaction: _transaction,
+          validate: false
+        })
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async error => {
+          await _transaction.rollback()
+          reject(error);;
+        });
+    });
+  }
+
 }
 
 export default UserRepository;

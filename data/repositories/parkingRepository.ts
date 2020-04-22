@@ -4,7 +4,6 @@ import { injectable } from "inversify";
 import IParkingRepository from '../interfaces/IRepositories/IParkingRepository';
 import Parking from '../models/Parking';
 import { TransactionType } from '../../commons/enums/transactionType';
-import Querying from '../../commons/core/querying';
 
 /**
  * @description
@@ -15,7 +14,7 @@ import Querying from '../../commons/core/querying';
 @injectable()
 class ParkingRepository implements IParkingRepository {
 
-  GetById(id: number) {
+  GetById(id: number): Promise<Parking> {
     return new Promise((resolve, reject) => {
       Parking.findByPk(id)
         .then((parking: Parking) => {
@@ -28,13 +27,12 @@ class ParkingRepository implements IParkingRepository {
   }
 
   /**
-  * @description
-  * @author Emerson Souza
-  * @param {Parking} parking
-  * @memberof ParkingRepository
-  */
-
-  Save(parking: Parking, companyId: number) {
+   * @description
+   * @author Emerson Souza
+   * @param {Parking} parking
+   * @memberof ParkingRepository
+   */
+  Save(parking: Parking) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
       parking.status = TransactionType.ACTIVE;
@@ -55,21 +53,24 @@ class ParkingRepository implements IParkingRepository {
    * @param {Parking} parking
    * @memberof ParkingRepository
    */
-  Update(parking: Parking) {
+  Update(parking: Parking): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
-      Parking.update(parking.toJSON(), {
-        where: {
-          id: parking.id
-        },
-        transaction: _transaction
-      })
-        .then(result => {
-          _transaction.commit();
+      Parking.update(parking,
+        {
+          where:
+          {
+            id: parking.id
+          },
+          transaction: _transaction,
+          validate: false
+        })
+        .then(async result => {
+          await _transaction.commit();
           resolve(result);
         })
-        .catch(error => {
-          _transaction.rollback();
+        .catch(async error => {
+          await _transaction.rollback();
           reject(error);
         });
     });
@@ -82,14 +83,17 @@ class ParkingRepository implements IParkingRepository {
    * @memberof ParkingRepository
    */
   Delete(id: number) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Parking.sequelize.transaction();
       Parking.update({
         status: TransactionType.DELETED
       },
         {
           where: {
             id: id
-          }
+          },
+          transaction: _transaction,
+          validate: false
         })
         .then(result => {
           resolve(result);
@@ -103,31 +107,10 @@ class ParkingRepository implements IParkingRepository {
   /**
    * @description
    * @author Emerson Souza
-   * @param {Parking} parking
-   * @param {string[]} properties
-   * @memberof ParkingRepository
-   */
-  Find(parking: Parking, properties: string[]) {
-    return new Promise((resolve, reject) => {
-      let query: any;
-      query = Querying.Or(parking, properties);
-      Parking.findAll({
-        where: query
-      }).then(result => {
-        resolve(result);
-      }).catch(error => {
-        reject(error);
-      });
-    });
-  }
-
-  /**
-   * @description
-   * @author Emerson Souza
    * @param {string} registryCode
    * @memberof ParkingRepository
    */
-  GetByRegistryCode(registryCode: string) {
+  GetByRegistryCode(registryCode: string): Promise<Parking> {
     return new Promise((resolve) => {
       Parking.findOne({
         where: {
@@ -154,7 +137,7 @@ class ParkingRepository implements IParkingRepository {
    * @author Emerson Souza
    * @memberof ParkingRepository
    */
-  ToList() {
+  ToList(): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       Parking.findAll({
         where: {
@@ -163,7 +146,7 @@ class ParkingRepository implements IParkingRepository {
           }
         }
       })
-        .then(result => {
+        .then((result: Parking[]) => {
           resolve(result);
         })
         .catch(error => {

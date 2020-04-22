@@ -7,73 +7,1064 @@
     "title": "Simple Parking",
     "description": "Backend da aplicação Simple Parking",
     "license": {
-      "name": "github",
+      "name": "Access the repository at this link",
       "url": "https://github.com/MarlonLira/sstec-backend"
     }
   },
   "tags": [
     {
       "name": "user",
-      "description": "Operations about user",
-      "externalDocs": {
-        "description": "Access the repository at this link",
-        "url": "https://github.com/MarlonLira/sstec-backend"
-      }
+      "description": "Operations about user"
+    },
+    {
+      "name": "useradress",
+      "description": "Operations about user adress"
     },
     {
       "name": "vehicle",
-      "description": "Operations about vehicle",
-      "externalDocs": {
-        "description": "Access the repository at this link",
-        "url": "https://github.com/MarlonLira/sstec-backend"
-      }
+      "description": "Operations about vehicle"
     },
     {
       "name": "company",
-      "description": "Operations about company",
-      "externalDocs": {
-        "description": "Access the repository at this link",
-        "url": "https://github.com/MarlonLira/sstec-backend"
-      }
+      "description": "Operations about company"
+    },
+    {
+      "name": "companyadress",
+      "description": "Operations about company adress"
     },
     {
       "name": "employee",
-      "description": "Operations about employee",
-      "externalDocs": {
-        "description": "Access the repository at this link",
-        "url": "https://github.com/MarlonLira/sstec-backend"
-      }
+      "description": "Operations about employee"
     },
     {
       "name": "card",
-      "description": "Operations about card",
-      "externalDocs": {
-        "description": "Access the repository at this link",
-        "url": "https://github.com/MarlonLira/sstec-backend"
-      }
+      "description": "Operations about card"
     },
     {
       "name": "payment",
-      "description": "Operations about payment",
-      "externalDocs": {
-        "description": "Access the repository at this link",
-        "url": "https://github.com/MarlonLira/sstec-backend"
-      }
+      "description": "Operations about payment"
     },
     {
       "name": "parking",
-      "description": "Operations about parking",
-      "externalDocs": {
-        "description": "Access the repository at this link",
-        "url": "https://github.com/MarlonLira/sstec-backend"
-      }
+      "description": "Operations about parking"
+    },
+    {
+      "name": "parkingadress",
+      "description": "Operations about parking adress"
+    },
+    {
+      "name": "parkingspace",
+      "description": "Operations about parking space"
+    },
+    {
+      "name": "parkingpromotion",
+      "description": "Operations about parking promotion"
     }
   ],
   "paths": {
-    "/employee": {
+    "/companyadress/{id}": {
       "get": {
+        "tags": [
+          "companyadress"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of company adress to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/companyadresses": {
+      "get": {
+        "tags": [
+          "companyadress"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "description": "",
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/companyadress": {
+      "put": {
+        "tags": [
+          "companyadress"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "company adress object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CompanyAdress"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "companyadress"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "company adress object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CompanyAdress"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/useradress/{id}": {
+      "get": {
+        "tags": [
+          "useradress"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of user adress to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/useradresses": {
+      "get": {
+        "tags": [
+          "useradress"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/useradress": {
+      "put": {
+        "tags": [
+          "useradress"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "user adress object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserAdress"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "useradress"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "user adress object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserAdress"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/parkingadress/{id}": {
+      "get": {
+        "tags": [
+          "parkingadress"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of parking adress to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/parkingadresses": {
+      "get": {
+        "tags": [
+          "parkingadress"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/parkingadress": {
+      "put": {
+        "tags": [
+          "parkingadress"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "parking adress object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ParkingAdress"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "parkingadress"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "parking adress object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ParkingAdress"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/parkingpromotion/{id}": {
+      "get": {
+        "tags": [
+          "parkingpromotion"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of parking promotion to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/parkingpromotions": {
+      "get": {
+        "tags": [
+          "parkingpromotion"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/parkingpromotion": {
+      "put": {
+        "tags": [
+          "parkingpromotion"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "parkin gpromotion object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ParkingPromotion"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "parkingpromotion"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "parking promotion object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ParkingPromotion"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/rule/{id}": {
+      "get": {
+        "tags": [
+          "rule"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of rule to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/rules": {
+      "get": {
+        "tags": [
+          "rule"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/rule": {
+      "put": {
+        "tags": [
+          "rule"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "rule object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Rule"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "rule"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "rule object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Rule"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/company/{id}": {
+      "get": {
+        "tags": [
+          "company"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of company to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/companies": {
+      "get": {
+        "tags": [
+          "company"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/company": {
+      "put": {
+        "tags": [
+          "company"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "company object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Company"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "company"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "company object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Company"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/parkingspace/{id}": {
+      "get": {
+        "tags": [
+          "parkingspace"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of parkingspace to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/parkingspaces": {
+      "get": {
+        "tags": [
+          "parkingspace"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/parkingspace": {
+      "put": {
+        "tags": [
+          "employee"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "parkingspace object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ParkingSpace"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "parkingspace"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "parkingspace object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ParkingSpace"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/employee/{id}": {
+      "get": {
+        "tags": [
+          "employee"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of employee to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/employees": {
+      "get": {
+        "tags": [
+          "employee"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/employee": {
+      "put": {
+        "tags": [
+          "employee"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "employee object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Employee"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "employee"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "employee object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Employee"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/card/{id}": {
+      "get": {
+        "tags": [
+          "card"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of card to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/cards": {
+      "get": {
+        "tags": [
+          "card"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/card": {
+      "put": {
+        "tags": [
+          "card"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "card object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "card"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "card object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/parking/{id}": {
+      "get": {
+        "tags": [
+          "parking"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of parking to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/parkings": {
+      "get": {
+        "tags": [
+          "parking"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/parking": {
+      "put": {
+        "tags": [
+          "parking"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "parking object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Parking"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "parking"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "parking object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Parking"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -152,6 +1143,40 @@
       }
     },
     "/vehicle": {
+      "put": {
+        "tags": [
+          "vehicle"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "vehicle object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Vehicles"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "400": {
+            "description": "Vehicle already exists"
+          }
+        }
+      },
       "post": {
         "tags": [
           "vehicle"
@@ -170,7 +1195,7 @@
             "description": "vehicle object",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/UserVehicles"
+              "$ref": "#/definitions/Vehicles"
             }
           }
         ],
@@ -188,6 +1213,40 @@
       }
     },
     "/user": {
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "400": {
+            "description": "User already exists"
+          }
+        }
+      },
       "post": {
         "tags": [
           "user"
@@ -289,30 +1348,77 @@
         }
       }
     },
+    "Auth": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "validated": {
+          "type": "boolean",
+          "example": false
+        },
+        "user": {
+          "type": "object",
+          "format": "#/definitions/Employee",
+          "example": "#/definitions/Employee"
+        },
+        "employee": {
+          "type": "object",
+          "format": "#/definitions/User",
+          "example": "#/definitions/User"
+        },
+        "company": {
+          "type": "object",
+          "format": "#/definitions/Company",
+          "example": "#/definitions/Company"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
     "User": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "status": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "registryCode": {
-          "type": "string"
-        },
-        "phone": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
+        "user": {
+          "type": "object",
+          "properties": {
+            "user": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "status": {
+                  "type": "string",
+                  "format": "char(2)",
+                  "example": "AT"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "teste"
+                },
+                "registryCode": {
+                  "type": "string",
+                  "example": "45100993049"
+                },
+                "phone": {
+                  "type": "string",
+                  "example": "81986584778"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "teste@teste.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "123456"
+                }
+              }
+            }
+          }
         }
       },
       "xml": {
@@ -322,48 +1428,7 @@
     "Vehicle": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "status": {
-          "type": "string",
-          "format": "char(2)"
-        },
-        "model": {
-          "type": "string"
-        },
-        "color": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "licensePlate": {
-          "type": "string"
-        },
-        "userId": {
-          "type": "integer",
-          "format": "int64"
-        }
-      },
-      "xml": {
-        "name": "Vehicle"
-      }
-    },
-    "UserVehicles": {
-      "type": "object",
-      "properties": {
-        "User": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        },
-        "Vehicle": {
+        "vehicle": {
           "type": "object",
           "properties": {
             "id": {
@@ -372,7 +1437,8 @@
             },
             "status": {
               "type": "string",
-              "format": "char(2)"
+              "format": "char(2)",
+              "example": "AT"
             },
             "model": {
               "type": "string"
@@ -394,23 +1460,29 @@
         }
       },
       "xml": {
-        "name": "UserVehicles"
+        "name": "Vehicle"
       }
     },
     "Payment": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "status": {
-          "type": "string",
-          "format": "char(2)"
-        },
-        "value": {
-          "type": "number",
-          "format": "double"
+        "payment": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "status": {
+              "type": "string",
+              "format": "char(2)",
+              "example": "AT"
+            },
+            "value": {
+              "type": "number",
+              "format": "double"
+            }
+          }
         }
       },
       "xml": {
@@ -420,25 +1492,35 @@
     "Card": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "status": {
-          "type": "string",
-          "format": "char(2)"
-        },
-        "holder": {
-          "type": "string"
-        },
-        "number": {
-          "type": "string"
-        },
-        "secureCode": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
+        "card": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "status": {
+              "type": "string",
+              "format": "char(2)",
+              "example": "AT"
+            },
+            "holder": {
+              "type": "string"
+            },
+            "number": {
+              "type": "string"
+            },
+            "secureCode": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "userId": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
         }
       },
       "xml": {
@@ -448,29 +1530,318 @@
     "Company": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "status": {
-          "type": "string",
-          "format": "char(2)"
-        },
-        "name": {
-          "type": "string"
-        },
-        "registryCode": {
-          "type": "string"
-        },
-        "phone": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
+        "company": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "status": {
+              "type": "string",
+              "format": "char(2)",
+              "example": "AT"
+            },
+            "name": {
+              "type": "string"
+            },
+            "registryCode": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
         }
       },
       "xml": {
         "name": "Company"
+      }
+    },
+    "CompanyAdress": {
+      "type": "object",
+      "properties": {
+        "companyAdress": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "status": {
+              "type": "string",
+              "format": "char(2)",
+              "example": "AT"
+            },
+            "country": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "street": {
+              "type": "string"
+            },
+            "number": {
+              "type": "number"
+            },
+            "zipCode": {
+              "type": "string"
+            },
+            "complement": {
+              "type": "string"
+            },
+            "companyId": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "xml": {
+        "name": "Company"
+      }
+    },
+    "Rule": {
+      "type": "object",
+      "properties": {
+        "rule": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "status": {
+              "type": "string",
+              "format": "char(2)",
+              "example": "AT"
+            },
+            "name": {
+              "type": "string",
+              "example": "admin"
+            },
+            "level": {
+              "type": "number",
+              "example": 1
+            }
+          }
+        }
+      },
+      "xml": {
+        "name": "Rule"
+      }
+    },
+    "Employee": {
+      "type": "object",
+      "properties": {
+        "employee": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "status": {
+              "type": "string",
+              "format": "char(2)",
+              "example": "AT"
+            },
+            "name": {
+              "type": "string"
+            },
+            "registryCode": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "companyId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "ruleId": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "xml": {
+        "name": "Employee"
+      }
+    },
+    "Parking": {
+      "type": "object",
+      "properties": {
+        "parking": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "status": {
+              "type": "string",
+              "format": "char(2)",
+              "example": "AT"
+            },
+            "name": {
+              "type": "string"
+            },
+            "registryCode": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "amount": {
+              "type": "string"
+            },
+            "imgUrl": {
+              "type": "string"
+            },
+            "companyId": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "xml": {
+        "name": "Parking"
+      }
+    },
+    "ParkingSpace": {
+      "type": "object",
+      "properties": {
+        "parkingSpace": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "status": {
+              "type": "string",
+              "format": "char(2)",
+              "example": "AT"
+            },
+            "description": {
+              "type": "string"
+            },
+            "value": {
+              "type": "number"
+            },
+            "parkingId": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "xml": {
+        "name": "ParkingSpace"
+      }
+    },
+    "ParkingPromotion": {
+      "type": "object",
+      "properties": {
+        "parkingPromotion": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "status": {
+              "type": "string",
+              "format": "char(2)",
+              "example": "AT"
+            },
+            "description": {
+              "type": "string"
+            },
+            "days": {
+              "type": "number"
+            },
+            "hours": {
+              "type": "number"
+            },
+            "discount": {
+              "type": "number"
+            },
+            "parkingId": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "xml": {
+        "name": "ParkingPromotion"
+      }
+    },
+    "ParkingAdress": {
+      "type": "object",
+      "properties": {
+        "parkingAdress": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "status": {
+              "type": "string",
+              "format": "char(2)",
+              "example": "AT"
+            },
+            "country": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "street": {
+              "type": "string"
+            },
+            "number": {
+              "type": "number"
+            },
+            "zipCode": {
+              "type": "string"
+            },
+            "latitude": {
+              "type": "string"
+            },
+            "longitude": {
+              "type": "string"
+            },
+            "complement": {
+              "type": "string"
+            },
+            "parkingId": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "xml": {
+        "name": "ParkingAdress"
       }
     }
   }

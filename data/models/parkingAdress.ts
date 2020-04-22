@@ -1,11 +1,10 @@
 import { Model, DataTypes } from 'sequelize';
 
-import { DbInstance } from '../../main/context';
+import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
-import { interfaces } from 'inversify';
-import { json } from 'express';
+import { TransactionType } from '../../commons/enums/transactionType';
 
-var _instance = DbInstance.getInstance()
+const _instance = Context.getInstance();
 
 
 /**
@@ -16,7 +15,7 @@ var _instance = DbInstance.getInstance()
  */
 class ParkingAdress extends Model {
   id!: number;
-  status!: string;
+  status!: TransactionType;
   country!: string;
   state!: string;
   city!: string;
@@ -28,9 +27,8 @@ class ParkingAdress extends Model {
   complement: string;
   parkingId!: number;
 
-
   /**
-   *Creates an instance of ParkingAdress.
+   * Creates an instance of ParkingAdress.
    * @author Felipe Seabra
    * @param {*} [json]
    * @memberof ParkingAdress
@@ -50,16 +48,20 @@ class ParkingAdress extends Model {
     this.complement = Attributes.ReturnIfValid(json.complement);
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
   }
+  
+  ToModify(){
+    return this.toJSON();
+  }
 }
 
 ParkingAdress.init({
   id: {
-    type: new DataTypes.INTEGER,
+    type: new DataTypes.INTEGER(),
     autoIncrement: true,
     primaryKey: true
   },
   status: {
-    type: new DataTypes.ENUM,
+    type: new DataTypes.ENUM(),
     allowNull: true,
     values: ['AT', 'PD', 'EX']
   },
@@ -80,7 +82,7 @@ ParkingAdress.init({
     allowNull: false
   },
   number: {
-    type: new DataTypes.INTEGER,
+    type: new DataTypes.INTEGER(),
     allowNull: false
   },
   zipCode: {
@@ -100,7 +102,7 @@ ParkingAdress.init({
     allowNull: false
   },
   parkingId: {
-    type: new DataTypes.INTEGER,
+    type: new DataTypes.INTEGER(),
     allowNull: false
   }
 },

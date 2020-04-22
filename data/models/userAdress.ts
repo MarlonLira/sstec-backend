@@ -1,4 +1,4 @@
-import { Model, DataTypes, BelongsToGetAssociationMixin } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
@@ -44,6 +44,9 @@ class UserAdress extends Model {
     this.complement = Attributes.ReturnIfValid(json.complement);
     this.userId = Attributes.ReturnIfValid(json.userId);
   }
+  ToModify(){
+    return this.toJSON();
+  }
 }
 
 UserAdress.init({
@@ -79,6 +82,10 @@ UserAdress.init({
   },
   complement: {
     type: new DataTypes.STRING(10)
+  },
+  userId: {
+    type: new DataTypes.INTEGER(),
+    allowNull: false
   }
 }, {
   sequelize: _instance,

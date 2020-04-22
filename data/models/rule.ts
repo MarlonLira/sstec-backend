@@ -2,6 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
+import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
 
@@ -13,7 +14,7 @@ const _instance = Context.getInstance();
  */
 class Rule extends Model {
   id!: number
-  status!: string
+  status!: TransactionType
   name!: string
   level!: number
 
@@ -29,6 +30,10 @@ class Rule extends Model {
     this.name = Attributes.ReturnIfValid(json.name);
     this.status = Attributes.ReturnIfValid(json.status);
     this.level = Attributes.ReturnIfValid(json.level);
+  }
+
+  ToModify(){
+    return this.toJSON();
   }
 }
 

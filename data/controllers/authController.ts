@@ -25,7 +25,7 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
 class AuthController implements IAuthController {
 
   /**
-   *Creates an instance of AuthController.
+   * Creates an instance of AuthController.
    * @author Marlon Lira
    * @param {IAuthService} _authService
    * @param {IUserRepository} _userRepository
@@ -42,7 +42,7 @@ class AuthController implements IAuthController {
    * @author Marlon Lira
    * @param {Request} req
    * @param {Response} res
-   * @returns 
+   * @returns
    * @memberof AuthController
    */
   @httpPost('/tokenValidate')
