@@ -1,10 +1,9 @@
-import ICompanyAdressRepository from '../interfaces/IRepositories/ICompanyAdressRepository';
-import Company from '../models/company';
-import CompanyAdress from '../models/companyAdress';
 import { injectable } from "inversify";
-import { TransactionType } from '../../commons/enums/transactionType';
 import { Op } from 'sequelize';
-import { cpus } from 'os';
+
+import ICompanyAdressRepository from '../interfaces/IRepositories/ICompanyAdressRepository';
+import CompanyAdress from '../models/companyAdress';
+import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
  * @description
@@ -14,6 +13,7 @@ import { cpus } from 'os';
  */
 @injectable()
 class CompanyAdressRepository implements ICompanyAdressRepository {
+
   /**
    * @description
    * @author Gustavo Gusmão
@@ -41,6 +41,7 @@ class CompanyAdressRepository implements ICompanyAdressRepository {
         });
     });
   }
+
   /**
    * @description
    * @author Gustavo Gusmão
@@ -108,12 +109,15 @@ class CompanyAdressRepository implements ICompanyAdressRepository {
    * @memberof CompanyAdressRepository
    */
   Save(companyAdress: CompanyAdress) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await CompanyAdress.sequelize.transaction();
       companyAdress.status = TransactionType.ACTIVE;
-      CompanyAdress.create(companyAdress)
-        .then(result => {
+      CompanyAdress.create(companyAdress, { transaction: _transaction })
+        .then(async result => {
+          await _transaction.commit();
           resolve(result);
-        }).catch(error => {
+        }).catch(async error => {
+          await _transaction.rollback();
           reject(error);
         });
     });

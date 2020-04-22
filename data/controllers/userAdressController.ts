@@ -5,8 +5,6 @@ import { inject } from "inversify";
 import IUserAdressController from "../interfaces/IControllers/IUserAdressController";
 import IUserAdressRepository from '../interfaces/IRepositories/IUserAdressRepository';
 import UserAdress from "../models/userAdress";
-import User from "../models/user";
-import Attributes from "../../commons/core/attributes";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';

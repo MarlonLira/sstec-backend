@@ -1,10 +1,11 @@
-import IUserAdressRepository from '../interfaces/IRepositories/IUserAdressRepository';
-import User from '../models/user';
-import UserAdress from '../models/userAdress';
-import { injectable } from "inversify";
-import { TransactionType } from '../../commons/enums/transactionType';
 import { Op } from 'sequelize';
-import { cpus } from 'os';
+import { injectable } from "inversify";
+
+import IUserAdressRepository from '../interfaces/IRepositories/IUserAdressRepository';
+import UserAdress from '../models/userAdress';
+import { TransactionType } from '../../commons/enums/transactionType';
+
+
 
 /**
  * @description
@@ -14,6 +15,7 @@ import { cpus } from 'os';
  */
 @injectable()
 class UserAdressRepository implements IUserAdressRepository {
+
   /**
    * @description
    * @author Gustavo Gusmão
@@ -41,6 +43,7 @@ class UserAdressRepository implements IUserAdressRepository {
         });
     });
   }
+
   /**
    * @description
    * @author Gustavo Gusmão
@@ -108,12 +111,15 @@ class UserAdressRepository implements IUserAdressRepository {
    * @memberof UserAdressRepository
    */
   Save(userAdress: UserAdress) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await UserAdress.sequelize.transaction();
       userAdress.status = TransactionType.ACTIVE;
-      UserAdress.create(userAdress)
-        .then(result => {
+      UserAdress.create(userAdress, { transaction: _transaction })
+        .then(async result => {
+          await _transaction.commit();
           resolve(result);
-        }).catch(error => {
+        }).catch(async error => {
+          await _transaction.rollback();
           reject(error);
         });
     });
