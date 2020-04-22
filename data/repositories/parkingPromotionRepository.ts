@@ -20,7 +20,7 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
    * @param {ParkingPromotion} parkingPromotion
    * @memberof ParkingPromotionRepository
    */
-  Update(parkingPromotion: ParkingPromotion) {
+  Update(parkingPromotion: ParkingPromotion): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingPromotion.sequelize.transaction();
       ParkingPromotion.update(parkingPromotion.ToModify(),
@@ -48,7 +48,7 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
    * @param {number} id
    * @memberof ParkingPromotionRepository
    */
-  Delete(_id: number) {
+  Delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingPromotion.sequelize.transaction();
       ParkingPromotion.update({
@@ -77,7 +77,7 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
    * @param {ParkingPromotion} parkingPromotion
    * @memberof ParkingPromotionRepository
    */
-  Save(parkingPromotion: ParkingPromotion) {
+  Save(parkingPromotion: ParkingPromotion): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingPromotion.sequelize.transaction();
       parkingPromotion.status = TransactionType.ACTIVE;
@@ -98,7 +98,7 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
    * @param {string} parkingPromotionName
    * @memberof ParkingPromotionRepository
    */
-  GetByName(parkingPromotionName: string) {
+  GetByName(parkingPromotionName: string): Promise<ParkingPromotion[]> {
     return new Promise((resolve, reject) => {
       ParkingPromotion.findAll({
         where: {
@@ -110,7 +110,7 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
           }
         }
       })
-        .then(result => {
+        .then((result: ParkingPromotion[]) => {
           resolve(result);
         })
         .catch(error => {
@@ -124,7 +124,7 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
    * @author Felipe Seabra
    * @memberof ParkingPromotionRepository
    */
-  ToList() {
+  ToList(): Promise<ParkingPromotion[]> {
     return new Promise((resolve, reject) => {
       ParkingPromotion.findAll({
         where: {
@@ -133,7 +133,7 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
           }
         }
       })
-        .then(result => {
+        .then((result: ParkingPromotion[]) => {
           resolve(result);
         })
         .catch(error => {

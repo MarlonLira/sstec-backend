@@ -6,11 +6,50 @@ import ParkingPromotion from '../../models/parkingPromotion';
  * @interface IParkingPromotionRepository
  */
 interface IParkingPromotionRepository {
-  Save(parkingPromotion: ParkingPromotion, parkingId: number);
-  Update(parkingPromotion: ParkingPromotion);
-  ToList();
-  GetByName(name: string);
-  Delete(id: number);
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {ParkingPromotion} parkingPromotion
+   * @returns {Promise<any>}
+   * @memberof IParkingPromotionRepository
+   */
+  Save(parkingPromotion: ParkingPromotion): Promise<any>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {ParkingPromotion} parkingPromotion
+   * @returns {Promise<any>}
+   * @memberof IParkingPromotionRepository
+   */
+  Update(parkingPromotion: ParkingPromotion): Promise<any>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @returns {Promise<ParkingPromotion[]>}
+   * @memberof IParkingPromotionRepository
+   */
+  ToList(): Promise<ParkingPromotion[]>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {string} name
+   * @returns {Promise<ParkingPromotion[]>}
+   * @memberof IParkingPromotionRepository
+   */
+  GetByName(name: string): Promise<ParkingPromotion[]>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} id
+   * @returns {Promise<any>}
+   * @memberof IParkingPromotionRepository
+   */
+  Delete(id: number): Promise<any>;
 }
 
 export default IParkingPromotionRepository;
