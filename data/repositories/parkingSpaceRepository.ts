@@ -1,50 +1,137 @@
 import { injectable } from "inversify";
+import { Op } from "sequelize/types";
 
 import IParkingSpaceRepository from '../interfaces/IRepositories/IParkingSpaceRepository';
 import Parking from '../models/Parking';
 import ParkingSpace from '../models/ParkingSpace';
-import Attributes from '../../commons/core/attributes';
 import { TransactionType } from "../../commons/enums/transactionType";
+
 
 @injectable()
 class ParkingSpaceRepository implements IParkingSpaceRepository {
 
-  Save(parkingSpace: ParkingSpace, parkingId: number) {
+  /**
+   * @description
+   * @author Emerson Souza
+   * @param {ParkingSpace} parkingSpace
+   * @returns
+   * @memberof ParkingSpaceRepository
+   */
+  Save(parkingSpace: ParkingSpace) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingSpace.sequelize.transaction();
-      Parking.findByPk(parkingId)
-        .then((parking: Parking) => {
-          parkingSpace.status = TransactionType.ACTIVE;
-          ParkingSpace.create(parkingSpace, { transaction: _transaction })
-            .then((createParkingSpace: ParkingSpace) => {
-              _transaction.commit();
-              resolve({ "parkingSpaceId": createParkingSpace.id });
-            }).catch(error => {
-              _transaction.rollback();
-              reject(error);
-            });
+      parkingSpace.status = TransactionType.ACTIVE;
+      ParkingSpace.create(parkingSpace, { transaction: _transaction })
+        .then((createParkingSpace: ParkingSpace) => {
+          _transaction.commit();
+          resolve({ "parkingSpaceId": createParkingSpace.id });
+        }).catch(error => {
+          _transaction.rollback();
+          reject(error);
         });
     });
   }
 
-  Update(parkingSpace: Parking) {
-    throw new Error("Method not implemented.");
+  /**
+   * @description
+   * @author Emerson Souza
+   * @param {ParkingSpace} parkingSpace
+   * @returns {Promise<any>}
+   * @memberof ParkingSpaceRepository
+   */
+  Update(parkingSpace: ParkingSpace): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await ParkingSpace.sequelize.transaction();
+      ParkingSpace.update(parkingSpace,
+        {
+          where:
+          {
+            id: parkingSpace.id
+          },
+          transaction: _transaction,
+          validate: false
+        })
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async error => {
+          await _transaction.rollback();
+          reject(error);
+        });
+    });
   }
 
-  ToList() {
-    throw new Error("Method not implemented.");
-  }
-
-  GetByRegistryCode(registryCode: string) {
-    throw new Error("Method not implemented.");
-  }
-
+  /**
+   * @description
+   * @author Emerson Souza
+   * @param {number} id
+   * @returns
+   * @memberof ParkingSpaceRepository
+   */
   Delete(id: number) {
-    throw new Error("Method not implemented.");
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await ParkingSpace.sequelize.transaction();
+      ParkingSpace.update({
+        status: TransactionType.DELETED
+      },
+        {
+          where: {
+            id: id
+          },
+          transaction: _transaction,
+          validate: false
+        })
+        .then(result => {
+          resolve(result);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 
-  Find(parkingSpace: Parking, properties: string[]) {
-    throw new Error("Method not implemented.");
+  /**
+   * @description
+   * @author Emerson Souza
+   * @param {number} id
+   * @returns {Promise<ParkingSpace>}
+   * @memberof ParkingSpaceRepository
+   */
+  GetByParkingSpaceId(id: number): Promise<ParkingSpace> {
+    return new Promise((resolve, reject) => {
+      ParkingSpace.findByPk(id)
+        .then((parkingSpace: ParkingSpace) => {
+          resolve(parkingSpace)
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+  /**
+   * @description
+   * @author Emerson Souza
+   * @returns {Promise<ParkingSpace[]>}
+   * @memberof ParkingSpaceRepository
+   */
+  ToList(): Promise<ParkingSpace[]> {
+    return new Promise((resolve, reject) => {
+      ParkingSpace.findAll({
+        where: {
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      })
+        .then((result: ParkingSpace[]) => {
+          resolve(result);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 }
 
