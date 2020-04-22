@@ -5,8 +5,6 @@ import { inject } from "inversify";
 import ICompanyAdressController from "../interfaces/IControllers/ICompanyAdressController";
 import ICompanyAdressRepository from '../interfaces/IRepositories/ICompanyAdressRepository';
 import CompanyAdress from "../models/companyAdress";
-import Company from "../models/company";
-import Attributes from "../../commons/core/attributes";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
