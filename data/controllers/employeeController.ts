@@ -41,10 +41,10 @@ class EmployeeController implements IEmployeeController {
     return new Promise((resolve) => {
       this._employeeRepository.Save(_employee)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Funcionario', result))
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Funcionário', result))
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionario', error));
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
         });
     });
   }
@@ -70,7 +70,15 @@ class EmployeeController implements IEmployeeController {
    */
   @httpGet('/employee')
   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) =>{
+      this._employeeRepository.ToList()
+      .then((result : Employee[]) =>{
+        resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionário', result));
+      })
+      .catch(error =>{
+        resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
+      });
+    });
   }
 
   /**
@@ -99,10 +107,10 @@ class EmployeeController implements IEmployeeController {
       const _id: number =  req.params.id;
       this._employeeRepository.Delete(_id)
         .then(result =>{
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Funcionario', result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Funcionário', result));
         })
         .catch(error =>{
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionario', error));
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
         });
     });
   }
