@@ -24,7 +24,7 @@ class EmployeeRepository implements IEmployeeRepository {
    * @param {Employee} employee
    * @memberof EmployeeRepository
    */
-  Save(employee: Employee) : Promise<any>{
+  Save(employee: Employee): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Employee.sequelize.transaction();
       employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
@@ -50,7 +50,7 @@ class EmployeeRepository implements IEmployeeRepository {
    * @param {string} employeeName
    * @memberof EmployeeRepository
    */
-  GetByName(name: string) : Promise<Employee[]>{
+  GetByName(name: string): Promise<Employee[]> {
     return new Promise((resolve, reject) => {
       Employee.findAll({
         where: {
@@ -100,7 +100,7 @@ class EmployeeRepository implements IEmployeeRepository {
   ToList(): Promise<Employee[]> {
     return new Promise((resolve, reject) => {
       Employee.findAll({
-        where:{
+        where: {
           status: {
             [Op.ne]: TransactionType.DELETED
           }
@@ -144,8 +144,28 @@ class EmployeeRepository implements IEmployeeRepository {
    * @param {number} id
    * @memberof EmployeeRepository
    */
-  Delete(id: number): Promise<any> {
-    throw new Error("Method not implemented.");
+  Delete(_id: number): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Employee.sequelize.transaction();
+      Employee.update({
+        status: TransactionType.DELETED
+      },
+        {
+          where: {
+            id: _id
+          },
+          transaction: _transaction,
+          validate: false
+        })
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async error => {
+          await _transaction.rollback()
+          reject(error);
+        });
+    });
   }
 }
 
