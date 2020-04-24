@@ -65,8 +65,8 @@ class AuthController implements IAuthController {
    */
   @httpPost('/employee/signIn')
   SignIn(@request() req: Request, @response() res: Response) {
-    const _auth = new Auth(req.body);
     return new Promise((resolve) => {
+      const _auth = new Auth(req.body);
       this._employeeRepository.GetByRegistryCode(_auth.employee.registryCode)
         .then((found: Employee) => {
           if (Attributes.IsValid(found) && Crypto.Compare(_auth.employee.password, found.password)) {

@@ -82,7 +82,12 @@ class EmployeeRepository implements IEmployeeRepository {
     return new Promise((resolve, reject) => {
       Employee.findOne({
         where: {
-          registryCode: _registryCode
+          registryCode: {
+            [Op.eq]: _registryCode
+          },
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
         }
       }).then((result: Employee) => {
         resolve(result);
