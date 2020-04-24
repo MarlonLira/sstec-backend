@@ -67,7 +67,7 @@ class AuthController implements IAuthController {
   SignIn(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
       const _auth = new Auth(req.body);
-      this._employeeRepository.GetByRegistryCode(_auth.employee.registryCode)
+      this._employeeRepository.GetByEmail(_auth.employee.email)
         .then((found: Employee) => {
           if (Attributes.IsValid(found) && Crypto.Compare(_auth.employee.password, found.password)) {
             this._authService.CreateToken(found)

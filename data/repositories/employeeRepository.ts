@@ -97,6 +97,25 @@ class EmployeeRepository implements IEmployeeRepository {
     });
   }
 
+  GetByEmail(_email: string): Promise<Employee> {
+    return new Promise((resolve, reject) => {
+      Employee.findOne({
+        where: {
+          email: {
+            [Op.eq]: _email
+          },
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      }).then((result: Employee) => {
+        resolve(result);
+      }).catch(error => {
+        reject(error);
+      });
+    });
+  }
+
   /**
    * @description
    * @author Marlon Lira

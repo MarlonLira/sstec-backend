@@ -31,7 +31,7 @@ class AuthService implements IAuthService {
    * @description
    * @author Marlon Lira
    * @param {*} entity
-   * @returns 
+   * @returns
    * @memberof AuthService
    */
   CreateToken(entity: any) {

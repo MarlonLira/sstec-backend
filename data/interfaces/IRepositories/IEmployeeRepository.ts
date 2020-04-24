@@ -20,11 +20,20 @@ interface IEmployeeRepository {
   /**
    * @description
    * @author Marlon Lira
-   * @param {string} registryCode
+   * @param {string} _registryCode
    * @returns {Promise<Employee>}
    * @memberof IEmployeeRepository
    */
-  GetByRegistryCode(registryCode: string): Promise<Employee>;
+  GetByRegistryCode(_registryCode: string): Promise<Employee>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {string} _email
+   * @returns {Promise<Employee>}
+   * @memberof IEmployeeRepository
+   */
+  GetByEmail(_email: string): Promise<Employee>;
 
   /**
    * @description
