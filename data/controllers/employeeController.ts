@@ -38,7 +38,7 @@ class EmployeeController implements IEmployeeController {
    */
   @httpPost('/employee')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
-    const _employee = new Employee(req.body);
+    const _employee = new Employee(req.body.employee);
     return new Promise((resolve) => {
       this._employeeRepository.Save(_employee)
         .then(result => {
