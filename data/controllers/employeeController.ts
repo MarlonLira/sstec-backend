@@ -38,15 +38,24 @@ class EmployeeController implements IEmployeeController {
    */
   @httpPost('/employee')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
-    const _employee = new Employee(req.body.employee);
-    return new Promise((resolve) => {
-      this._employeeRepository.Save(_employee)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Funcionário', result))
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
-        });
+    return new Promise(async (resolve) => {
+      const _employee = new Employee(req.body.employee);
+      const foundEmployee = Attributes.ReturnIfValid(
+        await this._employeeRepository.GetByRegistryCode(_employee.registryCode),
+        await this._employeeRepository.GetByEmail(_employee.email)
+      );
+      if (!Attributes.IsValid(foundEmployee)) {
+        this._employeeRepository.Save(_employee)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Funcionário', result))
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Funcionário'));
+      }
+
     });
   }
 
@@ -70,15 +79,15 @@ class EmployeeController implements IEmployeeController {
           .catch(error => {
             resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
           });
-      }else if(Attributes.IsValid(_employee.name)){
+      } else if (Attributes.IsValid(_employee.name)) {
         this._employeeRepository.GetByName(_employee.name)
-        .then((result: Employee[]) => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionário', result));
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
-        });
-      }else{
+          .then((result: Employee[]) => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionário', result));
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
+          });
+      } else {
         resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Funcionário'));
       }
     });
