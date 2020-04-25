@@ -80,10 +80,12 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
           transaction: _transaction,
           validate: false
         })
-        .then(result => {
+        .then(async result => {
+          await _transaction.commit();
           resolve(result);
         })
-        .catch(error => {
+        .catch(async error => {
+          await _transaction.commit();
           reject(error);
         });
     });
@@ -96,7 +98,7 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
    * @returns {Promise<ParkingSpace>}
    * @memberof ParkingSpaceRepository
    */
-  GetByParkingSpaceId(id: number): Promise<ParkingSpace> {
+  GetById(id: number): Promise<ParkingSpace> {
     return new Promise((resolve, reject) => {
       ParkingSpace.findByPk(id)
         .then((parkingSpace: ParkingSpace) => {

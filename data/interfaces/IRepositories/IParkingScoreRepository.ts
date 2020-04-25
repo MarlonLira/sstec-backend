@@ -42,7 +42,7 @@ interface IParkingScoreRepository {
    * @returns {Promise<ParkingScore>}
    * @memberof IParkingScoreRepository
    */
-  GetByParkingScoreId(id: number): Promise<ParkingScore>;
+  GetById(id: number): Promise<ParkingScore>;
 
   /**
    * @description

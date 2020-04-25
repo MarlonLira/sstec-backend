@@ -47,7 +47,7 @@ class ParkingScoreRepository implements IParkingScoreRepository {
    * @returns {Promise<ParkingScore>}
    * @memberof ParkingScoreRepository
    */
-  GetByParkingScoreId(id: number): Promise<ParkingScore> {
+  GetById(id: number): Promise<ParkingScore> {
     throw new Error("Method not implemented.");
   }
 

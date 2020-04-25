@@ -41,7 +41,7 @@ interface IParkingSpaceRepository {
    * @returns {Promise<ParkingSpace>}
    * @memberof IParkingSpaceRepository
    */
-  GetByParkingSpaceId(id: number): Promise<ParkingSpace>;
+  GetById(id: number): Promise<ParkingSpace>;
 
   /**
    * @description

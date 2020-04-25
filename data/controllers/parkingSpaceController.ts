@@ -63,7 +63,7 @@ class ParkingSpaceController implements IParkingSpaceController {
   Search(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _parkingSpace: number = req.params.Id;
-      this._parkingSpaceRepository.GetByParkingSpaceId(_parkingSpace)
+      this._parkingSpaceRepository.GetById(_parkingSpace)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Vaga', result))
         })
@@ -85,7 +85,7 @@ class ParkingSpaceController implements IParkingSpaceController {
   Update(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _parkingSpace = new ParkingSpace(req.body.parkingSpace);
-      this._parkingSpaceRepository.GetByParkingSpaceId(_parkingSpace.id)
+      this._parkingSpaceRepository.GetById(_parkingSpace.id)
         .then((parkingSpace: ParkingSpace) => {
           if (Attributes.IsValid(parkingSpace)) {
             this._parkingSpaceRepository.Update(_parkingSpace)
@@ -114,7 +114,7 @@ class ParkingSpaceController implements IParkingSpaceController {
   Delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _id: number = req.params.id;
-      this._parkingSpaceRepository.GetByParkingSpaceId(_id)
+      this._parkingSpaceRepository.GetById(_id)
         .then((parkingSpace: ParkingSpace) => {
           if (Attributes.IsValid(parkingSpace)) {
             this._parkingSpaceRepository.Delete(_id)

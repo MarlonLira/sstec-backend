@@ -27,9 +27,10 @@ class ParkingScoreController implements IParkingScoreController {
    * @author Emerson Souza
    * @param {Request<any, any, any, import("express-serve-static-core").Query>} req
    * @param {Response<any>} res
+   * @returns {Promise<any>}
    * @memberof ParkingScoreController
    */
-  Save(req: Request<any, any, any, import("express-serve-static-core").Query>, res: Response<any>) {
+  Save(req: Request<any, any, any, import("express-serve-static-core").Query>, res: Response<any>): Promise<any> {
     throw new Error("Method not implemented.");
   }
 
@@ -38,9 +39,10 @@ class ParkingScoreController implements IParkingScoreController {
    * @author Emerson Souza
    * @param {Request<any, any, any, import("express-serve-static-core").Query>} req
    * @param {Response<any>} res
+   * @returns {Promise<any>}
    * @memberof ParkingScoreController
    */
-  Search(req: Request<any, any, any, import("express-serve-static-core").Query>, res: Response<any>) {
+  Search(req: Request<any, any, any, import("express-serve-static-core").Query>, res: Response<any>): Promise<any> {
     throw new Error("Method not implemented.");
   }
 
@@ -49,9 +51,10 @@ class ParkingScoreController implements IParkingScoreController {
    * @author Emerson Souza
    * @param {Request<any, any, any, import("express-serve-static-core").Query>} req
    * @param {Response<any>} res
+   * @returns {Promise<any>}
    * @memberof ParkingScoreController
    */
-  Update(req: Request<any, any, any, import("express-serve-static-core").Query>, res: Response<any>) {
+  Update(req: Request<any, any, any, import("express-serve-static-core").Query>, res: Response<any>): Promise<any> {
     throw new Error("Method not implemented.");
   }
 
@@ -60,12 +63,12 @@ class ParkingScoreController implements IParkingScoreController {
    * @author Emerson Souza
    * @param {Request<any, any, any, import("express-serve-static-core").Query>} req
    * @param {Response<any>} res
+   * @returns {Promise<any>}
    * @memberof ParkingScoreController
    */
-  Delete(req: Request<any, any, any, import("express-serve-static-core").Query>, res: Response<any>) {
+  Delete(req: Request<any, any, any, import("express-serve-static-core").Query>, res: Response<any>): Promise<any> {
     throw new Error("Method not implemented.");
   }
-
 }
 
 export default ParkingScoreController;

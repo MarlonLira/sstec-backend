@@ -15,8 +15,8 @@ const _instance = Context.getInstance();
 class ParkingScore extends Model {
   id!: number;
   attendanceScore: number;
-  securitySocre: number;
-  locationSocre: number;
+  securityScore: number;
+  locationScore: number;
   userId: number;
   parkingId!: number;
 
@@ -30,8 +30,8 @@ class ParkingScore extends Model {
     super()
     this.id = Attributes.ReturnIfValid(json.id);
     this.attendanceScore = Attributes.ReturnIfValid(json.attendanceScore);
-    this.securitySocre = Attributes.ReturnIfValid(json.securitySocre);
-    this.locationSocre = Attributes.ReturnIfValid(json.locationSocre);
+    this.securityScore = Attributes.ReturnIfValid(json.securityScore);
+    this.locationScore = Attributes.ReturnIfValid(json.locationScore);
     this.userId = Attributes.ReturnIfValid(json.userId);
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
   }
@@ -47,15 +47,15 @@ ParkingScore.init({
     primaryKey: true
   },
   attendanceScore: {
-    type: new DataTypes.DOUBLE(),
+    type: new DataTypes.FLOAT(),
     allowNull: false
   },
-  securitySocre: {
-    type: new DataTypes.DOUBLE(),
+  securityScore: {
+    type: new DataTypes.FLOAT(),
     allowNull: false
   },
-  locationSocre: {
-    type: new DataTypes.DOUBLE(),
+  locationScore: {
+    type: new DataTypes.FLOAT(),
     allowNull: false
   },
   userId: {
