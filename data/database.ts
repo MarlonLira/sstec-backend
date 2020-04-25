@@ -19,7 +19,7 @@ import ParkingAdress from './models/parkingAdress';
 import Context from '../main/context';
 
 const _instance = Context.getInstance();
-const { ForceSync, AlterSync, IsLogger } = Config.Database;
+const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
 
 /**
  * @description
@@ -94,12 +94,12 @@ class Database {
       let total = 0;
       const modelsWithErrors = [];
 
-      if (ForceSync) {
+      if (DropAllTable) {
         await this.DropAllTables(models);
       }
 
       while (count < models.length) {
-        await models[count].entity.sync({ alter: AlterSync, logging: (IsLogger ? msg => Logger.Info(models[count].name, msg) : IsLogger) })
+        await models[count].entity.sync({ force: ForceSync, alter: AlterSync, logging: (IsLogger ? msg => Logger.Info(models[count].name, msg) : IsLogger) })
           .then(() => {
             Logger.Info(models[count].name, 'verification finished!')
             sucess++;
