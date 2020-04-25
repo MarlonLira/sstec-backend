@@ -1,9 +1,12 @@
+import { Op } from 'sequelize';
+import { injectable } from "inversify";
+
 import IEmployeeRepository from '../interfaces/IRepositories/IEmployeeRepository';
 import Employee from '../models/employee';
-import Querying from '../../commons/core/querying'
-import { injectable } from "inversify";
+import Querying from '../../commons/core/querying';
 import { CryptoType } from '../../commons/enums/cryptoType';
 import Crypto from '../../commons/core/crypto';
+
 import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
@@ -21,7 +24,7 @@ class EmployeeRepository implements IEmployeeRepository {
    * @param {Employee} employee
    * @memberof EmployeeRepository
    */
-  Save(employee: Employee) {
+  Save(employee: Employee): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Employee.sequelize.transaction();
       employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
@@ -44,32 +47,29 @@ class EmployeeRepository implements IEmployeeRepository {
   /**
    * @description
    * @author Marlon Lira
-   * @param {Employee} employee
-   * @param {string[]} properties
-   * @memberof EmployeeRepository
-   */
-  Find(employee: Employee, properties: string[]) {
-    return new Promise((resolve, reject) => {
-      let query: any;
-      query = Querying.Or(employee, properties);
-      Employee.findOne({
-        where: query
-      }).then((result: Employee) => {
-        resolve(result);
-      }).catch(error => {
-        reject(error);
-      });
-    });
-  }
-
-  /**
-   * @description
-   * @author Marlon Lira
    * @param {string} employeeName
    * @memberof EmployeeRepository
    */
-  GetByName(employeeName: string) {
-    throw new Error("Method not implemented.");
+  GetByName(name: string): Promise<Employee[]> {
+    return new Promise((resolve, reject) => {
+      Employee.findAll({
+        where: {
+          name: {
+            [Op.like]: `${name}%`
+          },
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      })
+        .then(result => {
+          resolve(result);
+        }
+        )
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 
   /**
@@ -78,11 +78,35 @@ class EmployeeRepository implements IEmployeeRepository {
    * @param {string} registryCode
    * @memberof EmployeeRepository
    */
-  GetByRegistryCode(registryCode: string) {
+  GetByRegistryCode(_registryCode: string): Promise<Employee> {
     return new Promise((resolve, reject) => {
       Employee.findOne({
         where: {
-          registryCode: registryCode
+          registryCode: {
+            [Op.eq]: _registryCode
+          },
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      }).then((result: Employee) => {
+        resolve(result);
+      }).catch(error => {
+        reject(error);
+      });
+    });
+  }
+
+  GetByEmail(_email: string): Promise<Employee> {
+    return new Promise((resolve, reject) => {
+      Employee.findOne({
+        where: {
+          email: {
+            [Op.eq]: _email
+          },
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
         }
       }).then((result: Employee) => {
         resolve(result);
@@ -97,8 +121,45 @@ class EmployeeRepository implements IEmployeeRepository {
    * @author Marlon Lira
    * @memberof EmployeeRepository
    */
-  ToList() {
-    throw new Error("Method not implemented.");
+  ToList(): Promise<Employee[]> {
+    return new Promise((resolve, reject) => {
+      Employee.findAll({
+        where: {
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      })
+        .then(result => {
+          resolve(result);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+  Update(employee: Employee): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Employee.sequelize.transaction();
+      Employee.update(employee.ToModify(),
+        {
+          where:
+          {
+            id: employee.id
+          },
+          transaction: _transaction,
+          validate: false
+        })
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async error => {
+          await _transaction.rollback();
+          reject(error);
+        });
+    });
   }
 
   /**
@@ -107,8 +168,28 @@ class EmployeeRepository implements IEmployeeRepository {
    * @param {number} id
    * @memberof EmployeeRepository
    */
-  Delete(id: number) {
-    throw new Error("Method not implemented.");
+  Delete(_id: number): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Employee.sequelize.transaction();
+      Employee.update({
+        status: TransactionType.DELETED
+      },
+        {
+          where: {
+            id: _id
+          },
+          transaction: _transaction,
+          validate: false
+        })
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async error => {
+          await _transaction.rollback()
+          reject(error);
+        });
+    });
   }
 }
 

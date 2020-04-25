@@ -51,9 +51,8 @@ Vehicle.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.ENUM(),
-    allowNull: true,
-    values: ['AT', 'PD', 'EX']
+    type: new DataTypes.STRING(2),
+    allowNull: false
   },
   model: {
     type: new DataTypes.STRING(12),

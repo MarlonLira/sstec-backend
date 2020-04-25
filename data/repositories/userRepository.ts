@@ -190,7 +190,7 @@ class UserRepository implements IUserRepository {
         })
         .catch(async error => {
           await _transaction.rollback()
-          reject(error);;
+          reject(error);
         });
     });
   }

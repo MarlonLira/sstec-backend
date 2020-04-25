@@ -9,6 +9,7 @@ import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
+import Attributes from "../../commons/core/attributes";
 
 /**
  * @description
@@ -37,14 +38,77 @@ class EmployeeController implements IEmployeeController {
    */
   @httpPost('/employee')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
-    const _employee = new Employee(req.body);
+    return new Promise(async (resolve) => {
+      const _employee = new Employee(req.body.employee);
+      const foundEmployee = Attributes.ReturnIfValid(
+        await this._employeeRepository.GetByRegistryCode(_employee.registryCode),
+        await this._employeeRepository.GetByEmail(_employee.email)
+      );
+      if (!Attributes.IsValid(foundEmployee)) {
+        this._employeeRepository.Save(_employee)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Funcionário', result))
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Funcionário'));
+      }
+
+    });
+  }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @memberof EmployeeController
+   */
+  @httpGet('/employee/registryCode/:registryCode')
+  @httpGet('/employee/name/:name')
+  Search(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      this._employeeRepository.Save(_employee)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Funcionario', result))
+      const _employee = new Employee(req.params);
+      if (Attributes.IsValid(_employee.registryCode)) {
+        this._employeeRepository.GetByRegistryCode(_employee.registryCode)
+          .then((result: Employee) => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionário', result));
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
+          });
+      } else if (Attributes.IsValid(_employee.name)) {
+        this._employeeRepository.GetByName(_employee.name)
+          .then((result: Employee[]) => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionário', result));
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Funcionário'));
+      }
+    });
+  }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @memberof EmployeeController
+   */
+  @httpGet('/employees')
+  SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
+    return new Promise((resolve) => {
+      this._employeeRepository.ToList()
+        .then((result: Employee[]) => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionário', result));
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionario', error));
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
         });
     });
   }
@@ -56,33 +120,22 @@ class EmployeeController implements IEmployeeController {
    * @param {Response<any>} res
    * @memberof EmployeeController
    */
-  @httpGet('/employee')
-  Search(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
-  }
-
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @memberof EmployeeController
-   */
-  @httpGet('/employee')
-  SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
-  }
-
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @memberof EmployeeController
-   */
   @httpPut('/employee')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      const _employee = new Employee(req.body.employee);
+      if (Attributes.IsValid(_employee.id)) {
+        this._employeeRepository.Update(_employee)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Funcionário', result));
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Funcionário'));
+      }
+    });
   }
 
   /**
@@ -93,16 +146,16 @@ class EmployeeController implements IEmployeeController {
    * @returns
    * @memberof EmployeeController
    */
-  @httpDelete('/employee/id/:id')
+  @httpDelete('/employee/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      const _id: number =  req.params.id;
+      const _id: number = req.params.id;
       this._employeeRepository.Delete(_id)
-        .then(result =>{
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Funcionario', result));
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Funcionário', result));
         })
-        .catch(error =>{
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionario', error));
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
         });
     });
   }
