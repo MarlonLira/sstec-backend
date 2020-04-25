@@ -146,7 +146,7 @@ class EmployeeController implements IEmployeeController {
    * @returns
    * @memberof EmployeeController
    */
-  @httpDelete('/employee/id/:id')
+  @httpDelete('/employee/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _id: number = req.params.id;
