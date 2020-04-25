@@ -21,9 +21,10 @@
       "password": "259cf8d446022dc1743ab5ee5727a7e969d6b6e38e8826dddb5c1c0a09dae068",
       "schema": "d8crqilshjdjcp"
     },
-    "ForceSync": false,
-    "AlterSync": false,
+    "ForceSync": true,
+    "AlterSync": true,
     "Logging": false,
+    "DropAllTable": false,
     "IsLogger": false
   }
 }

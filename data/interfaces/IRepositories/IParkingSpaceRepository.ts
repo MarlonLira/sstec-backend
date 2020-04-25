@@ -1,8 +1,11 @@
 import Parking from '../../models/parking';
 import ParkingSpace from '../../models/parkingSpace';
 
-
-
+/**
+ * @description
+ * @author Emerson Souza
+ * @interface IParkingSpaceRepository
+ */
 interface IParkingSpaceRepository {
 
   /**

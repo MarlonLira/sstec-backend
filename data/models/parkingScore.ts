@@ -9,28 +9,30 @@ const _instance = Context.getInstance();
 /**
  * @description
  * @author Emerson Souza
- * @class ParkingSpace
+ * @class ParkingScore
  * @extends {Model}
  */
-class ParkingSpace extends Model {
+class ParkingScore extends Model {
   id!: number;
-  status!: TransactionType;
-  description!: string;
-  value: number;
+  attendanceScore: number;
+  securitySocre: number;
+  locationSocre: number;
+  userId: number;
   parkingId!: number;
 
   /**
-   * Creates an instance of ParkingSpace.
+   *Creates an instance of ParkingScore.
    * @author Emerson Souza
    * @param {*} [json]
-   * @memberof ParkingSpace
+   * @memberof ParkingScore
    */
   constructor(json?: any) {
     super()
     this.id = Attributes.ReturnIfValid(json.id);
-    this.status = Attributes.ReturnIfValid(json.status);
-    this.description = Attributes.ReturnIfValid(json.description);
-    this.value = Attributes.ReturnIfValid(json.value);
+    this.attendanceScore = Attributes.ReturnIfValid(json.attendanceScore);
+    this.securitySocre = Attributes.ReturnIfValid(json.securitySocre);
+    this.locationSocre = Attributes.ReturnIfValid(json.locationSocre);
+    this.userId = Attributes.ReturnIfValid(json.userId);
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
   }
   ToModify() {
@@ -38,22 +40,26 @@ class ParkingSpace extends Model {
   }
 }
 
-ParkingSpace.init({
+ParkingScore.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,
     primaryKey: true
   },
-  status: {
-    type: new DataTypes.STRING(2),
-    allowNull: false
-  },
-  description: {
-    type: new DataTypes.STRING(50),
-    allowNull: false
-  },
-  value: {
+  attendanceScore: {
     type: new DataTypes.DOUBLE(),
+    allowNull: false
+  },
+  securitySocre: {
+    type: new DataTypes.DOUBLE(),
+    allowNull: false
+  },
+  locationSocre: {
+    type: new DataTypes.DOUBLE(),
+    allowNull: false
+  },
+  userId: {
+    type: new DataTypes.INTEGER(),
     allowNull: false
   },
   parkingId: {
@@ -62,7 +68,7 @@ ParkingSpace.init({
   }
 }, {
   sequelize: _instance,
-  tableName: 'ParkingSpace'
+  tableName: 'ParkingScore'
 });
 
-export default ParkingSpace;
+export default ParkingScore;
