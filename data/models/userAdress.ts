@@ -44,7 +44,6 @@ class UserAdress extends Model {
     this.complement = Attributes.ReturnIfValid(json.complement);
     this.userId = Attributes.ReturnIfValid(json.userId);
   }
-  
   ToModify(){
     return this.toJSON();
   }
@@ -57,9 +56,8 @@ UserAdress.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.ENUM(),
-    allowNull: true,
-    values: ['AT', 'PD', 'EX']
+    type: new DataTypes.STRING(2),
+    allowNull: false
   },
   country: {
     type: new DataTypes.STRING(15)
