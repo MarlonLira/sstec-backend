@@ -56,7 +56,7 @@ class ParkingRepository implements IParkingRepository {
   Update(parking: Parking): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
-      Parking.update(parking,
+      Parking.update(parking.ToModify(),
         {
           where:
           {
@@ -82,7 +82,7 @@ class ParkingRepository implements IParkingRepository {
    * @param {number} id
    * @memberof ParkingRepository
    */
-  Delete(id: number) {
+  Delete(_id: number) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
       Parking.update({
@@ -90,7 +90,7 @@ class ParkingRepository implements IParkingRepository {
       },
         {
           where: {
-            id: id
+            id: _id
           },
           transaction: _transaction,
           validate: false
