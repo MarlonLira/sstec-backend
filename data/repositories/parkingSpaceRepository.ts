@@ -1,11 +1,9 @@
 import { injectable } from "inversify";
-import { Op } from "sequelize/types";
+import { Op } from 'sequelize';
 
 import IParkingSpaceRepository from '../interfaces/IRepositories/IParkingSpaceRepository';
-import Parking from '../models/Parking';
 import ParkingSpace from '../models/ParkingSpace';
 import { TransactionType } from "../../commons/enums/transactionType";
-
 
 @injectable()
 class ParkingSpaceRepository implements IParkingSpaceRepository {
@@ -69,7 +67,7 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
    * @returns
    * @memberof ParkingSpaceRepository
    */
-  Delete(id: number) {
+  Delete(_id: number) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingSpace.sequelize.transaction();
       ParkingSpace.update({
@@ -77,7 +75,7 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
       },
         {
           where: {
-            id: id
+            id: _id
           },
           transaction: _transaction,
           validate: false
