@@ -25,7 +25,7 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
 class AuthController implements IAuthController {
 
   /**
-   *Creates an instance of AuthController.
+   * Creates an instance of AuthController.
    * @author Marlon Lira
    * @param {IAuthService} _authService
    * @param {IUserRepository} _userRepository
@@ -42,7 +42,7 @@ class AuthController implements IAuthController {
    * @author Marlon Lira
    * @param {Request} req
    * @param {Response} res
-   * @returns 
+   * @returns
    * @memberof AuthController
    */
   @httpPost('/tokenValidate')
@@ -65,9 +65,9 @@ class AuthController implements IAuthController {
    */
   @httpPost('/employee/signIn')
   SignIn(@request() req: Request, @response() res: Response) {
-    const _auth = new Auth(req.body);
     return new Promise((resolve) => {
-      this._employeeRepository.Find(_auth.employee, ['registryCode', 'email'])
+      const _auth = new Auth(req.body);
+      this._employeeRepository.GetByEmail(_auth.employee.email)
         .then((found: Employee) => {
           if (Attributes.IsValid(found) && Crypto.Compare(_auth.employee.password, found.password)) {
             this._authService.CreateToken(found)

@@ -32,6 +32,10 @@ class Payment extends Model {
     this.cardId = Attributes.ReturnIfValid(json.cardId);
     this.parkingSpaceId = Attributes.ReturnIfValid(json.parkingSpaceId);
   }
+  
+  ToModify(){
+    return this.toJSON();
+  }
 }
 
 Payment.init({
@@ -41,9 +45,8 @@ Payment.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.ENUM(),
-    allowNull: true,
-    values: ['AT', 'PD', 'EX']
+    type: new DataTypes.STRING(2),
+    allowNull: false
   },
   value: {
     type: new DataTypes.DOUBLE(),

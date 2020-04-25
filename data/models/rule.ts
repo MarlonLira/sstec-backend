@@ -31,6 +31,10 @@ class Rule extends Model {
     this.status = Attributes.ReturnIfValid(json.status);
     this.level = Attributes.ReturnIfValid(json.level);
   }
+
+  ToModify(){
+    return this.toJSON();
+  }
 }
 
 Rule.init({
@@ -40,9 +44,8 @@ Rule.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.ENUM(),
-    allowNull: true,
-    values: ['AT', 'PD', 'EX']
+    type: new DataTypes.STRING(2),
+    allowNull: false
   },
   name: {
     type: DataTypes.STRING(30),

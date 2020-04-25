@@ -1,4 +1,3 @@
-import User from '../../models/user';
 import Card from '../../models/card';
 
 /**
@@ -10,7 +9,7 @@ interface ICardRepository {
   Save(card: Card): Promise<any>;
   GetById(id: number): Promise<Card>;
   GetByUserId(userId: number): Promise<Card[]>;
-  Delete(card: Card): Promise<any>;
+  Delete(_id: number): Promise<any>;
   Update(card: Card): Promise<any>;
 }
 

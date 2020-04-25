@@ -41,6 +41,10 @@ class Parking extends Model {
     this.imgUrl = Attributes.ReturnIfValid(json.imgUrl);
     this.companyId = Attributes.ReturnIfValid(json.companyId);
   }
+  
+  ToModify(){
+    return this.toJSON();
+  }
 }
 
 Parking.init({
@@ -50,9 +54,8 @@ Parking.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.ENUM(),
-    allowNull: false,
-    values: ['AT', 'PD', 'EX']
+    type: new DataTypes.STRING(2),
+    allowNull: false
   },
   name: {
     type: new DataTypes.STRING(30)

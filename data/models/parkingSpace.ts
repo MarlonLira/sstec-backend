@@ -33,6 +33,10 @@ class ParkingSpace extends Model {
     this.value = Attributes.ReturnIfValid(json.value);
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
   }
+  
+  ToModify(){
+    return this.toJSON();
+  }
 }
 
 ParkingSpace.init({
@@ -42,9 +46,8 @@ ParkingSpace.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.ENUM(),
-    allowNull: true,
-    values: ['AT', 'PD', 'EX']
+    type: new DataTypes.STRING(2),
+    allowNull: false
   },
   description: {
     type: new DataTypes.STRING(50),

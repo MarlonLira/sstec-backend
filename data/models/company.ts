@@ -32,6 +32,10 @@ class Company extends Model {
     this.registryCode = Attributes.ReturnIfValid(json.registryCode);
     this.phone = Attributes.ReturnIfValid(json.phone);
   }
+  
+  ToModify(){
+    return this.toJSON();
+  }
 }
 
 // Todos os atributos que não podem ser nulos no banco tem que ter 'allowNull: false'
@@ -42,9 +46,8 @@ Company.init({
     primaryKey: true,
   },
   status: {
-    type: new DataTypes.ENUM(),
-    allowNull: true,
-    values: ['AT', 'PD', 'EX']
+    type: new DataTypes.STRING(2),
+    allowNull: false
   },
   name: {
     type: new DataTypes.STRING(30),

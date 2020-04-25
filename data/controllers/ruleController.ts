@@ -9,6 +9,7 @@ import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import Rule from '../models/rule';
 import { HttpMessage } from '../../commons/enums/httpMessage';
+import Attributes from '../../commons/core/attributes';
 
 /**
  * @description
@@ -20,7 +21,7 @@ import { HttpMessage } from '../../commons/enums/httpMessage';
 class RuleController implements IRuleController {
 
   /**
-   *Creates an instance of RuleController.
+   * Creates an instance of RuleController.
    * @author Marlon Lira
    * @param {IRuleRepository} _ruleRepository
    * @memberof RuleController
@@ -37,7 +38,7 @@ class RuleController implements IRuleController {
   @httpPost('/rule')
   Save(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
-      const _rule = new Rule(req.body);
+      const _rule = new Rule(req.body.rule);
       this._ruleRepository.Save(_rule)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Nivel de Acesso', result));
@@ -55,8 +56,25 @@ class RuleController implements IRuleController {
    * @param {Response} res
    * @memberof RuleController
    */
+  @httpGet('/rule/id/:id')
+  @httpGet('/rule/name/:name')
   Search(@request() req: Request, @response() res: Response) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      const _rule = new Rule(req.params);
+      if (Attributes.IsValid(_rule.id)) {
+        this._ruleRepository.GetById(_rule.id)
+          .then((result: Rule) => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Nivel de Acesso', result));
+          });
+      } else if (Attributes.IsValid(_rule.name)) {
+        this._ruleRepository.GetByName(_rule.name)
+          .then((result: Rule[]) => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Nivel de Acesso', result));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Nivel de Acesso'));
+      }
+    });
   }
 
   /**
@@ -66,8 +84,14 @@ class RuleController implements IRuleController {
    * @param {Response} res
    * @memberof RuleController
    */
+  @httpGet('/rules')
   SearchAll(@request() req: Request, @response() res: Response) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      this._ruleRepository.ToList()
+        .then((result: Rule[]) => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Nivel de Acesso', result));
+        });
+    });
   }
 
   /**
@@ -77,8 +101,22 @@ class RuleController implements IRuleController {
    * @param {Response} res
    * @memberof RuleController
    */
+  @httpPut('/rule')
   Update(@request() req: Request, @response() res: Response) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      const _rule = new Rule(req.body.rule);
+      if (Attributes.IsValid(_rule.id)) {
+        this._ruleRepository.Update(_rule)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Nivel de Acesso', result));
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Nivel de Acesso', error));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Nivel de Acesso'));
+      }
+    });
   }
 
   /**
@@ -88,8 +126,18 @@ class RuleController implements IRuleController {
    * @param {Response} res
    * @memberof RuleController
    */
+  @httpDelete('/rule/:id')
   Delete(@request() req: Request, @response() res: Response) {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve) => {
+      const _rule = new Rule(req.params);
+      this._ruleRepository.Delete(_rule.id)
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Nivel de Acesso', result));
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Nivel de Acesso', error));
+        });
+    });
   }
 }
 

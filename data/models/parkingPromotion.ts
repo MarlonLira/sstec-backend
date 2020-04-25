@@ -38,6 +38,10 @@ class ParkingPromotion extends Model {
     this.discount = Attributes.ReturnIfValid(json.discount);
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
   }
+  
+  ToModify(){
+    return this.toJSON();
+  }
 }
 
 ParkingPromotion.init({
@@ -47,9 +51,8 @@ ParkingPromotion.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.ENUM(),
-    allowNull: true,
-    values: ['AT', 'PD', 'EX']
+    type: new DataTypes.STRING(2),
+    allowNull: false
   },
   name: {
     type: new DataTypes.STRING(30),

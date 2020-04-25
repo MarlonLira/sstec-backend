@@ -3,15 +3,15 @@ import { Response, Request } from "express";
 
 /**
  * @description
- * @author Emerson Souza
- * @interface IParkingSpaceController
+ * @author Gustavo Gusmão
+ * @interface IUserAdressController
  * @extends {interfaces.Controller}
  */
-interface IParkingSpaceController extends interfaces.Controller {
+interface IUserAdressController extends interfaces.Controller {
   Save(req: Request<any>, res: Response<any>);
   Search(req: Request<any>, res: Response<any>);
   Update(req: Request<any>, res: Response<any>);
   Delete(req: Request<any>, res: Response<any>);
 }
 
-export default IParkingSpaceController;
+export default IUserAdressController;

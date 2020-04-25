@@ -1,4 +1,4 @@
-import { Model, DataTypes, BelongsToGetAssociationMixin } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
@@ -25,6 +25,12 @@ class CompanyAdress extends Model {
   complement!: string;
   companyId!: number;
 
+  /**
+   * Creates an instance of CompanyAdress.
+   * @author Gustavo Gusmão
+   * @param {*} [json]
+   * @memberof CompanyAdress
+   */
   constructor(json?: any) {
     super()
     this.id = Attributes.ReturnIfValid(json.id);
@@ -33,13 +39,15 @@ class CompanyAdress extends Model {
     this.state = Attributes.ReturnIfValid(json.state);
     this.city = Attributes.ReturnIfValid(json.city);
     this.street = Attributes.ReturnIfValid(json.street);
-    this.number = Attributes.ReturnIfValid(json.snumber);
+    this.number = Attributes.ReturnIfValid(json.number);
     this.zipCode = Attributes.ReturnIfValid(json.zipCode);
     this.complement = Attributes.ReturnIfValid(json.complement);
     this.companyId = Attributes.ReturnIfValid(json.companyId);
   }
+  ToModify() {
+    return this.toJSON();
+  }
 }
-
 
 CompanyAdress.init({
   id: {
@@ -48,9 +56,8 @@ CompanyAdress.init({
     primaryKey: true
   },
   status: {
-    type: new DataTypes.ENUM(),
-    allowNull: true,
-    values: ['AT', 'PD', 'EX']
+    type: new DataTypes.STRING(2),
+    allowNull: false
   },
   country: {
     type: new DataTypes.STRING(15)
