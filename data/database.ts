@@ -10,13 +10,13 @@ import Card from './models/card';
 import Company from './models/company';
 import CompanyAdress from './models/companyAdress';
 import Employee from './models/employee';
-import Payment from './models/payment';
 import Parking from './models/parking';
 import Rule from './models/rule';
 import ParkingPromotion from './models/parkingPromotion';
 import ParkingSpace from './models/parkingSpace';
 import ParkingAdress from './models/parkingAdress';
 import Context from '../main/context';
+import Scheduling from './models/scheduling';
 
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
@@ -47,7 +47,8 @@ class Database {
       { name: 'Rule', entity: Rule.sequelize },
       { name: 'parkingPromotion', entity: ParkingPromotion.sequelize },
       { name: 'parkingSpace', entity: ParkingSpace.sequelize },
-      { name: 'parkingAdress', entity: ParkingAdress.sequelize }
+      { name: 'parkingAdress', entity: ParkingAdress.sequelize },
+      { name: 'scheduling', entity: Scheduling.sequelize },
     ];
 
     Logger.Info('Database', 'Table verification started!');
@@ -67,6 +68,9 @@ class Database {
     Parking.hasMany(ParkingPromotion, { foreignKey: 'parkingId', as: 'ParkingPromotion' });
     Parking.hasMany(ParkingAdress, { foreignKey: 'parkingId', as: 'ParkingAdress' });
     Parking.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'ParkingSpace' });
+    Scheduling.hasMany(ParkingSpace, { foreignKey: 'parkingSpaceId', as: 'ParkingSpace'});
+    Scheduling.hasMany(User, { foreignKey: 'userId', as: 'User'});
+    Scheduling.hasMany(Card, { foreignKey: 'cardId', as: 'Card'});
 
     // 1:1
 

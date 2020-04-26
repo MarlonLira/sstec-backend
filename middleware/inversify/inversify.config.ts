@@ -17,6 +17,7 @@ import RuleRepository from '../../data/repositories/RuleRepository';
 import ParkingPromotionRepository from '../../data/repositories/parkingPromotionRepository';
 import ParkingSpaceRepository from '../../data/repositories/parkingSpaceRepository';
 import ParkingAdressRepository from '../../data/repositories/parkingAdressRepository';
+import SchedulingRepository from '../../data/repositories/schedulingRepository';
 
 // Services
 import AuthService from '../../data/services/authService';
@@ -36,6 +37,7 @@ import IRuleRepository from '../../data/interfaces/IRepositories/IRuleRepository
 import IParkingPromotionRepository from '../../data/interfaces/IRepositories/IParkingPromotionRepository';
 import IParkingAdressRepository from '../../data/interfaces/IRepositories/IParkingAdressRepository';
 import IAuthService from '../../data/interfaces/IServices/IAuthService';
+import ISchedulingRepository from '../../data/interfaces/IRepositories/ISchedulingRepository';
 
 
 const container = new Container();
@@ -53,5 +55,6 @@ container.bind<IRuleRepository>(TYPES.IRuleRepository).to(RuleRepository);
 container.bind<IParkingPromotionRepository>(TYPES.IParkingPromotionRepository).to(ParkingPromotionRepository);
 container.bind<IParkingSpaceRepository>(TYPES.IParkingSpaceRepository).to(ParkingSpaceRepository);
 container.bind<IParkingAdressRepository>(TYPES.IParkingAdressRepository).to(ParkingAdressRepository);
+container.bind<ISchedulingRepository>(TYPES.ISchedulingRepository).to(SchedulingRepository);
 
 export default container;
