@@ -18,6 +18,7 @@ import ParkingSpace from './models/parkingSpace';
 import ParkingAdress from './models/parkingAdress';
 import Scheduling from './models/scheduling';
 import ParkingScore from './models/parkingScore';
+import SpaceManager from './models/spaceManager';
 
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
@@ -50,7 +51,8 @@ class Database {
       { name: 'parkingSpace', entity: ParkingSpace.sequelize },
       { name: 'parkingAdress', entity: ParkingAdress.sequelize },
       { name: 'scheduling', entity: Scheduling.sequelize },
-      { name: 'parkingScore', entity: ParkingScore.sequelize }
+      { name: 'parkingScore', entity: ParkingScore.sequelize },
+      { name: 'spaceManager', entity: SpaceManager.sequelize }
 
     ];
 
@@ -76,6 +78,7 @@ class Database {
     Scheduling.hasMany(User, { foreignKey: 'userId', as: 'User'});
     Scheduling.hasMany(Card, { foreignKey: 'cardId', as: 'Card'});
     Parking.hasMany(ParkingScore, { foreignKey: 'parkingId', as: 'ParkingScore' });
+    SpaceManager.hasMany(ParkingSpace, { foreignKey: 'parkingSpaceId', as: 'ParkingSpace'})
 
     // 1:1
 
