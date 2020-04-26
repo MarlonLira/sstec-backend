@@ -11,6 +11,7 @@ const TYPES = {
   IRuleRepository: Symbol('IRuleRepository'),
   IParkingPromotionRepository: Symbol('IParkingPromotionRepository'),
   IParkingSpaceRepository: Symbol('IParkingSpaceRepository'),
+  IParkingScoreRepository: Symbol('IParkingScoreRepository'),
   IParkingAdressRepository: Symbol('IParkingAdressRepository'),
   IUserAdressRepository: Symbol('IUserAdressRepository'),
   ISchedulingRepository: Symbol('ISchedulingRepository')
