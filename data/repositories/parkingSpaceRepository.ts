@@ -112,6 +112,35 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
 
   /**
    * @description
+   * @author Marlon Lira
+   * @param {number} parkingId
+   * @returns {Promise<ParkingSpace[]>}
+   * @memberof ParkingSpaceRepository
+   */
+  GetByParkingId(_parkingId: number): Promise<ParkingSpace[]> {
+    return new Promise((resolve, reject) => {
+      ParkingSpace.findAll(
+        {
+          where:
+          {
+            parkingId: _parkingId,
+            status: {
+              [Op.ne]: TransactionType.DELETED
+            }
+          },
+        })
+        .then((parkingSpace: ParkingSpace[]) => {
+          resolve(parkingSpace)
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+
+  /**
+   * @description
    * @author Emerson Souza
    * @returns {Promise<ParkingSpace[]>}
    * @memberof ParkingSpaceRepository
