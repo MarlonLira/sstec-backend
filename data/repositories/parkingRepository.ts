@@ -37,11 +37,11 @@ class ParkingRepository implements IParkingRepository {
       const _transaction = await Parking.sequelize.transaction();
       parking.status = TransactionType.ACTIVE;
       Parking.create(parking, { transaction: _transaction })
-        .then((createParking: Parking) => {
-          _transaction.commit();
+        .then(async (createParking: Parking) => {
+          await _transaction.commit();
           resolve({ "parkingId": createParking.id });
-        }).catch(error => {
-          _transaction.rollback();
+        }).catch(async error => {
+          await _transaction.rollback();
           reject(error);
         });
     });
@@ -56,7 +56,7 @@ class ParkingRepository implements IParkingRepository {
   Update(parking: Parking): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
-      Parking.update(parking,
+      Parking.update(parking.ToModify(),
         {
           where:
           {
@@ -82,7 +82,7 @@ class ParkingRepository implements IParkingRepository {
    * @param {number} id
    * @memberof ParkingRepository
    */
-  Delete(id: number) {
+  Delete(_id: number) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
       Parking.update({
@@ -90,15 +90,17 @@ class ParkingRepository implements IParkingRepository {
       },
         {
           where: {
-            id: id
+            id: _id
           },
           transaction: _transaction,
           validate: false
         })
-        .then(result => {
+        .then(async result => {
+          await _transaction.commit();
           resolve(result);
         })
-        .catch(error => {
+        .catch(async error => {
+          await _transaction.commit();
           reject(error);
         });
     });

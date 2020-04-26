@@ -20,11 +20,11 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
       const _transaction = await ParkingSpace.sequelize.transaction();
       parkingSpace.status = TransactionType.ACTIVE;
       ParkingSpace.create(parkingSpace, { transaction: _transaction })
-        .then((createParkingSpace: ParkingSpace) => {
-          _transaction.commit();
+        .then(async (createParkingSpace: ParkingSpace) => {
+          await _transaction.commit();
           resolve({ "parkingSpaceId": createParkingSpace.id });
-        }).catch(error => {
-          _transaction.rollback();
+        }).catch(async error => {
+          await _transaction.rollback();
           reject(error);
         });
     });
@@ -40,7 +40,7 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
   Update(parkingSpace: ParkingSpace): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingSpace.sequelize.transaction();
-      ParkingSpace.update(parkingSpace,
+      ParkingSpace.update(parkingSpace.ToModify(),
         {
           where:
           {
@@ -64,10 +64,10 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
    * @description
    * @author Emerson Souza
    * @param {number} id
-   * @returns
+   * @returns {Promise<any>}
    * @memberof ParkingSpaceRepository
    */
-  Delete(_id: number) {
+  Delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingSpace.sequelize.transaction();
       ParkingSpace.update({
@@ -80,10 +80,12 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
           transaction: _transaction,
           validate: false
         })
-        .then(result => {
+        .then(async result => {
+          await _transaction.commit();
           resolve(result);
         })
-        .catch(error => {
+        .catch(async error => {
+          await _transaction.commit();
           reject(error);
         });
     });
@@ -96,7 +98,7 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
    * @returns {Promise<ParkingSpace>}
    * @memberof ParkingSpaceRepository
    */
-  GetByParkingSpaceId(id: number): Promise<ParkingSpace> {
+  GetById(id: number): Promise<ParkingSpace> {
     return new Promise((resolve, reject) => {
       ParkingSpace.findByPk(id)
         .then((parkingSpace: ParkingSpace) => {
