@@ -23,8 +23,8 @@
     },
     "ForceSync": false,
     "AlterSync": false,
-    "Logging": false,
     "DropAllTable": false,
+    "Logging": false,
     "IsLogger": false
   }
 }

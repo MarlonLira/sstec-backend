@@ -6,10 +6,14 @@ import Attributes from './attributes';
  * @class InnerDate
  */
 class InnerDate {
-  public Day!: string;
-  public Month!: string;
-  public Year!: string;
-  public FullDate!: string;
+  public day!: string;
+  public month!: string;
+  public year!: string;
+  public hours!: string;
+  public minutes!: string;
+  public seconds!: string;
+  public shortDate!: string;
+  public fullDate!: string;
   public _isValidDate!: boolean;
 
   /**
@@ -18,20 +22,31 @@ class InnerDate {
    * @param {*} [fullDate]
    * @memberof InnerDate
    */
-  public constructor(fullDate?: any) {
+  ConvertToString(fullDate?: string) {
     this._isValidDate = true;
     const datePart = Attributes.IsValid(fullDate) ? fullDate.split('-') : undefined;
 
     if (Attributes.IsValid(datePart)) {
-      this.Year = LeftZero(datePart[0]);
-      this.Month = LeftZero(datePart[1]);
-      this.Day = LeftZero(datePart[2]);
-      this.FullDate = fullDate;
+      this.year = LeftZero(datePart[0]);
+      this.month = LeftZero(datePart[1]);
+      this.day = LeftZero(datePart[2]);
+      this.fullDate = fullDate;
     } else {
       this._isValidDate = false;
     }
   }
 
+  ConvertToDateTime(_date: Date): InnerDate {
+    this.year = LeftZero(_date.getFullYear());
+    this.month = LeftZero(_date.getMonth() + 1);
+    this.day = LeftZero(_date.getDate());
+    this.hours = LeftZero((_date.getUTCHours() === 1 || _date.getUTCHours() === 2) ? 24 - (3 - _date.getUTCHours()) : _date.getUTCHours() - 3);
+    this.minutes = LeftZero(_date.getUTCMinutes());
+    this.seconds = LeftZero(_date.getUTCSeconds());
+    this.fullDate = `${this.year}-${this.month}-${this.day} ${this.hours}:${this.minutes}:${this.seconds}`;
+    this.shortDate = `${this.year}-${this.month}-${this.day}`;
+    return (this);
+  }
   /**
    * @description returns the built date in the constructor
    * @author Marlon Lira
@@ -39,7 +54,7 @@ class InnerDate {
    * @memberof InnerDate
    */
   getFullDate() {
-    return this._isValidDate ? `${this.Year}-${this.Month}-${this.Day}` : undefined;
+    return this._isValidDate ? `${this.year}-${this.month}-${this.day}` : undefined;
   }
 
   /**
@@ -50,11 +65,11 @@ class InnerDate {
    */
   public Now() {
     const _date = new Date();
-    this.Year = LeftZero(_date.getFullYear());
-    this.Month = LeftZero(_date.getMonth() + 1);
-    this.Day = LeftZero(_date.getDay());
-    this.FullDate = `${this.Year}-${this.Month}-${this.Day}`;
-    return `${this.Year}-${this.Month}-${this.Day}`;
+    this.year = LeftZero(_date.getFullYear());
+    this.month = LeftZero(_date.getMonth() + 1);
+    this.day = LeftZero(_date.getDay());
+    this.fullDate = `${this.year}-${this.month}-${this.day}`;
+    return `${this.year}-${this.month}-${this.day}`;
   }
 }
 
@@ -80,10 +95,27 @@ function DateTimeNow() {
   const _date = new Date();
   const Year = LeftZero(_date.getFullYear());
   const Month = LeftZero(_date.getMonth() + 1);
-  const Day = LeftZero(_date.getDay());
+  const Day = LeftZero(_date.getDate());
   const hours = (_date.getUTCHours() === 1 || _date.getUTCHours() === 2) ? 24 - (3 - _date.getUTCHours()) : _date.getUTCHours() - 3;
   const minutes = _date.getUTCMinutes();
   const seconds = _date.getUTCSeconds();
+  const build = `${Year}-${Month}-${Day} ${hours}:${minutes}:${seconds}`;
+  return build;
+}
+
+/**
+ * @description
+ * @author Gustavo Gusmão
+ * @param {Date} _date
+ * @returns {string}
+ */
+function ConvertToDateTime(_date: Date): string {
+  const Year = LeftZero(_date.getFullYear());
+  const Month = LeftZero(_date.getMonth() + 1);
+  const Day = LeftZero(_date.getDate());
+  const hours = LeftZero((_date.getUTCHours() === 1 || _date.getUTCHours() === 2) ? 24 - (3 - _date.getUTCHours()) : _date.getUTCHours() - 3);
+  const minutes = LeftZero(_date.getUTCMinutes());
+  const seconds = LeftZero(_date.getUTCSeconds());
   const build = `${Year}-${Month}-${Day} ${hours}:${minutes}:${seconds}`;
   return build;
 }
@@ -105,4 +137,4 @@ function LeftZero(value: any) {
   return result;
 }
 
-export { InnerDate, DateNow, DateTimeNow };
+export { InnerDate, DateNow, DateTimeNow, ConvertToDateTime };
