@@ -17,6 +17,7 @@ class ParkingSpace extends Model {
   status!: TransactionType;
   description!: string;
   value: number;
+  type: 'CAR' | 'MOTORCYCLE'
   parkingId!: number;
 
   /**
@@ -54,6 +55,10 @@ ParkingSpace.init({
   },
   value: {
     type: new DataTypes.DOUBLE(),
+    allowNull: false
+  },
+  type:{
+    type: new DataTypes.STRING(10),
     allowNull: false
   },
   parkingId: {
