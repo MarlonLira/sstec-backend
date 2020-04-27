@@ -70,15 +70,15 @@ class Database {
     User.hasMany(Vehicle, { foreignKey: 'userId', as: 'Vehicle' });
     User.hasMany(Card, { foreignKey: 'userId', as: 'Card' });
     User.hasMany(ParkingScore, { foreignKey: 'userId', as: 'ParkingScore' });
+    User.hasMany(Scheduling, { foreignKey: 'userId', as: 'Scheduling' });
     Rule.hasMany(Employee, { foreignKey: 'ruleId', as: 'Employee' });
+    //Card.hasMany(Scheduling, { foreignKey: 'cardId', as: 'Scheduling'});
     Parking.hasMany(ParkingPromotion, { foreignKey: 'parkingId', as: 'ParkingPromotion' });
     Parking.hasMany(ParkingAdress, { foreignKey: 'parkingId', as: 'ParkingAdress' });
     Parking.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'ParkingSpace' });
-    Scheduling.hasMany(ParkingSpace, { foreignKey: 'parkingSpaceId', as: 'ParkingSpace'});
-    Scheduling.hasMany(User, { foreignKey: 'userId', as: 'User'});
-    Scheduling.hasMany(Card, { foreignKey: 'cardId', as: 'Card'});
     Parking.hasMany(ParkingScore, { foreignKey: 'parkingId', as: 'ParkingScore' });
-    SpaceManager.hasMany(ParkingSpace, { foreignKey: 'parkingSpaceId', as: 'ParkingSpace'})
+    ParkingSpace.hasMany(Scheduling, { foreignKey: 'parkingSpaceId', as: 'Scheduling'});
+    ParkingSpace.hasMany(SpaceManager, { foreignKey: 'parkingSpaceId', as: 'SpaceManager'})
 
     // 1:1
 

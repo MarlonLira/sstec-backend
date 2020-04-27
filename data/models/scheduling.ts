@@ -38,6 +38,7 @@ class Scheduling extends Model {
     this.cardId = Attributes.ReturnIfValid(json.cardId);
     this.parkingSpaceId = Attributes.ReturnIfValid(json.parkingSpaceId);
   }
+
   ToModify(){
     return this.toJSON();
   }
@@ -63,16 +64,13 @@ Scheduling.init({
     type: new DataTypes.DATE()
   },
   userId: {
-    type: new DataTypes.INTEGER(),
-    allowNull: true
+    type: new DataTypes.INTEGER()
   },
   cardId: {
-    type: new DataTypes.INTEGER(),
-    allowNull: true
+    type: new DataTypes.INTEGER()
   },
   parkingSpaceId: {
-    type: new DataTypes.INTEGER(),
-    allowNull: true
+    type: new DataTypes.INTEGER()
   }
 }, {
   sequelize: _instance,
