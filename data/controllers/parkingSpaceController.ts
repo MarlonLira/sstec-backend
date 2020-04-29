@@ -11,7 +11,6 @@ import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 
-
 /**
  * @description
  * @author Emerson Souza
@@ -40,36 +39,42 @@ class ParkingSpaceController implements IParkingSpaceController {
   @httpPost('/parkingSpace')
   Save(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
-      let _parkingSpace = new ParkingSpace(req.body.parkingSpace);
+      const _parkingSpace = new ParkingSpace(req.body.parkingSpace);
       this._parkingSpaceRepository.Save(_parkingSpace)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento', result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Vaga', result));
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Vaga', error));
         });
     });
   }
 
-  /**
-   * @description
-   * @author Emerson Souza
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @returns {Promise<any>}
-   * @memberof ParkingSpaceController
-   */
-  @httpGet('/parkingSpace')
+  @httpGet('/parkingSpace/id/:id')
+  @httpGet('/parkingSpace/parkingId/:parkingId')
   Search(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
-      const _parkingSpace: number = req.params.Id;
-      this._parkingSpaceRepository.GetByParkingSpaceId(_parkingSpace)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento', result))
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
-        });
+      const _parkingSpace = new ParkingSpace(req.params);
+      if (Attributes.IsValid(_parkingSpace.id)) {
+        this._parkingSpaceRepository.GetById(_parkingSpace.id)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Vaga', result))
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Vaga', error));
+          });
+      } else if (Attributes.IsValid(_parkingSpace.parkingId)) {
+        this._parkingSpaceRepository.GetByParkingId(_parkingSpace.parkingId)
+          .then((foundParkingSpaces: ParkingSpace[]) => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Vaga', foundParkingSpaces))
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Vaga', error));
+          });
+      }
+      else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Vaga'));
+      }
     });
   }
 
@@ -85,20 +90,24 @@ class ParkingSpaceController implements IParkingSpaceController {
   Update(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _parkingSpace = new ParkingSpace(req.body.parkingSpace);
-      this._parkingSpaceRepository.GetByParkingSpaceId(_parkingSpace.id)
-        .then((parkingSpace: ParkingSpace) => {
-          if (Attributes.IsValid(parkingSpace)) {
-            this._parkingSpaceRepository.Update(_parkingSpace)
-              .then(result => {
-                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Estacionamento', result))
-              })
-              .catch(error => {
-                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
-              });
-          } else {
-            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Estacionamento'))
-          }
-        });
+      if (Attributes.IsValid(_parkingSpace.id)) {
+        this._parkingSpaceRepository.GetById(_parkingSpace.id)
+          .then((parkingSpace: ParkingSpace) => {
+            if (Attributes.IsValid(parkingSpace)) {
+              this._parkingSpaceRepository.Update(_parkingSpace)
+                .then(result => {
+                  resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Vaga', result))
+                })
+                .catch(error => {
+                  resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Vaga', error));
+                });
+            } else {
+              resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Vaga'))
+            }
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Vaga'));
+      }
     });
   }
 
@@ -114,18 +123,18 @@ class ParkingSpaceController implements IParkingSpaceController {
   Delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _id: number = req.params.id;
-      this._parkingSpaceRepository.GetByParkingSpaceId(_id)
+      this._parkingSpaceRepository.GetById(_id)
         .then((parkingSpace: ParkingSpace) => {
           if (Attributes.IsValid(parkingSpace)) {
             this._parkingSpaceRepository.Delete(_id)
               .then(result => {
-                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Estacionamento', result))
+                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Vaga', result))
               })
               .catch(error => {
-                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
+                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Vaga', error));
               });
           } else {
-            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Estacionamento'));
+            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Vaga'));
           }
         });
     });
