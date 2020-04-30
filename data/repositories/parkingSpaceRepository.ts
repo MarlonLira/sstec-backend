@@ -12,10 +12,10 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
    * @description
    * @author Emerson Souza
    * @param {ParkingSpace} parkingSpace
-   * @returns
+   * @returns {Promise<any>}
    * @memberof ParkingSpaceRepository
    */
-  Save(parkingSpace: ParkingSpace) {
+  Save(parkingSpace: ParkingSpace): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingSpace.sequelize.transaction();
       parkingSpace.status = TransactionType.ACTIVE;

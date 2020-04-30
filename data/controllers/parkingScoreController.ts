@@ -10,6 +10,7 @@ import Attributes from "../../commons/core/attributes";
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
+import Parking from "../models/parking";
 
 /**
  * @description
@@ -30,8 +31,19 @@ class ParkingScoreController implements IParkingScoreController {
    * @returns {Promise<any>}
    * @memberof ParkingScoreController
    */
-  Save(req: Request<any, any, any, import("express-serve-static-core").Query>, res: Response<any>): Promise<any> {
-    throw new Error("Method not implemented.");
+  @httpPost('/parkingScore')
+  Save(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+    return new Promise((resolve) => {
+      const _parkingScore = new ParkingScore(req.body.parkingScore);
+      const _parking = new Parking(req.body.parking);
+      this._parkingScoreRepository.Save(_parkingScore,_parking)
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Avaliação', result));
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Avaliação', error));
+        });
+    });
   }
 
   /**
