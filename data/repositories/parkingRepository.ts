@@ -111,6 +111,7 @@ class ParkingRepository implements IParkingRepository {
    * @description
    * @author Emerson Souza
    * @param {string} registryCode
+   * @returns {Promise<Parking>}
    * @memberof ParkingRepository
    */
   GetByRegistryCode(registryCode: string): Promise<Parking> {
@@ -138,6 +139,7 @@ class ParkingRepository implements IParkingRepository {
   /**
    * @description
    * @author Emerson Souza
+   * @returns {Promise<Parking[]>}
    * @memberof ParkingRepository
    */
   ToList(): Promise<Parking[]> {

@@ -61,7 +61,15 @@ class ParkingScoreRepository implements IParkingScoreRepository {
    * @memberof ParkingScoreRepository
    */
   GetById(id: number): Promise<ParkingScore> {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      ParkingScore.findByPk(id)
+        .then((parkingScore: ParkingScore) => {
+          resolve(parkingScore)
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 
   /**
