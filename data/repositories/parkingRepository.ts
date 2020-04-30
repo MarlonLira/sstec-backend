@@ -32,7 +32,7 @@ class ParkingRepository implements IParkingRepository {
    * @param {Parking} parking
    * @memberof ParkingRepository
    */
-  Save(parking: Parking) {
+  Save(parking: Parking): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
       parking.status = TransactionType.ACTIVE;
@@ -79,10 +79,11 @@ class ParkingRepository implements IParkingRepository {
   /**
    * @description
    * @author Emerson Souza
-   * @param {number} id
+   * @param {number} _id
+   * @returns {Promise<any>}
    * @memberof ParkingRepository
    */
-  Delete(_id: number) {
+  Delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
       Parking.update({
