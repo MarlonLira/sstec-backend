@@ -29,14 +29,15 @@ class Context {
         dialect: 'mysql',
         logging: _logging,
         omitNull: true,
-        // dialectOptions: {
-        //   options: {
-        //     trustServerCertificate: true
-        //   },
-        //   ssl: {
-        //     rejectUnauthorized: false,
-        //   }
-        // }
+        timezone: '-03:00',
+        dialectOptions: {
+          options: {
+            trustServerCertificate: true
+          },
+          ssl: {
+            rejectUnauthorized: false,
+          }
+        }
        }
     );
     return sequelize;

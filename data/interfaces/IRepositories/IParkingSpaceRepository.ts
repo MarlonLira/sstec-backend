@@ -1,8 +1,10 @@
-import Parking from '../../models/parking';
 import ParkingSpace from '../../models/parkingSpace';
 
-
-
+/**
+ * @description
+ * @author Emerson Souza
+ * @interface IParkingSpaceRepository
+ */
 interface IParkingSpaceRepository {
 
   /**
@@ -38,7 +40,16 @@ interface IParkingSpaceRepository {
    * @returns {Promise<ParkingSpace>}
    * @memberof IParkingSpaceRepository
    */
-  GetByParkingSpaceId(id: number): Promise<ParkingSpace>;
+  GetById(id: number): Promise<ParkingSpace>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} parkingId
+   * @returns {Promise<ParkingSpace[]>}
+   * @memberof IParkingSpaceRepository
+   */
+  GetByParkingId(parkingId: number): Promise<ParkingSpace[]>;
 
   /**
    * @description

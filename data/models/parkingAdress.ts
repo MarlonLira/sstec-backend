@@ -48,7 +48,7 @@ class ParkingAdress extends Model {
     this.complement = Attributes.ReturnIfValid(json.complement);
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
   }
-  
+
   ToModify(){
     return this.toJSON();
   }

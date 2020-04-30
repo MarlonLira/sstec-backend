@@ -13,5 +13,7 @@ import '../../data/controllers/ruleController';
 import '../../data/controllers/parkingPromotionController';
 import '../../data/controllers/parkingSpaceController';
 import '../../data/controllers/parkingAdressController';
+import '../../data/controllers/schedulingController';
+import '../../data/controllers/parkingScoreController';
+import '../../data/controllers/spaceManagerController';
 import '../../data/controllers/parkingFinanceController'
-
