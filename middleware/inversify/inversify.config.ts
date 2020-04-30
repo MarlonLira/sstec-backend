@@ -20,6 +20,9 @@ import ParkingAdressRepository from '../../data/repositories/parkingAdressReposi
 import SchedulingRepository from '../../data/repositories/schedulingRepository';
 import ParkingScoreRepository from '../../data/repositories/parkingScoreRepository';
 import SpaceManagerRepository from '../../data/repositories/SpaceManagerRepository';
+import PakingFinanceRepository from '../../data/repositories/parkingFinanceRepository';
+import ParkingFinance from '../../data/models/parkingFinance';
+import ParkingFinanceRepository from '../../data/repositories/parkingFinanceRepository';
 
 // Services
 import AuthService from '../../data/services/authService';
@@ -42,6 +45,10 @@ import IParkingScoreRepository from '../../data/interfaces/IRepositories/IParkin
 import IAuthService from '../../data/interfaces/IServices/IAuthService';
 import ISchedulingRepository from '../../data/interfaces/IRepositories/ISchedulingRepository';
 import ISpaceManagerRepository from '../../data/interfaces/IRepositories/ISpaceManagerRepository';
+import IParkingFinanceRepository from '../../data/interfaces/IRepositories/IParkingFinanceRepository';
+import IParkingFinanceController from '../../data/interfaces/IControllers/IParkingFinanceController';
+import IAuthService from '../../data/interfaces/IServices/IAuthService';
+
 
 // Binds
 const container = new Container();
@@ -62,5 +69,6 @@ container.bind<IParkingAdressRepository>(TYPES.IParkingAdressRepository).to(Park
 container.bind<ISchedulingRepository>(TYPES.ISchedulingRepository).to(SchedulingRepository);
 container.bind<IParkingScoreRepository>(TYPES.IParkingScoreRepository).to(ParkingScoreRepository);
 container.bind<ISpaceManagerRepository>(TYPES.ISpaceManagerRepository).to(SpaceManagerRepository);
+container.bind<IParkingFinanceRepository> (TYPES.IParkingFinanceRepository).to(ParkingFinanceRepository);
 
 export default container;
