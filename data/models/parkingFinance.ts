@@ -1,10 +1,8 @@
 import { Model, DataTypes } from 'sequelize';
 import Attributes from '../../commons/core/attributes';
-import { TransactionType } from '../../commons/enums/transactionType';
 import Context from '../../main/context';
 
 const _instance = Context.getInstance();
-
 
 /**
  * @description
@@ -21,7 +19,7 @@ class ParkingFinance extends Model{
   companyId!: number;
 
   /**
-   *Creates an instance of ParkingFinance.
+   * Creates an instance of ParkingFinance.
    * @author Felipe Seabra
    * @param {*} [json]
    * @memberof ParkingFinance
@@ -35,11 +33,11 @@ class ParkingFinance extends Model{
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
     this.companyId = Attributes.ReturnIfValid(json.companyId);
   }
+
   ToModify(){
     return this.toJSON();
   }
 }
-//Todos atributos não pode ser nulos
   ParkingFinance.init({
     id:{
       type: new DataTypes.INTEGER(),
