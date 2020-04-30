@@ -19,6 +19,7 @@ import ParkingAdress from './models/parkingAdress';
 import Scheduling from './models/scheduling';
 import ParkingScore from './models/parkingScore';
 import SpaceManager from './models/spaceManager';
+import ParkingFinance from './models/parkingFinance';
 
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
@@ -47,13 +48,13 @@ class Database {
       { name: 'Employee', entity: Employee.sequelize },
       { name: 'Parking', entity: Parking.sequelize },
       { name: 'Rule', entity: Rule.sequelize },
-      { name: 'parkingPromotion', entity: ParkingPromotion.sequelize },
-      { name: 'parkingSpace', entity: ParkingSpace.sequelize },
-      { name: 'parkingAdress', entity: ParkingAdress.sequelize },
-      { name: 'scheduling', entity: Scheduling.sequelize },
-      { name: 'parkingScore', entity: ParkingScore.sequelize },
-      { name: 'spaceManager', entity: SpaceManager.sequelize }
-
+      { name: 'ParkingPromotion', entity: ParkingPromotion.sequelize },
+      { name: 'ParkingSpace', entity: ParkingSpace.sequelize },
+      { name: 'ParkingAdress', entity: ParkingAdress.sequelize },
+      { name: 'Scheduling', entity: Scheduling.sequelize },
+      { name: 'ParkingScore', entity: ParkingScore.sequelize },
+      { name: 'SpaceManager', entity: SpaceManager.sequelize },
+      { name: 'ParkingFinance', entity: ParkingFinance.sequelize }
     ];
 
     Logger.Info('Database', 'Table verification started!');
@@ -66,19 +67,21 @@ class Database {
     Company.hasMany(Employee, { foreignKey: 'companyId', as: 'Employee' });
     Company.hasMany(CompanyAdress, { foreignKey: 'companyId', as: 'CompanyAdress' });
     Company.hasMany(Parking, { foreignKey: 'companyId', as: 'Parking' });
+    Company.hasMany(ParkingFinance, { foreignKey: 'companyId', as: 'ParkingFinance' });
     User.hasMany(UserAdress, { foreignKey: 'userId', as: 'UserAdress' });
     User.hasMany(Vehicle, { foreignKey: 'userId', as: 'Vehicle' });
     User.hasMany(Card, { foreignKey: 'userId', as: 'Card' });
     User.hasMany(ParkingScore, { foreignKey: 'userId', as: 'ParkingScore' });
     User.hasMany(Scheduling, { foreignKey: 'userId', as: 'Scheduling' });
     Rule.hasMany(Employee, { foreignKey: 'ruleId', as: 'Employee' });
-    //Card.hasMany(Scheduling, { foreignKey: 'cardId', as: 'Scheduling'});
     Parking.hasMany(ParkingPromotion, { foreignKey: 'parkingId', as: 'ParkingPromotion' });
     Parking.hasMany(ParkingAdress, { foreignKey: 'parkingId', as: 'ParkingAdress' });
     Parking.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'ParkingSpace' });
     Parking.hasMany(ParkingScore, { foreignKey: 'parkingId', as: 'ParkingScore' });
-    ParkingSpace.hasMany(Scheduling, { foreignKey: 'parkingSpaceId', as: 'Scheduling'});
-    ParkingSpace.hasMany(SpaceManager, { foreignKey: 'parkingSpaceId', as: 'SpaceManager'})
+    //Parking.hasMany(ParkingFinance, {foreignKey: 'parkingId', as: 'ParkingFinance'});
+    ParkingSpace.hasMany(Scheduling, { foreignKey: 'parkingSpaceId', as: 'Scheduling' });
+    ParkingSpace.hasMany(SpaceManager, { foreignKey: 'parkingSpaceId', as: 'SpaceManager' });
+    //Card.hasMany(Scheduling, { foreignKey: 'cardId', as: 'Scheduling' });
 
     // 1:1
 

@@ -4,6 +4,8 @@ import { Op } from 'sequelize';
 import IParkingScoreRepository from '../interfaces/IRepositories/IParkingScoreRepository';
 import ParkingScore from '../models/ParkingScore';
 import { TransactionType } from "../../commons/enums/transactionType";
+import ParkingSpace from "../models/parkingSpace";
+import Parking from "../models/parking";
 
 @injectable()
 class ParkingScoreRepository implements IParkingScoreRepository {
@@ -15,8 +17,19 @@ class ParkingScoreRepository implements IParkingScoreRepository {
    * @returns {Promise<any>}
    * @memberof ParkingScoreRepository
    */
-  Save(parkingScore: ParkingScore): Promise<any> {
-    throw new Error("Method not implemented.");
+  Save(parkingScore: ParkingScore, parking:Parking): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await ParkingScore.sequelize.transaction();
+      parking.status = TransactionType.ACTIVE;
+            ParkingScore.create(parkingScore, { transaction: _transaction })
+        .then(async (createParkingScore: ParkingScore) => {
+          await _transaction.commit();
+          resolve({ "parkingScoreId": createParkingScore.id });
+        }).catch(async error => {
+          await _transaction.rollback();
+          reject(error);
+        });
+    });
   }
 
   /**
