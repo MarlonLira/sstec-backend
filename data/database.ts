@@ -47,12 +47,12 @@ class Database {
       { name: 'Employee', entity: Employee.sequelize },
       { name: 'Parking', entity: Parking.sequelize },
       { name: 'Rule', entity: Rule.sequelize },
-      { name: 'parkingPromotion', entity: ParkingPromotion.sequelize },
-      { name: 'parkingSpace', entity: ParkingSpace.sequelize },
-      { name: 'parkingAdress', entity: ParkingAdress.sequelize },
-      { name: 'scheduling', entity: Scheduling.sequelize },
-      { name: 'parkingScore', entity: ParkingScore.sequelize },
-      { name: 'spaceManager', entity: SpaceManager.sequelize }
+      { name: 'ParkingPromotion', entity: ParkingPromotion.sequelize },
+      { name: 'ParkingSpace', entity: ParkingSpace.sequelize },
+      { name: 'ParkingAdress', entity: ParkingAdress.sequelize },
+      { name: 'Scheduling', entity: Scheduling.sequelize },
+      { name: 'ParkingScore', entity: ParkingScore.sequelize },
+      { name: 'SpaceManager', entity: SpaceManager.sequelize }
 
     ];
 
@@ -72,13 +72,13 @@ class Database {
     User.hasMany(ParkingScore, { foreignKey: 'userId', as: 'ParkingScore' });
     User.hasMany(Scheduling, { foreignKey: 'userId', as: 'Scheduling' });
     Rule.hasMany(Employee, { foreignKey: 'ruleId', as: 'Employee' });
-    //Card.hasMany(Scheduling, { foreignKey: 'cardId', as: 'Scheduling'});
     Parking.hasMany(ParkingPromotion, { foreignKey: 'parkingId', as: 'ParkingPromotion' });
     Parking.hasMany(ParkingAdress, { foreignKey: 'parkingId', as: 'ParkingAdress' });
     Parking.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'ParkingSpace' });
     Parking.hasMany(ParkingScore, { foreignKey: 'parkingId', as: 'ParkingScore' });
     ParkingSpace.hasMany(Scheduling, { foreignKey: 'parkingSpaceId', as: 'Scheduling'});
-    ParkingSpace.hasMany(SpaceManager, { foreignKey: 'parkingSpaceId', as: 'SpaceManager'})
+    ParkingSpace.hasMany(SpaceManager, { foreignKey: 'parkingSpaceId', as: 'SpaceManager'});
+    //Card.hasMany(Scheduling, { foreignKey: 'cardId', as: 'Scheduling' });
 
     // 1:1
 
