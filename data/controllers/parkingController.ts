@@ -10,6 +10,7 @@ import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import Attributes from "../../commons/core/attributes";
+import { NUMBER } from "sequelize/types";
 
 /**
  * @description
@@ -43,8 +44,8 @@ class ParkingController implements IParkingController {
         });
     });
   }
-  
- 
+
+
   /**
    * @description
    * @author Emerson Souza
@@ -75,16 +76,20 @@ class ParkingController implements IParkingController {
    * @returns {Promise<any>}
    * @memberof ParkingController
    */
-  @httpGet('/parkings')
+  @httpGet('/parkings/:companyId')
   SearchAll(@request() req: Request, @response() res: Response): Promise<any> {
     return new Promise((resolve) => {
-      this._parkingRepository.ToList()
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento', result));
-        });
+      const _companyId: number = Number(req.params.companyId);
+      if (Attributes.IsValid(_companyId)) {
+        this._parkingRepository.ToList(_companyId)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Veículo'));
+      }
     });
   }
-
 
   /**
    * @description

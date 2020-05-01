@@ -25,13 +25,15 @@ interface IParkingRepository {
    */
   Update(parking: Parking): Promise<any>;
 
+ 
   /**
    * @description
-   * @author Emerson Souza
-   * @returns {Promise<any>}
+   * @author Marlon Lira
+   * @param {number} _companyId
+   * @returns {Promise<Parking[]>}
    * @memberof IParkingRepository
    */
-  ToList(): Promise<Parking[]>;
+  ToList(_companyId: number): Promise<Parking[]>;
 
   /**
    * @description

@@ -140,10 +140,13 @@ class ParkingRepository implements IParkingRepository {
    * @author Emerson Souza
    * @memberof ParkingRepository
    */
-  ToList(): Promise<Parking[]> {
+  ToList(_companyId: number): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       Parking.findAll({
         where: {
+          companyId: {
+            [Op.eq]: _companyId
+          },
           status: {
             [Op.ne]: TransactionType.DELETED
           }
