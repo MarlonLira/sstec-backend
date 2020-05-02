@@ -113,8 +113,26 @@ class ParkingScoreRepository implements IParkingScoreRepository {
    * @returns {Promise<any>}
    * @memberof ParkingScoreRepository
    */
-  Delete(id: number): Promise<any> {
-    throw new Error("Method not implemented.");
+  Delete(_id: number): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await ParkingScore.sequelize.transaction();
+      ParkingScore.update({},
+        {
+          where: {
+            id: _id
+          },
+          transaction: _transaction,
+          validate: false
+        })
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async error => {
+          await _transaction.rollback()
+          reject(error);
+        });
+    });
   }
 }
 
