@@ -13,10 +13,11 @@ interface IParkingScoreRepository {
    * @description
    * @author Emerson Souza
    * @param {ParkingScore} parkingScore
+   * @param {Parking} parking
    * @returns {Promise<any>}
    * @memberof IParkingScoreRepository
    */
-  Save(parkingScore: ParkingScore): Promise<any>;
+  Save(parkingScore: ParkingScore, parking:Parking): Promise<any>;
 
   /**
    * @description
@@ -33,7 +34,7 @@ interface IParkingScoreRepository {
    * @returns {Promise<ParkingScore[]>}
    * @memberof IParkingScoreRepository
    */
-  ToList(): Promise<ParkingScore[]>;
+  ToList(_parkingId:number): Promise<ParkingScore[]>;
 
   /**
    * @description

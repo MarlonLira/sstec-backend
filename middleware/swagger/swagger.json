@@ -1384,39 +1384,34 @@
         "user": {
           "type": "object",
           "properties": {
-            "user": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "integer",
-                  "format": "int64"
-                },
-                "status": {
-                  "type": "string",
-                  "format": "char(2)",
-                  "example": "AT"
-                },
-                "name": {
-                  "type": "string",
-                  "example": "teste"
-                },
-                "registryCode": {
-                  "type": "string",
-                  "example": "45100993049"
-                },
-                "phone": {
-                  "type": "string",
-                  "example": "81986584778"
-                },
-                "email": {
-                  "type": "string",
-                  "example": "teste@teste.com"
-                },
-                "password": {
-                  "type": "string",
-                  "example": "123456"
-                }
-              }
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "status": {
+              "type": "string",
+              "format": "char(2)",
+              "example": "AT"
+            },
+            "name": {
+              "type": "string",
+              "example": "teste"
+            },
+            "registryCode": {
+              "type": "string",
+              "example": "45100993049"
+            },
+            "phone": {
+              "type": "string",
+              "example": "81986584778"
+            },
+            "email": {
+              "type": "string",
+              "example": "teste@teste.com"
+            },
+            "password": {
+              "type": "string",
+              "example": "123456"
             }
           }
         }
@@ -1661,6 +1656,14 @@
             },
             "password": {
               "type": "string"
+            },
+            "email": {
+              "type": "string",
+              "example": "teste@email.com"
+            },
+            "phone": {
+              "type": "string",
+              "example": "81985856565"
             },
             "companyId": {
               "type": "integer",
