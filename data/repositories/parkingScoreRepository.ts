@@ -1,10 +1,9 @@
-import { injectable, id } from "inversify";
+import { injectable } from "inversify";
 import { Op } from 'sequelize';
 
 import IParkingScoreRepository from '../interfaces/IRepositories/IParkingScoreRepository';
 import ParkingScore from '../models/ParkingScore';
 import { TransactionType } from "../../commons/enums/transactionType";
-import ParkingSpace from "../models/parkingSpace";
 import Parking from "../models/parking";
 
 @injectable()

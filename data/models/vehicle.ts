@@ -67,7 +67,7 @@ Vehicle.init({
     allowNull: false
   },
   licensePlate: {
-    type: new DataTypes.STRING(100),
+    type: new DataTypes.STRING(10),
     allowNull: false
   },
   userId :{
