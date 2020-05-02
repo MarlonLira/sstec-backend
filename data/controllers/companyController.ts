@@ -68,14 +68,18 @@ class CompanyController implements ICompanyController {
   @httpGet('/company/registryCode/:registryCode')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      const _registryCode: string = req.params.registryCode;
-      this._companyRepository.GetByRegistryCode(_registryCode)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Empresa', result))
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Empresa', error));
-        });
+      const _company = new Company(req.params);
+      if (Attributes.IsValid(_company.registryCode)) {
+        this._companyRepository.GetByRegistryCode(_company.registryCode)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Empresa', result))
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Empresa', error));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Empresa'));
+      }
     });
   }
 
