@@ -59,7 +59,7 @@ interface IParkingSpaceRepository {
    * @returns {Promise<ParkingSpace[]>}
    * @memberof IParkingSpaceRepository
    */
-  GetAvailable(scheduling: Scheduling): Promise<any>;
+  GetAvailable(scheduling: Scheduling): Promise<ParkingSpace[]>;
 
   /**
    * @description

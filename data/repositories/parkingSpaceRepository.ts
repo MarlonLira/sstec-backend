@@ -100,18 +100,21 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
    * @returns {Promise<ParkingSpace[]>}
    * @memberof ParkingSpaceRepository
    */
-  GetAvailable(scheduling: Scheduling): Promise<any> {
+  GetAvailable(scheduling: Scheduling): Promise<ParkingSpace[]> {
     return new Promise(async (resolve, reject) => {
       ParkingSpace.sequelize.query(
         "   SELECT PS.* FROM [SSTEC].[DBO].[PARKINGSPACE] AS PS" +
         "   WHERE NOT EXISTS ( SELECT PS1.* FROM [SSTEC].[DBO].[PARKINGSPACE] AS PS1" +
-        "                     INNER JOIN [SSTEC].[DBO].[SCHEDULING] AS S1" +
-        "                       ON S1.PARKINGSPACEID = PS1.ID" +
-        "                     AND S1.[DATE] = :date" +
-        "                     AND PS.ID = PS1.ID" +
-        "                     AND ( S1.AVALIABLETIME BETWEEN :avaliableTime AND :unavailableTime" +
-        "                             OR S1.UNAVAILABLETIME BETWEEN :avaliableTime AND :unavailableTime ))" +
-        "   AND PS.TYPE = :type",
+        "                      INNER JOIN [SSTEC].[DBO].[SCHEDULING] AS S1" +
+        "                       ON S1.[PARKINGSPACEID] = PS1.[ID]" +
+        "                      WHERE S1.[STATUS] NOT IN ('EX', 'PD')" +
+        "                       AND S1.[DATE] = :date" +
+        "                       AND PS.[ID] = PS1.[ID]" +
+        "                       AND (( S1.AVALIABLETIME BETWEEN :avaliableTime AND :unavailableTime" +
+        "                             OR S1.UNAVAILABLETIME BETWEEN :avaliableTime AND :unavailableTime )" +
+        "                             OR (S1.[AVALIABLETIME] < :avaliableTime AND S1.[UNAVAILABLETIME] > :unavailableTime )))" +
+        "     AND PS.[STATUS] NOT IN ('EX', 'PD')" +
+        "     AND PS.[TYPE] = :type",
         {
           replacements: {
             date: scheduling.date,

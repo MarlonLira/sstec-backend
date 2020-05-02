@@ -4,15 +4,17 @@ import { inject } from "inversify";
 
 import ISchedulingController from '../interfaces/IControllers/ISchedulingController';
 import ISchedulingRepository from '../interfaces/IRepositories/ISchedulingRepository';
+import IParkingSpaceRepository from "../interfaces/IRepositories/IParkingSpaceRepository";
+import IParkingPromotionRepository from "../interfaces/IRepositories/IParkingPromotionRepository";
+import IUserRepository from "../interfaces/IRepositories/IUserRepository";
+import IVehicleRepository from "../interfaces/IRepositories/IVehicleRepository";
+import ICardRepository from "../interfaces/IRepositories/ICardRepository";
 import Scheduling from "../models/scheduling";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import Attributes from "../../commons/core/attributes";
-import { InnerDate, ConvertToDateTime } from "../../commons/core/innerDate";
-import IParkingSpaceRepository from "../interfaces/IRepositories/IParkingSpaceRepository";
-import IParkingPromotionRepository from "../interfaces/IRepositories/IParkingPromotionRepository";
 
 /**
  * @description
@@ -25,19 +27,26 @@ class SchedulingController implements ISchedulingController {
 
   /**
    * Creates an instance of SchedulingController.
-   * @author Gustavo Gusmão
+   * @author Marlon Lira
    * @param {ISchedulingRepository} _schedulingRepository
+   * @param {IParkingSpaceRepository} _parkingSpaceRepository
+   * @param {IParkingPromotionRepository} _parkingPromotionRepository
    * @param {IUserRepository} _userRepository
+   * @param {IVehicleRepository} _vehicleRepository
+   * @param {ICardRepository} _cardRepository
    * @memberof SchedulingController
    */
   constructor(
     @inject(TYPES.ISchedulingRepository) private _schedulingRepository: ISchedulingRepository,
     @inject(TYPES.IParkingSpaceRepository) private _parkingSpaceRepository: IParkingSpaceRepository,
-    @inject(TYPES.IParkingPromotionRepository) private _parkingPromotionRepository: IParkingPromotionRepository) { }
+    @inject(TYPES.IParkingPromotionRepository) private _parkingPromotionRepository: IParkingPromotionRepository,
+    @inject(TYPES.IUserRepository) private _userRepository: IUserRepository,
+    @inject(TYPES.IVehicleRepository) private _vehicleRepository: IVehicleRepository,
+    @inject(TYPES.ICardRepository) private _cardRepository: ICardRepository) { }
 
   /**
    * @description
-   * @author Gustavo Gusmão
+   * @author Marlon Lira
    * @param {Request<any>} req
    * @param {Response<any>} res
    * @returns
@@ -45,35 +54,40 @@ class SchedulingController implements ISchedulingController {
    */
   @httpPost('/scheduling')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
       const _scheduling = new Scheduling(req.body.scheduling);
-      this._schedulingRepository.GetByUserId(_scheduling.userId)
-        .then((foundSchedulings: Scheduling[]) => {
-          if (!Attributes.IsValid(foundSchedulings)) {
-            this._schedulingRepository.Save(_scheduling)
-              .then(result => {
-                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result));
-              })
-              .catch(error => {
-                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Agendamento', error));
-              });
-          } else {
-            const findSchedule = foundSchedulings.find(
-              s => s.avaliableTime === _scheduling.avaliableTime || s.avaliableTime < _scheduling.unavailableTime || (
-                s.unavailableTime > _scheduling.avaliableTime && s.avaliableTime < _scheduling.avaliableTime));
-            if (!Attributes.IsValid(findSchedule)) {
+      const _availableParkingSpace = await this._parkingSpaceRepository.GetAvailable(_scheduling);
+      try {
+        if (Attributes.IsValid(_availableParkingSpace)) {
+          _scheduling.parkingSpaceId = _availableParkingSpace[0].id;
+          _scheduling.userName = (await this._userRepository.GetById(_scheduling.userId)).name;
+          _scheduling.vehiclePlate = (await this._vehicleRepository.GetById(_scheduling.vehicleId)).licensePlate;
+          _scheduling.cardNumber = (await this._cardRepository.GetById(_scheduling.cardId)).number;
+
+          const _userSchedulings: Scheduling[] = await this._schedulingRepository.GetByUserId(_scheduling.userId);
+          if (Attributes.IsValid(_userSchedulings)) {
+
+            const _userScheduling = await this._schedulingRepository.ReturnIfExists(_scheduling);
+            if (Attributes.IsValid(_userScheduling)) {
+              resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Agendamento'))
+            } else {
               this._schedulingRepository.Save(_scheduling)
                 .then(result => {
-                  resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result));
-                })
-                .catch(error => {
-                  resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Agendamento', error));
+                  resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result))
                 });
-            } else {
-              resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Already_Exists, 'Agendamento', findSchedule));
             }
+          } else {
+            this._schedulingRepository.Save(_scheduling)
+              .then(result => {
+                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result))
+              });
           }
-        });
+        } else {
+          resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Agendamento'))
+        }
+      } catch (error) {
+        resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Agendamento'))
+      }
     });
   }
 
@@ -106,11 +120,12 @@ class SchedulingController implements ISchedulingController {
     });
   }
 
-  @httpPost('/schedulings')
+  @httpGet('/scheduling/:parkingId')
   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      const _scheduling = new Scheduling(req.body.scheduling);
-      this._parkingSpaceRepository.GetAvailable(_scheduling)
+      const _parkingId: number = Number(req.params.parkingId);
+
+      this._schedulingRepository.ToList(_parkingId)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Agendamento', result));
         })
