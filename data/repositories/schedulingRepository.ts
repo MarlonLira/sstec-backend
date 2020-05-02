@@ -1,4 +1,4 @@
-import { Op } from 'sequelize';
+import { Op, QueryTypes } from 'sequelize';
 
 import ISchedulingRepository from '../interfaces/IRepositories/ISchedulingRepository';
 import Scheduling from '../models/scheduling';
@@ -49,6 +49,69 @@ class SchedulingRepository implements ISchedulingRepository {
       Scheduling.findByPk(id)
         .then((foundScheduling: Scheduling) => {
           resolve(foundScheduling)
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Scheduling} scheduling
+   * @returns {Promise<Scheduling[]>}
+   * @memberof SchedulingRepository
+   */
+  ReturnIfExists(scheduling: Scheduling): Promise<Scheduling[]> {
+    return new Promise(async (resolve, reject) => {
+      Scheduling.sequelize.query(
+        "   SELECT S.* FROM [SSTEC].[DBO].[SCHEDULING] AS S" +
+        "   WHERE EXISTS ( SELECT S1.* FROM [SSTEC].[DBO].[PARKINGSPACE] AS PS1" +
+        "                  INNER JOIN [SSTEC].[DBO].[SCHEDULING] AS S1" +
+        "                    ON S1.[PARKINGSPACEID] = PS1.[ID]" +
+        "                  WHERE S1.[STATUS] NOT IN ('EX', 'PD')" +
+        "                    AND S1.[DATE] = :date" +
+        "                    AND S.[ID] = S1.[ID]" +
+        "                    AND (( S1.AVALIABLETIME BETWEEN :avaliableTime AND :unavailableTime" +
+        "                             OR S1.UNAVAILABLETIME BETWEEN :avaliableTime AND :unavailableTime )" +
+        "                             OR (S1.[AVALIABLETIME] < :avaliableTime AND S1.[UNAVAILABLETIME] > :unavailableTime )))" +
+        "     AND S.[STATUS] NOT IN ('EX', 'PD')" +
+        "     AND S.[USERID] = :userId",
+        {
+          replacements: {
+            date: scheduling.date,
+            avaliableTime: scheduling.avaliableTime,
+            unavailableTime: scheduling.unavailableTime,
+            userId: scheduling.userId
+          },
+          type: QueryTypes.SELECT,
+          mapToModel: true
+        }
+      )
+        .then((result: Scheduling[]) => {
+          resolve(result);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+  ToList(_parkingId: number): Promise<Scheduling[]> {
+    return new Promise((resolve, reject) => {
+      Scheduling.findAll({
+        where: {
+          companyId: {
+            [Op.eq]: _parkingId
+          },
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      })
+        .then((result: Scheduling[]) => {
+          resolve(result);
         })
         .catch(error => {
           reject(error);
