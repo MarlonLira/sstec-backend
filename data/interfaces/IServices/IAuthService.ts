@@ -7,6 +7,22 @@ import Auth from '../../models/auth';
  * @interface IAuthService
  */
 export default interface IAuthService {
-  CheckToken(auth: Auth);
-  CreateToken(entity: any);
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Auth} auth
+   * @returns {Promise<any>}
+   * @memberof IAuthService
+   */
+  CheckToken(auth: Auth): Promise<any>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Auth} auth
+   * @returns {Promise<Auth>}
+   * @memberof IAuthService
+   */
+  CreateEmployeeToken(auth: Auth): Promise<Auth>;
 }
