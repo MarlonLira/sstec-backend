@@ -34,7 +34,7 @@ interface IParkingScoreRepository {
    * @returns {Promise<ParkingScore[]>}
    * @memberof IParkingScoreRepository
    */
-  ToList(): Promise<ParkingScore[]>;
+  ToList(_parkingId:number): Promise<ParkingScore[]>;
 
   /**
    * @description

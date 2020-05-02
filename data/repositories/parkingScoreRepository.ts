@@ -1,4 +1,4 @@
-import { injectable } from "inversify";
+import { injectable, id } from "inversify";
 import { Op } from 'sequelize';
 
 import IParkingScoreRepository from '../interfaces/IRepositories/IParkingScoreRepository';
@@ -40,7 +40,26 @@ class ParkingScoreRepository implements IParkingScoreRepository {
    * @memberof ParkingScoreRepository
    */
   Update(parkingScore: ParkingScore): Promise<any> {
-    throw new Error("Method not implemented.");
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await ParkingScore.sequelize.transaction();
+      ParkingScore.update(parkingScore.ToModify(),
+        {
+          where:
+          {
+            id: parkingScore.id
+          },
+          transaction: _transaction,
+          validate: false
+        })
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async error => {
+          await _transaction.rollback();
+          reject(error);
+        });
+    });
   }
 
   /**
@@ -49,8 +68,23 @@ class ParkingScoreRepository implements IParkingScoreRepository {
    * @returns {Promise<ParkingScore[]>}
    * @memberof ParkingScoreRepository
    */
-  ToList(): Promise<ParkingScore[]> {
-    throw new Error("Method not implemented.");
+  ToList(_parkingId: number): Promise<ParkingScore[]> {
+    return new Promise((resolve, reject) => {
+      ParkingScore.findAll({
+        where: {
+          parkingId: _parkingId,
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      })
+        .then((result: ParkingScore[]) => {
+          resolve(result);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 
   /**
@@ -61,7 +95,15 @@ class ParkingScoreRepository implements IParkingScoreRepository {
    * @memberof ParkingScoreRepository
    */
   GetById(id: number): Promise<ParkingScore> {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      ParkingScore.findByPk(id)
+        .then((parkingScore: ParkingScore) => {
+          resolve(parkingScore)
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 
   /**
