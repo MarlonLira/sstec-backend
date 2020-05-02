@@ -45,7 +45,6 @@ class ParkingController implements IParkingController {
     });
   }
 
-
   /**
    * @description
    * @author Emerson Souza
