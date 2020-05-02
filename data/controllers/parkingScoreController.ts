@@ -105,8 +105,22 @@ class ParkingScoreController implements IParkingScoreController {
    * @returns {Promise<any>}
    * @memberof ParkingScoreController
    */
-  Delete(req: Request<any, any, any, import("express-serve-static-core").Query>, res: Response<any>): Promise<any> {
-    throw new Error("Method not implemented.");
+  @httpDelete('/parkingScore/:id')
+  Delete(@request() req: Request, @response() res: Response) {
+    return new Promise((resolve) => {
+      const _parkingScore = new ParkingScore(req.params);
+      if (Attributes.IsValid(_parkingScore.id)) {
+        this._parkingScoreRepository.Delete(_parkingScore.id)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Avaliação', result));
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Avaliação', error));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Avaliação'));
+      }
+    });
   }
 }
 
