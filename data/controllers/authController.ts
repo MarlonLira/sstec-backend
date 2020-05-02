@@ -65,22 +65,23 @@ class AuthController implements IAuthController {
    */
   @httpPost('/employee/signIn')
   SignIn(@request() req: Request, @response() res: Response) {
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
       const _auth = new Auth(req.body);
-      this._employeeRepository.GetByEmail(_auth.employee.email)
-        .then((found: Employee) => {
-          if (Attributes.IsValid(found) && Crypto.Compare(_auth.employee.password, found.password)) {
-            this._authService.CreateToken(found)
-              .then((result: any) => {
-                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Login_Authorized, 'Login', result));
-              });
-          } else {
-            resolve(Http.SendMessage(res, HttpCode.Unauthorized, HttpMessage.Login_Unauthorized, 'Login'));
-          }
-        })
-        .catch((error: any) => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Login', error));
-        });
+      try {
+        const foundEmployee: Employee = await this._employeeRepository.GetByEmail(_auth.employee.email);
+        if (Attributes.IsValid(foundEmployee) && Crypto.Compare(_auth.employee.password, foundEmployee.password)) {
+          _auth.company = await this._companyRepository.GetById(foundEmployee.companyId);
+          _auth.employee = foundEmployee;
+          this._authService.CreateEmployeeToken(_auth)
+            .then((createdAuthentication: Auth) => {
+              resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Login_Authorized, 'Login', createdAuthentication));
+            });
+        } else {
+          resolve(Http.SendMessage(res, HttpCode.Unauthorized, HttpMessage.Login_Unauthorized, 'Login'));
+        }
+      } catch (error) {
+        resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Login', error));
+      }
     });
   }
 
@@ -89,6 +90,7 @@ class AuthController implements IAuthController {
    * @author Marlon Lira
    * @param {Request} req
    * @param {Response} res
+   * @returns
    * @memberof AuthController
    */
   @httpPost('/employee/signUp')

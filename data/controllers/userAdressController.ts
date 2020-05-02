@@ -51,8 +51,8 @@ class UserAdressController implements IUserAdressController {
   @httpGet('/userAdress/userId/:userId')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      const _userId: number = req.params.userId;
-      this._userAdressRepository.GetByUserId(_userId)
+      const _userAdress = new UserAdress(req.params);
+      this._userAdressRepository.GetByUserId(_userAdress.userId)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Endereço da empresa', result))
         })

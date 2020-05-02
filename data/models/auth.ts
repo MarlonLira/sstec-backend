@@ -24,6 +24,7 @@ class Auth {
    */
   constructor(json?: any) {
     this.token = Attributes.ReturnIfValid(json.token);
+    this.validated = Attributes.ReturnIfValid(json.validated);
     this.user = Attributes.IsValid(json.user) ? new User(json.user) : undefined;
     this.employee = Attributes.IsValid(json.employee) ? new Employee(json.employee) : undefined;
     this.company = Attributes.IsValid(json.company) ? new Company(json.company) : undefined;

@@ -16,7 +16,7 @@ class AuthService implements IAuthService {
    * @description
    * @author Marlon Lira
    * @param {Auth} auth
-   * @returns
+   * @returns 
    * @memberof AuthService
    */
   CheckToken(auth: Auth) {
@@ -30,27 +30,21 @@ class AuthService implements IAuthService {
   /**
    * @description
    * @author Marlon Lira
-   * @param {*} entity
-   * @returns
+   * @param {Auth} auth
+   * @returns {Promise<Auth>}
    * @memberof AuthService
    */
-  CreateToken(entity: any) {
-    return new Promise((resolve, reject) => {
-      const id = entity.id;
-      const name = entity.name;
+  CreateEmployeeToken(auth: Auth): Promise<Auth> {
+    return new Promise((resolve) => {
+      const id = auth.employee.id;
+      const name = auth.employee.name;
 
-      // Geração do Token de acesso
-      const token = jwt.sign({ id, name }, process.env.SECRET, {
+      auth.token = jwt.sign({ id, name }, process.env.SECRET, {
         expiresIn: "1h"
       });
+      auth.validated = true;
 
-      // objeto Json
-      const result = {
-        "token": token,
-        "name": entity.name,
-        "email": entity.email,
-      }
-      resolve(result);
+      resolve(auth);
     });
   }
 }
