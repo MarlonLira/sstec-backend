@@ -22,8 +22,8 @@
       "schema": "d8crqilshjdjcp"
     },
     "ForceSync": false,
-    "AlterSync": true,
-    "DropAllTable": false,
+    "AlterSync": false,
+    "DropAllTable": true,
     "Logging": false,
     "IsLogger": false
   }
