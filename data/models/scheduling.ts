@@ -17,6 +17,7 @@ class Scheduling extends Model {
   userName!: string;
   cardNumber!: string;
   vehiclePlate!: string;
+  vehicleType!: string;
   value!: number;
   date!: Date;
   avaliableTime!: string;
@@ -37,6 +38,7 @@ class Scheduling extends Model {
     this.userName = Attributes.ReturnIfValid(json.userName);
     this.cardNumber = Attributes.ReturnIfValid(json.cardNumber);
     this.vehiclePlate = Attributes.ReturnIfValid(json.vehiclePlate);
+    this.vehicleType = Attributes.ReturnIfValid(json.vehicleType);
     this.value = Attributes.ReturnIfValid(json.value);
     this.date = Attributes.ReturnIfValid(json.date);
     this.avaliableTime = Attributes.ReturnIfValid(json.avaliableTime);
@@ -45,7 +47,7 @@ class Scheduling extends Model {
     this.parkingSpaceId = Attributes.ReturnIfValid(json.parkingSpaceId);
   }
 
-  ToModify(){
+  ToModify() {
     return this.toJSON();
   }
 }
@@ -67,6 +69,9 @@ Scheduling.init({
     type: new DataTypes.STRING(100)
   },
   vehiclePlate: {
+    type: new DataTypes.STRING(10)
+  },
+  vehicleType: {
     type: new DataTypes.STRING(10)
   },
   value: {

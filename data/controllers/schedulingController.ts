@@ -32,8 +32,8 @@ class SchedulingController implements ISchedulingController {
    */
   constructor(
     @inject(TYPES.ISchedulingRepository) private _schedulingRepository: ISchedulingRepository,
-    @inject(TYPES.ISchedulingRepository) private _parkingSpaceRepository: IParkingSpaceRepository,
-    @inject(TYPES.ISchedulingRepository) private _parkingPromotionRepository: IParkingPromotionRepository) { }
+    @inject(TYPES.IParkingSpaceRepository) private _parkingSpaceRepository: IParkingSpaceRepository,
+    @inject(TYPES.IParkingPromotionRepository) private _parkingPromotionRepository: IParkingPromotionRepository) { }
 
   /**
    * @description
@@ -59,9 +59,8 @@ class SchedulingController implements ISchedulingController {
               });
           } else {
             const findSchedule = foundSchedulings.find(
-              s => new InnerDate().ConvertToDateTime(s.avaliableTime).hours === new InnerDate().ConvertToDateTime(_scheduling.avaliableTime).hours &&
-                new InnerDate().ConvertToDateTime(s.avaliableTime).shortDate === new InnerDate().ConvertToDateTime(_scheduling.avaliableTime).shortDate &&
-                new InnerDate().ConvertToDateTime(s.unavailableTime).hours >= new InnerDate().ConvertToDateTime(_scheduling.avaliableTime).hours);
+              s => s.avaliableTime === _scheduling.avaliableTime || s.avaliableTime < _scheduling.unavailableTime || (
+                s.unavailableTime > _scheduling.avaliableTime && s.avaliableTime < _scheduling.avaliableTime));
             if (!Attributes.IsValid(findSchedule)) {
               this._schedulingRepository.Save(_scheduling)
                 .then(result => {
@@ -106,6 +105,22 @@ class SchedulingController implements ISchedulingController {
       }
     });
   }
+
+  @httpPost('/schedulings')
+  SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
+    return new Promise((resolve) => {
+      const _scheduling = new Scheduling(req.body.scheduling);
+      this._parkingSpaceRepository.GetAvailable(_scheduling)
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Agendamento', result));
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Agendamento', error));
+        })
+    });
+  }
+
+
 
   /**
    * @description

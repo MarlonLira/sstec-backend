@@ -1,4 +1,5 @@
 import ParkingSpace from '../../models/parkingSpace';
+import Scheduling from '../../models/scheduling';
 
 /**
  * @description
@@ -50,6 +51,15 @@ interface IParkingSpaceRepository {
    * @memberof IParkingSpaceRepository
    */
   GetByParkingId(parkingId: number): Promise<ParkingSpace[]>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Scheduling} scheduling
+   * @returns {Promise<ParkingSpace[]>}
+   * @memberof IParkingSpaceRepository
+   */
+  GetAvailable(scheduling: Scheduling): Promise<any>;
 
   /**
    * @description
