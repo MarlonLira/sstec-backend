@@ -102,7 +102,7 @@ class SchedulingRepository implements ISchedulingRepository {
     return new Promise((resolve, reject) => {
       Scheduling.findAll({
         where: {
-          companyId: {
+          parkingId: {
             [Op.eq]: _parkingId
           },
           status: {

@@ -25,6 +25,7 @@ class Scheduling extends Model {
   userId!: number;
   cardId!: number;
   vehicleId!: number;
+  parkingId!: number;
   parkingSpaceId!: number;
 
   /**
@@ -48,6 +49,7 @@ class Scheduling extends Model {
     this.userId = Attributes.ReturnIfValid(json.userId);
     this.vehicleId = Attributes.ReturnIfValid(json.vehicleId);
     this.cardId = Attributes.ReturnIfValid(json.cardId);
+    this.parkingId = Attributes.ReturnIfValid(json.parkingId);
     this.parkingSpaceId = Attributes.ReturnIfValid(json.parkingSpaceId);
   }
 
@@ -97,6 +99,9 @@ Scheduling.init({
     type: new DataTypes.INTEGER()
   },
   vehicleId: {
+    type: new DataTypes.INTEGER()
+  },
+  parkingId: {
     type: new DataTypes.INTEGER()
   },
   parkingSpaceId: {
