@@ -18,7 +18,6 @@ import ParkingSpace from './models/parkingSpace';
 import ParkingAdress from './models/parkingAdress';
 import Scheduling from './models/scheduling';
 import ParkingScore from './models/parkingScore';
-import SpaceManager from './models/spaceManager';
 import ParkingFinance from './models/parkingFinance';
 
 const _instance = Context.getInstance();
@@ -53,7 +52,6 @@ class Database {
       { name: 'ParkingAdress', entity: ParkingAdress.sequelize },
       { name: 'Scheduling', entity: Scheduling.sequelize },
       { name: 'ParkingScore', entity: ParkingScore.sequelize },
-      { name: 'SpaceManager', entity: SpaceManager.sequelize },
       { name: 'ParkingFinance', entity: ParkingFinance.sequelize }
     ];
 
@@ -79,7 +77,6 @@ class Database {
     Parking.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'ParkingSpace' });
     Parking.hasMany(ParkingScore, { foreignKey: 'parkingId', as: 'ParkingScore' });
     ParkingSpace.hasMany(Scheduling, { foreignKey: 'parkingSpaceId', as: 'Scheduling' });
-    ParkingSpace.hasMany(SpaceManager, { foreignKey: 'parkingSpaceId', as: 'SpaceManager' });
 
     // 1:1
 
