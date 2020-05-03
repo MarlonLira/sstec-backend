@@ -4,7 +4,7 @@
       "host": "localhost",
       "port": 3306,
       "username": "root",
-      "password": "123456",
+      "password": "admserver01",
       "schema": "sstec"
     },
     "MSSQL": {
@@ -21,7 +21,7 @@
       "password": "259cf8d446022dc1743ab5ee5727a7e969d6b6e38e8826dddb5c1c0a09dae068",
       "schema": "d8crqilshjdjcp"
     },
-    "ForceSync": false,
+    "ForceSync": true,
     "AlterSync": false,
     "DropAllTable": false,
     "Logging": false,
