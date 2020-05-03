@@ -60,6 +60,7 @@ class SchedulingController implements ISchedulingController {
       try {
         if (Attributes.IsValid(_availableParkingSpace)) {
           _scheduling.parkingSpaceId = _availableParkingSpace[0].id;
+          _scheduling.parkingId = _availableParkingSpace[0].parkingId;
           _scheduling.userName = (await this._userRepository.GetById(_scheduling.userId)).name;
           _scheduling.vehiclePlate = (await this._vehicleRepository.GetById(_scheduling.vehicleId)).licensePlate;
           _scheduling.cardNumber = (await this._cardRepository.GetById(_scheduling.cardId)).number;
@@ -120,11 +121,10 @@ class SchedulingController implements ISchedulingController {
     });
   }
 
-  @httpGet('/scheduling/:parkingId')
+  @httpGet('/schedulings/:parkingId')
   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _parkingId: number = Number(req.params.parkingId);
-
       this._schedulingRepository.ToList(_parkingId)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Agendamento', result));
