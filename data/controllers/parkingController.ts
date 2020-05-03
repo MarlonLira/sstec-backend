@@ -35,6 +35,7 @@ class ParkingController implements IParkingController {
   Save(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _parking = new Parking(req.body.parking);
+      _parking.companyId = req.body.company.id;
       this._parkingRepository.Save(_parking)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento Cadastrado!', result));
@@ -44,7 +45,6 @@ class ParkingController implements IParkingController {
         });
     });
   }
-
 
   /**
    * @description

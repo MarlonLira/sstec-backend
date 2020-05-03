@@ -54,8 +54,18 @@ class ParkingScoreController implements IParkingScoreController {
    * @returns {Promise<any>}
    * @memberof ParkingScoreController
    */
-  Search(req: Request<any, any, any, import("express-serve-static-core").Query>, res: Response<any>): Promise<any> {
-    throw new Error("Method not implemented.");
+  @httpGet('/parkingScore/parkingScoreId/:id')
+  Search(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+    return new Promise((resolve) => {
+      const _parkingScoreId = req.params.id;
+      this._parkingScoreRepository.GetById(_parkingScoreId)
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Avaliação', result));
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Avaliação', error));
+        });
+    });
   }
 
   /**
@@ -66,8 +76,25 @@ class ParkingScoreController implements IParkingScoreController {
    * @returns {Promise<any>}
    * @memberof ParkingScoreController
    */
-  Update(req: Request<any, any, any, import("express-serve-static-core").Query>, res: Response<any>): Promise<any> {
-    throw new Error("Method not implemented.");
+  @httpPut('/parkingScore')
+  Update(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+    return new Promise((resolve) => {
+      const _parkingScore = new ParkingScore(req.body.parkingScore);
+      this._parkingScoreRepository.GetById(_parkingScore.id)
+        .then((parkingScore: ParkingScore) => {
+          if (Attributes.IsValid(parkingScore)) {
+            this._parkingScoreRepository.Update(_parkingScore)
+              .then(result => {
+                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Avaliação', result))
+              })
+              .catch(error => {
+                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Avaliação', error));
+              });
+          } else {
+            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Avaliação'))
+          }
+        });
+    });
   }
 
   /**
@@ -78,8 +105,22 @@ class ParkingScoreController implements IParkingScoreController {
    * @returns {Promise<any>}
    * @memberof ParkingScoreController
    */
-  Delete(req: Request<any, any, any, import("express-serve-static-core").Query>, res: Response<any>): Promise<any> {
-    throw new Error("Method not implemented.");
+  @httpDelete('/parkingScore/:id')
+  Delete(@request() req: Request, @response() res: Response) {
+    return new Promise((resolve) => {
+      const _parkingScore = new ParkingScore(req.params);
+      if (Attributes.IsValid(_parkingScore.id)) {
+        this._parkingScoreRepository.Delete(_parkingScore.id)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Avaliação', result));
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Avaliação', error));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Avaliação'));
+      }
+    });
   }
 }
 
