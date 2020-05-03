@@ -105,16 +105,16 @@ class AuthController implements IAuthController {
                 _auth.employee.companyId = createdCompany.id;
                 this._employeeRepository.Save(_auth.employee)
                   .then((_result: any) => {
-                    resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Account_Created, 'Login', _result));
+                    resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Account_Created, 'Cadastro', _result));
                   })
                   .catch((error: any) => {
-                    resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Login', error));
+                    resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Cadastro', error));
                   });
               }).catch((error: any) => {
-                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Login', error));
+                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Cadastro', error));
               })
           } else {
-            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Login'));
+            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Empresa'));
           }
         });
     });
