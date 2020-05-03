@@ -26,24 +26,83 @@ class ParkingFinanceController implements IParkingFinanceController{
  * @param {IParkingFinanceRepository} _parkingFinanceRepositor
  * @memberof ParkingFinanceController
  */
-constructor (@inject(TYPES.IParkingFinanceRepository) private _parkingFinanceRepositor: IParkingFinanceRepository){}
+constructor (@inject(TYPES.IParkingFinanceRepository) private _parkingFinanceRepository: IParkingFinanceRepository){}
 
-
-@httpGet('/parkingFinance')
+/**
+ * @description
+ * @author Felipe Seabra
+ * @param {Request<any>} req
+ * @param {Response<any>} res
+ * @memberof ParkingFinanceController
+ */
+@httpGet('/parkingFinance/:id')
 Search(@request() req: Request<any>, @response() res: Response<any>) {
-  throw new Error("Method not implemented.");
+  return new Promise((resolve) => {
+    const _id: number = req.params.id;
+    this._parkingFinanceRepository.getById(_id)
+    .then(result => {
+      resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Finanças', result));
+    })
+    .catch(error => {
+      resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Not_Found, 'Finanças', error));
+    })
+  })
 }
+
+/**
+ * @description
+ * @author Felipe Seabra
+ * @param {Request<any>} req
+ * @param {Response<any>} res
+ * @memberof ParkingFinanceController
+ */
 @httpPost('/parkingFinance')
 Save(@request() req: Request<any>, @response() res: Response<any>) {
-  throw new Error("Method not implemented.");
+  return new Promise((resolve) => {
+    const _parkingFinance = new ParkingFinance(req.body.parkingFinance);
+    _parkingFinance.parkingId = req.body.parking.id;
+    _parkingFinance.companyId = req.body.company.id;
+    this._parkingFinanceRepository.Save(_parkingFinance)
+    .then(result => {
+      resolve(Http.SendMessage(res,HttpCode.Ok, HttpMessage.Saved_Successfully, 'Finança', result ));
+    })
+    .catch(error => {
+      resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Finança', error));
+    })
+  })
 }
-@httpPut('/payment')
+
+/**
+ * @description
+ * @author Felipe Seabra
+ * @param {Request<any>} req
+ * @param {Response<any>} res
+ * @memberof ParkingFinanceController
+ */
+@httpPut('/parkingFinance')
 Update(@request() req: Request<any>, @response() res: Response<any>) {
-  throw new Error("Method not implemented.");
+  return new Promise((resolve) => {
+    const _parkingFinance = new ParkingFinance(req.body);
+    this._parkingFinanceRepository.Update(_parkingFinance)
+    .then(result => {
+      resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Finança', result));
+    })
+    .catch(error => {
+      resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Finança', error));
+    })
+  })
 }
 @httpGet('/parkingFinance')
 SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
-  throw new Error("Method not implemented.");
+  return new Promise((resolve) => {
+    this._parkingFinanceRepository.ToList()
+    .then(result => {
+      resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Finança', result));
+    })
+    .catch(error => {
+      resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Finança', error));
+    });
+  });
 }
 }
 export default ParkingFinanceController;
