@@ -4,7 +4,7 @@ import { inject } from "inversify";
 
 import IParkingController from "../interfaces/IControllers/IParkingController";
 import IParkingRepository from '../interfaces/IRepositories/IParkingRepository';
-import Parking from "../models/Parking";
+import Parking from "../models/parking";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';

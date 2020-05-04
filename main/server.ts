@@ -54,7 +54,7 @@ class Server {
   private Middlewares() {
     return new Promise((resolve, reject) => {
       dotenv.config();
-      const allowCors = require('./Cors');
+      const allowCors = require('./cors');
       const swaggerUi = require('swagger-ui-express');
 
       this.inversifyExpress.setConfig((server) => {
