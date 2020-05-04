@@ -1,6 +1,6 @@
 // Controllers
 import '../../data/controllers/userController';
-import '../../data/controllers/UserAdressController';
+import '../../data/controllers/userAdressController';
 import '../../data/controllers/authController';
 import '../../data/controllers/CardController';
 import '../../data/controllers/CompanyController';
