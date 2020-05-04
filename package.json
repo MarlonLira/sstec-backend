@@ -41,9 +41,7 @@
     "pg-hstore": "^2.3.3",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^5.21.5",
-    "tedious": "^8.2.0"
-  },
-  "devDependencies": {
+    "tedious": "^8.2.0",
     "@types/bcrypt": "^3.0.0",
     "@types/body-parser": "^1.17.1",
     "@types/cookie-parser": "^1.4.2",
@@ -54,7 +52,9 @@
     "@types/node": "^12.12.30",
     "@types/sequelize": "^4.28.8",
     "swagger-ui-express": "^4.1.4",
-    "tslint": "^6.1.1",
     "typescript": "^3.8.3"
+  },
+  "devDependencies": {
+    "tslint": "^6.1.1"
   }
 }

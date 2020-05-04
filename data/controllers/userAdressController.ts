@@ -54,7 +54,7 @@ class UserAdressController implements IUserAdressController {
       const _userAdress = new UserAdress(req.params);
       this._userAdressRepository.GetByUserId(_userAdress.userId)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Endereço do usuário', result))
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Endereço do usuário', result));
         })
         .catch(error => {
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço do usuário', error));
