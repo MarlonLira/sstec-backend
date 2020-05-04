@@ -17,7 +17,7 @@ class ParkingSpace extends Model {
   status!: TransactionType;
   value: number;
   amount!: number;
-  type: 'CAR' | 'MOTORCYCLE'
+  type: 'CAR' | 'MOTORCYCLE' | 'BOTH'
   parkingId!: number;
 
   /**
