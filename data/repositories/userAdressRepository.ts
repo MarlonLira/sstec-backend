@@ -53,7 +53,7 @@ class UserAdressRepository implements IUserAdressRepository {
   Update(_userAdress: UserAdress): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await UserAdress.sequelize.transaction();
-      UserAdress.update(_userAdress.ToModify(),
+      UserAdress.update(_userAdress.toJSON(),
         {
           where:
           {
