@@ -21,7 +21,7 @@ class ParkingScore extends Model {
   parkingId!: number;
 
   /**
-   *Creates an instance of ParkingScore.
+   * Creates an instance of ParkingScore.
    * @author Emerson Souza
    * @param {*} [json]
    * @memberof ParkingScore

@@ -95,11 +95,17 @@ class CardController implements ICardController {
         this._cardRepository.GetByUserId(_card.userId)
           .then(result => {
             resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Cartão', result));
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Cartão', error));
           });
       } else if (Attributes.IsValid(_card.id)) {
         this._cardRepository.GetById(_card.id)
           .then(result => {
             resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Cartão', result));
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Cartão', error));
           });
       } else {
         resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Cartão'));

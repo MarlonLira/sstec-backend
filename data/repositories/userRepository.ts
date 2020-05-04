@@ -43,7 +43,7 @@ class UserRepository implements IUserRepository {
   Update(user: User): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await User.sequelize.transaction();
-      User.update(user, {
+      User.update(user.toJSON(), {
         where: {
           id: user.id
         },

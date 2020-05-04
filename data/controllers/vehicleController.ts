@@ -105,7 +105,7 @@ class VehicleController implements IVehicleController {
       const _userId = req.params.id;
       this._vehicleRepository.GetByUserId(_userId)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Veículo', result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Veículo', result));
         })
         .catch(error => {
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Veículo', error));
@@ -128,7 +128,7 @@ class VehicleController implements IVehicleController {
       if (Attributes.IsValid(_vehicle.id)) {
         this._vehicleRepository.Update(_vehicle)
           .then(result => {
-            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Veículo', result));
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Veículo', result));
           })
           .catch(error => {
             resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Veículo', error));
