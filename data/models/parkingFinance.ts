@@ -45,11 +45,15 @@ class ParkingFinance extends Model{
       primaryKey: true
     },
     month:{
-      type: new DataTypes.STRING(2),
+      type: new DataTypes.STRING(10),
       allowNull: false
     },
     year:{
       type: new DataTypes.STRING(4),
+      allowNull: false
+    },
+    value:{
+      type: new DataTypes.INTEGER(),
       allowNull: false
     },
     parkingId:{
