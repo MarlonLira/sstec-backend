@@ -96,9 +96,9 @@ function DateTimeNow() {
   const Year = LeftZero(_date.getFullYear());
   const Month = LeftZero(_date.getMonth() + 1);
   const Day = LeftZero(_date.getDate());
-  const hours = (_date.getUTCHours() === 1 || _date.getUTCHours() === 2) ? 24 - (3 - _date.getUTCHours()) : _date.getUTCHours() - 3;
-  const minutes = _date.getUTCMinutes();
-  const seconds = _date.getUTCSeconds();
+  const hours = LeftZero((_date.getUTCHours() === 1 || _date.getUTCHours() === 2) ? 24 - (3 - _date.getUTCHours()) : _date.getUTCHours() - 3);
+  const minutes = LeftZero(_date.getUTCMinutes());
+  const seconds = LeftZero(_date.getUTCSeconds());
   const build = `${Year}-${Month}-${Day} ${hours}:${minutes}:${seconds}`;
   return build;
 }
