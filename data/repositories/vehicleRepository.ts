@@ -120,8 +120,7 @@ class VehicleRepository implements IVehicleRepository {
       const _transaction = await Vehicle.sequelize.transaction();
       Vehicle.update(vehicle.ToModify(),
         {
-          where:
-          {
+          where: {
             id: vehicle.id
           },
           transaction: _transaction,

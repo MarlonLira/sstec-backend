@@ -47,7 +47,11 @@ class CompanyRepository implements ICompanyRepository {
       const _transaction = await Company.sequelize.transaction();
       Company.update(company.toJSON(),
         {
-          where: { id: company.id }
+          where: {
+            id: company.id
+          },
+          transaction: _transaction,
+          validate: false
         })
         .then(async result => {
           await _transaction.commit();
@@ -72,7 +76,8 @@ class CompanyRepository implements ICompanyRepository {
       Company.update({ status: TransactionType.DELETED },
         {
           where: { id: _id },
-          transaction: _transaction
+          transaction: _transaction,
+          validate: false
         })
         .then(async result => {
           await _transaction.commit();
@@ -92,18 +97,20 @@ class CompanyRepository implements ICompanyRepository {
    * @returns
    * @memberof CompanyRepository
    */
-  GetByRegistryCode(registryCode: string) {
+  GetByRegistryCode(registryCode: string): Promise<Company[]> {
     return new Promise((resolve, reject) => {
-      Company.findOne({
+      Company.findAll({
         where: {
           registryCode: {
-            [Op.eq]: registryCode
-          }
+            [Op.like]: `${registryCode}%`
+          },
+            status: {
+              [Op.ne]: TransactionType.DELETED
+            }
         }
       })
-        .then(result => {
-          resolve(result);
-
+        .then((foundCompany: Company[]) => {
+          resolve(foundCompany);
         })
         .catch(error => {
           reject(error);
