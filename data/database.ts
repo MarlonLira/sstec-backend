@@ -5,7 +5,7 @@ import Context from '../main/context';
 
 // Entities
 import User from './models/user';
-import Vehicle from './models/vehicle'
+import Vehicle from './models/vehicle';
 import UserAdress from './models/userAdress';
 import Card from './models/card';
 import Company from './models/company';
@@ -76,6 +76,7 @@ class Database {
     Parking.hasMany(ParkingAdress, { foreignKey: 'parkingId', as: 'ParkingAdress' });
     Parking.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'ParkingSpace' });
     Parking.hasMany(ParkingScore, { foreignKey: 'parkingId', as: 'ParkingScore' });
+    Parking.hasMany(ParkingFinance, { foreignKey: 'parkingId', as: 'ParkingFinance' });
     ParkingSpace.hasMany(Scheduling, { foreignKey: 'parkingSpaceId', as: 'Scheduling' });
 
     // 1:1

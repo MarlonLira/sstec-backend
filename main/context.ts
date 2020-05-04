@@ -3,7 +3,11 @@ import * as Config from '../config.json';
 import Attributes from "../commons/core/attributes";
 
 const _logging = Config.Database.Logging;
+<<<<<<< HEAD
 const _dbConfig = Config.Database.MySql;
+=======
+const _dbConfig = Config.Database.PostgreSQL;
+>>>>>>> 4a7fd1688ab09d4f31d3f371d0cfc0dc6fc15a99
 
 /**
  * @description
@@ -26,6 +30,7 @@ class Context {
       {
         port: _dbConfig.port,
         host: _dbConfig.host,
+<<<<<<< HEAD
         dialect: 'mysql',
         logging: _logging,
         omitNull: true,
@@ -39,6 +44,21 @@ class Context {
         //   }
         // }
        }
+=======
+        dialect: 'postgres',
+        logging: _logging,
+        omitNull: true,
+        timezone: '-03:00',
+        dialectOptions: {
+          options: {
+            trustServerCertificate: true
+          },
+          ssl: {
+            rejectUnauthorized: false,
+          }
+        }
+      }
+>>>>>>> 4a7fd1688ab09d4f31d3f371d0cfc0dc6fc15a99
     );
     return sequelize;
   }

@@ -1,5 +1,4 @@
 import Parking from '../../models/parking';
-import User from '../../models/user';
 import ParkingScore from '../../models/parkingScore';
 
 /**

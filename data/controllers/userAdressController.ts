@@ -33,10 +33,10 @@ class UserAdressController implements IUserAdressController {
     return new Promise((resolve) => {
       this._userAdressRepository.Save(_userAdress)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Endereço', result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Endereço do usuário', result));
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço', error));
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço do usuário', error));
         });
     });
   }
@@ -54,10 +54,10 @@ class UserAdressController implements IUserAdressController {
       const _userAdress = new UserAdress(req.params);
       this._userAdressRepository.GetByUserId(_userAdress.userId)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Endereço da empresa', result))
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Endereço do usuário', result));
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço da empresa', error));
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço do usuário', error));
         });
     });
   }
@@ -68,10 +68,10 @@ class UserAdressController implements IUserAdressController {
       const _userAdress = new UserAdress(req.body.userAdress);
       this._userAdressRepository.Update(_userAdress)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Endereço da empresa', result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Endereço do usuário', result));
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço da empresa', error));
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço do usuário', error));
         });
     });
   }
@@ -82,10 +82,10 @@ class UserAdressController implements IUserAdressController {
       const _userAdressId: number = req.params.id;
       this._userAdressRepository.Delete(_userAdressId)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Endereço da empresa', result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Endereço do usuário', result));
         })
         .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço da empresa', error));
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço do usuário', error));
         });
     });
   }
