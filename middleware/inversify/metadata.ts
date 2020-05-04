@@ -1,10 +1,10 @@
 // Controllers
 import '../../data/controllers/userController';
-import '../../data/controllers/UserAdressController';
+import '../../data/controllers/userAdressController';
 import '../../data/controllers/authController';
-import '../../data/controllers/CardController';
-import '../../data/controllers/CompanyController';
-import '../../data/controllers/CompanyAdressController';
+import '../../data/controllers/cardController';
+import '../../data/controllers/companyController';
+import '../../data/controllers/companyAdressController';
 import '../../data/controllers/employeeController';
 import '../../data/controllers/paymentController';
 import '../../data/controllers/parkingController';
