@@ -20,6 +20,7 @@ class Parking extends Model {
   phone: string;
   email: string;
   imgUrl: string;
+  amount: number;
   companyId: number;
 
   /**
@@ -40,7 +41,7 @@ class Parking extends Model {
     this.companyId = Attributes.ReturnIfValid(json.companyId);
   }
 
-  ToModify(){
+  ToModify() {
     return this.toJSON();
   }
 }
@@ -71,6 +72,9 @@ Parking.init({
   imgUrl: {
     type: new DataTypes.STRING(100),
     validate: { isUrl: true }
+  },
+  amount: {
+    type: new DataTypes.INTEGER()
   },
   companyId: {
     type: new DataTypes.INTEGER(),
