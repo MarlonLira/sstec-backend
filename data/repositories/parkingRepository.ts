@@ -40,7 +40,8 @@ class ParkingRepository implements IParkingRepository {
         .then(async (createParking: Parking) => {
           await _transaction.commit();
           resolve({ "parkingId": createParking.id });
-        }).catch(async error => {
+        })
+        .catch(async error => {
           await _transaction.rollback();
           reject(error);
         });
