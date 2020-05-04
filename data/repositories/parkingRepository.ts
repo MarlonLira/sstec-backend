@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 import { injectable } from "inversify";
 
 import IParkingRepository from '../interfaces/IRepositories/IParkingRepository';
-import Parking from '../models/Parking';
+import Parking from '../models/parking';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 /**
@@ -40,7 +40,8 @@ class ParkingRepository implements IParkingRepository {
         .then(async (createParking: Parking) => {
           await _transaction.commit();
           resolve({ "parkingId": createParking.id });
-        }).catch(async error => {
+        })
+        .catch(async error => {
           await _transaction.rollback();
           reject(error);
         });

@@ -15,15 +15,15 @@
       "schema": "sstec"
     },
     "PostgreSQL": {
-      "host": "ec2-107-21-110-75.compute-1.amazonaws.com",
+      "host": "ec2-35-174-127-63.compute-1.amazonaws.com",
       "port": 5432,
-      "username": "nlftzsubppeyav",
-      "password": "259cf8d446022dc1743ab5ee5727a7e969d6b6e38e8826dddb5c1c0a09dae068",
-      "schema": "d8crqilshjdjcp"
+      "username": "zgygdkrrohhyvx",
+      "password": "7d2c2e289c09bc57cb1ceed8347a9c703d4ad43e62f1b8e6c729cfe73847f45f",
+      "schema": "d5gj1g2unumoig"
     },
     "ForceSync": false,
     "AlterSync": false,
-    "DropAllTable": true,
+    "DropAllTable": false,
     "Logging": false,
     "IsLogger": false
   }

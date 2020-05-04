@@ -4,12 +4,14 @@
   "description": "",
   "main": "dist/src/app.js",
   "scripts": {
-    "build-ts": "tsc",
-    "start": "npm run app",
+    "ts:build": "tsc",
+    "ts:watch": "tsc -w",
+    "start": "npm run build && npm run prod:serve",
+    "prod:serve": "node dist/src/app.js",
+    "build": "npm run ts:build",
     "app": "node dist/src/app.js",
     "dev": "nodemon dist/src/app.js",
-    "dev-debugger": "nodemon --inspect dist/src/app.js",
-    "watch-ts": "tsc -w"
+    "dev-debugger": "nodemon --inspect dist/src/app.js"
   },
   "repository": {
     "type": "git",
@@ -39,9 +41,8 @@
     "pg-hstore": "^2.3.3",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^5.21.5",
-    "tedious": "^8.2.0"
-  },
-  "devDependencies": {
+    "tedious": "^8.2.0",
+    "typescript": "^3.8.3",
     "@types/bcrypt": "^3.0.0",
     "@types/body-parser": "^1.17.1",
     "@types/cookie-parser": "^1.4.2",
@@ -51,8 +52,9 @@
     "@types/jsonwebtoken": "^8.3.5",
     "@types/node": "^12.12.30",
     "@types/sequelize": "^4.28.8",
-    "swagger-ui-express": "^4.1.4",
-    "tslint": "^6.1.1",
-    "typescript": "^3.8.3"
+    "swagger-ui-express": "^4.1.4"
+  },
+  "devDependencies": {
+    "tslint": "^6.1.1"
   }
 }

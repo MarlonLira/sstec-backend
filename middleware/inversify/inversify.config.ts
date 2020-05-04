@@ -12,8 +12,8 @@ import CompanyAdressRepository from '../../data/repositories/companyAdressReposi
 import EmployeeRepository from '../../data/repositories/employeeRepository';
 import PaymentRepository from '../../data/repositories/paymentRepository';
 import VehicleRepository from '../../data/repositories/vehicleRepository';
-import ParkingRepository from '../../data/repositories/ParkingRepository';
-import RuleRepository from '../../data/repositories/RuleRepository';
+import ParkingRepository from '../../data/repositories/parkingRepository';
+import RuleRepository from '../../data/repositories/ruleRepository';
 import ParkingPromotionRepository from '../../data/repositories/parkingPromotionRepository';
 import ParkingSpaceRepository from '../../data/repositories/parkingSpaceRepository';
 import ParkingAdressRepository from '../../data/repositories/parkingAdressRepository';

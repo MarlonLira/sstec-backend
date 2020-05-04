@@ -127,7 +127,7 @@ class ParkingPromotionController implements IParkingPromotionController {
       if (Attributes.IsValid(_parkingPromotion.id)) {
         this._parkingPromotionRepository.Delete(_parkingPromotion.id)
           .then(result => {
-            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Promoção', result));
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Promoção', result));
           })
           .catch(error => {
             resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Promoção', error));

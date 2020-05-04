@@ -60,13 +60,13 @@ class CompanyController implements ICompanyController {
   /**
    * @description
    * @author Gustavo Gusmão
-   * @param {Request<any>} req
-   * @param {Response<any>} res
+   * @param {Request} req
+   * @param {Response} res
    * @returns
    * @memberof CompanyController
    */
   @httpGet('/company/registryCode/:registryCode')
-  Search(@request() req: Request<any>, @response() res: Response<any>) {
+  Search(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
       const _company = new Company(req.params);
       if (Attributes.IsValid(_company.registryCode)) {
@@ -95,20 +95,17 @@ class CompanyController implements ICompanyController {
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _company = new Company(req.body.company);
-      this._companyRepository.GetById(_company.id)
-        .then((found: Company) => {
-          if (Attributes.IsValid(found)) {
-            this._companyRepository.Update(_company)
-              .then(result => {
-                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Empresa', result));
-              })
-              .catch(error => {
-                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Empresa', error));
-              });
-          } else {
-            resolve(Http.SendMessage(res, HttpCode.Not_Found, HttpMessage.Not_Found, 'Empresa'));
-          }
-        });
+      if (Attributes.IsValid(_company.id)) {
+        this._companyRepository.Update(_company)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Empresa', result));
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Empresa', error));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Not_Found, HttpMessage.Not_Found, 'Empresa'));
+      }
     });
   }
 
