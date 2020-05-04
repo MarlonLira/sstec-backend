@@ -7,9 +7,10 @@ import ParkingFinance from '../../models/parkingFinance';
  * @interface IParkingFinanceRepository
  */
 interface IParkingFinanceRepository{
-Save(parkingFinance: ParkingFinance);
-Update(parkingFinance: ParkingFinance);
-getById(id: number);
-ToList();
+Save(parkingFinance: ParkingFinance): Promise<any>;
+Update(parkingFinance: ParkingFinance): Promise <any>;
+GetById(id: number): Promise <ParkingFinance>;
+ToList(_parkingId): Promise <ParkingFinance[]>;
+Delete(id: number): Promise<any>;
 }
 export default IParkingFinanceRepository;
