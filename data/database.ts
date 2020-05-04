@@ -5,7 +5,7 @@ import Context from '../main/context';
 
 // Entities
 import User from './models/user';
-import Vehicle from './models/vehicle'
+import Vehicle from './models/vehicle';
 import UserAdress from './models/userAdress';
 import Card from './models/card';
 import Company from './models/company';
