@@ -75,12 +75,16 @@ class ParkingAdressController implements IParkingAdressController{
    * @param {Response<any>} res
    * @memberof ParkingAdressController
    */
-  @httpGet('/ParkingsAdresses')
+  @httpGet('/ParkingAdress/:parkingId')
   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      this._parkingAdressRepository.ToList()
+      const _parkingId: number = req.params.parkingId;
+      this._parkingAdressRepository.ToList(_parkingId)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Endereço', result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Endereço', result));
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço', error))
         });
     });
   }

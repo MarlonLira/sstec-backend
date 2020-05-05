@@ -44,7 +44,7 @@ class ParkingAdressRepository implements IParkingAdressRepository {
    * @param {ParkingAdress} parkingAdress
    * @memberof ParkingAdressRepository
    */
-  Save(parkingAdress: ParkingAdress) {
+  Save(parkingAdress: ParkingAdress): Promise <any>{
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingAdress.sequelize.transaction();
       parkingAdress.status = TransactionType.ACTIVE;
@@ -59,7 +59,7 @@ class ParkingAdressRepository implements IParkingAdressRepository {
     });
   }
 
-  Delete(_id: number) {
+  Delete(_id: number): Promise <any>{
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingAdress.sequelize.transaction();
       ParkingAdress.update({ status: TransactionType.DELETED },
@@ -86,7 +86,7 @@ class ParkingAdressRepository implements IParkingAdressRepository {
    * @returns
    * @memberof ParkingAdressRepository
    */
-  GetById(parkingAdressId: number) {
+  GetById(parkingAdressId: number): Promise <ParkingAdress>{
     return new Promise((resolve, reject) => {
       ParkingAdress.findOne({
         where:{
@@ -107,10 +107,13 @@ class ParkingAdressRepository implements IParkingAdressRepository {
     });
   }
 
-  ToList() {
+  ToList(_parkingId): Promise <ParkingAdress[]>{
     return new Promise((resolve, reject) => {
       ParkingAdress.findAll({
         where: {
+          parkingId:{
+            [Op.eq]: _parkingId
+          },
           status: {
             [Op.ne]: TransactionType.DELETED
           }

@@ -6,11 +6,11 @@ import ParkingAdress from '../../models/parkingAdress';
  * @interface IParkingAdressRepository
  */
 interface IParkingAdressRepository {
-  Save(parkingAdress: ParkingAdress);
-  Update(parkingAdress: ParkingAdress);
-  GetById(id: number);
-  Delete(id: number);
-  ToList();
+  Save(parkingAdress: ParkingAdress): Promise <any>;
+  Update(parkingAdress: ParkingAdress): Promise <any>;
+  GetById(id: number): Promise <ParkingAdress>;
+  Delete(id: number): Promise <any>;
+  ToList(_parkingId): Promise <ParkingAdress[]>
 }
 
 export default IParkingAdressRepository;
