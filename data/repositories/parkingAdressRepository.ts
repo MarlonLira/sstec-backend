@@ -88,7 +88,16 @@ class ParkingAdressRepository implements IParkingAdressRepository {
    */
   GetById(parkingAdressId: number) {
     return new Promise((resolve, reject) => {
-      ParkingAdress.findByPk(parkingAdressId)
+      ParkingAdress.findOne({
+        where:{
+          id:{
+            [Op.eq]: parkingAdressId
+          },
+          status:{
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      })
         .then((result: ParkingAdress) => {
           resolve(result);
         })

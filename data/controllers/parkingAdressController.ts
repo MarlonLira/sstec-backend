@@ -39,7 +39,7 @@ class ParkingAdressController implements IParkingAdressController{
       const _id: number = req.params.id;
       this._parkingAdressRepository.GetById(_id)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Endereço', result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Endereço', result));
         })
         .catch(error => {
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço', error));
