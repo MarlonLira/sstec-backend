@@ -65,7 +65,8 @@ class ParkingAdressRepository implements IParkingAdressRepository {
       ParkingAdress.update({ status: TransactionType.DELETED },
         {
           where: { id: _id },
-          transaction: _transaction
+          transaction: _transaction,
+          validate:false
         })
         .then(async result => {
           await _transaction.commit();
