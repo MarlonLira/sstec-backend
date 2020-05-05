@@ -58,7 +58,6 @@ class ParkingAdressController implements IParkingAdressController{
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _parkingAdress = new ParkingAdress(req.body.parkingAdress);
-      _parkingAdress.parkingId  = req.body.parking.id;
       this._parkingAdressRepository.Save(_parkingAdress)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Endereço', result));
