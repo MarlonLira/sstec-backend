@@ -38,7 +38,6 @@ class ParkingAdressRepository implements IParkingAdressRepository {
     });
   }
 
-
   /**
    * @description
    * @author Felipe Seabra

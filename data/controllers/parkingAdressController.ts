@@ -95,10 +95,13 @@ class ParkingAdressController implements IParkingAdressController{
   @httpPut('/ParkingAdress')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      const _parkingAdress = new ParkingAdress(req.body);
+      const _parkingAdress = new ParkingAdress(req.body.parkingAdress);
       this._parkingAdressRepository.Update(_parkingAdress)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Endereço', result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Endereço', result));
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço', error));
         });
     });
   }
