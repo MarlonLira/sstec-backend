@@ -27,6 +27,14 @@ class UserAdressController implements IUserAdressController {
    */
   constructor(@inject(TYPES.IUserAdressRepository) private _userAdressRepository: IUserAdressRepository) { }
 
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns
+   * @memberof UserAdressController
+   */
   @httpPost('/userAdress')
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     const _userAdress = new UserAdress(req.body.userAdress);
@@ -62,6 +70,14 @@ class UserAdressController implements IUserAdressController {
     });
   }
 
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns
+   * @memberof UserAdressController
+   */
   @httpPut('/userAdress')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
@@ -76,6 +92,14 @@ class UserAdressController implements IUserAdressController {
     });
   }
 
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns
+   * @memberof UserAdressController
+   */
   @httpDelete('/userAdress/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {

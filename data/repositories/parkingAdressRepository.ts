@@ -8,7 +8,6 @@ import { TransactionType } from '../../commons/enums/transactionType';
 @injectable()
 class ParkingAdressRepository implements IParkingAdressRepository {
 
-
   /**
    * @description
    * @author Felipe Seabra
@@ -59,15 +58,22 @@ class ParkingAdressRepository implements IParkingAdressRepository {
     });
   }
 
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {number} _id
+   * @returns {Promise <any>}
+   * @memberof ParkingAdressRepository
+   */
   Delete(_id: number): Promise <any>{
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingAdress.sequelize.transaction();
-      ParkingAdress.update({ status: TransactionType.DELETED },
-        {
-          where: { id: _id },
-          transaction: _transaction,
-          validate:false
-        })
+      ParkingAdress.destroy({
+        where: {
+          id: _id
+        },
+        transaction: _transaction
+      })
         .then(async result => {
           await _transaction.commit();
           resolve(result);
@@ -76,7 +82,7 @@ class ParkingAdressRepository implements IParkingAdressRepository {
           await _transaction.rollback();
           reject(error);
         });
-    })
+    });
   }
 
   /**
