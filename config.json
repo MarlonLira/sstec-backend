@@ -21,7 +21,7 @@
       "password": "7d2c2e289c09bc57cb1ceed8347a9c703d4ad43e62f1b8e6c729cfe73847f45f",
       "schema": "d5gj1g2unumoig"
     },
-    "MySqlProd": {
+    "MySqlWEB": {
       "host": "remotemysql.com",
       "port": 3306,
       "username": "zMgq639h8l",
