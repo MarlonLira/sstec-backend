@@ -32,17 +32,23 @@ class ParkingController implements IParkingController {
    */
   @httpPost('/parking')
   Save(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
       const _parking = new Parking(req.body.parking);
-      this._parkingRepository.Save(_parking)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento Cadastrado!', result));
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
-        });
+      const _parkingFound = await this._parkingRepository.GetByRegistryCode(_parking.registryCode);
+      if (!Attributes.IsValid(_parkingFound)) {
+        this._parkingRepository.Save(_parking)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento', result));
+          })
+          .catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, "Estacionamento"));
+      }
     });
   }
+
 
   /**
    * @description
@@ -99,24 +105,27 @@ class ParkingController implements IParkingController {
    */
   @httpPut('/parking')
   Update(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
       const _parking = new Parking(req.body.parking);
-      this._parkingRepository.GetById(_parking.id)
-        .then((parking: Parking) => {
-          if (Attributes.IsValid(parking)) {
-            this._parkingRepository.Update(_parking)
-              .then(result => {
-                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Estacionamento', result))
-              })
-              .catch(error => {
-                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
-              });
-          } else {
-            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Estacionamento'))
-          }
-        });
+      const _parkingFound = await this._parkingRepository.GetByRegistryCode(_parking.registryCode);
+      if ((Attributes.IsValid(_parkingFound) && _parkingFound.registryCode === _parking.registryCode) || !Attributes.IsValid(_parkingFound)) {
+        if (Attributes.IsValid(_parking.id)) {
+          this._parkingRepository.Update(_parking)
+            .then(result => {
+              resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Estacionamento', result))
+            })
+            .catch(error => {
+              resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
+            });
+        } else {
+          resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Estacionamento'))
+        }
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists,"Estacionamento"))
+      }
     });
   }
+
 
   /**
    * @description
