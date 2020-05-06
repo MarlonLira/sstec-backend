@@ -94,6 +94,7 @@ class Database {
         Logger.Error('Database', 'Error when trying to connect to the database!');
         Logger.Error('Database', error);
       });
+
   }
 
   private async CreateTables(models: { name: string, entity: Sequelize }[]) {

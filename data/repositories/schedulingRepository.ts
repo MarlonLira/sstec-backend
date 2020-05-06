@@ -66,18 +66,18 @@ class SchedulingRepository implements ISchedulingRepository {
   ReturnIfExists(scheduling: Scheduling): Promise<Scheduling[]> {
     return new Promise(async (resolve, reject) => {
       Scheduling.sequelize.query(
-        "   SELECT S.* FROM [SSTEC].[DBO].[SCHEDULING] AS S" +
-        "   WHERE EXISTS ( SELECT S1.* FROM [SSTEC].[DBO].[PARKINGSPACE] AS PS1" +
-        "                  INNER JOIN [SSTEC].[DBO].[SCHEDULING] AS S1" +
-        "                    ON S1.[PARKINGSPACEID] = PS1.[ID]" +
-        "                  WHERE S1.[STATUS] NOT IN ('EX', 'PD')" +
-        "                    AND S1.[DATE] = :date" +
-        "                    AND S.[ID] = S1.[ID]" +
+        "   SELECT S.* FROM Scheduling AS S" +
+        "   WHERE EXISTS ( SELECT S1.* FROM ParkingSpace AS PS1" +
+        "                  INNER JOIN Scheduling AS S1" +
+        "                    ON S1.PARKINGSPACEID = PS1.ID" +
+        "                  WHERE S1.STATUS NOT IN ('EX', 'PD')" +
+        "                    AND S1.DATE = :date" +
+        "                    AND S.ID = S1.ID" +
         "                    AND (( S1.AVALIABLETIME BETWEEN :avaliableTime AND :unavailableTime" +
         "                             OR S1.UNAVAILABLETIME BETWEEN :avaliableTime AND :unavailableTime )" +
-        "                             OR (S1.[AVALIABLETIME] < :avaliableTime AND S1.[UNAVAILABLETIME] > :unavailableTime )))" +
-        "     AND S.[STATUS] NOT IN ('EX', 'PD')" +
-        "     AND S.[USERID] = :userId",
+        "                             OR (S1.AVALIABLETIME < :avaliableTime AND S1.UNAVAILABLETIME > :unavailableTime )))" +
+        "     AND S.STATUS NOT IN ('EX', 'PD')" +
+        "     AND S.USERID = :userId",
         {
           replacements: {
             date: scheduling.date,
