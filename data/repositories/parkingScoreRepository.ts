@@ -71,7 +71,9 @@ class ParkingScoreRepository implements IParkingScoreRepository {
     return new Promise((resolve, reject) => {
       ParkingScore.findAll({
         where: {
-          parkingId: _parkingId,
+          parkingId: {
+            [Op.eq]: _parkingId
+          },
           status: {
             [Op.ne]: TransactionType.DELETED
           }
