@@ -56,8 +56,8 @@ class SchedulingController implements ISchedulingController {
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise(async (resolve) => {
       const _scheduling = new Scheduling(req.body.scheduling);
-      const _availableParkingSpace = await this._parkingSpaceRepository.GetAvailable(_scheduling);
       try {
+        const _availableParkingSpace = await this._parkingSpaceRepository.GetAvailable(_scheduling);
         if (Attributes.IsValid(_availableParkingSpace)) {
           _scheduling.parkingSpaceId = _availableParkingSpace[0].id;
           _scheduling.parkingId = _availableParkingSpace[0].parkingId;
@@ -87,7 +87,7 @@ class SchedulingController implements ISchedulingController {
           resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Agendamento'))
         }
       } catch (error) {
-        resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Agendamento'))
+        resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Agendamento', error))
       }
     });
   }
