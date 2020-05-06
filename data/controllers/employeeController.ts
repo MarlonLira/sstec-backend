@@ -152,7 +152,7 @@ class EmployeeController implements IEmployeeController {
       const _id: number = req.params.id;
       this._employeeRepository.Delete(_id)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Funcionário', result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Funcionário', result));
         })
         .catch(error => {
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
