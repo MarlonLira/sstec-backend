@@ -35,8 +35,7 @@ class ParkingScoreController implements IParkingScoreController {
   Save(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _parkingScore = new ParkingScore(req.body.parkingScore);
-      const _parking = new Parking(req.body.parking);
-      this._parkingScoreRepository.Save(_parkingScore,_parking)
+      this._parkingScoreRepository.Save(_parkingScore)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Avaliação', result));
         })
