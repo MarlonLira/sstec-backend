@@ -70,6 +70,29 @@ class ParkingScoreController implements IParkingScoreController {
   /**
    * @description
    * @author Emerson Souza
+   * @param {Request} req
+   * @param {Response} res
+   * @returns {Promise<any>}
+   * @memberof ParkingScoreController
+   */
+  @httpGet('/parkingScores/:parkingId')
+  SearchAll(@request() req: Request, @response() res: Response): Promise<any> {
+    return new Promise((resolve) => {
+      const _parkingId: number = Number(req.params.parkingId);
+      if (Attributes.IsValid(_parkingId)) {
+        this._parkingScoreRepository.ToList(_parkingId)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Avaliação', result));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Estacionamento'));
+      }
+    });
+  }
+
+  /**
+   * @description
+   * @author Emerson Souza
    * @param {Request<any, any, any, import("express-serve-static-core").Query>} req
    * @param {Response<any>} res
    * @returns {Promise<any>}
@@ -116,7 +139,7 @@ class ParkingScoreController implements IParkingScoreController {
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Avaliação', error));
         });
     });
-  }
+  }  
 }
 
 export default ParkingScoreController;
