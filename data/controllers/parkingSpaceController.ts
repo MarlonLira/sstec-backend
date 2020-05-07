@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { controller, httpGet, httpPost, httpDelete, request, response, httpPut, results } from "inversify-express-utils";
+import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
 import IParkingSpaceController from "../interfaces/IControllers/IParkingSpaceController";
