@@ -76,9 +76,6 @@ class ParkingScoreRepository implements IParkingScoreRepository {
           parkingId: {
             [Op.eq]: _parkingId
           },
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
         }
       })
         .then((result: ParkingScore[]) => {
