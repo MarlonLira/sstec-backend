@@ -119,14 +119,12 @@ class ParkingScoreRepository implements IParkingScoreRepository {
   Delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingScore.sequelize.transaction();
-      ParkingScore.update({},
-        {
-          where: {
-            id: _id
-          },
-          transaction: _transaction,
-          validate: false
-        })
+      ParkingScore.destroy({
+        where: {
+          id: _id
+        },
+        transaction: _transaction
+      })
         .then(async result => {
           await _transaction.commit();
           resolve(result);

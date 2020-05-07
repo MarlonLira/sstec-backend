@@ -105,20 +105,16 @@ class ParkingScoreController implements IParkingScoreController {
    * @memberof ParkingScoreController
    */
   @httpDelete('/parkingScore/:id')
-  Delete(@request() req: Request, @response() res: Response) {
+  Delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      const _parkingScore = new ParkingScore(req.params);
-      if (Attributes.IsValid(_parkingScore.id)) {
-        this._parkingScoreRepository.Delete(_parkingScore.id)
-          .then(result => {
-            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Avaliação', result));
-          })
-          .catch(error => {
-            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Avaliação', error));
-          });
-      } else {
-        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Avaliação'));
-      }
+      const _parkingScoreId: number = req.params.id;
+      this._parkingScoreRepository.Delete(_parkingScoreId)
+        .then(result => {
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Avaliação', result));
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Avaliação', error));
+        });
     });
   }
 }
