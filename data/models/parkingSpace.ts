@@ -16,7 +16,6 @@ class ParkingSpace extends Model {
   id!: number;
   status!: TransactionType;
   value: number;
-  amount!: number;
   type: 'CAR' | 'MOTORCYCLE' | 'BOTH'
   parkingId!: number;
 
@@ -31,7 +30,6 @@ class ParkingSpace extends Model {
     this.id = Attributes.ReturnIfValid(json.id);
     this.status = Attributes.ReturnIfValid(json.status);
     this.value = Attributes.ReturnIfValid(json.value);
-    this.amount = Attributes.ReturnIfValid(json.amount);
     this.type = Attributes.ReturnIfValid(json.type);
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
   }

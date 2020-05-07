@@ -58,7 +58,7 @@ class ParkingSpaceController implements IParkingSpaceController {
       if (Attributes.IsValid(_parkingSpace.id)) {
         this._parkingSpaceRepository.GetById(_parkingSpace.id)
           .then(result => {
-            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Vaga', result))
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Vaga', result))
           })
           .catch(error => {
             resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Vaga', error));
@@ -66,7 +66,7 @@ class ParkingSpaceController implements IParkingSpaceController {
       } else if (Attributes.IsValid(_parkingSpace.parkingId)) {
         this._parkingSpaceRepository.GetByParkingId(_parkingSpace.parkingId)
           .then((foundParkingSpaces: ParkingSpace[]) => {
-            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Vaga', foundParkingSpaces))
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Vaga', foundParkingSpaces))
           })
           .catch(error => {
             resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Vaga', error));

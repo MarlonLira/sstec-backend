@@ -30,7 +30,7 @@
     },
     "ForceSync": false,
     "AlterSync": false,
-    "DropAllTable": false,
+    "DropAllTable":false,
     "Logging": false,
     "IsLogger": false
   }
