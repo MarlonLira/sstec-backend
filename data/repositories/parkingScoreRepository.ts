@@ -16,14 +16,16 @@ class ParkingScoreRepository implements IParkingScoreRepository {
    * @returns {Promise<any>}
    * @memberof ParkingScoreRepository
    */
-  Save(parkingScore: ParkingScore, parking:Parking): Promise<any> {
+  Save(parkingScore: ParkingScore): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingScore.sequelize.transaction();
-      parking.status = TransactionType.ACTIVE;
-            ParkingScore.create(parkingScore, { transaction: _transaction })
+      ParkingScore.create(parkingScore, { transaction: _transaction })
         .then(async (createParkingScore: ParkingScore) => {
           await _transaction.commit();
-          resolve({ "parkingScoreId": createParkingScore.id });
+          resolve({
+            "userId": createParkingScore.userId,
+            "parkingId": createParkingScore.parkingId,
+            "parkingScoreId": createParkingScore.id });
         }).catch(async error => {
           await _transaction.rollback();
           reject(error);
@@ -117,14 +119,12 @@ class ParkingScoreRepository implements IParkingScoreRepository {
   Delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingScore.sequelize.transaction();
-      ParkingScore.update({},
-        {
-          where: {
-            id: _id
-          },
-          transaction: _transaction,
-          validate: false
-        })
+      ParkingScore.destroy({
+        where: {
+          id: _id
+        },
+        transaction: _transaction
+      })
         .then(async result => {
           await _transaction.commit();
           resolve(result);
