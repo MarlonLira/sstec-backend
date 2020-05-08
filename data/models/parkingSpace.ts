@@ -15,6 +15,7 @@ const _instance = Context.getInstance();
 class ParkingSpace extends Model {
   id!: number;
   status!: TransactionType;
+  amount!: number;
   value: number;
   type: 'CAR' | 'MOTORCYCLE' | 'BOTH'
   parkingId!: number;
@@ -32,6 +33,7 @@ class ParkingSpace extends Model {
     this.value = Attributes.ReturnIfValid(json.value);
     this.type = Attributes.ReturnIfValid(json.type);
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
+    this.amount = Attributes.ReturnIfValid(json.amount);
   }
   ToModify() {
     return this.toJSON();
@@ -51,6 +53,10 @@ ParkingSpace.init({
   value: {
     type: new DataTypes.DOUBLE(),
     allowNull: false
+  },
+  amount:{
+    type: new DataTypes.INTEGER(),
+    allowNull:false
   },
   type: {
     type: new DataTypes.STRING(10),
