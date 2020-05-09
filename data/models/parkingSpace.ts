@@ -54,10 +54,6 @@ ParkingSpace.init({
     type: new DataTypes.DOUBLE(),
     allowNull: false
   },
-  amount:{
-    type: new DataTypes.INTEGER(),
-    allowNull:false
-  },
   type: {
     type: new DataTypes.STRING(10),
     allowNull: false

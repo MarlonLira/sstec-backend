@@ -38,15 +38,17 @@ class ParkingSpaceController implements IParkingSpaceController {
    */
   @httpPost('/parkingSpace')
   Save(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
-    return new Promise((resolve) => {
-      const _parkingSpace = new ParkingSpace(req.body.parkingSpace);
-      this._parkingSpaceRepository.Save(_parkingSpace)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Vaga', result));
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Vaga', error));
-        });
+    return new Promise(async (resolve) => {
+      try {
+        const _parkingSpace = new ParkingSpace(req.body.parkingSpace);
+        const result = [];
+        for (let i = 0; i < _parkingSpace.amount; i++) {
+          result.push(await this._parkingSpaceRepository.Save(_parkingSpace));
+        };
+        resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result));
+      } catch (error) {
+        resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Vaga', error));
+      };
     });
   }
 
