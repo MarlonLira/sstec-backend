@@ -3,7 +3,6 @@ import { injectable } from "inversify";
 
 import IEmployeeRepository from '../interfaces/IRepositories/IEmployeeRepository';
 import Employee from '../models/employee';
-import Querying from '../../commons/core/querying';
 import { CryptoType } from '../../commons/enums/cryptoType';
 import Crypto from '../../commons/core/crypto';
 
@@ -33,7 +32,7 @@ class EmployeeRepository implements IEmployeeRepository {
         .then(async (createdEmployee: Employee) => {
           await _transaction.commit();
           resolve({
-            "companyId": createdEmployee.companyId,
+            "parkingId": createdEmployee.parkingId,
             "employeeId": createdEmployee.id
           })
         })
@@ -50,13 +49,14 @@ class EmployeeRepository implements IEmployeeRepository {
    * @param {string} employeeName
    * @memberof EmployeeRepository
    */
-  GetByName(name: string): Promise<Employee[]> {
+  GetByName(name: string, _parkingId: number = 0, _companyId: number = 0): Promise<Employee[]> {
     return new Promise((resolve, reject) => {
       Employee.findAll({
         where: {
           name: {
-            [Op.like]: `${name}%`
+            [Op.like]: `%${name}%`
           },
+          [Op.or]: [{ parkingId: _parkingId }, { companyId: _companyId }],
           status: {
             [Op.ne]: TransactionType.DELETED
           }
@@ -78,9 +78,9 @@ class EmployeeRepository implements IEmployeeRepository {
    * @param {string} registryCode
    * @memberof EmployeeRepository
    */
-  GetByRegistryCode(_registryCode: string): Promise<Employee> {
+  GetByRegistryCode(_registryCode: string): Promise<Employee[]> {
     return new Promise((resolve, reject) => {
-      Employee.findOne({
+      Employee.findAll({
         where: {
           registryCode: {
             [Op.eq]: _registryCode
@@ -89,7 +89,7 @@ class EmployeeRepository implements IEmployeeRepository {
             [Op.ne]: TransactionType.DELETED
           }
         }
-      }).then((result: Employee) => {
+      }).then((result: Employee[]) => {
         resolve(result);
       }).catch(error => {
         reject(error);
@@ -109,6 +109,58 @@ class EmployeeRepository implements IEmployeeRepository {
           }
         }
       }).then((result: Employee) => {
+        resolve(result);
+      }).catch(error => {
+        reject(error);
+      });
+    });
+  }
+
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {number} _companyId
+   * @returns {Promise<Employee[]>}
+   * @memberof EmployeeRepository
+   */
+  GetByCompanyId(_companyId: number): Promise<Employee[]> {
+    return new Promise((resolve, reject) => {
+      Employee.findAll({
+        where: {
+          companyId: {
+            [Op.eq]: _companyId
+          },
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      }).then((result: Employee[]) => {
+        resolve(result);
+      }).catch(error => {
+        reject(error);
+      });
+    });
+  }
+
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {number} _parkingId
+   * @returns {Promise<Employee[]>}
+   * @memberof EmployeeRepository
+   */
+  GetByParkingId(_parkingId: number): Promise<Employee[]> {
+    return new Promise((resolve, reject) => {
+      Employee.findAll({
+        where: {
+          parkingId: {
+            [Op.eq]: _parkingId
+          },
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      }).then((result: Employee[]) => {
         resolve(result);
       }).catch(error => {
         reject(error);

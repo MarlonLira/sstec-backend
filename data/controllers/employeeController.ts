@@ -66,50 +66,66 @@ class EmployeeController implements IEmployeeController {
    * @param {Response<any>} res
    * @memberof EmployeeController
    */
-  @httpGet('/employee/registryCode/:registryCode')
-  @httpGet('/employee/name/:name')
+  @httpGet('/employee/parkingId/:parkingId/registryCode/:registryCode')
+  @httpGet('/employee/parkingId/:parkingId/name/:name')
+  @httpGet('/employee/companyId/:companyId/registryCode/:registryCode')
+  @httpGet('/employee/companyId/:companyId/name/:name')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise((resolve) => {
-      const _employee = new Employee(req.params);
-      if (Attributes.IsValid(_employee.registryCode)) {
-        this._employeeRepository.GetByRegistryCode(_employee.registryCode)
-          .then((result: Employee) => {
-            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionário', result));
-          })
-          .catch(error => {
-            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
-          });
-      } else if (Attributes.IsValid(_employee.name)) {
-        this._employeeRepository.GetByName(_employee.name)
-          .then((result: Employee[]) => {
-            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionário', result));
-          })
-          .catch(error => {
-            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
-          });
-      } else {
-        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Funcionário'));
+    return new Promise(async (resolve) => {
+      try {
+        const _employee = new Employee(req.params);
+        let foundEmployees: any = null;
+        if (Attributes.IsValid(_employee.parkingId) && Attributes.IsValid(_employee.registryCode)) {
+          foundEmployees = await this._employeeRepository.GetByRegistryCode(_employee.registryCode);
+          foundEmployees = foundEmployees.find(r => r.parkingId === Number(_employee.parkingId));
+          resolve(Http.SendMessage(res, HttpCode.Found, HttpMessage.Found, 'Funcionário', foundEmployees))
+        } else if (Attributes.IsValid(_employee.parkingId) && Attributes.IsValid(_employee.name)) {
+          foundEmployees = await this._employeeRepository.GetByName(_employee.name, Number(_employee.parkingId),0);
+          resolve(Http.SendMessage(res, HttpCode.Found, HttpMessage.Found, 'Funcionário', foundEmployees))
+        } else if (Attributes.IsValid(_employee.companyId) && Attributes.IsValid(_employee.registryCode)) {
+          foundEmployees = await this._employeeRepository.GetByRegistryCode(_employee.registryCode);
+          foundEmployees = foundEmployees.find(r => r.companyId === Number(_employee.companyId));
+          resolve(Http.SendMessage(res, HttpCode.Found, HttpMessage.Found, 'Funcionário', foundEmployees))
+        } else if (Attributes.IsValid(_employee.companyId) && Attributes.IsValid(_employee.name)) {
+          foundEmployees = await this._employeeRepository.GetByName(_employee.name,0,Number(_employee.companyId));
+          foundEmployees = foundEmployees.find(r => r.companyId === Number(_employee.companyId));
+          resolve(Http.SendMessage(res, HttpCode.Found, HttpMessage.Found, 'Funcionário', foundEmployees))
+        } else {
+          resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Funcionário'));
+        }
+      } catch (error) {
+        resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
       }
     });
   }
 
   /**
    * @description
-   * @author Marlon Lira
+   * @author Gustavo Gusmão
    * @param {Request<any>} req
    * @param {Response<any>} res
+   * @returns
    * @memberof EmployeeController
    */
-  @httpGet('/employees')
+  @httpGet('/employees/parkingId/:parkingId')
+  @httpGet('/employees/companyId/:companyId')
   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise((resolve) => {
-      this._employeeRepository.ToList()
-        .then((result: Employee[]) => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionário', result));
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
-        });
+    return new Promise(async (resolve) => {
+      try {
+        const _employee = new Employee(req.params);
+        let result: Employee[] = null;
+        if (Attributes.IsValid(_employee.parkingId)) {
+          result = await this._employeeRepository.GetByParkingId(_employee.parkingId);
+          resolve(Http.SendMessage(res, HttpCode.Found, HttpMessage.Found, 'Funcionário', result))
+        } else if (Attributes.IsValid(_employee.companyId)) {
+          result = await this._employeeRepository.GetByCompanyId(_employee.companyId);
+          resolve(Http.SendMessage(res, HttpCode.Found, HttpMessage.Found, 'Funcionário', result))
+        } else {
+          resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Funcionário'));
+        }
+      } catch (error) {
+        resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
+      }
     });
   }
 
