@@ -38,7 +38,7 @@ class Context {
         //     rejectUnauthorized: false,
         //   }
         // }
-       }
+      }
     );
     return sequelize;
   }
