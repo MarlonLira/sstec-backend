@@ -64,8 +64,7 @@ class EmployeeRepository implements IEmployeeRepository {
       })
         .then(result => {
           resolve(result);
-        }
-        )
+        })
         .catch(error => {
           reject(error);
         });

@@ -46,23 +46,28 @@ class ParkingController implements IParkingController {
 
   /**
    * @description
-   * @author Emerson Souza
+   * @author Gustavo Gusmão
    * @param {Request<any>} req
    * @param {Response<any>} res
    * @returns {Promise<any>}
    * @memberof ParkingController
    */
-  @httpGet('/parking/registryCode/:registryCode')
+  @httpGet('/parking/companyId/:companyId/registryCode/:registryCode')
   Search(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
-    return new Promise((resolve) => {
-      const _registryCode: string = req.params.registryCode;
-      this._parkingRepository.GetByRegistryCode(_registryCode)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result));
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
-        });
+    return new Promise(async (resolve) => {
+      try {
+        const _parking = new Parking(req.params);
+        let found: any = null;
+          if (Attributes.IsValid(_parking.registryCode) && Attributes.IsValid(_parking.companyId)) {
+            found = await this._parkingRepository.GetByRegistryCode(_parking.registryCode);
+            found = found.find(r => r.companyId === Number(_parking.companyId));
+            resolve(Http.SendMessage(res, HttpCode.Found, HttpMessage.Found, 'Estacionameto', found))
+          } else {
+            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Estacionamento', found));
+          }
+      } catch(error) {
+        resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
+      }
     });
   }
 
@@ -74,7 +79,7 @@ class ParkingController implements IParkingController {
    * @returns {Promise<any>}
    * @memberof ParkingController
    */
-  @httpGet('/parkings/:companyId')
+  @httpGet('/parkings/companyId/:companyId')
   SearchAll(@request() req: Request, @response() res: Response): Promise<any> {
     return new Promise((resolve) => {
       const _companyId: number = Number(req.params.companyId);
