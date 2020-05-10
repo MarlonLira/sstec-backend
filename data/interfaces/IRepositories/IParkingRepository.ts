@@ -51,7 +51,7 @@ interface IParkingRepository {
    * @returns {Promise<Parking>}
    * @memberof IParkingRepository
    */
-  GetByRegistryCode(registryCode: string): Promise<Parking>;
+  GetByRegistryCode(registryCode: string): Promise<Parking[]>;
 
   /**
    * @description

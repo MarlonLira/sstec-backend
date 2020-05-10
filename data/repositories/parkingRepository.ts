@@ -115,9 +115,9 @@ class ParkingRepository implements IParkingRepository {
    * @returns {Promise<Parking>}
    * @memberof ParkingRepository
    */
-  GetByRegistryCode(registryCode: string): Promise<Parking> {
-    return new Promise((resolve) => {
-      Parking.findOne({
+  GetByRegistryCode(registryCode: string): Promise<Parking[]> {
+    return new Promise((resolve, reject) => {
+      Parking.findAll({
         where: {
           registryCode: {
             [Op.eq]: registryCode
@@ -126,14 +126,11 @@ class ParkingRepository implements IParkingRepository {
             [Op.ne]: TransactionType.DELETED
           }
         }
-      })
-        .then(result => {
-          resolve(result);
-
-        })
-        .catch(error => {
-          throw error;
-        });
+      }).then((result: Parking[]) => {
+        resolve(result);
+      }).catch(error => {
+        reject(error);
+      });
     });
   }
 
