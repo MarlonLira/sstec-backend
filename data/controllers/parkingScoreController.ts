@@ -75,7 +75,7 @@ class ParkingScoreController implements IParkingScoreController {
    * @returns {Promise<any>}
    * @memberof ParkingScoreController
    */
-  @httpGet('/parkingScores/:parkingId')
+  @httpGet('/parkingsScores/:parkingId')
   SearchAll(@request() req: Request, @response() res: Response): Promise<any> {
     return new Promise((resolve) => {
       const _parkingId: number = Number(req.params.parkingId);

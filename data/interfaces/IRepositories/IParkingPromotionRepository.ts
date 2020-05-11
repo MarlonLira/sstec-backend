@@ -31,7 +31,7 @@ interface IParkingPromotionRepository {
    * @returns {Promise<ParkingPromotion[]>}
    * @memberof IParkingPromotionRepository
    */
-  ToList(): Promise<ParkingPromotion[]>;
+  ToList(_parkingId: number): Promise<ParkingPromotion[]>;
 
   /**
    * @description
@@ -41,6 +41,15 @@ interface IParkingPromotionRepository {
    * @memberof IParkingPromotionRepository
    */
   GetByName(name: string): Promise<ParkingPromotion[]>;
+
+  /**
+   * @description
+   * @author Emerson Souza
+   * @param {number} id
+   * @returns {Promise<ParkingPromotion>}
+   * @memberof IParkingPromotionRepository
+   */
+  GetById(id: number): Promise<ParkingPromotion>;
 
   /**
    * @description
