@@ -102,7 +102,7 @@ class ParkingRepository implements IParkingRepository {
           resolve(result);
         })
         .catch(async error => {
-          await _transaction.commit();
+          await _transaction.rollback();
           reject(error);
         });
     });

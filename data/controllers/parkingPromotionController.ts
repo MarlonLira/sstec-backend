@@ -36,7 +36,7 @@ class ParkingPromotionController implements IParkingPromotionController {
    * @memberof ParkingPromotionController
    */
   @httpGet('/parkingPromotion/name/:name')
-  Search(@request() req: Request<any>, @response() res: Response<any>) {
+  Search(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _parkingPromotion = new ParkingPromotion(req.params);
       if (Attributes.IsValid(_parkingPromotion.name)) {
@@ -81,13 +81,18 @@ class ParkingPromotionController implements IParkingPromotionController {
    * @param {Response<any>} res
    * @memberof ParkingPromotionController
    */
-  @httpGet('/ParkingsPromotion')
-  SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
+  @httpGet('/ParkingsPromotion/:parkingId')
+  SearchAll(@request() req: Request, @response() res: Response): Promise<any> {
     return new Promise((resolve) => {
-      this._parkingPromotionRepository.ToList()
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Promoção', result));
-        });
+      const _parkingId: number = Number(req.params.parkingId);
+      if (Attributes.IsValid(_parkingId)) {
+        this._parkingPromotionRepository.ToList(_parkingId)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Promoção', result));
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Estacionamento'));
+      }
     });
   }
 
@@ -99,7 +104,7 @@ class ParkingPromotionController implements IParkingPromotionController {
    * @memberof ParkingPromotionController
    */
   @httpPut('/ParkingPromotion')
-  Update(@request() req: Request<any>, @response() res: Response<any>) {
+  Update(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _parkingPromotion = new ParkingPromotion(req.body.parkingPromotion);
       if (Attributes.IsValid(_parkingPromotion.id)) {
@@ -121,20 +126,23 @@ class ParkingPromotionController implements IParkingPromotionController {
    * @memberof ParkingPromotionController
    */
   @httpDelete('/ParkingPromotion/:id')
-  Delete(@request() req: Request<any>, @response() res: Response<any>) {
+  Delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
-      const _parkingPromotion = new ParkingPromotion(req.params);
-      if (Attributes.IsValid(_parkingPromotion.id)) {
-        this._parkingPromotionRepository.Delete(_parkingPromotion.id)
-          .then(result => {
-            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Promoção', result));
-          })
-          .catch(error => {
-            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Promoção', error));
-          });
-      } else {
-        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Promoção'));
-      }
+      const _id: number = req.params.id;
+      this._parkingPromotionRepository.GetById(_id)
+        .then((parkingPromotion: ParkingPromotion) => {
+          if (Attributes.IsValid(parkingPromotion)) {
+            this._parkingPromotionRepository.Delete(_id)
+              .then(result => {
+                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Promoção', result))
+              })
+              .catch(error => {
+                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Promoção', error));
+              });
+          } else {
+            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Estacionamento'));
+          }
+        });
     });
   }
 }
