@@ -116,10 +116,10 @@ class EmployeeController implements IEmployeeController {
         let result: Employee[] = null;
         if (Attributes.IsValid(_employee.parkingId)) {
           result = await this._employeeRepository.GetByParkingId(_employee.parkingId);
-          resolve(Http.SendMessage(res, HttpCode.Found, HttpMessage.Found, 'Funcionário', result))
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionário', result))
         } else if (Attributes.IsValid(_employee.companyId)) {
           result = await this._employeeRepository.GetByCompanyId(_employee.companyId);
-          resolve(Http.SendMessage(res, HttpCode.Found, HttpMessage.Found, 'Funcionário', result))
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionário', result))
         } else {
           resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Funcionário'));
         }
