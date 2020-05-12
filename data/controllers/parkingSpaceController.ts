@@ -42,10 +42,14 @@ class ParkingSpaceController implements IParkingSpaceController {
       try {
         const _parkingSpace = new ParkingSpace(req.body.parkingSpace);
         const result = [];
-        for (let i = 0; i < _parkingSpace.amount; i++) {
-          result.push(await this._parkingSpaceRepository.Save(_parkingSpace));
-        };
-        resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result));
+        if (Attributes.ReturnIfValid(_parkingSpace.amount, 0) > 0) {
+          for (let i = 0; i < _parkingSpace.amount; i++) {
+            result.push(await this._parkingSpaceRepository.Save(_parkingSpace));
+          };
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Vaga', result));
+        } else {
+          resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Vaga'));
+        }
       } catch (error) {
         resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Vaga', error));
       };

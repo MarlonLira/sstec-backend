@@ -98,7 +98,14 @@ class SchedulingRepository implements ISchedulingRepository {
     });
   }
 
-  ToList(_parkingId: number): Promise<Scheduling[]> {
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} _parkingId
+   * @returns {Promise<Scheduling[]>}
+   * @memberof SchedulingRepository
+   */
+  GetByParkingId(_parkingId: number): Promise<Scheduling[]> {
     return new Promise((resolve, reject) => {
       Scheduling.findAll({
         where: {
@@ -110,6 +117,41 @@ class SchedulingRepository implements ISchedulingRepository {
           }
         }
       })
+        .then((result: Scheduling[]) => {
+          resolve(result);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} _companyId
+   * @returns {Promise<Scheduling[]>}
+   * @memberof SchedulingRepository
+   */
+  GetByCompanyId(_companyId: number): Promise<Scheduling[]> {
+    return new Promise(async (resolve, reject) => {
+      Scheduling.sequelize.query(
+        "   SELECT S.* FROM Scheduling AS S" +
+        "   INNER JOIN Parking AS P" +
+        "     ON S.PARKINGID = P.ID" +
+        "   INNER JOIN Company AS C" +
+        "     ON P.COMPANYID = C.ID" +
+        "   WHERE S.STATUS = 'AT'" +
+        "     AND C.STATUS = 'AT'" +
+        "     AND C.ID = :companyId",
+        {
+          replacements: {
+            companyId: _companyId
+          },
+          type: QueryTypes.SELECT,
+          mapToModel: true
+        }
+      )
         .then((result: Scheduling[]) => {
           resolve(result);
         })

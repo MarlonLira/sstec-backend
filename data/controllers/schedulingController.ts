@@ -121,17 +121,24 @@ class SchedulingController implements ISchedulingController {
     });
   }
 
-  @httpGet('/schedulings/:parkingId')
+  @httpGet('/schedulings/companyId/:companyId')
+  @httpGet('/schedulings/parkingId/:parkingId')
   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise((resolve) => {
-      const _parkingId: number = Number(req.params.parkingId);
-      this._schedulingRepository.ToList(_parkingId)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Agendamento', result));
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Agendamento', error));
-        })
+    return new Promise(async (resolve) => {
+      try {
+        const _parkingId: number = req.params.parkingId;
+        const _companyId: number = req.params.companyId;
+        let _result: any;
+        if (Attributes.IsValid(_parkingId)) {
+          _result = await this._schedulingRepository.GetByParkingId(_parkingId);
+
+        } else if (Attributes.IsValid(_companyId)) {
+          _result = await this._schedulingRepository.GetByCompanyId(_companyId);
+        }
+        resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Agendamento', _result));
+      } catch (error) {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Agendamento', error));
+      }
     });
   }
 

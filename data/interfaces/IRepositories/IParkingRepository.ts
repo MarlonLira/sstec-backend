@@ -25,7 +25,7 @@ interface IParkingRepository {
    */
   Update(parking: Parking): Promise<any>;
 
- 
+
   /**
    * @description
    * @author Marlon Lira
@@ -52,6 +52,15 @@ interface IParkingRepository {
    * @memberof IParkingRepository
    */
   GetByRegistryCode(registryCode: string): Promise<Parking[]>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} _employeeId
+   * @returns {Promise<Parking[]>}
+   * @memberof IParkingRepository
+   */
+  GetByEmployeeId(_employeeId: number): Promise<Parking[]>;
 
   /**
    * @description
