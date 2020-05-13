@@ -62,7 +62,6 @@ class Database {
     // N:N
 
     // 1:N
-    Company.hasMany(Employee, { foreignKey: 'companyId', as: 'Employee' });
     Company.hasMany(CompanyAdress, { foreignKey: 'companyId', as: 'CompanyAdress' });
     Company.hasMany(Parking, { foreignKey: 'companyId', as: 'Parking' });
     User.hasMany(UserAdress, { foreignKey: 'userId', as: 'UserAdress' });
@@ -76,6 +75,7 @@ class Database {
     Parking.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'ParkingSpace' });
     Parking.hasMany(ParkingScore, { foreignKey: 'parkingId', as: 'ParkingScore' });
     Parking.hasMany(ParkingFinance, { foreignKey: 'parkingId', as: 'ParkingFinance' });
+    Parking.hasMany(Employee, { foreignKey: 'parkingId', as: 'Employee' });
     ParkingSpace.hasMany(Scheduling, { foreignKey: 'parkingSpaceId', as: 'Scheduling' });
 
     // 1:1

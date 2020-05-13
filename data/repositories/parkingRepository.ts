@@ -1,4 +1,4 @@
-import { Op } from 'sequelize';
+import { Op, QueryTypes } from 'sequelize';
 import { injectable } from "inversify";
 
 import IParkingRepository from '../interfaces/IRepositories/IParkingRepository';
@@ -102,7 +102,7 @@ class ParkingRepository implements IParkingRepository {
           resolve(result);
         })
         .catch(async error => {
-          await _transaction.commit();
+          await _transaction.rollback();
           reject(error);
         });
     });
@@ -115,9 +115,9 @@ class ParkingRepository implements IParkingRepository {
    * @returns {Promise<Parking>}
    * @memberof ParkingRepository
    */
-  GetByRegistryCode(registryCode: string): Promise<Parking> {
-    return new Promise((resolve) => {
-      Parking.findOne({
+  GetByRegistryCode(registryCode: string): Promise<Parking[]> {
+    return new Promise((resolve, reject) => {
+      Parking.findAll({
         where: {
           registryCode: {
             [Op.eq]: registryCode
@@ -126,13 +126,43 @@ class ParkingRepository implements IParkingRepository {
             [Op.ne]: TransactionType.DELETED
           }
         }
-      })
-        .then(result => {
-          resolve(result);
+      }).then((result: Parking[]) => {
+        resolve(result);
+      }).catch(error => {
+        reject(error);
+      });
+    });
+  }
 
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} _employeeId
+   * @returns {Promise<Parking>}
+   * @memberof ParkingRepository
+   */
+  GetByEmployeeId(_employeeId: number): Promise<Parking[]> {
+    return new Promise(async (resolve, reject) => {
+      Parking.sequelize.query(
+        "   SELECT P.* FROM Parking AS P" +
+        "   INNER JOIN Employee AS E" +
+        "     ON E.PARKINGID = P.id" +
+        "     WHERE E.STATUS = 'AT'" +
+        "     AND P.status = 'AT'" +
+        "     AND E.id = :employeeId",
+        {
+          replacements: {
+            employeeId: _employeeId,
+          },
+          type: QueryTypes.SELECT,
+          mapToModel: true
+        }
+      )
+        .then((result: Parking[]) => {
+          resolve(result);
         })
         .catch(error => {
-          throw error;
+          reject(error);
         });
     });
   }
