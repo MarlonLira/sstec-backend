@@ -39,7 +39,7 @@ class ParkingAdressController implements IParkingAdressController{
       const _id: number = req.params.id;
       this._parkingAdressRepository.GetById(_id)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Endereço', result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Endereço', result));
         })
         .catch(error => {
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço', error));
@@ -58,7 +58,6 @@ class ParkingAdressController implements IParkingAdressController{
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _parkingAdress = new ParkingAdress(req.body.parkingAdress);
-      _parkingAdress.parkingId  = req.body.parking.id;
       this._parkingAdressRepository.Save(_parkingAdress)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Endereço', result));
@@ -76,12 +75,16 @@ class ParkingAdressController implements IParkingAdressController{
    * @param {Response<any>} res
    * @memberof ParkingAdressController
    */
-  @httpGet('/ParkingsAdresses')
+  @httpGet('/ParkingAdress/:parkingId')
   SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      this._parkingAdressRepository.ToList()
+      const _parkingId: number = req.params.parkingId;
+      this._parkingAdressRepository.ToList(_parkingId)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Endereço', result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Endereço', result));
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço', error))
         });
     });
   }
@@ -96,10 +99,13 @@ class ParkingAdressController implements IParkingAdressController{
   @httpPut('/ParkingAdress')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      const _parkingAdress = new ParkingAdress(req.body);
+      const _parkingAdress = new ParkingAdress(req.body.parkingAdress);
       this._parkingAdressRepository.Update(_parkingAdress)
         .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Endereço', result));
+          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Endereço', result));
+        })
+        .catch(error => {
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Endereço', error));
         });
     });
   }

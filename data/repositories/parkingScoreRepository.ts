@@ -2,7 +2,7 @@ import { injectable } from "inversify";
 import { Op } from 'sequelize';
 
 import IParkingScoreRepository from '../interfaces/IRepositories/IParkingScoreRepository';
-import ParkingScore from '../models/ParkingScore';
+import ParkingScore from '../models/parkingScore';
 import { TransactionType } from "../../commons/enums/transactionType";
 import Parking from "../models/parking";
 
@@ -71,7 +71,9 @@ class ParkingScoreRepository implements IParkingScoreRepository {
     return new Promise((resolve, reject) => {
       ParkingScore.findAll({
         where: {
-          parkingId: _parkingId,
+          parkingId: {
+            [Op.eq]: _parkingId
+          },
           status: {
             [Op.ne]: TransactionType.DELETED
           }

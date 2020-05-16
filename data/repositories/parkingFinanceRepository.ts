@@ -1,9 +1,8 @@
 import { Op } from 'sequelize';
-import { injectable } from "inversify";
+import { injectable} from "inversify";
 import IParkingFinanceRepository from '../interfaces/IRepositories/IParkingFinanceRepository';
 import ParkingFinance from  '../models/parkingFinance';
 import { TransactionType } from '../../commons/enums/transactionType';
-import Parking from  '../models/parking';
 
 @injectable()
 class ParkingFinanceRepository implements IParkingFinanceRepository{
@@ -17,6 +16,7 @@ class ParkingFinanceRepository implements IParkingFinanceRepository{
   Save(parkingFinance: ParkingFinance):Promise<any> {
     return new Promise(async (resolve, reject) =>{
       const _transaction = await ParkingFinance.sequelize.transaction();
+      parkingFinance.status = TransactionType.ACTIVE;
       ParkingFinance.create(parkingFinance, {transaction: _transaction})
       .then(async (createParkingFinance:  ParkingFinance) => {
         await _transaction.commit();
@@ -26,6 +26,30 @@ class ParkingFinanceRepository implements IParkingFinanceRepository{
         reject(error);
       });
     });
+  }
+
+  Delete(_id: number): Promise<any>{
+    return new Promise (async (resolve, reject) =>{
+      const _transaction = await ParkingFinance.sequelize.transaction();
+      ParkingFinance.update({
+        status: TransactionType.DELETED,
+      },
+        {
+          where:{
+            id: _id
+          },
+          transaction: _transaction,
+          validate: false
+      })
+      .then(async result =>{
+        await _transaction.commit();
+        resolve(result);
+      })
+      .catch(async error =>{
+        await _transaction.rollback();
+        reject(error)
+      })
+    })
   }
 
   /**
@@ -62,9 +86,18 @@ class ParkingFinanceRepository implements IParkingFinanceRepository{
    * @param {number} parkingFinanceId
    * @memberof ParkingFinanceRepository
    */
-  getById(parkingFinanceId: number) {
+  GetById(parkingFinanceId: number): Promise<ParkingFinance> {
     return new Promise((resolve, reject) => {
-      ParkingFinance.findByPk(parkingFinanceId)
+      ParkingFinance.findOne({
+        where: {
+        id:{
+          [Op.eq]: parkingFinanceId
+        },
+        status:{
+          [Op.ne]:TransactionType.DELETED
+        }
+      }
+      })
       .then((result: ParkingFinance) => {
         resolve(result);
       })
@@ -79,9 +112,18 @@ class ParkingFinanceRepository implements IParkingFinanceRepository{
    * @author Felipe Seabra
    * @memberof ParkingFinanceRepository
    */
-  ToList() {
+  ToList(_parkingId): Promise <ParkingFinance[]> {
     return new Promise ((resolve, reject) => {
-      ParkingFinance.findAll()
+      ParkingFinance.findAll({
+        where: {
+          parkingId:{
+            [Op.eq]: _parkingId
+          },
+          status:{
+            [Op.ne]:TransactionType.DELETED
+          }
+        }
+      })
       .then(result => {
         resolve(result);
       })

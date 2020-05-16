@@ -1,6 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 import Attributes from '../../commons/core/attributes';
 import Context from '../../main/context';
+import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
 
@@ -17,6 +18,7 @@ class ParkingFinance extends Model{
   value!: number;
   parkingId!: number;
   companyId!: number;
+  status!: TransactionType;
 
   /**
    * Creates an instance of ParkingFinance.
@@ -32,6 +34,7 @@ class ParkingFinance extends Model{
     this.value = Attributes.ReturnIfValid(json.value);
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
     this.companyId = Attributes.ReturnIfValid(json.companyId);
+    this.status = Attributes.ReturnIfValid(json.status);
   }
 
   ToModify(){
@@ -62,6 +65,10 @@ class ParkingFinance extends Model{
     },
     companyId:{
       type: new DataTypes.INTEGER(),
+      allowNull: false
+    },
+    status: {
+      type: new DataTypes.STRING(2),
       allowNull: false
     }
   },

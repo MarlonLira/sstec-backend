@@ -2,7 +2,7 @@ import { injectable } from "inversify";
 import { Op, QueryTypes } from 'sequelize';
 
 import IParkingSpaceRepository from '../interfaces/IRepositories/IParkingSpaceRepository';
-import ParkingSpace from '../models/ParkingSpace';
+import ParkingSpace from '../models/parkingSpace';
 import { TransactionType } from "../../commons/enums/transactionType";
 import Scheduling from '../models/scheduling';
 
@@ -103,21 +103,21 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
   GetAvailable(scheduling: Scheduling): Promise<ParkingSpace[]> {
     return new Promise(async (resolve, reject) => {
       ParkingSpace.sequelize.query(
-        "   SELECT PS.* FROM [SSTEC].[DBO].[PARKINGSPACE] AS PS" +
-        "   WHERE NOT EXISTS ( SELECT PS1.* FROM [SSTEC].[DBO].[PARKINGSPACE] AS PS1" +
-        "                      INNER JOIN [SSTEC].[DBO].[SCHEDULING] AS S1" +
-        "                       ON S1.[PARKINGSPACEID] = PS1.[ID]" +
-        "                      WHERE S1.[STATUS] NOT IN ('EX', 'PD')" +
-        "                       AND S1.[DATE] = :date" +
-        "                       AND S1.[PARKINGID] = :parkingId" +
-        "                       AND PS1.[PARKINGID] = :parkingId" +
-        "                       AND PS.[ID] = PS1.[ID]" +
+        "   SELECT PS.* FROM ParkingSpace AS PS" +
+        "   WHERE NOT EXISTS ( SELECT PS1.* FROM ParkingSpace AS PS1" +
+        "                      INNER JOIN Scheduling AS S1" +
+        "                       ON S1.PARKINGSPACEID = PS1.ID" +
+        "                      WHERE S1.STATUS NOT IN ('EX', 'PD')" +
+        "                       AND S1.DATE = :date" +
+        "                       AND S1.PARKINGID = :parkingId" +
+        "                       AND PS1.PARKINGID = :parkingId" +
+        "                       AND PS.ID = PS1.ID" +
         "                       AND (( S1.AVALIABLETIME BETWEEN :avaliableTime AND :unavailableTime" +
         "                             OR S1.UNAVAILABLETIME BETWEEN :avaliableTime AND :unavailableTime )" +
-        "                             OR (S1.[AVALIABLETIME] < :avaliableTime AND S1.[UNAVAILABLETIME] > :unavailableTime )))" +
-        "     AND PS.[STATUS] NOT IN ('EX', 'PD')" +
-        "     AND PS.[PARKINGID] = :parkingId" +
-        "     AND PS.[TYPE] = :type",
+        "                             OR (S1.AVALIABLETIME < :avaliableTime AND S1.UNAVAILABLETIME > :unavailableTime )))" +
+        "     AND PS.STATUS NOT IN ('EX', 'PD')" +
+        "     AND PS.PARKINGID = :parkingId" +
+        "     AND PS.TYPE = :type",
         {
           replacements: {
             date: scheduling.date,

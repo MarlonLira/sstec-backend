@@ -5,7 +5,7 @@ import Context from '../main/context';
 
 // Entities
 import User from './models/user';
-import Vehicle from './models/vehicle'
+import Vehicle from './models/vehicle';
 import UserAdress from './models/userAdress';
 import Card from './models/card';
 import Company from './models/company';
@@ -65,11 +65,10 @@ class Database {
     Company.hasMany(Employee, { foreignKey: 'companyId', as: 'Employee' });
     Company.hasMany(CompanyAdress, { foreignKey: 'companyId', as: 'CompanyAdress' });
     Company.hasMany(Parking, { foreignKey: 'companyId', as: 'Parking' });
-    Company.hasMany(ParkingFinance, { foreignKey: 'companyId', as: 'ParkingFinance' });
     User.hasMany(UserAdress, { foreignKey: 'userId', as: 'UserAdress' });
     User.hasMany(Vehicle, { foreignKey: 'userId', as: 'Vehicle' });
     User.hasMany(Card, { foreignKey: 'userId', as: 'Card' });
-    User.hasMany(ParkingScore, { foreignKey: 'userId', as: 'ParkingScore' });
+    User.hasMany(ParkingScore, { foreignKey: 'userId', as: 'ParkingScore' }); // Revisar isso, acredito que seja 1:1
     User.hasMany(Scheduling, { foreignKey: 'userId', as: 'Scheduling' });
     Rule.hasMany(Employee, { foreignKey: 'ruleId', as: 'Employee' });
     Parking.hasMany(ParkingPromotion, { foreignKey: 'parkingId', as: 'ParkingPromotion' });
@@ -95,6 +94,7 @@ class Database {
         Logger.Error('Database', 'Error when trying to connect to the database!');
         Logger.Error('Database', error);
       });
+
   }
 
   private async CreateTables(models: { name: string, entity: Sequelize }[]) {
