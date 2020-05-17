@@ -31,8 +31,7 @@ class Attributes {
    * @returns {*}
    * @memberof Attributes
    */
-  // tslint:disable-next-line: no-unnecessary-initializer
-  static ReturnIfValid(value: any, returnIfNotValid: any = undefined): any {
+  static ReturnIfValid(value: any, returnIfNotValid: any): any {
     return this.IsValid(value) ? value : returnIfNotValid;
   }
 }
