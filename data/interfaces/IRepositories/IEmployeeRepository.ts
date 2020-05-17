@@ -15,7 +15,7 @@ interface IEmployeeRepository {
    * @returns {Promise<Employee[]>}
    * @memberof IEmployeeRepository
    */
-  GetByName(name: string): Promise<Employee[]>;
+  GetByName(name: string, parkingId: number, companyId: number): Promise<Employee[]>;
 
   /**
    * @description
@@ -24,7 +24,7 @@ interface IEmployeeRepository {
    * @returns {Promise<Employee>}
    * @memberof IEmployeeRepository
    */
-  GetByRegistryCode(_registryCode: string): Promise<Employee>;
+  GetByRegistryCode(_registryCode: string): Promise<Employee[]>;
 
   /**
    * @description
@@ -34,6 +34,24 @@ interface IEmployeeRepository {
    * @memberof IEmployeeRepository
    */
   GetByEmail(_email: string): Promise<Employee>;
+
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {number} _companyId
+   * @returns {Promise<Employee[]>}
+   * @memberof IEmployeeRepository
+   */
+  GetByCompanyId(_companyId: number): Promise<Employee[]>;
+
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {number} _parkingId
+   * @returns {Promise<Employee[]>}
+   * @memberof IEmployeeRepository
+   */
+  GetByParkingId(_parkingId: number): Promise<Employee[]>;
 
   /**
    * @description

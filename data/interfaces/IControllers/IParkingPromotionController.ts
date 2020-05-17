@@ -9,11 +9,11 @@ import { Response, Request } from "express";
  * @extends {interfaces.Controller}
  */
 interface IParkingPromotionController extends interfaces.Controller {
-  Save(req: Request<any>, res: Response<any>);
-  Search(req: Request<any>, res: Response<any>);
-  SearchAll(req: Request<any>, res: Response<any>);
-  Update(req: Request<any>, res: Response<any>);
-  Delete(req: Request<any>, res: Response<any>);
+  Save(req: Request<any>, res: Response<any>): Promise<any>;
+  Search(req: Request<any>, res: Response<any>): Promise<any>;
+  SearchAll(req: Request<any>, res: Response<any>): Promise<any>;
+  Update(req: Request<any>, res: Response<any>): Promise<any>;
+  Delete(req: Request<any>, res: Response<any>): Promise<any>;
 }
 
 export default IParkingPromotionController;

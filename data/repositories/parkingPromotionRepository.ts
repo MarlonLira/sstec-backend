@@ -58,7 +58,8 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
           where: {
             id: _id
           },
-          transaction: _transaction
+          transaction: _transaction,
+          validate: false
         })
         .then(async _result => {
           await _transaction.commit();
@@ -121,16 +122,35 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
 
   /**
    * @description
+   * @author Emerson Souza
+   * @param {number} id
+   * @returns {Promise<ParkingPromotion>}
+   * @memberof ParkingPromotionRepository
+   */
+  GetById(id: number): Promise<ParkingPromotion> {
+    return new Promise((resolve, reject) => {
+      ParkingPromotion.findByPk(id)
+        .then((parkingPromotion: ParkingPromotion) => {
+          resolve(parkingPromotion)
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+  /**
+   * @description
    * @author Felipe Seabra
    * @memberof ParkingPromotionRepository
    */
-  ToList(): Promise<ParkingPromotion[]> {
+  ToList(_parkingId: number): Promise<ParkingPromotion[]> {
     return new Promise((resolve, reject) => {
       ParkingPromotion.findAll({
         where: {
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          parkingId:{
+            [Op.eq]: _parkingId
+          },
         }
       })
         .then((result: ParkingPromotion[]) => {

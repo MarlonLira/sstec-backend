@@ -1,3 +1,5 @@
+import { isNumber } from "util";
+
 /**
  * @description
  * @author Marlon Lira
@@ -10,11 +12,11 @@ class Attributes {
    * @author Marlon Lira
    * @static
    * @param {*} value
-   * @returns 
+   * @returns
    * @memberof Attributes
    */
   static IsValid(value: any): boolean {
-    return (value != undefined && value != '' && value != null) ? true : false;
+    return (value !== undefined && value !== '' && value != null) ? true : false;
   }
 
   /**
@@ -26,6 +28,7 @@ class Attributes {
    * @returns {*}
    * @memberof Attributes
    */
+  // tslint:disable-next-line: no-unnecessary-initializer
   static ReturnIfValid(value: any, returnIfNotValid: any = undefined): any {
     return this.IsValid(value) ? value : returnIfNotValid;
   }
