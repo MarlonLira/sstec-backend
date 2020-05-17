@@ -1,4 +1,4 @@
-import { isNumber } from "util";
+import { isNumber, isUndefined, isNull, isArray } from "util";
 
 /**
  * @description
@@ -16,7 +16,10 @@ class Attributes {
    * @memberof Attributes
    */
   static IsValid(value: any): boolean {
-    return (value !== undefined && value !== '' && value != null) ? true : false;
+    if (isArray(value)) {
+      return value.length > 0 ? true: false;
+    }
+    return (!isUndefined(value) && value !== '' && !isNull(value)) ? true : false;
   }
 
   /**
