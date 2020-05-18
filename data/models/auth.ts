@@ -2,6 +2,7 @@ import User from './user';
 import Employee from './employee';
 import Attributes from '../../commons/core/attributes';
 import Company from './company';
+import Parking from './parking';
 
 /**
  * @description
@@ -15,6 +16,7 @@ class Auth {
   user!: User;
   employee!: Employee;
   company!: Company;
+  parking!: Parking;
 
   /**
    * Creates an instance of Auth.
@@ -28,6 +30,7 @@ class Auth {
     this.user = Attributes.IsValid(json.user) ? new User(json.user) : undefined;
     this.employee = Attributes.IsValid(json.employee) ? new Employee(json.employee) : undefined;
     this.company = Attributes.IsValid(json.company) ? new Company(json.company) : undefined;
+    this.parking = Attributes.IsValid(json.parking) ? new Parking(json.parking) : undefined;
   }
 }
 

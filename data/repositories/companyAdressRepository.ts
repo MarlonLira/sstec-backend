@@ -74,22 +74,19 @@ class CompanyAdressRepository implements ICompanyAdressRepository {
   /**
    * @description
    * @author Gustavo Gusmão
-   * @param {number} id
+   * @param {number} _id
+   * @returns {Promise<any>}
    * @memberof CompanyAdressRepository
    */
   Delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await CompanyAdress.sequelize.transaction();
-      CompanyAdress.update({
-        status: TransactionType.DELETED
-      },
-        {
-          where: {
-            id: _id
-          },
-          transaction: _transaction,
-          validate: false
-        })
+      CompanyAdress.destroy({
+        where: {
+          id: _id
+        },
+        transaction: _transaction
+      })
         .then(async result => {
           await _transaction.commit();
           resolve(result);

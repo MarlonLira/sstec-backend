@@ -5,8 +5,6 @@ import IUserAdressRepository from '../interfaces/IRepositories/IUserAdressReposi
 import UserAdress from '../models/userAdress';
 import { TransactionType } from '../../commons/enums/transactionType';
 
-
-
 /**
  * @description
  * @author Gustavo Gusmão
@@ -73,25 +71,23 @@ class UserAdressRepository implements IUserAdressRepository {
     });
   }
 
+
   /**
    * @description
    * @author Gustavo Gusmão
-   * @param {number} id
+   * @param {number} _id
+   * @returns {Promise<any>}
    * @memberof UserAdressRepository
    */
   Delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await UserAdress.sequelize.transaction();
-      UserAdress.update({
-        status: TransactionType.DELETED
-      },
-        {
-          where: {
-            id: _id
-          },
-          transaction: _transaction,
-          validate: false
-        })
+      UserAdress.destroy({
+        where: {
+          id: _id
+        },
+        transaction: _transaction
+      })
         .then(async result => {
           await _transaction.commit();
           resolve(result);

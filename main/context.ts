@@ -30,14 +30,14 @@ class Context {
         logging: _logging,
         omitNull: true,
         timezone: '-03:00',
-        // dialectOptions: {
-        //   options: {
-        //     trustServerCertificate: true
-        //   },
-        //   ssl: {
-        //     rejectUnauthorized: false,
-        //   }
-        // }
+     /*    dialectOptions: {
+          options: {
+            trustServerCertificate: true
+          },
+          ssl: {
+            rejectUnauthorized: false,
+          }
+        } */
        }
     );
     return sequelize;

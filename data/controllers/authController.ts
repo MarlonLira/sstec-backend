@@ -3,17 +3,21 @@ import { controller, httpPost, request, response } from "inversify-express-utils
 import { inject } from "inversify";
 
 import TYPES from '../types';
+
 import IAuthService from '../interfaces/IServices/IAuthService';
 import Auth from "../models/auth";
 import Http from '../../commons/core/http';
+import { HttpMessage } from "../../commons/enums/httpMessage";
 import { HttpCode } from '../../commons/enums/httpCode';
 import Attributes from '../../commons/core/attributes';
 import Crypto from '../../commons/core/crypto';
 import IAuthController from "../interfaces/IControllers/IAuthController";
 import IEmployeeRepository from "../interfaces/IRepositories/IEmployeeRepository";
-import Employee from "../models/employee";
 import ICompanyRepository from "../interfaces/IRepositories/ICompanyRepository";
-import { HttpMessage } from "../../commons/enums/httpMessage";
+import IParkingRepository from "../interfaces/IRepositories/IParkingRepository";
+import Employee from "../models/employee";
+import Company from "../models/company";
+
 
 /**
  * @description
@@ -35,6 +39,7 @@ class AuthController implements IAuthController {
     @inject(TYPES.IAuthService) private _authService: IAuthService,
     @inject(TYPES.IEmployeeRepository) private _employeeRepository: IEmployeeRepository,
     @inject(TYPES.ICompanyRepository) private _companyRepository: ICompanyRepository,
+    @inject(TYPES.IParkingRepository) private _parkingRepository: IParkingRepository,
   ) { }
 
   /**
@@ -71,6 +76,7 @@ class AuthController implements IAuthController {
         const foundEmployee: Employee = await this._employeeRepository.GetByEmail(_auth.employee.email);
         if (Attributes.IsValid(foundEmployee) && Crypto.Compare(_auth.employee.password, foundEmployee.password)) {
           _auth.company = await this._companyRepository.GetById(foundEmployee.companyId);
+          _auth.parking = (await this._parkingRepository.GetByEmployeeId(foundEmployee.id))[0];
           _auth.employee = foundEmployee;
           this._authService.CreateEmployeeToken(_auth)
             .then((createdAuthentication: Auth) => {
@@ -98,7 +104,7 @@ class AuthController implements IAuthController {
     return new Promise((resolve) => {
       const _auth = new Auth(req.body);
       this._companyRepository.GetByRegistryCode(_auth.company.registryCode)
-        .then((result: any) => {
+        .then((result: Company[]) => {
           if (!Attributes.IsValid(result)) {
             this._companyRepository.Save(_auth.company)
               .then((createdCompany: { id: number; }) => {

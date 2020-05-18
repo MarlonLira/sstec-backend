@@ -16,10 +16,10 @@ interface IParkingScoreRepository {
    * @returns {Promise<any>}
    * @memberof IParkingScoreRepository
    */
-  Save(parkingScore: ParkingScore, parking:Parking): Promise<any>;
+  Save(parkingScore: ParkingScore): Promise<any>;
 
   /**
-   * @description
+   * @descriptionS
    * @author Emerson Souza
    * @param {ParkingScore} parkingScore
    * @returns {Promise<any>}
