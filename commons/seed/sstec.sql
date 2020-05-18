@@ -1,4 +1,6 @@
-insert into sstec.company(status, name, registryCode, phone, createdAt, updatedAt) 
+
+
+insert into Company(status, name, registryCode, phone, createdAt, updatedAt) 
 values ('AT','Estacionamentos vila nova', '94156717896300', '81996656400', '2020-05-08 21:56:26', '2020-05-08 21:56:26'),
 ('AT', 'Estacionamentos WR', '94156717898888', '81986656596', '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Alagoas Estacionamentos', '94156717897882', '8199665335', '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
@@ -10,7 +12,7 @@ values ('AT','Estacionamentos vila nova', '94156717896300', '81996656400', '2020
 ('AT', 'Estudio car', '4666717897882', '8199659935', '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Estacionamentos Norte', '45208917897882', '8133408099', '2020-05-09 21:57:27', '2020-05-09 21:57:27');
 
-insert into sstec.user(status, name, registryCode, phone, email, password, createdAt, updatedAt)
+insert into User(status, name, registryCode, phone, email, password, createdAt, updatedAt)
 values('AT', 'Alice', '155369855210', '8133408099', 'Alice@gmail.com', '123456', '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Miguel', '155369889755', '8133408155', 'Miguel@gmail.com', '123456', '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Sophia', '155369854477', '8199808099', 'Sophia@gmail.com', '123456', '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
@@ -23,14 +25,14 @@ values('AT', 'Alice', '155369855210', '8133408099', 'Alice@gmail.com', '123456',
 ('AT', 'Isabella', '155369854998', '8198408633', 'Isabella@gmail.com', '123456', '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Lorenzo', '155367566210', '8199488099', 'Lorenzo@gmail.com', '123456', '2020-05-09 21:57:27', '2020-05-09 21:57:27');
 
-insert into sstec.rule(status, name, level, createdAt, updatedAt)
+insert into Rule(status, name, level, createdAt, updatedAt)
 values('AT', 'adm', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'assist', 2, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'manobrista', 3, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'gerente', 4, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'supervisor', 5, '2020-05-09 21:57:27', '2020-05-09 21:57:27');
 
-insert into sstec.useradress(status, country, state, city, street, number, zipCode, complement, userId, createdAt, updatedAt)
+insert into UserAdress(status, country, state, city, street, number, zipCode, complement, userId, createdAt, updatedAt)
 values ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Principal', 99, '52090168', ' ', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Abaré', 09, '50820710', ' ', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Abdias de Oliveira', 63, '50720550', ' ', 2, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
@@ -52,7 +54,7 @@ values ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Principal', 99, '52090168',
 ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Afonso Arinos', 111, '51320140', ' ', 10, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Aires Belo', 68, '50870240', ' ', 10, '2020-05-09 21:57:27', '2020-05-09 21:57:27');
 
-insert into sstec.parking(status, name, registryCode, phone, email, imgUrl, companyId, createdAt, updatedAt)
+insert into Parking(status, name, registryCode, phone, email, imgUrl, companyId, createdAt, updatedAt)
 values('AT', 'estacionamento Vila Nova1', '323636984889', '81995574552', 'estacionamentosvilanova1@gmail.com', 'www.facebook.com', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'estacionamento Vila Nova2', '323636984369', '81995574458', 'estacionamentosvilanova2@gmail.com', 'www.facebook.com', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'estacionamento Vila Nova3', '323636984477', '81995575566', 'estacionamentosvilanova3@gmail.com', 'www.facebook.com', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
@@ -84,7 +86,7 @@ values('AT', 'estacionamento Vila Nova1', '323636984889', '81995574552', 'estaci
 ('AT', 'estacionamento Norte centro', '11537788300', '81202305669', 'estacionamentosnorte@gmail.com', 'www.estacionamentosnorte.com', 10, '2020-05-09 21:57:27', '2020-05-09 21:57:27');
 
 
-insert into sstec.companyadress (status, country, state, city, street, number, zipCode, complement, companyId, createdAt, updatedAt)
+insert into CompanyAdress (status, country, state, city, street, number, zipCode, complement, companyId, createdAt, updatedAt)
 values('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Principal', 08, '52090168', ' ', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua São José ', 90, '52160231', ' ', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Abadiânia', 00, '52280373', ' ', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
@@ -145,7 +147,7 @@ values('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Principal', 08, '52090168', 
 ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Abdias Cabral de Moura', 2312, '51350390', ' ', 10, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Abdias de Oliveira', 548, '50720550', ' ', 10, '2020-05-09 21:57:27', '2020-05-09 21:57:27');
 
-insert into sstec.parkingadress(status, country, state, city, street, number, zipCode, latitude, longitude, complement,parkingId, createdAt, updatedAt)
+insert into ParkingAdress(status, country, state, city, street, number, zipCode, latitude, longitude, complement,parkingId, createdAt, updatedAt)
 values ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Nove', 100, '52190480', '22561','98563', ' ', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Brasil', 'Pernambuco', 'Recife', '3ª Travessa A', 85, '52031216', '22587','98963', ' ', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua A. Boulitreau Fragoso', 50, '50920675', '22231','33353',  ' ', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
@@ -195,7 +197,7 @@ values ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Nove', 100, '52190480', '22
 ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Praça Abelardo Rijo', 10, '50090280', '34452', '78853', ' ', 10, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Abaeté', 410, '51180470', '33566', '22345', ' ', 10, '2020-05-09 21:57:27', '2020-05-09 21:57:27');
 
-insert into sstec.vehicle(status, model, color, type, licensePlate, userId, createdAt, updatedAt)
+insert into Vehicle(status, model, color, type, licensePlate, userId, createdAt, updatedAt)
 values ('AT', 'CELTA', 'branco', 'CAR', 'AVB1231', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'GOL', 'VERMELHO', 'CAR', 'ABC1331', 2, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'GOL', 'PRETO', 'CAR', 'OBC5586', 3, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
@@ -211,7 +213,7 @@ values ('AT', 'CELTA', 'branco', 'CAR', 'AVB1231', 1, '2020-05-09 21:57:27', '20
 ('AT', 'KAWAZAKI', 'VERDE', 'MOTORCYCLE', 'FED4556', 10, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'GSX-S 750', 'VERDE', 'MOTORCYCLE', 'TTT9885', 11, '2020-05-09 21:57:27', '2020-05-09 21:57:27');
 
-insert into sstec.card(status, holder, flag, number, expirationDate, secureCode, type, userId, createdAt, updatedAt)
+insert into Card(status, holder, flag, number, expirationDate, secureCode, type, userId, createdAt, updatedAt)
 values ('AT', ' ', 'MarterCard', '5117294366921797', '10/05/2022', '979', 'CREDIT', '1', '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', ' ', 'MarterCard', '5189962294448538', '10/04/2021', '776', 'CREDIT', '1', '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', ' ', 'Visa', '4024007139965403', '10/10/2020', '447', 'CREDIT', '2', '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
@@ -227,7 +229,7 @@ values ('AT', ' ', 'MarterCard', '5117294366921797', '10/05/2022', '979', 'CREDI
 ('AT', ' ', 'HiperCard', '6062820275962812', '10/01/2021', '217', 'CREDIT', '10', '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', ' ', 'Visa', '4929304819671765', '13/05/2021', '522', 'CREDIT', '11', '2020-05-09 21:57:27', '2020-05-09 21:57:27');
 
-insert into sstec.parkingfinance(status, month, year, value, parkingId, companyId, createdAt, updatedAt)
+insert into ParkingFinance(status, month, year, value, parkingId, companyId, createdAt, updatedAt)
 values ('AT', 'April', '2020', 12235, 1, 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'FEBRUARY', '2020', 23332, 2, 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'DEZEMBER', '2020', 56331, 3, 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
@@ -255,7 +257,7 @@ values ('AT', 'April', '2020', 12235, 1, 1, '2020-05-09 21:57:27', '2020-05-09 2
 ('AT', 'NOVEMBER', '2020', 23361, 29, 10, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'SEPTEMBER', '2020', 56333, 28, 10, '2020-05-09 21:57:27', '2020-05-09 21:57:27');
 
-insert into sstec.parkingpromotion(status, name, description, days, hours, discount, parkingId, createdAt, updatedAt)
+insert into ParkingPromotion(status, name, description, days, hours, discount, parkingId, createdAt, updatedAt)
 values ('AT', '40% DIAS DAS MAES', '2 HORAS E GANHE 40%', 3, 72, 40, 3, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', '20% DIAS DAS MAES', '2 HORAS E GANHE 20%', 9, 72, 20, 9, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', '10% DIAS DAS MAES', '2 HORAS E GANHE 10% ', 6, 72, 10, 6, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
@@ -267,7 +269,7 @@ values ('AT', '40% DIAS DAS MAES', '2 HORAS E GANHE 40%', 3, 72, 40, 3, '2020-05
 ('AT', 'DESCONTO TOTAL', 'GANHE DESCONTO DE 20% A CADA 1 HORA', 3, 72, 40, 25, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'CRIZE ESTACIONADO', 'GANHE DESCONTO DE 10% A CADA 1 HORA', 3, 72, 40, 29, '2020-05-09 21:57:27', '2020-05-09 21:57:27');
 
-insert into sstec.payment(status, value, createdAt, updatedAt)
+insert into Payment(status, value, createdAt, updatedAt)
 values ('AT', 10.00, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 5.00, '2020-05-10 21:57:27', '2020-05-10 21:57:27'),
 ('AT', 6.00, '2020-05-11 21:57:27', '2020-05-11 21:57:27'),
@@ -283,7 +285,7 @@ values ('AT', 10.00, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 30.00, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 40.00, '2020-05-09 21:57:27', '2020-05-09 21:57:27');
 
-insert into sstec.parkingscore(attendanceScore, securityScore, locationScore, userId, parkingId, createdAt, updatedAt)
+insert into ParkingScore(attendanceScore, securityScore, locationScore, userId, parkingId, createdAt, updatedAt)
 values (4, 5, 4, 1, 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 (3, 3, 2, 3, 2, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 (5, 5, 5, 2, 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
@@ -307,7 +309,7 @@ values (4, 5, 4, 1, 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 (4, 5, 4, 1, 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 (4, 5, 4, 7, 9, '2020-05-09 21:57:27', '2020-05-09 21:57:27');
 
-insert into sstec.parkingspace (status, value, type, parkingId, createdAt, updatedAt)
+insert into ParkingSpace (status, value, type, parkingId, createdAt, updatedAt)
 values ('AT', 5.00, 'CAR', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 5.00, 'CAR', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 5.00, 'CAR', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
@@ -413,7 +415,7 @@ values ('AT', 5.00, 'CAR', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 3.70, 'MOTORCYCLE', 13, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 3.70, 'MOTORCYCLE', 13, '2020-05-09 21:57:27', '2020-05-09 21:57:27');
 
-insert into sstec.scheduling(status, userName, cardNumber, vehiclePlate, vehicleType, value, date, avaliableTime, unavailableTime, userId, cardId, vehicleId, parkingId, parkingSpaceId, createdAt, updatedAt)
+insert into Scheduling(status, userName, cardNumber, vehiclePlate, vehicleType, value, date, avaliableTime, unavailableTime, userId, cardId, vehicleId, parkingId, parkingSpaceId, createdAt, updatedAt)
 values ('AT', 'Isabella', '6062820275962812', 'FED4556', 'MOTORCYCLE', 2, '2020-05-09 21:57:27', '00:57:27', '00:57:27', 10, 13, 13, 5, 48, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Alice', '5189962294448538', 'FED4556', 'CAR', 4, '2020-05-11 14:00:27' , '00:40:27', '00:40:27', 1, 1, 1, 4, 34, '2020-05-11 21:57:27', '2020-05-11 21:57:27'),
 ('AT', 'Alice', '5189962294448538', 'FED4556', 'CAR', 3, '2020-05-12 16:57:27' , '00:30:00', '00:30:00', 1, 2, 1, 1, 1, '2020-05-12 21:57:27', '2020-05-12 21:57:27'),
@@ -432,7 +434,7 @@ values ('AT', 'Isabella', '6062820275962812', 'FED4556', 'MOTORCYCLE', 2, '2020-
 ('AT', 'Valentina', '4916034019991037', 'TCU2121', 'MOTORCYCLE', 1, '2020-05-18 21:57:27' , '00:20:00', '00:20:00', 7, 10, 8, 9, 76, '2020-05-12 21:57:27', '2020-05-12 21:57:27'),
 ('AT', 'Alice', '5189962294448538', 'FED4556', 'CAR', 4, '2020-05-18 23:55:27' , '00:20:00', '00:20:00', 1, 2, 1, 9, 76, '2020-05-12 21:57:27', '2020-05-12 21:57:27');
 
-insert into sstec.employee(status, name, registryCode, phone, email, password, ruleId, companyId, parkingId, createdAt, updatedAt)
+insert into Employee(status, name, registryCode, phone, email, password, ruleId, companyId, parkingId, createdAt, updatedAt)
 values ('AT', 'Alice', '155369855210', '8133408099', 'Alice@gmail.com', '$2b$10$GwFxCsUk4JVmu1Slh.JY9.yxhJtLaZ8XXJ.1ns/VkaUUl8rpioFqG', 1, 1, 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Miguel', '155369889755', '8133408155', 'Miguel@gmail.com', '$2b$10$GwFxCsUk4JVmu1Slh.JY9.yxhJtLaZ8XXJ.1ns/VkaUUl8rpioFqG', 2, 2, 4, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Sophia', '155369854477', '8199808099', 'Sophia@gmail.com', '$2b$10$GwFxCsUk4JVmu1Slh.JY9.yxhJtLaZ8XXJ.1ns/VkaUUl8rpioFqG', 3, 3, 8, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
@@ -448,4 +450,4 @@ values ('AT', 'Alice', '155369855210', '8133408099', 'Alice@gmail.com', '$2b$10$
 ('AT', 'Emerson', '333367566210', '8198958099', 'emerson@gmail.com', '$2b$10$GwFxCsUk4JVmu1Slh.JY9.yxhJtLaZ8XXJ.1ns/VkaUUl8rpioFqG', 4, 9, 26, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Gustavo', '152007566210', '8199455599', 'gustavo@gmail.com', '$2b$10$GwFxCsUk4JVmu1Slh.JY9.yxhJtLaZ8XXJ.1ns/VkaUUl8rpioFqG', 3, 8, 21, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Felipe', '154887566210', '8199999099', 'felipe@gmail.com', '$2b$10$GwFxCsUk4JVmu1Slh.JY9.yxhJtLaZ8XXJ.1ns/VkaUUl8rpioFqG', 1, 7, 18, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
-('AT', 'Marlon', '155456366210', '8199250099', 'marlon@gmail.com', '$2b$10$GwFxCsUk4JVmu1Slh.JY9.yxhJtLaZ8XXJ.1ns/VkaUUl8rpioFqG', 2, 10, 29, '2020-05-09 21:57:27', '2020-05-09 21:57:27');
+('AT', 'Marlon', '155456366210', '8199250099', 'marlon@gmail.com', '$2b$10$GwFxCsUk4JVmu1Slh.JY9.yxhJtLaZ8XXJ.1ns/VkaUUl8rpioFqG', 2, 10, 19, '2020-05-09 21:57:27', '2020-05-09 21:57:27');
