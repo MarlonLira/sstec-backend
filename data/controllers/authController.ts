@@ -128,7 +128,7 @@ class AuthController implements IAuthController {
             }
           });
       } else {
-        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Empresa'));
+        resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Cadastro'));
       }
     });
   }
