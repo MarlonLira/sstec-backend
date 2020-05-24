@@ -103,7 +103,8 @@ class AuthController implements IAuthController {
   SignUp(@request() req: Request, @response() res: Response<any>) {
     return new Promise(async (resolve) => {
       const _auth = new Auth(req.body);
-      const foundEmployee = Attributes.ReturnIfValid(await this._employeeRepository.GetByEmail(_auth.employee.email),
+      const foundEmployee = Attributes.ReturnIfValid(
+        await this._employeeRepository.GetByEmail(_auth.employee.email),
         await this._companyRepository.GetByRegistryCode(_auth.company.registryCode)
       );
       if (!Attributes.IsValid(foundEmployee)) {
@@ -128,7 +129,7 @@ class AuthController implements IAuthController {
             }
           });
       } else {
-        resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Cadastro'));
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Funcionário'));
       }
     });
   }
