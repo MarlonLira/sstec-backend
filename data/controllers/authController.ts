@@ -100,29 +100,36 @@ class AuthController implements IAuthController {
    * @memberof AuthController
    */
   @httpPost('/employee/signUp')
-  SignUp(@request() req: Request, @response() res: Response) {
-    return new Promise((resolve) => {
+  SignUp(@request() req: Request, @response() res: Response<any>) {
+    return new Promise(async (resolve) => {
       const _auth = new Auth(req.body);
-      this._companyRepository.GetByRegistryCode(_auth.company.registryCode)
-        .then((result: Company[]) => {
-          if (!Attributes.IsValid(result)) {
-            this._companyRepository.Save(_auth.company)
-              .then((createdCompany: { id: number; }) => {
-                _auth.employee.companyId = createdCompany.id;
-                this._employeeRepository.Save(_auth.employee)
-                  .then((_result: any) => {
-                    resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Account_Created, 'Cadastro', _result));
-                  })
-                  .catch((error: any) => {
-                    resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Cadastro', error));
-                  });
-              }).catch((error: any) => {
-                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Cadastro', error));
-              })
-          } else {
-            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Empresa'));
-          }
-        });
+      const foundEmployee = Attributes.ReturnIfValid(await this._employeeRepository.GetByEmail(_auth.employee.email),
+        await this._companyRepository.GetByRegistryCode(_auth.company.registryCode)
+      );
+      if (!Attributes.IsValid(foundEmployee)) {
+        this._companyRepository.GetByRegistryCode(_auth.company.registryCode)
+          .then((result: Company[]) => {
+            if (!Attributes.IsValid(result)) {
+              this._companyRepository.Save(_auth.company)
+                .then((createdCompany: { id: number; }) => {
+                  _auth.employee.companyId = createdCompany.id;
+                  this._employeeRepository.Save(_auth.employee)
+                    .then((_result: any) => {
+                      resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Account_Created, 'Cadastro', _result));
+                    })
+                    .catch((error: any) => {
+                      resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Cadastro', error));
+                    });
+                }).catch((error: any) => {
+                  resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Cadastro', error));
+                })
+            } else {
+              resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Empresa'));
+            }
+          });
+      } else {
+        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Empresa'));
+      }
     });
   }
 }
