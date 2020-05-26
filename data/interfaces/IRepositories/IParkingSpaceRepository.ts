@@ -69,6 +69,15 @@ interface IParkingSpaceRepository {
    * @memberof IParkingSpaceRepository
    */
   Delete(id: number): Promise<any>;
+
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {number} _parkingId
+   * @returns {Promise<ParkingSpace[]>}
+   * @memberof IParkingSpaceRepository
+   */
+  ToGroupedList(_parkingId: number): Promise<ParkingSpace[]>;
 }
 
 export default IParkingSpaceRepository;

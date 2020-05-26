@@ -5,6 +5,8 @@ import IParkingSpaceRepository from '../interfaces/IRepositories/IParkingSpaceRe
 import ParkingSpace from '../models/parkingSpace';
 import { TransactionType } from "../../commons/enums/transactionType";
 import Scheduling from '../models/scheduling';
+import { resolve } from "dns";
+import { results } from "inversify-express-utils";
 
 
 @injectable()
@@ -125,6 +127,29 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
             unavailableTime: scheduling.unavailableTime,
             type: scheduling.vehicleType,
             parkingId: scheduling.parkingId
+          },
+          type: QueryTypes.SELECT,
+          mapToModel: true
+        }
+      )
+        .then((result: ParkingSpace[]) => {
+          resolve(result);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+  ToGroupedList(_parkingId: number): Promise<ParkingSpace[]> {
+    return new Promise(async (resolve, reject) => {
+      ParkingSpace.sequelize.query(
+        " SELECT *, COUNT(*) AS amount FROM PARKINGSPACE " +
+        " WHERE PARKINGID = :parkingId " +
+        " GROUP BY TYPE",
+        {
+          replacements: {
+            parkingId: _parkingId
           },
           type: QueryTypes.SELECT,
           mapToModel: true
