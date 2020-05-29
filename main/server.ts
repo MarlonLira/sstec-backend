@@ -65,6 +65,7 @@ class Server {
       });
 
       this.express = this.inversifyExpress.build();
+
       resolve();
     })
   }
@@ -86,6 +87,7 @@ class Server {
    * @memberof Server
    */
   private Status() {
+
     const port = process.env.PORT || 4001;
     return new Promise((resolve) => {
       if (!process.env.SECRET) {
@@ -93,10 +95,12 @@ class Server {
       } else {
         Logger.Info(this, 'Environment variables loaded!');
       }
-      this.express.listen(port, function () {
+      const server = this.express.listen(port, function () {
         Logger.Info(this, `Backend is running on port ${port}.`);
         resolve();
       });
+      const io = require('socket.io')(server);
+      io.on('connection', () => { Logger.Warn(io ,'Socket [IO] - Connected') });
     });
   }
 }
