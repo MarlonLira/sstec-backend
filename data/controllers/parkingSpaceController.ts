@@ -96,9 +96,9 @@ class ParkingSpaceController implements IParkingSpaceController {
   Update(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _parkingSpace = new ParkingSpace(req.body.parkingSpace);
-      if (Attributes.IsValid(_parkingSpace.id)) {
-        this._parkingSpaceRepository.GetById(_parkingSpace.id)
-          .then((parkingSpace: ParkingSpace) => {
+      if (Attributes.IsValid(_parkingSpace.parkingId)) {
+        this._parkingSpaceRepository.ToGroupedList(_parkingSpace.parkingId)
+          .then((parkingSpace: ParkingSpace[]) => {
             if (Attributes.IsValid(parkingSpace)) {
               this._parkingSpaceRepository.Update(_parkingSpace)
                 .then(result => {

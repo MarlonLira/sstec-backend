@@ -48,7 +48,8 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
         {
           where:
           {
-            id: parkingSpace.id
+            type: parkingSpace.type,
+            parkingId: parkingSpace.parkingId
           },
           transaction: _transaction,
           validate: false
