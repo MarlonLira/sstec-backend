@@ -78,6 +78,15 @@ interface IParkingSpaceRepository {
    * @memberof IParkingSpaceRepository
    */
   ToGroupedList(_parkingId: number): Promise<ParkingSpace[]>;
+
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {ParkingSpace} _parkingspace
+   * @returns {Promise<any>}
+   * @memberof IParkingSpaceRepository
+   */
+  GetExByParkingId(_parkingspace: ParkingSpace): Promise<any>;
 }
 
 export default IParkingSpaceRepository;

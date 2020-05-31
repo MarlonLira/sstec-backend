@@ -56,6 +56,14 @@ class ParkingSpaceController implements IParkingSpaceController {
     });
   }
 
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns {Promise<any>}
+   * @memberof ParkingSpaceController
+   */
   @httpGet('/parkingSpace/id/:id')
   @httpGet('/parkingSpace/parkingId/:parkingId')
   Search(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
