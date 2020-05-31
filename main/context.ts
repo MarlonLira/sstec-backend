@@ -3,7 +3,7 @@ import * as Config from '../config.json';
 import Attributes from "../commons/core/attributes";
 
 const _logging = Config.Database.Logging;
-const _dbConfig = Config.Database.MSSQL;
+const _dbConfig = Config.Database.MySqlWEB;
 
 /**
  * @description
@@ -26,18 +26,18 @@ class Context {
       {
         port: _dbConfig.port,
         host: _dbConfig.host,
-        dialect: 'mssql',
+        dialect: 'mysql',
         logging: _logging,
         omitNull: true,
         timezone: '-03:00',
-        dialectOptions: {
-          options: {
-            trustServerCertificate: true
-          },
-          ssl: {
-            rejectUnauthorized: false,
-          }
-        }
+          // dialectOptions: {
+          //   options: {
+          //     trustServerCertificate: true
+          //   },
+          //   ssl: {
+          //     rejectUnauthorized: false,
+          //   }
+          // }
       }
     );
     return sequelize;
