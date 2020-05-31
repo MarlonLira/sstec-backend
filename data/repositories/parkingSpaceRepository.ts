@@ -208,7 +208,6 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
     });
   }
 
-
   /**
    * @description
    * @author Emerson Souza

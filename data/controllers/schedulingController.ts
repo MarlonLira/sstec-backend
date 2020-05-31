@@ -150,8 +150,6 @@ class SchedulingController implements ISchedulingController {
     });
   }
 
-
-
   /**
    * @description
    * @author Gustavo Gusmão
@@ -195,7 +193,6 @@ class SchedulingController implements ISchedulingController {
         });
     });
   }
-
 }
 
 export default SchedulingController;

@@ -18,7 +18,6 @@ import IParkingRepository from "../interfaces/IRepositories/IParkingRepository";
 import Employee from "../models/employee";
 import Company from "../models/company";
 
-
 /**
  * @description
  * @author Marlon Lira
