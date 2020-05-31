@@ -99,8 +99,15 @@ class Server {
         Logger.Info(this, `Backend is running on port ${port}.`);
         resolve();
       });
-      const io = require('socket.io')(server);
-      io.on('connection', () => { Logger.Warn(io ,'Socket [IO] - Connected') });
+
+      // const io = require('socket.io')(server);
+      // io.on('connection', soket => {
+      //   Logger.Warn(io, 'Socket [IO] - Connected');
+      //   soket.on('scheduling', data => {
+      //     Logger.Info(this, data);
+      //     //io.emit('get.schedulings', data);
+      //   })
+      // });
     });
   }
 }

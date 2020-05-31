@@ -28,8 +28,8 @@
       "password": "9Fg8x4cdCo",
       "schema": "zMgq639h8l"
     },
-    "ForceSync": true,
-    "AlterSync": false,
+    "ForceSync": false,
+    "AlterSync": true,
     "DropAllTable":false,
     "Logging": false,
     "IsLogger": false
