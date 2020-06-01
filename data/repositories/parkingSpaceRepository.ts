@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { Op, QueryTypes } from 'sequelize';
+import { Op, QueryTypes, where } from 'sequelize';
 
 import IParkingSpaceRepository from '../interfaces/IRepositories/IParkingSpaceRepository';
 import ParkingSpace from '../models/parkingSpace';
@@ -89,6 +89,46 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
           await _transaction.commit();
           reject(error);
         });
+    });
+  }
+
+ /**
+   * @description
+   * @author Felipe Seabra 
+   * @param {ParkingSpace} parkingSpace
+   * @returns {Promise<any>}
+   * @memberof ParkingSpaceRepository
+   */
+  DeleteGroupType(parkingSpace: ParkingSpace): Promise<any>{
+    return new Promise(async (resolve, reject)=>{
+    const _transaction = await ParkingSpace.sequelize.transaction();
+    ParkingSpace.update({
+      status: TransactionType.DELETED,
+      },
+    {
+      where:{
+        type:{
+          [Op.eq]: parkingSpace.type
+        },
+        parkingId:{
+          [Op.eq]: parkingSpace.parkingId,
+        },
+        status:{
+          [Op.eq]: TransactionType.ACTIVE
+        }
+      },
+      limit: Number(parkingSpace.amount),
+      transaction: _transaction,
+      validate: false
+    })
+    .then(async result =>{
+      await _transaction.commit();
+      resolve(result);
+    })
+    .catch(async error => {
+      await _transaction.rollback();
+      reject(error);
+    });
     });
   }
 
