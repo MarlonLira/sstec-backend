@@ -156,7 +156,6 @@ class CardController implements ICardController {
         });
     });
   }
-
 }
 
 export default CardController;

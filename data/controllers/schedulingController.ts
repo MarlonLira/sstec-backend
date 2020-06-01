@@ -57,37 +57,45 @@ class SchedulingController implements ISchedulingController {
     return new Promise(async (resolve) => {
       const _scheduling = new Scheduling(req.body.scheduling);
       try {
-        const _availableParkingSpace = await this._parkingSpaceRepository.GetAvailable(_scheduling);
-        if (Attributes.IsValid(_availableParkingSpace)) {
-          _scheduling.parkingSpaceId = _availableParkingSpace[0].id;
-          _scheduling.parkingId = _availableParkingSpace[0].parkingId;
-          _scheduling.userName = (await this._userRepository.GetById(_scheduling.userId)).name;
-          _scheduling.vehiclePlate = (await this._vehicleRepository.GetById(_scheduling.vehicleId)).licensePlate;
-          _scheduling.cardNumber = (await this._cardRepository.GetById(_scheduling.cardId)).number;
+        if (
+          Attributes.IsValid(_scheduling.cardId) &&
+          Attributes.IsValid(_scheduling.userId) &&
+          Attributes.IsValid(_scheduling.parkingId) &&
+          Attributes.IsValid(_scheduling.vehicleId)
+        ) {
+          const _availableParkingSpace = await this._parkingSpaceRepository.GetAvailable(_scheduling);
+          if (Attributes.IsValid(_availableParkingSpace)) {
+            _scheduling.parkingSpaceId = _availableParkingSpace[0].id;
+            _scheduling.userName = (await this._userRepository.GetById(_scheduling.userId)).name;
+            _scheduling.vehiclePlate = (await this._vehicleRepository.GetById(_scheduling.vehicleId)).licensePlate;
+            _scheduling.cardNumber = (await this._cardRepository.GetById(_scheduling.cardId)).number;
 
-          const _userSchedulings: Scheduling[] = await this._schedulingRepository.GetByUserId(_scheduling.userId);
-          if (Attributes.IsValid(_userSchedulings)) {
+            const _userSchedulings: Scheduling[] = await this._schedulingRepository.GetByUserId(_scheduling.userId);
+            if (Attributes.IsValid(_userSchedulings)) {
 
-            const _userScheduling = await this._schedulingRepository.ReturnIfExists(_scheduling);
-            if (Attributes.IsValid(_userScheduling)) {
-              resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Agendamento'))
+              const _userScheduling = await this._schedulingRepository.ReturnIfExists(_scheduling);
+              if (Attributes.IsValid(_userScheduling)) {
+                resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Agendamento'));
+              } else {
+                this._schedulingRepository.Save(_scheduling)
+                  .then(result => {
+                    resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result));
+                  });
+              }
             } else {
               this._schedulingRepository.Save(_scheduling)
                 .then(result => {
-                  resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result))
+                  resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result));
                 });
             }
           } else {
-            this._schedulingRepository.Save(_scheduling)
-              .then(result => {
-                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result))
-              });
+            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Agendamento'));
           }
         } else {
-          resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Agendamento'))
+          resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Agendamento'));
         }
       } catch (error) {
-        resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Agendamento', error))
+        resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Agendamento', error));
       }
     });
   }
@@ -142,8 +150,6 @@ class SchedulingController implements ISchedulingController {
     });
   }
 
-
-
   /**
    * @description
    * @author Gustavo Gusmão
@@ -187,7 +193,6 @@ class SchedulingController implements ISchedulingController {
         });
     });
   }
-
 }
 
 export default SchedulingController;
