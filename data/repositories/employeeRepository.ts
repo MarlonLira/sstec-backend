@@ -193,7 +193,6 @@ class EmployeeRepository implements IEmployeeRepository {
   Update(employee: Employee): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Employee.sequelize.transaction();
-      employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
       Employee.update(employee.ToModify(),
         {
           where:

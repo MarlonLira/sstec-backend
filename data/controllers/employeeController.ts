@@ -10,6 +10,8 @@ import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import Attributes from "../../commons/core/attributes";
+import { CryptoType } from '../../commons/enums/cryptoType';
+import Crypto from '../../commons/core/crypto';
 
 /**
  * @description
@@ -140,6 +142,9 @@ class EmployeeController implements IEmployeeController {
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _employee = new Employee(req.body.employee);
+      if (Attributes.IsValid(_employee.password)){
+        _employee.password = Crypto.Encrypt(_employee.password, CryptoType.PASSWORD);
+      }
       if (Attributes.IsValid(_employee.id)) {
         this._employeeRepository.Update(_employee)
           .then(result => {

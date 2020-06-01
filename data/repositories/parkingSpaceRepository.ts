@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { Op, QueryTypes, where } from 'sequelize';
+import { Op, QueryTypes } from 'sequelize';
 
 import IParkingSpaceRepository from '../interfaces/IRepositories/IParkingSpaceRepository';
 import ParkingSpace from '../models/parkingSpace';
@@ -188,8 +188,9 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
   ToGroupedList(_parkingId: number): Promise<ParkingSpace[]> {
     return new Promise(async (resolve, reject) => {
       ParkingSpace.sequelize.query(
-        " SELECT *, COUNT(*) AS amount FROM PARKINGSPACE " +
-        " WHERE PARKINGID = :parkingId " +
+        " SELECT *, COUNT(*) AS amount FROM PARKINGSPACE" +
+        " WHERE PARKINGID = :parkingId" +
+        " AND STATUS = 'AT'" +
         " GROUP BY TYPE",
         {
           replacements: {
