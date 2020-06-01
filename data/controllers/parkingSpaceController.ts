@@ -10,6 +10,7 @@ import Attributes from "../../commons/core/attributes";
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
+import { TransactionType } from "../../commons/enums/transactionType";
 
 /**
  * @description
@@ -42,10 +43,23 @@ class ParkingSpaceController implements IParkingSpaceController {
       try {
         const _parkingSpace = new ParkingSpace(req.body.parkingSpace);
         const result = [];
-        if (Attributes.ReturnIfValid(_parkingSpace.amount, 0) > 0) {
-          for (let i = 0; i < _parkingSpace.amount; i++) {
-            result.push(await this._parkingSpaceRepository.Save(_parkingSpace));
-          };
+        if (Attributes.IsValid(_parkingSpace.amount)) {
+          const listEx: ParkingSpace[] = (await this._parkingSpaceRepository.GetDeletedByParkingId(_parkingSpace));
+          const rest = _parkingSpace.amount - listEx.length;
+          if (Attributes.IsValid(listEx)) {
+            listEx.forEach(async (foundParkingSpace: ParkingSpace) => {
+              foundParkingSpace.value = _parkingSpace.value;
+              foundParkingSpace.status = TransactionType.ACTIVE;
+              this._parkingSpaceRepository.Update(foundParkingSpace);
+              result.push(foundParkingSpace.id);
+            });
+          }
+          if (listEx.length < _parkingSpace.amount) {
+            for (let i = 0; i < rest; i++) {
+              result.push(await this._parkingSpaceRepository.Save(_parkingSpace));
+            };
+          }
+          await this.UpdateAll(_parkingSpace);
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Vaga', result));
         } else {
           resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Vaga'));
@@ -56,6 +70,14 @@ class ParkingSpaceController implements IParkingSpaceController {
     });
   }
 
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns {Promise<any>}
+   * @memberof ParkingSpaceController
+   */
   @httpGet('/parkingSpace/id/:id')
   @httpGet('/parkingSpace/parkingId/:parkingId')
   Search(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
@@ -96,27 +118,39 @@ class ParkingSpaceController implements IParkingSpaceController {
   Update(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       const _parkingSpace = new ParkingSpace(req.body.parkingSpace);
-      if (Attributes.IsValid(_parkingSpace.id)) {
-        this._parkingSpaceRepository.GetById(_parkingSpace.id)
-          .then((parkingSpace: ParkingSpace) => {
-            if (Attributes.IsValid(parkingSpace)) {
-              this._parkingSpaceRepository.Update(_parkingSpace)
-                .then(result => {
-                  resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Vaga', result))
-                })
-                .catch(error => {
-                  resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Vaga', error));
-                });
-            } else {
-              resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Vaga'))
-            }
-          });
+      if (Attributes.IsValid(_parkingSpace.parkingId)) {
+        this.UpdateAll(_parkingSpace)
+          .then(result => {
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Vaga', result));
+          }).catch(error => {
+            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Vaga', error));
+          })
       } else {
         resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Vaga'));
       }
     });
   }
-/**
+
+  private UpdateAll(_parkingSpace: ParkingSpace) {
+    return new Promise((resolve) => {
+      const result = [];
+      this._parkingSpaceRepository.GetByParkingId(_parkingSpace.parkingId)
+        .then((parkingSpaces: ParkingSpace[]) => {
+          const foundParkingSpaces = parkingSpaces.filter(ps => ps.type === _parkingSpace.type);
+          if (Attributes.IsValid(foundParkingSpaces)) {
+            foundParkingSpaces.forEach(async (parkingspace: ParkingSpace) => {
+              parkingspace.type = Attributes.ReturnIfValid(_parkingSpace.type);
+              parkingspace.value = Attributes.ReturnIfValid(_parkingSpace.value);
+              await this._parkingSpaceRepository.Update(parkingspace);
+              result.push(parkingspace.id);
+            });
+          }
+          resolve(result);
+        });
+    });
+  }
+
+  /**
    * @description
    * @author Felipe Seabra 
    * @param {ParkingSpace} parkingSpace

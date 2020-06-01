@@ -6,8 +6,6 @@ import ParkingSpace from '../models/parkingSpace';
 import { TransactionType } from "../../commons/enums/transactionType";
 import Scheduling from '../models/scheduling';
 
-
-
 @injectable()
 class ParkingSpaceRepository implements IParkingSpaceRepository {
 
@@ -180,6 +178,13 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
     });
   }
 
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {number} _parkingId
+   * @returns {Promise<ParkingSpace[]>}
+   * @memberof ParkingSpaceRepository
+   */
   ToGroupedList(_parkingId: number): Promise<ParkingSpace[]> {
     return new Promise(async (resolve, reject) => {
       ParkingSpace.sequelize.query(
@@ -250,6 +255,37 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
     });
   }
 
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {ParkingSpace} _parkingspace
+   * @returns {Promise<any>}
+   * @memberof ParkingSpaceRepository
+   */
+  GetDeletedByParkingId(_parkingspace: ParkingSpace): Promise<ParkingSpace[]> {
+    return new Promise((resolve, reject) => {
+      ParkingSpace.findAll(
+        {
+          where:
+          {
+            parkingId: _parkingspace.parkingId,
+            type: {
+              [Op.eq]: _parkingspace.type,
+            },
+            status: {
+              [Op.eq]: TransactionType.DELETED
+            }
+          },
+          limit: Number(_parkingspace.amount)
+        })
+        .then(result => {
+          resolve(result)
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
 
   /**
    * @description

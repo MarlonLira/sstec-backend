@@ -87,6 +87,14 @@ interface IParkingSpaceRepository {
    * @memberof ParkingSpaceRepository
    */
   DeleteGroupType(parkingSpace:ParkingSpace): Promise<any>;
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {ParkingSpace} _parkingspace
+   * @returns {Promise<ParkingSpace[]>}
+   * @memberof IParkingSpaceRepository
+   */
+  GetDeletedByParkingId(_parkingspace: ParkingSpace): Promise<ParkingSpace[]>;
 }
 
 export default IParkingSpaceRepository;

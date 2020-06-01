@@ -139,7 +139,7 @@ class ParkingScoreController implements IParkingScoreController {
           resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Avaliação', error));
         });
     });
-  }  
+  }
 }
 
 export default ParkingScoreController;
