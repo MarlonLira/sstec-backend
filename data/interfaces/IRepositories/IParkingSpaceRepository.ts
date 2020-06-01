@@ -83,10 +83,10 @@ interface IParkingSpaceRepository {
    * @description
    * @author Gustavo Gusmão
    * @param {ParkingSpace} _parkingspace
-   * @returns {Promise<any>}
+   * @returns {Promise<ParkingSpace[]>}
    * @memberof IParkingSpaceRepository
    */
-  GetExByParkingId(_parkingspace: ParkingSpace): Promise<ParkingSpace[]>;
+  GetDeletedByParkingId(_parkingspace: ParkingSpace): Promise<ParkingSpace[]>;
 }
 
 export default IParkingSpaceRepository;
