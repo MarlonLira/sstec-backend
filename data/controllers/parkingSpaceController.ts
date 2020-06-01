@@ -116,23 +116,19 @@ class ParkingSpaceController implements IParkingSpaceController {
       }
     });
   }
-
-  /**
+/**
    * @description
-   * @author Emerson Souza
-   * @param {Request<any>} req
-   * @param {Response<any>} res
+   * @author Felipe Seabra 
+   * @param {ParkingSpace} parkingSpace
    * @returns {Promise<any>}
-   * @memberof ParkingSpaceController
+   * @memberof ParkingSpaceRepository
    */
-  @httpDelete('/parkingSpace/:id')
+  @httpDelete('/parkingSpace/parkingId/:parkingId/type/:type/amount/:amount')
   Delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
-      const _id: number = req.params.id;
-      this._parkingSpaceRepository.GetById(_id)
-        .then((parkingSpace: ParkingSpace) => {
+      const parkingSpace = new ParkingSpace(req.params);
           if (Attributes.IsValid(parkingSpace)) {
-            this._parkingSpaceRepository.Delete(_id)
+            this._parkingSpaceRepository.DeleteGroupType(parkingSpace)
               .then(result => {
                 resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Vaga', result))
               })
@@ -143,7 +139,6 @@ class ParkingSpaceController implements IParkingSpaceController {
             resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Vaga'));
           }
         });
-    });
   }
 }
 
