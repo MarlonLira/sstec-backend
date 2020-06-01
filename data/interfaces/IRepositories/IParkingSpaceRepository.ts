@@ -86,7 +86,7 @@ interface IParkingSpaceRepository {
    * @returns {Promise<any>}
    * @memberof IParkingSpaceRepository
    */
-  GetExByParkingId(_parkingspace: ParkingSpace): Promise<any>;
+  GetExByParkingId(_parkingspace: ParkingSpace): Promise<ParkingSpace[]>;
 }
 
 export default IParkingSpaceRepository;

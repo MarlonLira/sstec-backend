@@ -5,9 +5,6 @@ import IParkingSpaceRepository from '../interfaces/IRepositories/IParkingSpaceRe
 import ParkingSpace from '../models/parkingSpace';
 import { TransactionType } from "../../commons/enums/transactionType";
 import Scheduling from '../models/scheduling';
-import { resolve } from "dns";
-import { results } from "inversify-express-utils";
-
 
 @injectable()
 class ParkingSpaceRepository implements IParkingSpaceRepository {
@@ -48,8 +45,7 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
         {
           where:
           {
-            type: parkingSpace.type,
-            parkingId: parkingSpace.parkingId
+            id: parkingSpace.id
           },
           transaction: _transaction,
           validate: false
@@ -226,32 +222,29 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
    * @returns {Promise<any>}
    * @memberof ParkingSpaceRepository
    */
-  GetExByParkingId(_parkingspace: ParkingSpace): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingSpace.sequelize.transaction();
+  GetExByParkingId(_parkingspace: ParkingSpace): Promise<ParkingSpace[]> {
+    return new Promise((resolve, reject) => {
       ParkingSpace.findAll(
         {
           where:
           {
             parkingId: _parkingspace.parkingId,
-            type: _parkingspace.type,
+            type:{
+              [Op.eq]: _parkingspace.type,
+            },
             status: {
-              [Op.ne]: TransactionType.DELETED
+              [Op.eq]: TransactionType.DELETED
             }
           },
-          transaction: _transaction,
         })
-        .then(async result => {
-          await _transaction.commit();
+        .then(result => {
           resolve(result)
         })
-        .catch(async error => {
-          await _transaction.rollback();
+        .catch(error => {
           reject(error);
         });
     });
   }
-
 
   /**
    * @description
