@@ -61,6 +61,7 @@ class ParkingSpaceController implements IParkingSpaceController {
               result.push(await this._parkingSpaceRepository.Save(_parkingSpace));
             };
           }
+          await this.Update(req, res);
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Vaga', result));
         } else {
           resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Vaga'));
@@ -125,11 +126,8 @@ class ParkingSpaceController implements IParkingSpaceController {
             const foundParkingSpaces = parkingSpaces.filter(ps => ps.type === _parkingSpace.type);
             if (Attributes.IsValid(foundParkingSpaces)) {
               foundParkingSpaces.forEach(async (parkingspace: ParkingSpace)=> {
-
                 parkingspace.type = Attributes.ReturnIfValid(_parkingSpace.type);
                 parkingspace.value = Attributes.ReturnIfValid(_parkingSpace.value);
-
-                console.log(parkingspace)
                 await this._parkingSpaceRepository.Update(parkingspace);
               });
               resolve((Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Vaga')))
