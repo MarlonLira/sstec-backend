@@ -222,20 +222,21 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
    * @returns {Promise<any>}
    * @memberof ParkingSpaceRepository
    */
-  GetExByParkingId(_parkingspace: ParkingSpace): Promise<ParkingSpace[]> {
+  GetDeletedByParkingId(_parkingspace: ParkingSpace): Promise<ParkingSpace[]> {
     return new Promise((resolve, reject) => {
       ParkingSpace.findAll(
         {
           where:
           {
             parkingId: _parkingspace.parkingId,
-            type:{
+            type: {
               [Op.eq]: _parkingspace.type,
             },
             status: {
               [Op.eq]: TransactionType.DELETED
             }
           },
+          limit: Number(_parkingspace.amount)
         })
         .then(result => {
           resolve(result)
