@@ -1,10 +1,12 @@
 import { injectable } from "inversify";
-import { Op, QueryTypes, where } from 'sequelize';
+import { Op, QueryTypes, where, Sequelize, Model } from 'sequelize';
 
 import IParkingSpaceRepository from '../interfaces/IRepositories/IParkingSpaceRepository';
 import ParkingSpace from '../models/parkingSpace';
 import { TransactionType } from "../../commons/enums/transactionType";
 import Scheduling from '../models/scheduling';
+import { type } from "os";
+import { raw } from "body-parser";
 
 @injectable()
 class ParkingSpaceRepository implements IParkingSpaceRepository {
@@ -180,31 +182,27 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
 
   /**
    * @description
-   * @author Gustavo Gusmão
+   * @author Felipe Seabra
    * @param {number} _parkingId
    * @returns {Promise<ParkingSpace[]>}
    * @memberof ParkingSpaceRepository
    */
-  ToGroupedList(_parkingId: number): Promise<ParkingSpace[]> {
+  ToGroupedList(_parkingspace: ParkingSpace): Promise<ParkingSpace[]> {
     return new Promise(async (resolve, reject) => {
-      ParkingSpace.sequelize.query(
-        " SELECT *, COUNT(*) AS amount FROM PARKINGSPACE " +
-        " WHERE PARKINGID = :parkingId " +
-        " GROUP BY TYPE",
-        {
-          replacements: {
-            parkingId: _parkingId
-          },
-          type: QueryTypes.SELECT,
-          mapToModel: true
-        }
-      )
-        .then((result: ParkingSpace[]) => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
+      ParkingSpace.findAll({
+        where:{
+          parkingId:{ [Op.eq]: _parkingspace.parkingId },
+          status:{[Op.eq]: TransactionType.ACTIVE},
+        },
+        group: ['type'],
+        attributes: ['*', [Sequelize.fn('COUNT', Sequelize.col('type')), 'amount' ]],
+        raw: true
+      }).then((parkingSpace: ParkingSpace[]) => {
+        resolve(parkingSpace);
+      })
+      .catch(error => {
+        reject(error);
+      });
     });
   }
 

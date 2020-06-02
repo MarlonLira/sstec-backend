@@ -92,7 +92,7 @@ class ParkingSpaceController implements IParkingSpaceController {
             resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Vaga', error));
           });
       } else if (Attributes.IsValid(_parkingSpace.parkingId)) {
-        this._parkingSpaceRepository.ToGroupedList(_parkingSpace.parkingId)
+        this._parkingSpaceRepository.ToGroupedList(_parkingSpace)
           .then((foundParkingSpaces: ParkingSpace[]) => {
             resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Vagas', foundParkingSpaces))
           })
