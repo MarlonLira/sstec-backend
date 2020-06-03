@@ -15,9 +15,9 @@ import IAuthController from "../interfaces/IControllers/IAuthController";
 import IEmployeeRepository from "../interfaces/IRepositories/IEmployeeRepository";
 import ICompanyRepository from "../interfaces/IRepositories/ICompanyRepository";
 import IParkingRepository from "../interfaces/IRepositories/IParkingRepository";
+import IRuleRepository from "../interfaces/IRepositories/IRuleRepository";
 import Employee from "../models/employee";
 import Company from "../models/company";
-
 
 /**
  * @description
@@ -40,6 +40,7 @@ class AuthController implements IAuthController {
     @inject(TYPES.IEmployeeRepository) private _employeeRepository: IEmployeeRepository,
     @inject(TYPES.ICompanyRepository) private _companyRepository: ICompanyRepository,
     @inject(TYPES.IParkingRepository) private _parkingRepository: IParkingRepository,
+    @inject(TYPES.IRuleRepository) private _ruleRepository: IRuleRepository
   ) { }
 
   /**
@@ -78,6 +79,7 @@ class AuthController implements IAuthController {
           _auth.company = await this._companyRepository.GetById(foundEmployee.companyId);
           _auth.parking = (await this._parkingRepository.GetByEmployeeId(foundEmployee.id))[0];
           _auth.employee = foundEmployee;
+          _auth.authenticationLevel = Attributes.IsValid(foundEmployee.ruleId) ? (await this._ruleRepository.GetById(foundEmployee.ruleId)).level : null;
           this._authService.CreateEmployeeToken(_auth)
             .then((createdAuthentication: Auth) => {
               resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Login_Authorized, 'Login', createdAuthentication));

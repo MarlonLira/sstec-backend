@@ -1,13 +1,10 @@
 import { injectable } from "inversify";
-import { Op, QueryTypes } from 'sequelize';
+import { Op, QueryTypes, where } from 'sequelize';
 
 import IParkingSpaceRepository from '../interfaces/IRepositories/IParkingSpaceRepository';
 import ParkingSpace from '../models/parkingSpace';
 import { TransactionType } from "../../commons/enums/transactionType";
 import Scheduling from '../models/scheduling';
-import { resolve } from "dns";
-import { results } from "inversify-express-utils";
-
 
 @injectable()
 class ParkingSpaceRepository implements IParkingSpaceRepository {
@@ -95,6 +92,46 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
     });
   }
 
+ /**
+   * @description
+   * @author Felipe Seabra 
+   * @param {ParkingSpace} parkingSpace
+   * @returns {Promise<any>}
+   * @memberof ParkingSpaceRepository
+   */
+  DeleteGroupType(parkingSpace: ParkingSpace): Promise<any>{
+    return new Promise(async (resolve, reject)=>{
+    const _transaction = await ParkingSpace.sequelize.transaction();
+    ParkingSpace.update({
+      status: TransactionType.DELETED,
+      },
+    {
+      where:{
+        type:{
+          [Op.eq]: parkingSpace.type
+        },
+        parkingId:{
+          [Op.eq]: parkingSpace.parkingId,
+        },
+        status:{
+          [Op.eq]: TransactionType.ACTIVE
+        }
+      },
+      limit: Number(parkingSpace.amount),
+      transaction: _transaction,
+      validate: false
+    })
+    .then(async result =>{
+      await _transaction.commit();
+      resolve(result);
+    })
+    .catch(async error => {
+      await _transaction.rollback();
+      reject(error);
+    });
+    });
+  }
+
   /**
    * @description
    * @author Marlon Lira
@@ -141,6 +178,13 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
     });
   }
 
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {number} _parkingId
+   * @returns {Promise<ParkingSpace[]>}
+   * @memberof ParkingSpaceRepository
+   */
   ToGroupedList(_parkingId: number): Promise<ParkingSpace[]> {
     return new Promise(async (resolve, reject) => {
       ParkingSpace.sequelize.query(
@@ -211,6 +255,37 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
     });
   }
 
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {ParkingSpace} _parkingspace
+   * @returns {Promise<any>}
+   * @memberof ParkingSpaceRepository
+   */
+  GetDeletedByParkingId(_parkingspace: ParkingSpace): Promise<ParkingSpace[]> {
+    return new Promise((resolve, reject) => {
+      ParkingSpace.findAll(
+        {
+          where:
+          {
+            parkingId: _parkingspace.parkingId,
+            type: {
+              [Op.eq]: _parkingspace.type,
+            },
+            status: {
+              [Op.eq]: TransactionType.DELETED
+            }
+          },
+          limit: Number(_parkingspace.amount)
+        })
+        .then(result => {
+          resolve(result)
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
 
   /**
    * @description

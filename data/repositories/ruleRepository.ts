@@ -46,8 +46,8 @@ class RuleRepository implements IRuleRepository {
   GetById(_id: number): Promise<Rule> {
     return new Promise((resolve, reject) => {
       Rule.findByPk(_id)
-        .then((foundVehicle: Rule) => {
-          resolve(foundVehicle);
+        .then((foundRule: Rule) => {
+          resolve(foundRule);
         })
         .catch(error => {
           reject(error);
