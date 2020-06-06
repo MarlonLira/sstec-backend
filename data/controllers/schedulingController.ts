@@ -71,7 +71,6 @@ class SchedulingController implements ISchedulingController {
             _scheduling.cardNumber = (await this._cardRepository.GetById(_scheduling.cardId)).number;
 
             const _userSchedulings: Scheduling[] = await this._schedulingRepository.GetByUserId(_scheduling.userId);
-            console.log(_scheduling);
             if (Attributes.IsValid(_userSchedulings)) {
 
               const _userScheduling = await this._schedulingRepository.ReturnIfExists(_scheduling);
@@ -170,6 +169,7 @@ class SchedulingController implements ISchedulingController {
       const _scheduling = new Scheduling(req.body.scheduling);
       this._schedulingRepository.Update(_scheduling)
         .then(result => {
+          global.SocketServer.emit('get.schedulings');
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Agendamento', result));
         })
         .catch(error => {
@@ -192,6 +192,7 @@ class SchedulingController implements ISchedulingController {
       const _schedulingId: number = req.params.id;
       this._schedulingRepository.Delete(_schedulingId)
         .then(result => {
+          global.SocketServer.emit('get.schedulings');
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Agendamento', result));
         })
         .catch(error => {
