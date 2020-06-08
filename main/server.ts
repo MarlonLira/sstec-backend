@@ -12,6 +12,16 @@ import container from '../middleware/inversify/inversify.config';
 import Logger from '../commons/core/logger';
 import Database from '../data/database';
 
+import * as io from "socket.io";
+
+declare global {
+  namespace NodeJS {
+    interface Global {
+      SocketServer: io.Server
+    }
+  }
+}
+
 /**
  * @description
  * @author Marlon Lira
@@ -32,7 +42,6 @@ class Server {
    * @memberof Server
    */
   public express: express.Application;
-
   /**
    * Creates an instance of Server.
    * @author Marlon Lira
@@ -65,6 +74,7 @@ class Server {
       });
 
       this.express = this.inversifyExpress.build();
+
       resolve();
     })
   }
@@ -85,20 +95,27 @@ class Server {
    * @private
    * @memberof Server
    */
-  private Status() {
+  public Status() {
     const port = process.env.PORT || 4001;
+
     return new Promise((resolve) => {
       if (!process.env.SECRET) {
         Logger.Error(this, 'Did not find the environment variables!');
       } else {
         Logger.Info(this, 'Environment variables loaded!');
       }
-      this.express.listen(port, function () {
+      const server = this.express.listen(port, function () {
         Logger.Info(this, `Backend is running on port ${port}.`);
         resolve();
       });
+
+      global.SocketServer = io(server);
+      global.SocketServer.on('connection', soket => {
+        Logger.Warn(this, 'Socket [IO] - Connected!');
+      });
     });
   }
+
 }
 
 export default new Server().express;
