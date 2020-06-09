@@ -19,6 +19,7 @@ class ParkingAdress extends Model {
   country!: string;
   state!: string;
   city!: string;
+  district!: string;
   street!: string;
   number: number;
   zipCode!: string;
@@ -40,6 +41,7 @@ class ParkingAdress extends Model {
     this.country = Attributes.ReturnIfValid(json.country);
     this.state = Attributes.ReturnIfValid(json.state);
     this.city = Attributes.ReturnIfValid(json.city);
+    this.district = Attributes.ReturnIfValid(json.district);
     this.street = Attributes.ReturnIfValid(json.street);
     this.number = Attributes.ReturnIfValid(json.number);
     this.zipCode = Attributes.ReturnIfValid(json.zipCode);
@@ -75,6 +77,9 @@ ParkingAdress.init({
   city: {
     type: new DataTypes.STRING(30),
     allowNull: false
+  },
+  district: {
+    type: new DataTypes.STRING(30)
   },
   street: {
     type: new DataTypes.STRING(30),
