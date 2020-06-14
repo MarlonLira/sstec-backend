@@ -79,12 +79,13 @@ interface IParkingSpaceRepository {
    */
   ToGroupedList(parkingspace: ParkingSpace): Promise<ParkingSpace[]>;
 
-/**
+
+  /**
    * @description
-   * @author Felipe Seabra 
+   * @author Felipe Seabra
    * @param {ParkingSpace} parkingSpace
    * @returns {Promise<any>}
-   * @memberof ParkingSpaceRepository
+   * @memberof IParkingSpaceRepository
    */
   DeleteGroupType(parkingSpace:ParkingSpace): Promise<any>;
   /**
