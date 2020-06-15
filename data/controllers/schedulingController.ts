@@ -79,20 +79,21 @@ class SchedulingController implements ISchedulingController {
               } else {
                 this._schedulingRepository.Save(_scheduling)
                   .then(result => {
+                    global.SocketServer.emit('get.schedulings', result);
                     resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result));
                   });
               }
             } else {
               this._schedulingRepository.Save(_scheduling)
                 .then(result => {
-                  global.SocketServer.emit('get.schedulings');
+                  global.SocketServer.emit('get.schedulings', result);
                   resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result))
                 });
             }
           } else {
             this._schedulingRepository.Save(_scheduling)
               .then(result => {
-                global.SocketServer.emit('get.schedulings');
+                global.SocketServer.emit('get.schedulings', result);
                 resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result))
               });
           }
