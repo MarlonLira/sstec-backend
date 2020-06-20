@@ -79,17 +79,23 @@ class SchedulingController implements ISchedulingController {
               } else {
                 this._schedulingRepository.Save(_scheduling)
                   .then(result => {
+                    global.SocketServer.emit('get.schedulings', result);
                     resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result));
                   });
               }
             } else {
               this._schedulingRepository.Save(_scheduling)
                 .then(result => {
-                  resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result));
+                  global.SocketServer.emit('get.schedulings', result);
+                  resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result))
                 });
             }
           } else {
-            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Agendamento'));
+            this._schedulingRepository.Save(_scheduling)
+              .then(result => {
+                global.SocketServer.emit('get.schedulings', result);
+                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result))
+              });
           }
         } else {
           resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Agendamento'));
@@ -164,6 +170,7 @@ class SchedulingController implements ISchedulingController {
       const _scheduling = new Scheduling(req.body.scheduling);
       this._schedulingRepository.Update(_scheduling)
         .then(result => {
+          global.SocketServer.emit('get.schedulings');
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Agendamento', result));
         })
         .catch(error => {
@@ -186,6 +193,7 @@ class SchedulingController implements ISchedulingController {
       const _schedulingId: number = req.params.id;
       this._schedulingRepository.Delete(_schedulingId)
         .then(result => {
+          global.SocketServer.emit('get.schedulings');
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Agendamento', result));
         })
         .catch(error => {

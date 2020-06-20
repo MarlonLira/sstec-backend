@@ -25,6 +25,16 @@
   },
   "homepage": "https://github.com/MarlonLira/sstec#readme",
   "dependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/body-parser": "^1.17.1",
+    "@types/cookie-parser": "^1.4.2",
+    "@types/cors": "^2.8.6",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.3",
+    "@types/jsonwebtoken": "^8.3.5",
+    "@types/node": "^12.12.30",
+    "@types/sequelize": "^4.28.8",
+    "@types/socket.io": "^2.1.8",
     "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",
     "cli-color": "^2.0.0",
@@ -41,18 +51,10 @@
     "pg-hstore": "^2.3.3",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^5.21.5",
+    "socket.io": "^2.3.0",
+    "swagger-ui-express": "^4.1.4",
     "tedious": "^8.2.0",
-    "typescript": "^3.8.3",
-    "@types/bcrypt": "^3.0.0",
-    "@types/body-parser": "^1.17.1",
-    "@types/cookie-parser": "^1.4.2",
-    "@types/cors": "^2.8.6",
-    "@types/dotenv": "^8.2.0",
-    "@types/express": "^4.17.3",
-    "@types/jsonwebtoken": "^8.3.5",
-    "@types/node": "^12.12.30",
-    "@types/sequelize": "^4.28.8",
-    "swagger-ui-express": "^4.1.4"
+    "typescript": "^3.8.3"
   },
   "devDependencies": {
     "tslint": "^6.1.1"

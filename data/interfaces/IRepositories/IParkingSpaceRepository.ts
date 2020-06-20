@@ -74,17 +74,18 @@ interface IParkingSpaceRepository {
    * @description
    * @author Gustavo Gusmão
    * @param {number} _parkingId
-   * @returns {Promise<ParkingSpace[]>}
+   * @returns {Promise<any>}
    * @memberof IParkingSpaceRepository
    */
-  ToGroupedList(_parkingId: number): Promise<ParkingSpace[]>;
+  ToGroupedList(parkingspace: ParkingSpace): Promise<ParkingSpace[]>;
 
-/**
+
+  /**
    * @description
-   * @author Felipe Seabra 
+   * @author Felipe Seabra
    * @param {ParkingSpace} parkingSpace
    * @returns {Promise<any>}
-   * @memberof ParkingSpaceRepository
+   * @memberof IParkingSpaceRepository
    */
   DeleteGroupType(parkingSpace:ParkingSpace): Promise<any>;
   /**
