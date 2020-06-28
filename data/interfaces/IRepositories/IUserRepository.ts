@@ -7,6 +7,7 @@ import User from '../../models/user';
  * @interface IUserRepository
  */
 interface IUserRepository {
+
   /**
    * @description
    * @author Marlon Lira
@@ -24,6 +25,15 @@ interface IUserRepository {
    * @memberof IUserRepository
    */
   GetByRegistryCode(registryCode: string): Promise<User[]>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {string} _email
+   * @returns {Promise<User>}
+   * @memberof IUserRepository
+   */
+  GetByEmail(_email: string): Promise<User>;
 
   /**
    * @description

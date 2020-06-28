@@ -1,4 +1,4 @@
-import { Model, DataTypes} from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
@@ -39,7 +39,7 @@ class User extends Model {
     this.password = Attributes.ReturnIfValid(json.password);
   }
 
-  ToModify(){
+  ToModify() {
     return this.toJSON();
   }
 }

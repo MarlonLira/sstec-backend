@@ -25,4 +25,13 @@ export default interface IAuthService {
    * @memberof IAuthService
    */
   CreateEmployeeToken(auth: Auth): Promise<Auth>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Auth} auth
+   * @returns {Promise<Auth>}
+   * @memberof IAuthService
+   */
+  CreateUserToken(auth: Auth): Promise<Auth>;
 }

@@ -17,6 +17,32 @@ class UserRepository implements IUserRepository {
   /**
    * @description
    * @author Marlon Lira
+   * @param {string} _email
+   * @returns {Promise<User>}
+   * @memberof UserRepository
+   */
+  GetByEmail(_email: string): Promise<User> {
+    return new Promise((resolve, reject) => {
+      User.findOne({
+        where: {
+          email: {
+            [Op.eq]: _email
+          },
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      }).then((result: User) => {
+        resolve(result);
+      }).catch(error => {
+        reject(error);
+      });
+    });
+  }
+
+  /**
+   * @description
+   * @author Marlon Lira
    * @param {number} id
    * @returns {Promise<User>}
    * @memberof UserRepository
