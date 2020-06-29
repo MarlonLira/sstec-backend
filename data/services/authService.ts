@@ -47,6 +47,27 @@ class AuthService implements IAuthService {
       resolve(auth);
     });
   }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Auth} auth
+   * @returns {Promise<Auth>}
+   * @memberof AuthService
+   */
+  CreateUserToken(auth: Auth): Promise<Auth> {
+    return new Promise((resolve) => {
+      const id = auth.user.id;
+      const name = auth.user.name;
+
+      auth.token = jwt.sign({ id, name }, process.env.SECRET, {
+        expiresIn: "1h"
+      });
+      auth.validated = true;
+
+      resolve(auth);
+    });
+  }
 }
 
 export default AuthService;

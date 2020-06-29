@@ -18,6 +18,8 @@ import IParkingRepository from "../interfaces/IRepositories/IParkingRepository";
 import IRuleRepository from "../interfaces/IRepositories/IRuleRepository";
 import Employee from "../models/employee";
 import Company from "../models/company";
+import IUserRepository from "../interfaces/IRepositories/IUserRepository";
+import User from "../models/user";
 
 /**
  * @description
@@ -40,7 +42,8 @@ class AuthController implements IAuthController {
     @inject(TYPES.IEmployeeRepository) private _employeeRepository: IEmployeeRepository,
     @inject(TYPES.ICompanyRepository) private _companyRepository: ICompanyRepository,
     @inject(TYPES.IParkingRepository) private _parkingRepository: IParkingRepository,
-    @inject(TYPES.IRuleRepository) private _ruleRepository: IRuleRepository
+    @inject(TYPES.IRuleRepository) private _ruleRepository: IRuleRepository,
+    @inject(TYPES.IUserRepository) private _userRepository: IUserRepository
   ) { }
 
   /**
@@ -69,23 +72,40 @@ class AuthController implements IAuthController {
    * @returns
    * @memberof AuthController
    */
-  @httpPost('/employee/signIn')
+  @httpPost('/employee/signin')
+  @httpPost('/user/signin')
   SignIn(@request() req: Request, @response() res: Response) {
     return new Promise(async (resolve) => {
       const _auth = new Auth(req.body);
       try {
-        const foundEmployee: Employee = await this._employeeRepository.GetByEmail(_auth.employee.email);
-        if (Attributes.IsValid(foundEmployee) && Crypto.Compare(_auth.employee.password, foundEmployee.password)) {
-          _auth.company = await this._companyRepository.GetById(foundEmployee.companyId);
-          _auth.parking = (await this._parkingRepository.GetByEmployeeId(foundEmployee.id))[0];
-          _auth.employee = foundEmployee;
-          _auth.authenticationLevel = Attributes.IsValid(foundEmployee.ruleId) ? (await this._ruleRepository.GetById(foundEmployee.ruleId)).level : null;
-          this._authService.CreateEmployeeToken(_auth)
-            .then((createdAuthentication: Auth) => {
-              resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Login_Authorized, 'Login', createdAuthentication));
-            });
+        if (Attributes.IsValid(_auth.employee)) {
+          const foundEmployee: Employee = await this._employeeRepository.GetByEmail(_auth.employee.email);
+          if (Attributes.IsValid(foundEmployee) && Crypto.Compare(_auth.employee.password, foundEmployee.password)) {
+            _auth.company = await this._companyRepository.GetById(foundEmployee.companyId);
+            _auth.parking = (await this._parkingRepository.GetByEmployeeId(foundEmployee.id))[0];
+            _auth.employee = foundEmployee;
+            _auth.authenticationLevel = Attributes.IsValid(foundEmployee.ruleId) ? (await this._ruleRepository.GetById(foundEmployee.ruleId)).level : null;
+            this._authService.CreateEmployeeToken(_auth)
+              .then((createdAuthentication: Auth) => {
+                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Login_Authorized, 'Login', createdAuthentication));
+              });
+          } else {
+            resolve(Http.SendMessage(res, HttpCode.Unauthorized, HttpMessage.Login_Unauthorized, 'Login'));
+          }
+        } else if (Attributes.IsValid(_auth.user)) {
+          const foundUser: User = await this._userRepository.GetByEmail(_auth.user.email);
+          if (Attributes.IsValid(foundUser) && Crypto.Compare(_auth.user.password, foundUser.password)) {
+            _auth.user = foundUser;
+            _auth.user.password = undefined;
+            this._authService.CreateUserToken(_auth)
+              .then((createdAuthentication: Auth) => {
+                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Login_Authorized, 'Login', createdAuthentication));
+              });
+          } else {
+            resolve(Http.SendMessage(res, HttpCode.Unauthorized, HttpMessage.Login_Unauthorized, 'Login'));
+          }
         } else {
-          resolve(Http.SendMessage(res, HttpCode.Unauthorized, HttpMessage.Login_Unauthorized, 'Login'));
+          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Parameters_Not_Provided, 'Login'));
         }
       } catch (error) {
         resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Login', error));

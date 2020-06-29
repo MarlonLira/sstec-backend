@@ -96,6 +96,13 @@ class EmployeeRepository implements IEmployeeRepository {
     });
   }
 
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {string} _email
+   * @returns {Promise<Employee>}
+   * @memberof EmployeeRepository
+   */
   GetByEmail(_email: string): Promise<Employee> {
     return new Promise((resolve, reject) => {
       Employee.findOne({
