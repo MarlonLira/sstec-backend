@@ -34,10 +34,10 @@ class Crypto {
       case CryptoType.PASSWORD:
         return this.EncryptPassword(value);
       case CryptoType.CARD: {
-        return this.EncryptCard(value);
+        return this.EncryptDefault(value);
       }
       default: {
-        break;
+        return this.EncryptDefault(value);
       }
     }
   }
@@ -72,9 +72,7 @@ class Crypto {
    * @returns
    * @memberof Crypto
    */
-  private static EncryptCard(card: string) {
-    return CryptoJS.AES.encrypt(card, this.cryptographyData.secret).toString();
-  }
+  private static EncryptDefault = (card: string) => CryptoJS.AES.encrypt(card, Crypto.cryptographyData.secret).toString();
 
   /**
    * @description
@@ -85,21 +83,7 @@ class Crypto {
    * @returns
    * @memberof Crypto
    */
-  private static DecryptCard(hash: string): string {
-    const bytes = CryptoJS.AES.decrypt(hash, this.cryptographyData.secret);
-    return bytes.toString(CryptoJS.enc.Utf8);
-  }
-
-  /**
-   * @description
-   * @author Marlon Lira
-   * @static
-   * @param {string} value
-   * @memberof Crypto
-   */
-  private static DecryptPassword(value: string) {
-    throw new Error("Method not implemented.");
-  }
+  private static DecryptCard = (hash: string): string => CryptoJS.AES.decrypt(hash, Crypto.cryptographyData.secret).toString(CryptoJS.enc.Utf8);
 
   /**
    * @description
@@ -110,11 +94,7 @@ class Crypto {
    * @returns
    * @memberof Crypto
    */
-  private static EncryptPassword(password: string) {
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(password, salt);
-    return hash;
-  }
+  private static EncryptPassword = (password: string) => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
   /**
    * @description
@@ -125,9 +105,7 @@ class Crypto {
    * @returns
    * @memberof Crypto
    */
-  static Compare(password: string, hash: string): boolean {
-    return bcrypt.compareSync(password, hash);
-  }
+  static Compare = (password: string, hash: string): boolean => bcrypt.compareSync(password, hash);
 }
 
 export default Crypto;

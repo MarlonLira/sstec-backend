@@ -20,6 +20,7 @@ import Employee from "../models/employee";
 import Company from "../models/company";
 import IUserRepository from "../interfaces/IRepositories/IUserRepository";
 import User from "../models/user";
+import { CryptoType } from "../../commons/enums/cryptoType";
 
 /**
  * @description
@@ -87,7 +88,8 @@ class AuthController implements IAuthController {
             _auth.authenticationLevel = Attributes.IsValid(foundEmployee.ruleId) ? (await this._ruleRepository.GetById(foundEmployee.ruleId)).level : null;
             this._authService.CreateEmployeeToken(_auth)
               .then((createdAuthentication: Auth) => {
-                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Login_Authorized, 'Login', createdAuthentication));
+                const result = Crypto.Encrypt(JSON.stringify(createdAuthentication), CryptoType.DEFAULT)
+                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Login_Authorized, 'Login', result));
               });
           } else {
             resolve(Http.SendMessage(res, HttpCode.Unauthorized, HttpMessage.Login_Unauthorized, 'Login'));
@@ -99,7 +101,8 @@ class AuthController implements IAuthController {
             _auth.user.password = undefined;
             this._authService.CreateUserToken(_auth)
               .then((createdAuthentication: Auth) => {
-                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Login_Authorized, 'Login', createdAuthentication));
+                const result = Crypto.Encrypt(JSON.stringify(createdAuthentication), CryptoType.DEFAULT)
+                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Login_Authorized, 'Login', result));
               });
           } else {
             resolve(Http.SendMessage(res, HttpCode.Unauthorized, HttpMessage.Login_Unauthorized, 'Login'));
