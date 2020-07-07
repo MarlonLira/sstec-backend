@@ -124,7 +124,7 @@ class AuthController implements IAuthController {
    * @returns
    * @memberof AuthController
    */
-  @httpPost('/employee/signUp')
+  @httpPost('/employee/signup')
   SignUp(@request() req: Request, @response() res: Response<any>) {
     return new Promise(async (resolve) => {
       const _auth = new Auth(req.body);
