@@ -99,7 +99,6 @@ class Database {
 
   private async CreateTables(models: { name: string, entity: Sequelize }[]) {
     return new Promise(async (resolve) => {
-      let count = 0;
       let sucess = 0;
       let errors = 0;
       let total = 0;
@@ -109,18 +108,22 @@ class Database {
         await this.DropAllTables(models);
       }
 
-      while (count < models.length) {
-        await models[count].entity.sync({ force: ForceSync, alter: AlterSync, logging: (IsLogger ? msg => Logger.Info(models[count].name, msg) : IsLogger) })
+      models.forEach(async model => {
+        await model.entity.sync({
+          force: ForceSync,
+          alter: AlterSync,
+          logging: (IsLogger ? msg => Logger.Info(model.name, msg) : IsLogger)
+        })
           .then(() => {
-            Logger.Info(models[count].name, 'verification finished!')
+            Logger.Info(model.name, 'verification finished!')
             sucess++;
           })
           .catch(error => {
-            Logger.Error(models[count].name, error);
-            modelsWithErrors.push(models[count]);
+            Logger.Error(model.name, error);
+            modelsWithErrors.push(model);
             errors++;
           });
-        count++;
+
         total = sucess + errors;
         if (total === models.length) {
           Logger.Info('Database', `verification result => Sucess: ${sucess} | Errors: ${errors} | Total: ${models.length}`);
@@ -132,29 +135,29 @@ class Database {
           } else {
             resolve('finished successfully');
           }
-          break;
         }
-      }
+      });
     });
   }
 
   private async TryFixModels(modelsWithErrors: any[], resolve: (value?: unknown) => void) {
     let attempts = 0;
-    let count = 0;
     let sucess = 0;
     let errors = 0;
 
-    while (count < modelsWithErrors.length) {
-      await modelsWithErrors[count].entity.sync({ alter: AlterSync, logging: IsLogger ? msg => Logger.Info(modelsWithErrors[count].name, msg) : IsLogger })
+    modelsWithErrors.forEach(async modelsWithError => {
+      await modelsWithError.entity.sync({
+        alter: AlterSync,
+        logging: IsLogger ? msg => Logger.Info(modelsWithError.name, msg) : IsLogger
+      })
         .then(() => {
-          Logger.Info(modelsWithErrors[count].name, 'correction completed!');
+          Logger.Info(modelsWithError.name, 'correction completed!');
           sucess++;
         })
         .catch(error => {
-          Logger.Error(modelsWithErrors[count].name, error);
+          Logger.Error(modelsWithError.name, error);
           errors++;
         });
-      count++;
       attempts = sucess + errors;
       if (attempts === modelsWithErrors.length) {
         Logger.Info('Database', `correction attempts => Sucess: ${sucess} | Errors: ${errors} | Total: ${attempts}`);
@@ -165,7 +168,7 @@ class Database {
           resolve('finished successfully and corrected errors');
         }
       }
-    }
+    });
   }
 
   private async DropAllTables(models: { name: string; entity: Sequelize; }[]) {
