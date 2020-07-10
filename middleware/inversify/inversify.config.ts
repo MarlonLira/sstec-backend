@@ -23,6 +23,7 @@ import ParkingFinanceRepository from '../../data/repositories/parkingFinanceRepo
 
 // Services
 import AuthService from '../../data/services/authService';
+import EmailService from '../../data/services/emailService';
 
 // interfaces
 import IUserRepository from '../../data/interfaces/IRepositories/IUserRepository';
@@ -42,9 +43,12 @@ import IParkingScoreRepository from '../../data/interfaces/IRepositories/IParkin
 import ISchedulingRepository from '../../data/interfaces/IRepositories/ISchedulingRepository';
 import IParkingFinanceRepository from '../../data/interfaces/IRepositories/IParkingFinanceRepository';
 import IAuthService from '../../data/interfaces/IServices/IAuthService';
+import IEmailService from '../../data/interfaces/IServices/IEmailService';
 
 // Binds
 const container = new Container();
+container.bind<IAuthService>(TYPES.IAuthService).to(AuthService);
+container.bind<IEmailService>(TYPES.IEmailService).to(EmailService);
 container.bind<IUserRepository>(TYPES.IUserRepository).to(UserRepository);
 container.bind<IUserAdressRepository>(TYPES.IUserAdressRepository).to(UserAdressRepository);
 container.bind<ICardRepository>(TYPES.ICardRepository).to(CardRepository);
@@ -52,7 +56,6 @@ container.bind<ICompanyRepository>(TYPES.ICompanyRepository).to(CompanyRepositor
 container.bind<ICompanyAdressRepository>(TYPES.ICompanyAdressRepository).to(CompanyAdressRepository);
 container.bind<IEmployeeRepository>(TYPES.IEmployeeRepository).to(EmployeeRepository);
 container.bind<IPaymentRepository>(TYPES.IPaymentRepository).to(PaymentRepository);
-container.bind<IAuthService>(TYPES.IAuthService).to(AuthService);
 container.bind<IVehicleRepository>(TYPES.IVehicleRepository).to(VehicleRepository);
 container.bind<IParkingRepository>(TYPES.IParkingRepository).to(ParkingRepository);
 container.bind<IRuleRepository>(TYPES.IRuleRepository).to(RuleRepository);
@@ -61,6 +64,6 @@ container.bind<IParkingSpaceRepository>(TYPES.IParkingSpaceRepository).to(Parkin
 container.bind<IParkingAdressRepository>(TYPES.IParkingAdressRepository).to(ParkingAdressRepository);
 container.bind<ISchedulingRepository>(TYPES.ISchedulingRepository).to(SchedulingRepository);
 container.bind<IParkingScoreRepository>(TYPES.IParkingScoreRepository).to(ParkingScoreRepository);
-container.bind<IParkingFinanceRepository> (TYPES.IParkingFinanceRepository).to(ParkingFinanceRepository);
+container.bind<IParkingFinanceRepository>(TYPES.IParkingFinanceRepository).to(ParkingFinanceRepository);
 
 export default container;

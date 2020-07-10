@@ -1,7 +1,6 @@
 // Controllers
 import '../../data/controllers/userController';
 import '../../data/controllers/userAdressController';
-import '../../data/controllers/authController';
 import '../../data/controllers/cardController';
 import '../../data/controllers/companyController';
 import '../../data/controllers/companyAdressController';
@@ -15,4 +14,6 @@ import '../../data/controllers/parkingSpaceController';
 import '../../data/controllers/parkingAdressController';
 import '../../data/controllers/schedulingController';
 import '../../data/controllers/parkingScoreController';
-import '../../data/controllers/parkingFinanceController'
+import '../../data/controllers/parkingFinanceController';
+import '../../data/controllers/authController';
+import '../../data/controllers/emailController';

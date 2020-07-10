@@ -14,7 +14,8 @@ enum HttpMessage {
   Login_Unauthorized = 'A conta informada é inválida!',
   Login_Authorized = 'Acesso bem sucedido!',
   Account_Created = 'Conta criada com sucesso!',
-  Parameters_Not_Provided = 'Os parâmetros esperados não foram fornecidos!'
+  Parameters_Not_Provided = 'Os parâmetros esperados não foram fornecidos!',
+  Send_Successfully = 'Enviando(a) com sucesso!',
 }
 
 export { HttpMessage };

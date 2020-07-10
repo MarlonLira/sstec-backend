@@ -62,21 +62,24 @@ class Server {
    */
   private Middlewares() {
     return new Promise((resolve, reject) => {
-      dotenv.config();
-      const allowCors = require('./cors');
-      const swaggerUi = require('swagger-ui-express');
+      try {
+        dotenv.config();
+        const allowCors = require('./cors');
+        const swaggerUi = require('swagger-ui-express');
 
-      this.inversifyExpress.setConfig((server) => {
-        server.use(bodyParser.urlencoded({ extended: true }));
-        server.use(bodyParser.json());
-        server.use(allowCors);
-        server.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-      });
+        this.inversifyExpress.setConfig((server) => {
+          server.use(bodyParser.urlencoded({ extended: true }));
+          server.use(bodyParser.json());
+          server.use(allowCors);
+          server.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+        });
 
-      this.express = this.inversifyExpress.build();
-
-      resolve();
-    })
+        this.express = this.inversifyExpress.build();
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
   /**
@@ -115,7 +118,6 @@ class Server {
       });
     });
   }
-
 }
 
 export default new Server().express;

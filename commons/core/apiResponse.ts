@@ -8,6 +8,7 @@ import Attributes from './attributes';
 class ApiResponse {
 
   code: number;
+  codeMessage: string;
   message: string;
   result: any;
 

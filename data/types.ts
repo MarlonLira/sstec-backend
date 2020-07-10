@@ -1,5 +1,6 @@
 const TYPES = {
   IAuthService: Symbol('IAuthService'),
+  IEmailService: Symbol('IEmailService'),
   IUserRepository: Symbol('IUserRepository'),
   ICardRepository: Symbol('ICardRepository'),
   ICompanyRepository: Symbol('ICompanyRepository'),

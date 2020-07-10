@@ -1,0 +1,6 @@
+help.simpleparking@gmail.com
+sstec2020
+
+smtp
+smtp.gmail.com
+pass: hikpucfalhaqxkhd
