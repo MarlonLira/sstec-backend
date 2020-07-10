@@ -12,7 +12,6 @@ class EmailService implements IEmailService {
 
   Send(email: Email): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      let _info: any;
       this.mailer.sendMail(email,
         (error, info) => {
           if (error)
@@ -23,7 +22,6 @@ class EmailService implements IEmailService {
       );
     });
   }
-
 }
 
 export default EmailService;
