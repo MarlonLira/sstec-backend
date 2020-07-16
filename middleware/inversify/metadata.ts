@@ -6,7 +6,7 @@ import '../../data/controllers/companyController';
 import '../../data/controllers/companyAdressController';
 import '../../data/controllers/employeeController';
 import '../../data/controllers/paymentController';
-import '../../data/controllers/parkingController';
+import '../../data/controllers/parking.controller';
 import '../../data/controllers/vehicleController';
 import '../../data/controllers/ruleController';
 import '../../data/controllers/parkingPromotionController';

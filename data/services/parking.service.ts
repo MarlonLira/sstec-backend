@@ -2,7 +2,7 @@ import { injectable, inject, id } from "inversify";
 import { IParkingRepository } from "../interfaces/IRepositories/IParkingRepository";
 import TYPES from "../types";
 import { IParkingService } from "../interfaces/IServices/IParking.service";
-import Parking from "../models/parking";
+import Parking from "../models/parking.model";
 import Attributes from "../../commons/core/attributes";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 

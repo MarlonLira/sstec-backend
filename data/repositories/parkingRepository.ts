@@ -2,7 +2,7 @@ import { Op, QueryTypes } from 'sequelize';
 import { injectable } from "inversify";
 
 import { IParkingRepository } from '../interfaces/IRepositories/IParkingRepository';
-import Parking from '../models/parking';
+import Parking from '../models/parking.model';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 /**

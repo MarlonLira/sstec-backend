@@ -1,4 +1,4 @@
-import Parking from '../../models/parking';
+import Parking from '../../models/parking.model';
 
 export interface IParkingService {
 

@@ -11,7 +11,7 @@ import Card from './models/card';
 import Company from './models/company';
 import CompanyAdress from './models/companyAdress';
 import Employee from './models/employee';
-import Parking from './models/parking';
+import Parking from './models/parking.model';
 import Rule from './models/rule';
 import ParkingPromotion from './models/parkingPromotion';
 import ParkingSpace from './models/parkingSpace';

@@ -10,7 +10,7 @@
     "ordered-imports": false,
     "max-line-length": {
       "options": [
-        120
+        140
       ]
     },
     "new-parens": true,
@@ -33,7 +33,7 @@
   "jsRules": {
     "max-line-length": {
       "options": [
-        120
+        140
       ]
     }
   }

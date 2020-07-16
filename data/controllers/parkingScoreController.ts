@@ -10,7 +10,7 @@ import Attributes from "../../commons/core/attributes";
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
-import Parking from "../models/parking";
+import Parking from "../models/parking.model";
 
 /**
  * @description

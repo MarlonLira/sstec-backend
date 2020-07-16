@@ -2,7 +2,7 @@ import User from './user';
 import Employee from './employee';
 import Attributes from '../../commons/core/attributes';
 import Company from './company';
-import Parking from './parking';
+import Parking from './parking.model';
 
 /**
  * @description
