@@ -4,50 +4,50 @@ import { Container } from 'inversify';
 import TYPES from '../../data/types';
 
 // Repositories
-import UserRepository from '../../data/repositories/userRepository';
-import UserAdressRepository from '../../data/repositories/userAdressRepository';
-import CardRepository from '../../data/repositories/cardRepository';
-import CompanyRepository from '../../data/repositories/companyRepository';
-import CompanyAdressRepository from '../../data/repositories/companyAdressRepository';
-import EmployeeRepository from '../../data/repositories/employeeRepository';
-import PaymentRepository from '../../data/repositories/paymentRepository';
-import VehicleRepository from '../../data/repositories/vehicleRepository';
-import ParkingRepository from '../../data/repositories/parkingRepository';
-import RuleRepository from '../../data/repositories/ruleRepository';
-import ParkingPromotionRepository from '../../data/repositories/parkingPromotionRepository';
-import ParkingSpaceRepository from '../../data/repositories/parkingSpaceRepository';
-import ParkingAdressRepository from '../../data/repositories/parkingAdressRepository';
-import SchedulingRepository from '../../data/repositories/schedulingRepository';
-import ParkingScoreRepository from '../../data/repositories/parkingScoreRepository';
-import ParkingFinanceRepository from '../../data/repositories/parkingFinanceRepository';
+import UserRepository from '../../data/repositories/user.repository';
+import UserAdressRepository from '../../data/repositories/user-adress.repository';
+import CardRepository from '../../data/repositories/card.repository';
+import CompanyRepository from '../../data/repositories/company.repository';
+import CompanyAdressRepository from '../../data/repositories/company-adress.repository';
+import EmployeeRepository from '../../data/repositories/employee.repository';
+import PaymentRepository from '../../data/repositories/payment.repository';
+import VehicleRepository from '../../data/repositories/vehicle.repository';
+import ParkingRepository from '../../data/repositories/parking.repository';
+import RuleRepository from '../../data/repositories/rule.repository';
+import ParkingPromotionRepository from '../../data/repositories/parking-promotion.repository';
+import ParkingSpaceRepository from '../../data/repositories/parking-space.repository';
+import ParkingAdressRepository from '../../data/repositories/parking-adress.repository';
+import SchedulingRepository from '../../data/repositories/scheduling.repository';
+import ParkingScoreRepository from '../../data/repositories/parking-score.repository';
+import ParkingFinanceRepository from '../../data/repositories/parking-finance.repository';
 
 // Services
-import AuthService from '../../data/services/authService';
-import EmailService from '../../data/services/emailService';
+import AuthService from '../../data/services/auth.service';
+import EmailService from '../../data/services/email.service';
 import { ParkingService } from '../../data/services/parking.service';
 
 // interfaces
 
-import IAuthService from '../../data/interfaces/IServices/IAuthService';
-import IEmailService from '../../data/interfaces/IServices/IEmailService';
-import { IParkingService } from '../../data/interfaces/IServices/IParking.service';
+import IAuthService from '../../data/interfaces/IServices/authService.interface';
+import IEmailService from '../../data/interfaces/IServices/emailService.interface';
+import { IParkingService } from '../../data/interfaces/IServices/parkingService.interface';
 
-import IUserRepository from '../../data/interfaces/IRepositories/IUserRepository';
-import IUserAdressRepository from '../../data/interfaces/IRepositories/IUserAdressRepository';
-import ICardRepository from '../../data/interfaces/IRepositories/ICardRepository';
-import ICompanyRepository from '../../data/interfaces/IRepositories/ICompanyRepository';
-import ICompanyAdressRepository from '../../data/interfaces/IRepositories/ICompanyAdressRepository';
-import IEmployeeRepository from '../../data/interfaces/IRepositories/IEmployeeRepository';
-import IPaymentRepository from '../../data/interfaces/IRepositories/IPaymentRepository';
-import {IParkingRepository} from '../../data/interfaces/IRepositories/IParkingRepository';
-import IParkingSpaceRepository from '../../data/interfaces/IRepositories/IParkingSpaceRepository';
-import IVehicleRepository from '../../data/interfaces/IRepositories/IVehicleRepository';
-import IRuleRepository from '../../data/interfaces/IRepositories/IRuleRepository';
-import IParkingPromotionRepository from '../../data/interfaces/IRepositories/IParkingPromotionRepository';
-import IParkingAdressRepository from '../../data/interfaces/IRepositories/IParkingAdressRepository';
-import IParkingScoreRepository from '../../data/interfaces/IRepositories/IParkingScoreRepository';
-import ISchedulingRepository from '../../data/interfaces/IRepositories/ISchedulingRepository';
-import IParkingFinanceRepository from '../../data/interfaces/IRepositories/IParkingFinanceRepository';
+import IUserRepository from '../../data/interfaces/IRepositories/userRepository.interface';
+import IUserAdressRepository from '../../data/interfaces/IRepositories/user-adressRepository.interface';
+import ICardRepository from '../../data/interfaces/IRepositories/cardRepository.interface';
+import ICompanyRepository from '../../data/interfaces/IRepositories/companyRepository.interface';
+import ICompanyAdressRepository from '../../data/interfaces/IRepositories/company-adressRepository.interface';
+import IEmployeeRepository from '../../data/interfaces/IRepositories/employeeRepository.interface';
+import IPaymentRepository from '../../data/interfaces/IRepositories/paymentRepository.interface';
+import {IParkingRepository} from '../../data/interfaces/IRepositories/parkingRepository.interface';
+import IParkingSpaceRepository from '../../data/interfaces/IRepositories/parking-spaceRepository.interface';
+import IVehicleRepository from '../../data/interfaces/IRepositories/vehicleRepository.interface';
+import IRuleRepository from '../../data/interfaces/IRepositories/ruleRepository.interface';
+import IParkingPromotionRepository from '../../data/interfaces/IRepositories/parking-promotionRepository.interface';
+import IParkingAdressRepository from '../../data/interfaces/IRepositories/parking-adressRepository.interface';
+import IParkingScoreRepository from '../../data/interfaces/IRepositories/parking-scoreRepository.interface';
+import ISchedulingRepository from '../../data/interfaces/IRepositories/schedulingRepository.interface';
+import IParkingFinanceRepository from '../../data/interfaces/IRepositories/parking-financeRepository.interface';
 
 // Binds
 const container = new Container();

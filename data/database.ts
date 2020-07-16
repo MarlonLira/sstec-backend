@@ -4,21 +4,21 @@ import Logger from '../commons/core/logger';
 import Context from '../main/context';
 
 // Entities
-import User from './models/user';
-import Vehicle from './models/vehicle';
-import UserAdress from './models/userAdress';
-import Card from './models/card';
-import Company from './models/company';
-import CompanyAdress from './models/companyAdress';
-import Employee from './models/employee';
+import User from './models/user.model';
+import Vehicle from './models/vehicle.model';
+import UserAdress from './models/userAdress.model';
+import Card from './models/card.model';
+import Company from './models/company.model';
+import CompanyAdress from './models/companyAdress.model';
+import Employee from './models/employee.model';
 import Parking from './models/parking.model';
-import Rule from './models/rule';
-import ParkingPromotion from './models/parkingPromotion';
-import ParkingSpace from './models/parkingSpace';
-import ParkingAdress from './models/parkingAdress';
-import Scheduling from './models/scheduling';
-import ParkingScore from './models/parkingScore';
-import ParkingFinance from './models/parkingFinance';
+import Rule from './models/rule.model';
+import ParkingPromotion from './models/parkingPromotion.model';
+import ParkingSpace from './models/parkingSpace.model';
+import ParkingAdress from './models/parkingAdress.model';
+import Scheduling from './models/scheduling.model';
+import ParkingScore from './models/parkingScore.model';
+import ParkingFinance from './models/parkingFinance.model';
 
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;

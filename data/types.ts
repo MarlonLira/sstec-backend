@@ -1,6 +1,10 @@
 const TYPES = {
+  // Services Types
   IAuthService: Symbol('IAuthService'),
   IEmailService: Symbol('IEmailService'),
+  IParkingService: Symbol('IParkingService'),
+
+  // Repositories Types
   IUserRepository: Symbol('IUserRepository'),
   ICardRepository: Symbol('ICardRepository'),
   ICompanyRepository: Symbol('ICompanyRepository'),
@@ -16,8 +20,7 @@ const TYPES = {
   IParkingAdressRepository: Symbol('IParkingAdressRepository'),
   IUserAdressRepository: Symbol('IUserAdressRepository'),
   ISchedulingRepository: Symbol('ISchedulingRepository'),
-  IParkingFinanceRepository: Symbol('IParkingFinanceRepository'),
-  IParkingService: Symbol('IParkingService')
+  IParkingFinanceRepository: Symbol('IParkingFinanceRepository')
 };
 
 export default TYPES;
