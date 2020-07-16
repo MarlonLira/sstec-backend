@@ -5,7 +5,7 @@ import Email from '../../models/email.model';
  * @export
  * @interface IEmailService
  */
-export default interface IEmailService {
+export interface IEmailService {
 
   /**
    * @description
@@ -14,6 +14,6 @@ export default interface IEmailService {
    * @returns {Promise<any>}
    * @memberof IEmailService
    */
-  Send(email: Email): Promise<any>;
+  send(email: Email): Promise<any>;
 
 }

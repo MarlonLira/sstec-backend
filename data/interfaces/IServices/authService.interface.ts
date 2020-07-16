@@ -6,7 +6,7 @@ import Auth from '../../models/auth.model';
  * @export
  * @interface IAuthService
  */
-export default interface IAuthService {
+export interface IAuthService {
 
   /**
    * @description
@@ -15,7 +15,7 @@ export default interface IAuthService {
    * @returns {Promise<any>}
    * @memberof IAuthService
    */
-  CheckToken(auth: Auth): Promise<any>;
+  checkToken(auth: Auth): Promise<any>;
 
   /**
    * @description
@@ -24,7 +24,7 @@ export default interface IAuthService {
    * @returns {Promise<Auth>}
    * @memberof IAuthService
    */
-  CreateEmployeeToken(auth: Auth): Promise<Auth>;
+  createEmployeeToken(auth: Auth): Promise<Auth>;
 
   /**
    * @description
@@ -33,5 +33,41 @@ export default interface IAuthService {
    * @returns {Promise<Auth>}
    * @memberof IAuthService
    */
-  CreateUserToken(auth: Auth): Promise<Auth>;
+  createUserToken(auth: Auth): Promise<Auth>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Auth} auth
+   * @returns {Promise<any>}
+   * @memberof IAuthService
+   */
+  signinEmployee(auth: Auth): Promise<any>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Auth} auth
+   * @returns {Promise<any>}
+   * @memberof IAuthService
+   */
+  signinUser(auth: Auth): Promise<any>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Auth} auth
+   * @returns {Promise<any>}
+   * @memberof IAuthService
+   */
+  signupCompany(auth: Auth): Promise<any>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Auth} auth
+   * @returns {Promise<any>}
+   * @memberof IAuthService
+   */
+  signupUser(auth: Auth): Promise<any>;
 }

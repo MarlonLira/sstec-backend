@@ -28,8 +28,8 @@ import { ParkingService } from '../../data/services/parking.service';
 
 // interfaces
 
-import IAuthService from '../../data/interfaces/IServices/authService.interface';
-import IEmailService from '../../data/interfaces/IServices/emailService.interface';
+import { IAuthService } from '../../data/interfaces/IServices/authService.interface';
+import { IEmailService } from '../../data/interfaces/IServices/emailService.interface';
 import { IParkingService } from '../../data/interfaces/IServices/parkingService.interface';
 
 import IUserRepository from '../../data/interfaces/IRepositories/userRepository.interface';
@@ -39,7 +39,7 @@ import ICompanyRepository from '../../data/interfaces/IRepositories/companyRepos
 import ICompanyAdressRepository from '../../data/interfaces/IRepositories/company-adressRepository.interface';
 import IEmployeeRepository from '../../data/interfaces/IRepositories/employeeRepository.interface';
 import IPaymentRepository from '../../data/interfaces/IRepositories/paymentRepository.interface';
-import {IParkingRepository} from '../../data/interfaces/IRepositories/parkingRepository.interface';
+import { IParkingRepository } from '../../data/interfaces/IRepositories/parkingRepository.interface';
 import IParkingSpaceRepository from '../../data/interfaces/IRepositories/parking-spaceRepository.interface';
 import IVehicleRepository from '../../data/interfaces/IRepositories/vehicleRepository.interface';
 import IRuleRepository from '../../data/interfaces/IRepositories/ruleRepository.interface';

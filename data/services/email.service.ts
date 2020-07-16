@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import * as nodemailer from 'nodemailer';
 import * as Config from '../../config.json';
-import IEmailService from "../interfaces/IServices/emailService.interface";
+import { IEmailService } from "../interfaces/IServices/emailService.interface";
 import Email from '../models/email.model';
 
 
@@ -10,7 +10,7 @@ class EmailService implements IEmailService {
 
   private mailer = nodemailer.createTransport(Config.SMTP);
 
-  Send(email: Email): Promise<any> {
+  send(email: Email): Promise<any> {
     return new Promise(async (resolve, reject) => {
       this.mailer.sendMail(email,
         (error, info) => {
