@@ -5,7 +5,7 @@ import Parking from '../../models/parking';
  * @author Emerson Souza
  * @interface IParkingRepository
  */
-interface IParkingRepository {
+export interface IParkingRepository {
 
   /**
    * @description
@@ -14,7 +14,7 @@ interface IParkingRepository {
    * @returns {Promise<any>}
    * @memberof IParkingRepository
    */
-  Save(parking: Parking): Promise<any>;
+  save(parking: Parking): Promise<any>;
 
   /**
    * @description
@@ -23,8 +23,7 @@ interface IParkingRepository {
    * @returns {Promise<any>}
    * @memberof IParkingRepository
    */
-  Update(parking: Parking): Promise<any>;
-
+  update(parking: Parking): Promise<any>;
 
   /**
    * @description
@@ -33,7 +32,7 @@ interface IParkingRepository {
    * @returns {Promise<Parking[]>}
    * @memberof IParkingRepository
    */
-  ToList(_companyId: number): Promise<Parking[]>;
+  toList(_companyId: number): Promise<Parking[]>;
 
   /**
    * @description
@@ -42,7 +41,7 @@ interface IParkingRepository {
    * @returns {Promise<Parking[]>}
    * @memberof IParkingRepository
    */
-  GetById(id: number): Promise<Parking>;
+  getById(id: number): Promise<Parking>;
 
   /**
    * @description
@@ -51,7 +50,7 @@ interface IParkingRepository {
    * @returns {Promise<Parking>}
    * @memberof IParkingRepository
    */
-  GetByRegistryCode(registryCode: string): Promise<Parking[]>;
+  getByRegistryCode(companyId: number, registryCode: string): Promise<Parking[]>;
 
   /**
    * @description
@@ -60,7 +59,7 @@ interface IParkingRepository {
    * @returns {Promise<Parking[]>}
    * @memberof IParkingRepository
    */
-  GetByEmployeeId(_employeeId: number): Promise<Parking[]>;
+  getByEmployeeId(_employeeId: number): Promise<Parking[]>;
 
   /**
    * @description
@@ -69,7 +68,5 @@ interface IParkingRepository {
    * @returns {Promise<any>}
    * @memberof IParkingRepository
    */
-  Delete(id: number): Promise<any>;
+  delete(id: number): Promise<any>;
 }
-
-export default IParkingRepository;

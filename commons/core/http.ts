@@ -30,6 +30,25 @@ class Http {
    * @description
    * @author Marlon Lira
    * @static
+   * @param {*} res
+   * @param {HttpMessage} error
+   * @param {*} entity
+   * @returns
+   * @memberof Http
+   */
+  static SendErrorMessage(res, error: HttpMessage, entity) {
+    switch (error) {
+      case HttpMessage.Parameters_Not_Provided:
+        return Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, entity, error);
+      default:
+        return Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, entity, error);
+    }
+  }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @static
    * @param {Response} res
    * @param {HttpCode} code
    * @param {*} json

@@ -24,8 +24,14 @@ import ParkingFinanceRepository from '../../data/repositories/parkingFinanceRepo
 // Services
 import AuthService from '../../data/services/authService';
 import EmailService from '../../data/services/emailService';
+import { ParkingService } from '../../data/services/parking.service';
 
 // interfaces
+
+import IAuthService from '../../data/interfaces/IServices/IAuthService';
+import IEmailService from '../../data/interfaces/IServices/IEmailService';
+import { IParkingService } from '../../data/interfaces/IServices/IParking.service';
+
 import IUserRepository from '../../data/interfaces/IRepositories/IUserRepository';
 import IUserAdressRepository from '../../data/interfaces/IRepositories/IUserAdressRepository';
 import ICardRepository from '../../data/interfaces/IRepositories/ICardRepository';
@@ -33,7 +39,7 @@ import ICompanyRepository from '../../data/interfaces/IRepositories/ICompanyRepo
 import ICompanyAdressRepository from '../../data/interfaces/IRepositories/ICompanyAdressRepository';
 import IEmployeeRepository from '../../data/interfaces/IRepositories/IEmployeeRepository';
 import IPaymentRepository from '../../data/interfaces/IRepositories/IPaymentRepository';
-import IParkingRepository from '../../data/interfaces/IRepositories/IParkingRepository';
+import {IParkingRepository} from '../../data/interfaces/IRepositories/IParkingRepository';
 import IParkingSpaceRepository from '../../data/interfaces/IRepositories/IParkingSpaceRepository';
 import IVehicleRepository from '../../data/interfaces/IRepositories/IVehicleRepository';
 import IRuleRepository from '../../data/interfaces/IRepositories/IRuleRepository';
@@ -42,13 +48,13 @@ import IParkingAdressRepository from '../../data/interfaces/IRepositories/IParki
 import IParkingScoreRepository from '../../data/interfaces/IRepositories/IParkingScoreRepository';
 import ISchedulingRepository from '../../data/interfaces/IRepositories/ISchedulingRepository';
 import IParkingFinanceRepository from '../../data/interfaces/IRepositories/IParkingFinanceRepository';
-import IAuthService from '../../data/interfaces/IServices/IAuthService';
-import IEmailService from '../../data/interfaces/IServices/IEmailService';
 
 // Binds
 const container = new Container();
 container.bind<IAuthService>(TYPES.IAuthService).to(AuthService);
 container.bind<IEmailService>(TYPES.IEmailService).to(EmailService);
+container.bind<IParkingService>(TYPES.IParkingService).to(ParkingService);
+
 container.bind<IUserRepository>(TYPES.IUserRepository).to(UserRepository);
 container.bind<IUserAdressRepository>(TYPES.IUserAdressRepository).to(UserAdressRepository);
 container.bind<ICardRepository>(TYPES.ICardRepository).to(CardRepository);

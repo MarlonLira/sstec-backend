@@ -1,7 +1,7 @@
 import { Op, QueryTypes } from 'sequelize';
 import { injectable } from "inversify";
 
-import IParkingRepository from '../interfaces/IRepositories/IParkingRepository';
+import { IParkingRepository } from '../interfaces/IRepositories/IParkingRepository';
 import Parking from '../models/parking';
 import { TransactionType } from '../../commons/enums/transactionType';
 
@@ -14,7 +14,7 @@ import { TransactionType } from '../../commons/enums/transactionType';
 @injectable()
 class ParkingRepository implements IParkingRepository {
 
-  GetById(id: number): Promise<Parking> {
+  getById(id: number): Promise<Parking> {
     return new Promise((resolve, reject) => {
       Parking.findByPk(id)
         .then((parking: Parking) => {
@@ -32,7 +32,7 @@ class ParkingRepository implements IParkingRepository {
    * @param {Parking} parking
    * @memberof ParkingRepository
    */
-  Save(parking: Parking): Promise<any> {
+  save(parking: Parking): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
       parking.status = TransactionType.ACTIVE;
@@ -54,7 +54,7 @@ class ParkingRepository implements IParkingRepository {
    * @param {Parking} parking
    * @memberof ParkingRepository
    */
-  Update(parking: Parking): Promise<any> {
+  update(parking: Parking): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
       Parking.update(parking.ToModify(),
@@ -84,7 +84,7 @@ class ParkingRepository implements IParkingRepository {
    * @returns {Promise<any>}
    * @memberof ParkingRepository
    */
-  Delete(_id: number): Promise<any> {
+  delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
       Parking.update({
@@ -115,12 +115,15 @@ class ParkingRepository implements IParkingRepository {
    * @returns {Promise<Parking>}
    * @memberof ParkingRepository
    */
-  GetByRegistryCode(registryCode: string): Promise<Parking[]> {
+  getByRegistryCode(companyId: number, registryCode: string): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       Parking.findAll({
         where: {
           registryCode: {
             [Op.eq]: registryCode
+          },
+          companyId: {
+            [Op.eq]: companyId
           },
           status: {
             [Op.ne]: TransactionType.DELETED
@@ -141,7 +144,7 @@ class ParkingRepository implements IParkingRepository {
    * @returns {Promise<Parking>}
    * @memberof ParkingRepository
    */
-  GetByEmployeeId(_employeeId: number): Promise<Parking[]> {
+  getByEmployeeId(_employeeId: number): Promise<Parking[]> {
     return new Promise(async (resolve, reject) => {
       Parking.sequelize.query(
         "   SELECT P.* FROM Parking AS P" +
@@ -173,7 +176,7 @@ class ParkingRepository implements IParkingRepository {
    * @returns {Promise<Parking[]>}
    * @memberof ParkingRepository
    */
-  ToList(_companyId: number): Promise<Parking[]> {
+  toList(_companyId: number): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       Parking.findAll({
         where: {

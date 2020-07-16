@@ -2,29 +2,32 @@ import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import IParkingController from "../interfaces/IControllers/IParkingController";
-import IParkingRepository from '../interfaces/IRepositories/IParkingRepository';
 import Parking from "../models/parking";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
-import Attributes from "../../commons/core/attributes";
+import { IParkingService } from "../interfaces/IServices/IParking.service";
 
 /**
  * @description
- * @author Emerson Souza
+ * @author Marlon Lira
  * @class ParkingController
- * @implements {IParkingController}
  */
 @controller('')
-class ParkingController implements IParkingController {
+class ParkingController {
 
-  constructor(@inject(TYPES.IParkingRepository) private _parkingRepository: IParkingRepository) { }
+  /**
+   * Creates an instance of ParkingController.
+   * @author Marlon Lira
+   * @param {IParkingService} service
+   * @memberof ParkingController
+   */
+  constructor(@inject(TYPES.IParkingService) private service: IParkingService) { }
 
   /**
    * @description
-   * @author Emerson Souza
+   * @author Marlon Lira
    * @param {Request<any>} req
    * @param {Response<any>} res
    * @returns {Promise<any>}
@@ -33,20 +36,15 @@ class ParkingController implements IParkingController {
   @httpPost('/parking')
   Save(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
-      const _parking = new Parking(req.body.parking);
-      this._parkingRepository.Save(_parking)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento', result));
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
-        });
+      this.service.save(new Parking(req.body))
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
 
   /**
    * @description
-   * @author Gustavo Gusmão
+   * @author Marlon Lira
    * @param {Request<any>} req
    * @param {Response<any>} res
    * @returns {Promise<any>}
@@ -54,26 +52,16 @@ class ParkingController implements IParkingController {
    */
   @httpGet('/parking/companyId/:companyId/registryCode/:registryCode')
   Search(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
-    return new Promise(async (resolve) => {
-      try {
-        const _parking = new Parking(req.params);
-        let found: any = null;
-        if (Attributes.IsValid(_parking.registryCode) && Attributes.IsValid(_parking.companyId)) {
-          found = await this._parkingRepository.GetByRegistryCode(_parking.registryCode);
-          found = found.find(r => r.companyId === Number(_parking.companyId));
-          resolve(Http.SendMessage(res, HttpCode.Found, HttpMessage.Found, 'Estacionameto', found))
-        } else {
-          resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Estacionamento', found));
-        }
-      } catch (error) {
-        resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
-      }
+    return new Promise((resolve) => {
+      this.service.getByRegistryCode(new Parking(req.params))
+        .then((result: Parking[]) => resolve(Http.SendMessage(res, HttpCode.Found, HttpMessage.Found, 'Estacionamento', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
 
   /**
    * @description
-   * @author Emerson Souza
+   * @author Marlon Lira
    * @param {Request} req
    * @param {Response} res
    * @returns {Promise<any>}
@@ -82,21 +70,15 @@ class ParkingController implements IParkingController {
   @httpGet('/parkings/companyId/:companyId')
   SearchAll(@request() req: Request, @response() res: Response): Promise<any> {
     return new Promise((resolve) => {
-      const _companyId: number = Number(req.params.companyId);
-      if (Attributes.IsValid(_companyId)) {
-        this._parkingRepository.ToList(_companyId)
-          .then(result => {
-            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result));
-          });
-      } else {
-        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Veículo'));
-      }
+      this.service.toList(Number(req.params.companyId))
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
 
   /**
    * @description
-   * @author Emerson Souza
+   * @author Marlon Lira
    * @param {Request<any>} req
    * @param {Response<any>} res
    * @returns {Promise<any>}
@@ -105,27 +87,15 @@ class ParkingController implements IParkingController {
   @httpPut('/parking')
   Update(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
-      const _parking = new Parking(req.body.parking);
-      this._parkingRepository.GetById(_parking.id)
-        .then((parking: Parking) => {
-          if (Attributes.IsValid(parking)) {
-            this._parkingRepository.Update(_parking)
-              .then(result => {
-                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Estacionamento', result))
-              })
-              .catch(error => {
-                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
-              });
-          } else {
-            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Estacionamento'))
-          }
-        });
+      this.service.update(new Parking(req.body))
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
 
   /**
    * @description
-   * @author Emerson Souza
+   * @author Marlon Lira
    * @param {Request<any>} req
    * @param {Response<any>} res
    * @returns {Promise<any>}
@@ -134,21 +104,9 @@ class ParkingController implements IParkingController {
   @httpDelete('/parking/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
-      const _id: number = req.params.id;
-      this._parkingRepository.GetById(_id)
-        .then((parking: Parking) => {
-          if (Attributes.IsValid(parking)) {
-            this._parkingRepository.Delete(_id)
-              .then(result => {
-                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Estacionamento', result))
-              })
-              .catch(error => {
-                resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Estacionamento', error));
-              });
-          } else {
-            resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Not_Found, 'Estacionamento'));
-          }
-        });
+      this.service.delete(Number(req.params.id))
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
 }

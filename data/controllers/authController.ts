@@ -14,7 +14,7 @@ import Crypto from '../../commons/core/crypto';
 import IAuthController from "../interfaces/IControllers/IAuthController";
 import IEmployeeRepository from "../interfaces/IRepositories/IEmployeeRepository";
 import ICompanyRepository from "../interfaces/IRepositories/ICompanyRepository";
-import IParkingRepository from "../interfaces/IRepositories/IParkingRepository";
+import { IParkingRepository } from "../interfaces/IRepositories/IParkingRepository";
 import IRuleRepository from "../interfaces/IRepositories/IRuleRepository";
 import Employee from "../models/employee";
 import Company from "../models/company";
@@ -83,7 +83,7 @@ class AuthController implements IAuthController {
           const foundEmployee: Employee = await this._employeeRepository.GetByEmail(_auth.employee.email);
           if (Attributes.IsValid(foundEmployee) && Crypto.Compare(_auth.employee.password, foundEmployee.password)) {
             _auth.company = await this._companyRepository.GetById(foundEmployee.companyId);
-            _auth.parking = (await this._parkingRepository.GetByEmployeeId(foundEmployee.id))[0];
+            _auth.parking = (await this._parkingRepository.getByEmployeeId(foundEmployee.id))[0];
             _auth.employee = foundEmployee;
             _auth.authenticationLevel = Attributes.IsValid(foundEmployee.ruleId) ? (await this._ruleRepository.GetById(foundEmployee.ruleId)).level : null;
             this._authService.CreateEmployeeToken(_auth)
