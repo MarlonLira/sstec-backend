@@ -9,7 +9,7 @@ enum HttpMessage {
   Unknown_Error = 'Erro desconhecido, por favor reporte a equipe técnica!',
   Already_Exists = 'Já cadastrado(a)!',
   Found = 'Encontrado(a)!',
-  Not_Found = 'Não encontrato(a)!',
+  Not_Found = 'Não encontrado(a)!',
   Empty = '',
   Login_Unauthorized = 'A conta informada é inválida!',
   Login_Authorized = 'Acesso bem sucedido!',
