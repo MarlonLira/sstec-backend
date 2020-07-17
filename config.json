@@ -35,7 +35,7 @@
     "IsLogger": false
   },
   "SMTP": {
-    "host": "",
+    "host": "smtp.gmail.com",
     "port": 587,
     "secure": false,
     "auth": {

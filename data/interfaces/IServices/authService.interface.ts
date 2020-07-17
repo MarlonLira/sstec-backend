@@ -21,6 +21,15 @@ export interface IAuthService {
    * @description
    * @author Marlon Lira
    * @param {Auth} auth
+   * @returns {Promise<any>}
+   * @memberof IAuthService
+   */
+  accountRecoveryEmployee(auth: Auth): Promise<any>;
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Auth} auth
    * @returns {Promise<Auth>}
    * @memberof IAuthService
    */

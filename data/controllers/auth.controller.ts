@@ -14,7 +14,6 @@ import { HttpCode } from '../../commons/enums/httpCode';
  * @description
  * @author Marlon Lira
  * @class AuthController
- * @implements {interfaces.Controller}
  */
 @controller('/auth')
 class AuthController {
@@ -22,8 +21,7 @@ class AuthController {
   /**
    * Creates an instance of AuthController.
    * @author Marlon Lira
-   * @param {IAuthService} _authService
-   * @param {IUserRepository} _userRepository
+   * @param {IAuthService} service
    * @memberof AuthController
    */
   constructor(
@@ -40,10 +38,26 @@ class AuthController {
    */
   @httpPost('/token-validate')
   tokenValidate(@request() req: Request, @response() res: Response) {
-    const _auth = new Auth(req.body);
     return new Promise((resolve) => {
-      this.service.checkToken(_auth).
+      this.service.checkToken(new Auth(req.body)).
         then((result: any) => resolve(Http.SendSimpleMessage(res, HttpCode.Ok, { valid: !result })));
+    });
+  }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Request} req
+   * @param {Response} res
+   * @returns
+   * @memberof AuthController
+   */
+  @httpPost('/employee/account-recovery')
+  accountRecoveryEmployee(@request() req: Request, @response() res: Response) {
+    return new Promise((resolve) => {
+      this.service.accountRecoveryEmployee(new Auth(req.body))
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, `${HttpMessage.Email_Account_Recovery} ${result}` as HttpMessage, 'Account', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Account Recovery')));
     });
   }
 
@@ -57,7 +71,7 @@ class AuthController {
    */
   @httpPost('/employee/signin')
   signinEmployee(@request() req: Request, @response() res: Response) {
-    return new Promise(async (resolve) => {
+    return new Promise((resolve) => {
       this.service.signinEmployee(new Auth(req.body))
         .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Login_Authorized, 'Login', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Login')));
@@ -74,7 +88,7 @@ class AuthController {
    */
   @httpPost('/user/signin')
   signinUser(@request() req: Request, @response() res: Response) {
-    return new Promise(async (resolve) => {
+    return new Promise((resolve) => {
       this.service.signinUser(new Auth(req.body))
         .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Login_Authorized, 'Login', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Login')));
@@ -91,7 +105,7 @@ class AuthController {
    */
   @httpPost('/employee/signup')
   signUp(@request() req: Request, @response() res: Response<any>) {
-    return new Promise(async (resolve) => {
+    return new Promise((resolve) => {
       this.service.signupCompany(new Auth(req.body))
         .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Login', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Login')));

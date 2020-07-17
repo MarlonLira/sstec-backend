@@ -15,7 +15,8 @@ enum HttpMessage {
   Login_Authorized = 'Acesso bem sucedido!',
   Account_Created = 'Conta criada com sucesso!',
   Parameters_Not_Provided = 'Os parâmetros esperados não foram fornecidos!',
-  Send_Successfully = 'Enviando(a) com sucesso!',
+  Send_Successfully = 'Enviado(a) com sucesso!',
+  Email_Account_Recovery = 'Um email foi enviado para'
 }
 
 export { HttpMessage };

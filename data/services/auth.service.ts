@@ -15,6 +15,8 @@ import Employee from "../models/employee.model";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import User from "../models/user.model";
 import Company from "../models/company.model";
+import { IEmailService } from "../interfaces/IServices/emailService.interface";
+import Email from "../models/email.model";
 
 /**
  * @description
@@ -30,7 +32,8 @@ class AuthService implements IAuthService {
     @inject(TYPES.ICompanyRepository) private _companyRepository: ICompanyRepository,
     @inject(TYPES.IParkingRepository) private _parkingRepository: IParkingRepository,
     @inject(TYPES.IRuleRepository) private _ruleRepository: IRuleRepository,
-    @inject(TYPES.IUserRepository) private _userRepository: IUserRepository
+    @inject(TYPES.IUserRepository) private _userRepository: IUserRepository,
+    @inject(TYPES.IEmailService) private _emailService: IEmailService
   ) { }
 
   signinEmployee(auth: Auth): Promise<any> {
@@ -89,7 +92,7 @@ class AuthService implements IAuthService {
       try {
         const foundEmployee = Attributes.ReturnIfValid(
           await this._employeeRepository.GetByEmail(auth.employee.email),
-          await this._companyRepository.GetByRegistryCode(auth.company.registryCode)
+          await this._employeeRepository.GetByRegistryCode(auth.employee.registryCode)
         );
         if (!Attributes.IsValid(foundEmployee)) {
           const companies: Company[] = await this._companyRepository.GetByRegistryCode(auth.company.registryCode);
@@ -126,6 +129,37 @@ class AuthService implements IAuthService {
       jwt.verify(auth.token, process.env.SECRET, (err) => {
         resolve(err);
       });
+    });
+  }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Auth} auth
+   * @returns {Promise<any>}
+   * @memberof AuthService
+   */
+  accountRecoveryEmployee(auth: Auth): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const foundEmployee: Employee = Attributes.ReturnIfValid(
+          await this._employeeRepository.GetByEmail(auth.employee.email),
+          await this._employeeRepository.GetByRegistryCode(auth.employee.registryCode)
+        );
+        if (Attributes.IsValid(foundEmployee)) {
+          const _email = new Email();
+          _email.from = 'help.simpleparking@gmail.com';
+          _email.subject = 'Recuperação de Conta';
+          _email.text = 'Clique no link abaixo e digite sua nova senha';
+          _email.to = foundEmployee.email;
+
+          await this._emailService.send(_email);
+
+          resolve(foundEmployee.email);
+        }
+      } catch (error) {
+        reject(error);
+      }
     });
   }
 
