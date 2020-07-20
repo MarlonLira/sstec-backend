@@ -2,10 +2,8 @@
  * @description
  * @enum {number}
  */
-enum TransactionType {
+export enum TransactionType {
   ACTIVE = 'AT',
   PENDING = 'PD',
   DELETED = 'EX'
 }
-
-export { TransactionType };

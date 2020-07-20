@@ -4,21 +4,22 @@ import Logger from '../commons/core/logger';
 import Context from '../main/context';
 
 // Entities
-import User from './models/user';
-import Vehicle from './models/vehicle';
-import UserAdress from './models/userAdress';
-import Card from './models/card';
-import Company from './models/company';
-import CompanyAdress from './models/companyAdress';
-import Employee from './models/employee';
-import Parking from './models/parking';
-import Rule from './models/rule';
-import ParkingPromotion from './models/parkingPromotion';
-import ParkingSpace from './models/parkingSpace';
-import ParkingAdress from './models/parkingAdress';
-import Scheduling from './models/scheduling';
-import ParkingScore from './models/parkingScore';
-import ParkingFinance from './models/parkingFinance';
+import User from './models/user.model';
+import Vehicle from './models/vehicle.model';
+import UserAdress from './models/userAdress.model';
+import Card from './models/card.model';
+import Company from './models/company.model';
+import CompanyAdress from './models/companyAdress.model';
+import Employee from './models/employee.model';
+import Parking from './models/parking.model';
+import { Rule } from './models/rule.model';
+import ParkingPromotion from './models/parkingPromotion.model';
+import ParkingSpace from './models/parkingSpace.model';
+import ParkingAdress from './models/parkingAdress.model';
+import Scheduling from './models/scheduling.model';
+import ParkingScore from './models/parkingScore.model';
+import ParkingFinance from './models/parkingFinance.model';
+import { Log } from './models/logger.model';
 
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
@@ -52,7 +53,8 @@ class Database {
       { name: 'ParkingAdress', entity: ParkingAdress.sequelize },
       { name: 'Scheduling', entity: Scheduling.sequelize },
       { name: 'ParkingScore', entity: ParkingScore.sequelize },
-      { name: 'ParkingFinance', entity: ParkingFinance.sequelize }
+      { name: 'ParkingFinance', entity: ParkingFinance.sequelize },
+      { name: 'Log', entity: Log.sequelize }
     ];
 
     Logger.Info('Database', 'Table verification started!');
@@ -99,7 +101,6 @@ class Database {
 
   private async CreateTables(models: { name: string, entity: Sequelize }[]) {
     return new Promise(async (resolve) => {
-      let count = 0;
       let sucess = 0;
       let errors = 0;
       let total = 0;
@@ -109,22 +110,25 @@ class Database {
         await this.DropAllTables(models);
       }
 
-      while (count < models.length) {
-        await models[count].entity.sync({ force: ForceSync, alter: AlterSync, logging: (IsLogger ? msg => Logger.Info(models[count].name, msg) : IsLogger) })
+      models.forEach(async model => {
+        await model.entity.sync({
+          force: ForceSync,
+          alter: AlterSync,
+          logging: (IsLogger ? msg => Logger.Info(model.name, msg) : IsLogger)
+        })
           .then(() => {
-            Logger.Info(models[count].name, 'verification finished!')
+            Logger.Info(model.name, 'verification finished!')
             sucess++;
           })
           .catch(error => {
-            Logger.Error(models[count].name, error);
-            modelsWithErrors.push(models[count]);
+            Logger.Error(model.name, error);
+            modelsWithErrors.push(model);
             errors++;
           });
-        count++;
+
         total = sucess + errors;
         if (total === models.length) {
           Logger.Info('Database', `verification result => Sucess: ${sucess} | Errors: ${errors} | Total: ${models.length}`);
-
           if (errors > 0) {
             Logger.Error('Database', `${errors} errors in the models were found!`);
             Logger.Warn('Database', 'trying to fix the models');
@@ -132,29 +136,29 @@ class Database {
           } else {
             resolve('finished successfully');
           }
-          break;
         }
-      }
+      });
     });
   }
 
   private async TryFixModels(modelsWithErrors: any[], resolve: (value?: unknown) => void) {
     let attempts = 0;
-    let count = 0;
     let sucess = 0;
     let errors = 0;
 
-    while (count < modelsWithErrors.length) {
-      await modelsWithErrors[count].entity.sync({ alter: AlterSync, logging: IsLogger ? msg => Logger.Info(modelsWithErrors[count].name, msg) : IsLogger })
+    modelsWithErrors.forEach(async modelsWithError => {
+      await modelsWithError.entity.sync({
+        alter: AlterSync,
+        logging: IsLogger ? msg => Logger.Info(modelsWithError.name, msg) : IsLogger
+      })
         .then(() => {
-          Logger.Info(modelsWithErrors[count].name, 'correction completed!');
+          Logger.Info(modelsWithError.name, 'correction completed!');
           sucess++;
         })
         .catch(error => {
-          Logger.Error(modelsWithErrors[count].name, error);
+          Logger.Error(modelsWithError.name, error);
           errors++;
         });
-      count++;
       attempts = sucess + errors;
       if (attempts === modelsWithErrors.length) {
         Logger.Info('Database', `correction attempts => Sucess: ${sucess} | Errors: ${errors} | Total: ${attempts}`);
@@ -165,7 +169,7 @@ class Database {
           resolve('finished successfully and corrected errors');
         }
       }
-    }
+    });
   }
 
   private async DropAllTables(models: { name: string; entity: Sequelize; }[]) {
