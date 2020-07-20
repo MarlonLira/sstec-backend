@@ -20,17 +20,7 @@ import ParkingAdressRepository from '../../data/repositories/parking-adress.repo
 import SchedulingRepository from '../../data/repositories/scheduling.repository';
 import ParkingScoreRepository from '../../data/repositories/parking-score.repository';
 import ParkingFinanceRepository from '../../data/repositories/parking-finance.repository';
-
-// Services
-import AuthService from '../../data/services/auth.service';
-import EmailService from '../../data/services/email.service';
-import { ParkingService } from '../../data/services/parking.service';
-import { RuleService } from '../../data/services/rule.service';
-
-// Services interfaces
-import { IAuthService } from '../../data/interfaces/IServices/authService.interface';
-import { IEmailService } from '../../data/interfaces/IServices/emailService.interface';
-import { IParkingService } from '../../data/interfaces/IServices/parkingService.interface';
+import { LogRepository } from '../../data/repositories/log.repository';
 
 // Repositories interfaces
 import IUserRepository from '../../data/interfaces/IRepositories/userRepository.interface';
@@ -49,7 +39,24 @@ import IParkingAdressRepository from '../../data/interfaces/IRepositories/parkin
 import IParkingScoreRepository from '../../data/interfaces/IRepositories/parking-scoreRepository.interface';
 import ISchedulingRepository from '../../data/interfaces/IRepositories/schedulingRepository.interface';
 import IParkingFinanceRepository from '../../data/interfaces/IRepositories/parking-financeRepository.interface';
+import { ILogRepository } from '../../data/interfaces/IRepositories/logRepository.interface';
+
+// Services
+import AuthService from '../../data/services/auth.service';
+import EmailService from '../../data/services/email.service';
+import { ParkingService } from '../../data/services/parking.service';
+import { RuleService } from '../../data/services/rule.service';
+import { LogService } from '../../data/services/log.service';
+
+// Services interfaces
+import { IAuthService } from '../../data/interfaces/IServices/authService.interface';
+import { IEmailService } from '../../data/interfaces/IServices/emailService.interface';
+import { IParkingService } from '../../data/interfaces/IServices/parkingService.interface';
 import { IRuleService } from '../../data/interfaces/IServices/ruleService.interface';
+import { ILogService } from '../../data/interfaces/IServices/logService.interface';
+
+
+
 
 // Binds
 const container = new Container();
@@ -58,6 +65,7 @@ container.bind<IAuthService>(TYPES.IAuthService).to(AuthService);
 container.bind<IEmailService>(TYPES.IEmailService).to(EmailService);
 container.bind<IParkingService>(TYPES.IParkingService).to(ParkingService);
 container.bind<IRuleService>(TYPES.IRuleService).to(RuleService);
+container.bind<ILogService>(TYPES.ILogService).to(LogService);
 
 // Repositories Binds
 container.bind<IUserRepository>(TYPES.IUserRepository).to(UserRepository);
@@ -76,5 +84,6 @@ container.bind<IParkingAdressRepository>(TYPES.IParkingAdressRepository).to(Park
 container.bind<ISchedulingRepository>(TYPES.ISchedulingRepository).to(SchedulingRepository);
 container.bind<IParkingScoreRepository>(TYPES.IParkingScoreRepository).to(ParkingScoreRepository);
 container.bind<IParkingFinanceRepository>(TYPES.IParkingFinanceRepository).to(ParkingFinanceRepository);
+container.bind<ILogRepository>(TYPES.ILogRepository).to(LogRepository);
 
 export default container;

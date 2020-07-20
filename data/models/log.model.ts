@@ -2,7 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
-import { LogError } from '../../commons/enums/log-error';
+import { LogLevel } from '../../commons/enums/log-level';
 import { HttpCode } from '../../commons/enums/httpCode';
 
 const _instance = Context.getInstance();
@@ -16,9 +16,8 @@ const _instance = Context.getInstance();
 export class Log extends Model {
 
   id!: number;
-  level: LogError;
+  level: LogLevel;
   message: string;
-  date: Date;
   source: string;
   code: HttpCode;
 
@@ -31,12 +30,13 @@ export class Log extends Model {
    */
   constructor(json?: any) {
     super()
-    this.id = Attributes.ReturnIfValid(json.id);
-    this.level = Attributes.ReturnIfValid(json.name);
-    this.message = Attributes.ReturnIfValid(json.message);
-    this.date = Attributes.ReturnIfValid(json.date);
-    this.source = Attributes.ReturnIfValid(json.source);
-    this.code = Attributes.ReturnIfValid(json.code);
+    if (json) {
+      this.id = Attributes.ReturnIfValid(json.id);
+      this.level = Attributes.ReturnIfValid(json.level);
+      this.message = Attributes.ReturnIfValid(json.message);
+      this.source = Attributes.ReturnIfValid(json.source);
+      this.code = Attributes.ReturnIfValid(json.code);
+    }
   }
 
   ToModify() {
@@ -51,16 +51,13 @@ Log.init({
     primaryKey: true
   },
   level: {
-    type: new DataTypes.STRING(15),
-    allowNull: false
+    type: new DataTypes.STRING(15)
   },
   message: {
-    type: new DataTypes.STRING(50),
-    allowNull: false
+    type: new DataTypes.STRING(255)
   },
   date: {
-    type: new DataTypes.DATE(),
-    allowNull: false
+    type: new DataTypes.DATE()
   },
   source: {
     type: new DataTypes.STRING(20)

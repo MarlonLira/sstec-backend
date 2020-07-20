@@ -1,4 +1,4 @@
-import { Log } from "../../models/logger.model";
+import { Log } from "../../models/log.model";
 
 
 export interface ILogRepository {

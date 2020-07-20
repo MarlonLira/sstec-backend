@@ -18,3 +18,7 @@ import '../../data/controllers/parking-finance.controller';
 import '../../data/controllers/auth.controller';
 import '../../data/controllers/email.controller';
 import '../../data/controllers/log.controller';
+
+// Others
+
+import '../../commons/core/logger';

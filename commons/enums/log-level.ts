@@ -4,7 +4,7 @@
  * @export
  * @enum {number}
  */
-export enum LogError {
+export enum LogLevel {
   ERROR = 'ERROR',
   CRITICAL = 'CRITICAL',
   UNKNOWN = 'UNKNOWN',

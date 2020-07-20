@@ -17,6 +17,8 @@ import User from "../models/user.model";
 import Company from "../models/company.model";
 import { IEmailService } from "../interfaces/IServices/emailService.interface";
 import Email from "../models/email.model";
+import { HttpCode } from "../../commons/enums/httpCode";
+import { ILogService } from "../interfaces/IServices/logService.interface";
 
 /**
  * @description
@@ -33,7 +35,8 @@ class AuthService implements IAuthService {
     @inject(TYPES.IParkingRepository) private _parkingRepository: IParkingRepository,
     @inject(TYPES.IRuleRepository) private _ruleRepository: IRuleRepository,
     @inject(TYPES.IUserRepository) private _userRepository: IUserRepository,
-    @inject(TYPES.IEmailService) private _emailService: IEmailService
+    @inject(TYPES.IEmailService) private _emailService: IEmailService,
+    @inject(TYPES.ILogService) private log: ILogService
   ) { }
 
   signinEmployee(auth: Auth): Promise<any> {
@@ -53,7 +56,7 @@ class AuthService implements IAuthService {
             const result = await Crypto.Encrypt(JSON.stringify(auth), CryptoType.DEFAULT);
             resolve(result);
           } else {
-            reject(HttpMessage.Login_Unauthorized)
+            reject(await this.log.error('Auth', HttpCode.Bad_Request, HttpMessage.Login_Unauthorized));
           }
         } else {
           reject(HttpMessage.Parameters_Not_Provided)

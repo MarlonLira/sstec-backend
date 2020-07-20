@@ -39,7 +39,9 @@ class Http {
   static SendErrorMessage(res, error: HttpMessage, entity) {
     switch (error) {
       case HttpMessage.Parameters_Not_Provided:
-        return Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, entity, error);
+        return Http.SendMessage(res, HttpCode.Bad_Request, error, entity);
+      case HttpMessage.Login_Unauthorized:
+        return Http.SendMessage(res, HttpCode.Bad_Request, error, entity);
       default:
         return Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, entity, error);
     }
