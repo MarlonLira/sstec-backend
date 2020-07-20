@@ -2,7 +2,7 @@
  * @description
  * @enum {number}
  */
-enum HttpMessage {
+export enum HttpMessage {
   Saved_Successfully = 'Cadastrado(a) com sucesso!',
   Updated_Successfully = 'Atualizado(a) com sucesso!',
   Deleted_Successfully = 'Deletado(a) com sucesso!',
@@ -18,5 +18,3 @@ enum HttpMessage {
   Send_Successfully = 'Enviado(a) com sucesso!',
   Email_Account_Recovery = 'Um email foi enviado para'
 }
-
-export { HttpMessage };

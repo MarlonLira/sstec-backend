@@ -2,7 +2,7 @@
  * @description
  * @enum {number}
  */
-enum HttpCode {
+export enum HttpCode {
   Continue = 100,
   Processing = 102,
   Ok = 200,
@@ -19,5 +19,3 @@ enum HttpCode {
   Bad_Gateway = 502,
   Service_Unavailable = 503
 }
-
-export { HttpCode };

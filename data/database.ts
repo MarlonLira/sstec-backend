@@ -19,6 +19,7 @@ import ParkingAdress from './models/parkingAdress.model';
 import Scheduling from './models/scheduling.model';
 import ParkingScore from './models/parkingScore.model';
 import ParkingFinance from './models/parkingFinance.model';
+import { Log } from './models/logger.model';
 
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
@@ -52,7 +53,8 @@ class Database {
       { name: 'ParkingAdress', entity: ParkingAdress.sequelize },
       { name: 'Scheduling', entity: Scheduling.sequelize },
       { name: 'ParkingScore', entity: ParkingScore.sequelize },
-      { name: 'ParkingFinance', entity: ParkingFinance.sequelize }
+      { name: 'ParkingFinance', entity: ParkingFinance.sequelize },
+      { name: 'Log', entity: Log.sequelize }
     ];
 
     Logger.Info('Database', 'Table verification started!');
@@ -127,7 +129,6 @@ class Database {
         total = sucess + errors;
         if (total === models.length) {
           Logger.Info('Database', `verification result => Sucess: ${sucess} | Errors: ${errors} | Total: ${models.length}`);
-
           if (errors > 0) {
             Logger.Error('Database', `${errors} errors in the models were found!`);
             Logger.Warn('Database', 'trying to fix the models');
