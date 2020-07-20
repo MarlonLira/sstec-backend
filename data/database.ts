@@ -12,7 +12,7 @@ import Company from './models/company.model';
 import CompanyAdress from './models/companyAdress.model';
 import Employee from './models/employee.model';
 import Parking from './models/parking.model';
-import Rule from './models/rule.model';
+import { Rule } from './models/rule.model';
 import ParkingPromotion from './models/parkingPromotion.model';
 import ParkingSpace from './models/parkingSpace.model';
 import ParkingAdress from './models/parkingAdress.model';

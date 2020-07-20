@@ -4,7 +4,7 @@ import * as jwt from 'jsonwebtoken';
 import Auth from '../models/auth.model';
 import TYPES from "../types";
 import IUserRepository from "../interfaces/IRepositories/userRepository.interface";
-import IRuleRepository from "../interfaces/IRepositories/ruleRepository.interface";
+import { IRuleRepository } from "../interfaces/IRepositories/ruleRepository.interface";
 import { IParkingRepository } from "../interfaces/IRepositories/parkingRepository.interface";
 import ICompanyRepository from "../interfaces/IRepositories/companyRepository.interface";
 import IEmployeeRepository from "../interfaces/IRepositories/employeeRepository.interface";
@@ -47,7 +47,7 @@ class AuthService implements IAuthService {
             auth.employee = foundEmployee;
             auth.employee.password = undefined;
             auth.authenticationLevel = Attributes.IsValid(foundEmployee.ruleId)
-              ? (await this._ruleRepository.GetById(foundEmployee.ruleId)).level
+              ? (await this._ruleRepository.getById(foundEmployee.ruleId)).level
               : null;
             auth = await this.createEmployeeToken(auth);
             const result = await Crypto.Encrypt(JSON.stringify(auth), CryptoType.DEFAULT);

@@ -3,49 +3,42 @@ import { controller, httpGet, httpPost, httpDelete, request, response, httpPut }
 import { inject } from "inversify";
 
 import TYPES from '../types';
-import IRuleController from '../interfaces/IControllers/IRuleController';
-import IRuleRepository from '../interfaces/IRepositories/ruleRepository.interface';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
-import Rule from '../models/rule.model';
+import { Rule } from '../models/rule.model';
 import { HttpMessage } from '../../commons/enums/httpMessage';
-import Attributes from '../../commons/core/attributes';
+import { IRuleService } from '../interfaces/IServices/ruleService.interface';
 
 /**
  * @description
  * @author Marlon Lira
  * @class RuleController
- * @implements {IRuleController}
  */
 @controller('')
-class RuleController implements IRuleController {
+class RuleController {
 
   /**
    * Creates an instance of RuleController.
    * @author Marlon Lira
-   * @param {IRuleRepository} _ruleRepository
+   * @param {IRuleService} service
    * @memberof RuleController
    */
-  constructor(@inject(TYPES.IRuleRepository) private _ruleRepository: IRuleRepository) { }
+  constructor(@inject(TYPES.IRuleService) private service: IRuleService) { }
 
   /**
    * @description
    * @author Marlon Lira
    * @param {Request} req
    * @param {Response} res
+   * @returns
    * @memberof RuleController
    */
   @httpPost('/rule')
-  Save(@request() req: Request, @response() res: Response) {
+  save(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
-      const _rule = new Rule(req.body.rule);
-      this._ruleRepository.Save(_rule)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Nivel de Acesso', result));
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Nivel de Acesso', error));
-        });
+      this.service.save(new Rule(req.body))
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Nivel de Acesso', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
 
@@ -54,26 +47,16 @@ class RuleController implements IRuleController {
    * @author Marlon Lira
    * @param {Request} req
    * @param {Response} res
+   * @returns
    * @memberof RuleController
    */
   @httpGet('/rule/id/:id')
-  @httpGet('/rule/name/:name')
-  Search(@request() req: Request, @response() res: Response) {
+  searchById(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
-      const _rule = new Rule(req.params);
-      if (Attributes.IsValid(_rule.id)) {
-        this._ruleRepository.GetById(_rule.id)
-          .then((result: Rule) => {
-            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Nivel de Acesso', result));
-          });
-      } else if (Attributes.IsValid(_rule.name)) {
-        this._ruleRepository.GetByName(_rule.name)
-          .then((result: Rule[]) => {
-            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Nivel de Acesso', result));
-          });
-      } else {
-        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Nivel de Acesso'));
-      }
+      this.service.getById(Number(req.params.id))
+        .then((result: Rule) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Nivel de Acesso', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
+
     });
   }
 
@@ -82,15 +65,32 @@ class RuleController implements IRuleController {
    * @author Marlon Lira
    * @param {Request} req
    * @param {Response} res
+   * @returns
+   * @memberof RuleController
+   */
+  @httpGet('/rule/name/:name')
+  searchByName(@request() req: Request, @response() res: Response) {
+    return new Promise((resolve) => {
+      this.service.getByName(String(req.params.name))
+        .then((result: Rule[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Nivel de Acesso', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
+    });
+  }
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Request} req
+   * @param {Response} res
+   * @returns
    * @memberof RuleController
    */
   @httpGet('/rules')
-  SearchAll(@request() req: Request, @response() res: Response) {
+  searchAll(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
-      this._ruleRepository.ToList()
-        .then((result: Rule[]) => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Nivel de Acesso', result));
-        });
+      this.service.toList()
+        .then((result: Rule[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Nivel de Acesso', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
 
@@ -99,23 +99,15 @@ class RuleController implements IRuleController {
    * @author Marlon Lira
    * @param {Request} req
    * @param {Response} res
+   * @returns
    * @memberof RuleController
    */
   @httpPut('/rule')
-  Update(@request() req: Request, @response() res: Response) {
+  update(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
-      const _rule = new Rule(req.body.rule);
-      if (Attributes.IsValid(_rule.id)) {
-        this._ruleRepository.Update(_rule)
-          .then(result => {
-            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Nivel de Acesso', result));
-          })
-          .catch(error => {
-            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Nivel de Acesso', error));
-          });
-      } else {
-        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Nivel de Acesso'));
-      }
+      this.service.update(new Rule(req.body))
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Nivel de Acesso', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
 
@@ -124,19 +116,15 @@ class RuleController implements IRuleController {
    * @author Marlon Lira
    * @param {Request} req
    * @param {Response} res
+   * @returns
    * @memberof RuleController
    */
   @httpDelete('/rule/:id')
-  Delete(@request() req: Request, @response() res: Response) {
+  delete(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
-      const _rule = new Rule(req.params);
-      this._ruleRepository.Delete(_rule.id)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Nivel de Acesso', result));
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Nivel de Acesso', error));
-        });
+      this.service.delete(Number(req.params.id))
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Nivel de Acesso', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
 }

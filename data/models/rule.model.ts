@@ -12,7 +12,7 @@ const _instance = Context.getInstance();
  * @class Rule
  * @extends {Model}
  */
-class Rule extends Model {
+export class Rule extends Model {
   id!: number
   status!: TransactionType
   name!: string
@@ -31,7 +31,7 @@ class Rule extends Model {
     this.status = Attributes.ReturnIfValid(json.status);
     this.level = Attributes.ReturnIfValid(json.level);
   }
-  ToModify(){
+  ToModify() {
     return this.toJSON();
   }
 }
@@ -58,5 +58,3 @@ Rule.init({
   sequelize: _instance,
   tableName: 'Rule'
 });
-
-export default Rule;

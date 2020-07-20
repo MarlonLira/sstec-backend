@@ -1,11 +1,11 @@
-import Rule from '../../models/rule.model';
+import { Rule } from '../../models/rule.model';
 
 /**
  * @description
  * @author Marlon Lira
  * @interface IRuleRepository
  */
-interface IRuleRepository {
+export interface IRuleRepository {
 
   /**
    * @description
@@ -13,7 +13,7 @@ interface IRuleRepository {
    * @returns {Promise<Rule[]>}
    * @memberof IRuleRepository
    */
-  ToList(): Promise<Rule[]>;
+  toList(): Promise<Rule[]>;
 
   /**
    * @description
@@ -22,7 +22,7 @@ interface IRuleRepository {
    * @returns {Promise<any>}
    * @memberof IRuleRepository
    */
-  Save(rule: Rule): Promise<any>;
+  save(rule: Rule): Promise<any>;
 
   /**
    * @description
@@ -31,7 +31,7 @@ interface IRuleRepository {
    * @returns {Promise<any>}
    * @memberof IRuleRepository
    */
-  Update(rule: Rule): Promise<any>;
+  update(rule: Rule): Promise<any>;
 
   /**
    * @description
@@ -40,7 +40,7 @@ interface IRuleRepository {
    * @returns {Promise<any>}
    * @memberof IRuleRepository
    */
-  Delete(_id: number): Promise<any>;
+  delete(_id: number): Promise<any>;
 
   /**
    * @description
@@ -49,7 +49,7 @@ interface IRuleRepository {
    * @returns {Promise<Rule[]>}
    * @memberof IRuleRepository
    */
-  GetByName(_name: string): Promise<Rule[]>;
+  getByName(_name: string): Promise<Rule[]>;
 
   /**
    * @description
@@ -58,7 +58,5 @@ interface IRuleRepository {
    * @returns {Promise<Rule>}
    * @memberof IRuleRepository
    */
-  GetById(_id: number): Promise<Rule>;
+  getById(_id: number): Promise<Rule>;
 }
-
-export default IRuleRepository;

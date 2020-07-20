@@ -3,6 +3,7 @@ const TYPES = {
   IAuthService: Symbol('IAuthService'),
   IEmailService: Symbol('IEmailService'),
   IParkingService: Symbol('IParkingService'),
+  IRuleService: Symbol('IRuleService'),
 
   // Repositories Types
   IUserRepository: Symbol('IUserRepository'),
