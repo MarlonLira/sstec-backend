@@ -1,4 +1,4 @@
-import ParkingSpace from '../../models/parkingSpace.model';
+import ParkingSpace from '../../models/parking-space.model';
 import Scheduling from '../../models/scheduling.model';
 
 /**

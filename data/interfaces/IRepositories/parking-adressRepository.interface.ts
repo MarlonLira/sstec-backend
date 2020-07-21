@@ -1,4 +1,4 @@
-import ParkingAdress from '../../models/parkingAdress.model';
+import ParkingAdress from '../../models/parking-adress.model';
 
 /**
  * @description

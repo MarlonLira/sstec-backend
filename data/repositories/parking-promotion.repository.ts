@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 import { injectable } from "inversify";
 
 import IParkingPromotionRepository from '../interfaces/IRepositories/parking-promotionRepository.interface';
-import ParkingPromotion from '../models/parkingPromotion.model';
+import ParkingPromotion from '../models/parking-promotion.model';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 /**

@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
 import { injectable} from "inversify";
 import IParkingFinanceRepository from '../interfaces/IRepositories/parking-financeRepository.interface';
-import ParkingFinance from  '../models/parkingFinance.model';
+import ParkingFinance from  '../models/parking-finance.model';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 @injectable()

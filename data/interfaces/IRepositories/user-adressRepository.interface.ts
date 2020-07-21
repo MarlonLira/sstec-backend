@@ -1,4 +1,4 @@
-import UserAdress from '../../models/userAdress.model';
+import UserAdress from '../../models/user-adress.model';
 
 /**
  * @description

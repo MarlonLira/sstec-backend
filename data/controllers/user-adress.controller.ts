@@ -3,7 +3,7 @@ import { controller, httpGet, httpPost, httpDelete, request, response, httpPut }
 import { inject } from "inversify";
 
 import IUserAdressRepository from '../interfaces/IRepositories/user-adressRepository.interface';
-import UserAdress from "../models/userAdress.model";
+import UserAdress from "../models/user-adress.model";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';

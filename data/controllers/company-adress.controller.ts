@@ -3,7 +3,7 @@ import { controller, httpGet, httpPost, httpDelete, request, response, httpPut }
 import { inject } from "inversify";
 
 import ICompanyAdressRepository from '../interfaces/IRepositories/company-adressRepository.interface';
-import CompanyAdress from "../models/companyAdress.model";
+import CompanyAdress from "../models/company-adress.model";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';

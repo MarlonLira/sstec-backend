@@ -1,4 +1,4 @@
-import CompanyAdress from '../../models/companyAdress.model';
+import CompanyAdress from '../../models/company-adress.model';
 
 /**
  * @description

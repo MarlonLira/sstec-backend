@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 import { injectable } from "inversify";
 
 import IUserAdressRepository from '../interfaces/IRepositories/user-adressRepository.interface';
-import UserAdress from '../models/userAdress.model';
+import UserAdress from '../models/user-adress.model';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 /**

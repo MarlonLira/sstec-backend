@@ -2,7 +2,7 @@ import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 import IParkingFinanceRepository from '../interfaces/IRepositories/parking-financeRepository.interface';
-import ParkingFinance from "../models/parkingFinance.model";
+import ParkingFinance from "../models/parking-finance.model";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';

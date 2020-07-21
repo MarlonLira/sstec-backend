@@ -3,7 +3,7 @@ import { controller, httpGet, httpPost, httpDelete, request, response, httpPut }
 import { inject } from "inversify";
 
 import IParkingPromotionRepository from '../interfaces/IRepositories/parking-promotionRepository.interface';
-import ParkingPromotion from "../models/parkingPromotion.model";
+import ParkingPromotion from "../models/parking-promotion.model";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';

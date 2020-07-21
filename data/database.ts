@@ -6,19 +6,19 @@ import Context from '../main/context';
 // Entities
 import User from './models/user.model';
 import Vehicle from './models/vehicle.model';
-import UserAdress from './models/userAdress.model';
+import UserAdress from './models/user-adress.model';
 import Card from './models/card.model';
 import Company from './models/company.model';
-import CompanyAdress from './models/companyAdress.model';
+import CompanyAdress from './models/company-adress.model';
 import Employee from './models/employee.model';
 import Parking from './models/parking.model';
 import { Rule } from './models/rule.model';
-import ParkingPromotion from './models/parkingPromotion.model';
-import ParkingSpace from './models/parkingSpace.model';
-import ParkingAdress from './models/parkingAdress.model';
+import ParkingPromotion from './models/parking-promotion.model';
+import ParkingSpace from './models/parking-space.model';
+import ParkingAdress from './models/parking-adress.model';
 import Scheduling from './models/scheduling.model';
-import ParkingScore from './models/parkingScore.model';
-import ParkingFinance from './models/parkingFinance.model';
+import ParkingScore from './models/parking-score.model';
+import ParkingFinance from './models/parking-finance.model';
 import { Log } from './models/log.model';
 
 const _instance = Context.getInstance();
