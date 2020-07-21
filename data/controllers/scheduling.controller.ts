@@ -2,7 +2,6 @@ import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import ISchedulingController from '../interfaces/IControllers/ISchedulingController';
 import ISchedulingRepository from '../interfaces/IRepositories/schedulingRepository.interface';
 import IParkingSpaceRepository from "../interfaces/IRepositories/parking-spaceRepository.interface";
 import IParkingPromotionRepository from "../interfaces/IRepositories/parking-promotionRepository.interface";
@@ -16,14 +15,8 @@ import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import Attributes from "../../commons/core/attributes";
 
-/**
- * @description
- * @author Gustavo Gusmão
- * @class SchedulingController
- * @implements {ISchedulingController}
- */
 @controller('')
-class SchedulingController implements ISchedulingController {
+class SchedulingController {
 
   /**
    * Creates an instance of SchedulingController.

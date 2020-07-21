@@ -2,7 +2,6 @@ import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut, results } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import IParkingScoreController from "../interfaces/IControllers/IParkingScoreController";
 import IParkingScoreRepository from '../interfaces/IRepositories/parking-scoreRepository.interface';
 import ParkingScore from "../models/parkingScore.model";
 import TYPES from '../types';
@@ -10,16 +9,9 @@ import Attributes from "../../commons/core/attributes";
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
-import Parking from "../models/parking.model";
 
-/**
- * @description
- * @author Emerson Souza
- * @class ParkingScoreController
- * @implements {IParkingScoreController}
- */
 @controller('')
-class ParkingScoreController implements IParkingScoreController {
+class ParkingScoreController {
 
   constructor(@inject(TYPES.IParkingScoreRepository) private _parkingScoreRepository: IParkingScoreRepository) { }
 

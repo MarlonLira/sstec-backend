@@ -1,7 +1,6 @@
 import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
-import IParkingAdressController from "../interfaces/IControllers/IParkingAdressController";
 import IParkingAdressRepository from '../interfaces/IRepositories/parking-adressRepository.interface';
 import ParkingAdress from "../models/parkingAdress.model";
 import TYPES from '../types';
@@ -9,14 +8,8 @@ import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 
-/**
- * @description
- * @author Felipe Seabra
- * @class ParkingAdressController
- * @implements {IParkingAdressController}
- */
 @controller('')
-class ParkingAdressController implements IParkingAdressController{
+class ParkingAdressController {
 
   /**
    * Creates an instance of ParkingPromotionController.

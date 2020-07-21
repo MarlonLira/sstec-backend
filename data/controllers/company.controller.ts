@@ -2,7 +2,6 @@ import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import ICompanyController from "../interfaces/IControllers/ICompanyController";
 import ICompanyRepository from '../interfaces/IRepositories/companyRepository.interface';
 import Company from "../models/company.model";
 import TYPES from '../types';
@@ -11,14 +10,9 @@ import { HttpCode } from '../../commons/enums/httpCode';
 import Attributes from "../../commons/core/attributes";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 
-/**
- * @description
- * @author Gustavo Gusmão
- * @class CompanyController
- * @implements {ICompanyController}
- */
+
 @controller('')
-class CompanyController implements ICompanyController {
+class CompanyController {
 
   /**
    * Creates an instance of CompanyController.

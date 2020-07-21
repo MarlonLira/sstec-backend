@@ -2,7 +2,6 @@ import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import IEmployeeController from "../interfaces/IControllers/IEmployeeController";
 import IEmployeeRepository from '../interfaces/IRepositories/employeeRepository.interface';
 import Employee from "../models/employee.model";
 import TYPES from '../types';
@@ -13,14 +12,8 @@ import Attributes from "../../commons/core/attributes";
 import { CryptoType } from '../../commons/enums/cryptoType';
 import Crypto from '../../commons/core/crypto';
 
-/**
- * @description
- * @author Marlon Lira
- * @class EmployeeController
- * @implements {IEmployeeController}
- */
 @controller('')
-class EmployeeController implements IEmployeeController {
+class EmployeeController {
 
   /**
    * Creates an instance of EmployeeController.

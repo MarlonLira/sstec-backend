@@ -2,7 +2,6 @@ import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import IPaymentController from "../interfaces/IControllers/IPaymentController";
 import IPaymentRepository from '../interfaces/IRepositories/paymentRepository.interface';
 import Payment from "../models/payment.model";
 import TYPES from '../types';
@@ -10,14 +9,8 @@ import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 
-/**
- * @description
- * @author Emerson Souza
- * @class PaymentController
- * @implements {IPaymentController}
- */
 @controller('')
-class PaymentController implements IPaymentController {
+class PaymentController {
 
   /**
    * Creates an instance of PaymentController.
