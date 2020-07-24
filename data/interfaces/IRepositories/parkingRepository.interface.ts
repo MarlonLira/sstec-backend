@@ -32,7 +32,7 @@ export interface IParkingRepository {
    * @returns {Promise<Parking[]>}
    * @memberof IParkingRepository
    */
-  toList(_companyId: number): Promise<Parking[]>;
+  toList(_companyId: number, page: number, limiter: number): Promise<Parking[]>;
 
   /**
    * @description

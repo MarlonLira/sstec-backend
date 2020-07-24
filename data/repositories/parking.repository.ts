@@ -176,7 +176,7 @@ class ParkingRepository implements IParkingRepository {
    * @returns {Promise<Parking[]>}
    * @memberof ParkingRepository
    */
-  toList(_companyId: number): Promise<Parking[]> {
+  toList(_companyId: number, page: number, limiter: number): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       Parking.findAll({
         where: {
@@ -186,7 +186,8 @@ class ParkingRepository implements IParkingRepository {
           status: {
             [Op.ne]: TransactionType.DELETED
           }
-        }
+        }, limit: limiter,
+        offset: page = Number(page - 1)
       })
         .then((result: Parking[]) => {
           resolve(result);

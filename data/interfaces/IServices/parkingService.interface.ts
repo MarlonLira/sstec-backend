@@ -63,6 +63,6 @@ export interface IParkingService {
    * @returns {Promise<Parking[]>}
    * @memberof IParkingService
    */
-  toList(companyId: number): Promise<Parking[]>;
+  toList(companyId: number, page: number, limiter: number): Promise<Parking[]>;
 
 }

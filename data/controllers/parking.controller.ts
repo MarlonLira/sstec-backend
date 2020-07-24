@@ -67,10 +67,10 @@ class ParkingController {
    * @returns {Promise<any>}
    * @memberof ParkingController
    */
-  @httpGet('/parkings/companyId/:companyId')
+  @httpGet('/parkings/companyId/:companyId/page/:page/limit/:limiter')
   SearchAll(@request() req: Request, @response() res: Response): Promise<any> {
     return new Promise((resolve) => {
-      this.service.toList(Number(req.params.companyId))
+      this.service.toList(Number(req.params.companyId), Number(req.params.page), Number(req.params.limiter))
         .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
