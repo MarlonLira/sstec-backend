@@ -56,13 +56,9 @@ export interface IParkingService {
    */
   getByEmployeeId(employeeId: number): Promise<Parking[]>;
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} _companyId
-   * @returns {Promise<Parking[]>}
-   * @memberof IParkingService
-   */
-  toList(companyId: number, page: number, limiter: number): Promise<Parking[]>;
+  // Felipe
+  pagination(companyId: number, page: number, limiter: number): Promise<Parking[]>;
+
+  toList(companyId: number): Promise<Parking[]>;
 
 }

@@ -25,6 +25,9 @@ export interface IParkingRepository {
    */
   update(parking: Parking): Promise<any>;
 
+ // Felipe
+  pagination(_companyId: number, page: number, limiter: number): Promise<Parking[]>;
+
   /**
    * @description
    * @author Marlon Lira
@@ -32,7 +35,7 @@ export interface IParkingRepository {
    * @returns {Promise<Parking[]>}
    * @memberof IParkingRepository
    */
-  toList(_companyId: number, page: number, limiter: number): Promise<Parking[]>;
+  toList(_companyId: number): Promise<Parking[]>;
 
   /**
    * @description
