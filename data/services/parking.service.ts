@@ -136,4 +136,13 @@ export class ParkingService implements IParkingService {
         .catch(async (error: any) => reject(await this.log.error('Parking', HttpCode.Internal_Server_Error, JSON.stringify(error))));
     });
   }
+
+  // Felipe resolve isso
+  pagination(companyId: number,page: number,limiter: number): Promise<Parking[]> {
+    return new Promise((resolve, reject) => {
+      this.repository.pagination(companyId, page, limiter)
+        .then((result: Parking[]) => resolve(result))
+        .catch(async (error: any) => reject(await this.log.error('Parking', HttpCode.Internal_Server_Error, JSON.stringify(error))));
+    });
+  }
 }

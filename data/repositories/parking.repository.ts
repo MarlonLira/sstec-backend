@@ -176,6 +176,28 @@ class ParkingRepository implements IParkingRepository {
    * @returns {Promise<Parking[]>}
    * @memberof ParkingRepository
    */
+  pagination(_companyId: number, page: number, limiter: number): Promise<Parking[]> {
+    return new Promise((resolve, reject) => {
+      Parking.findAll({
+        where: {
+          companyId: {
+            [Op.eq]: _companyId
+          },
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }, limit: limiter,
+        offset: page = Number(page - 1)
+      })
+        .then((result: Parking[]) => {
+          resolve(result);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
   toList(_companyId: number): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       Parking.findAll({
