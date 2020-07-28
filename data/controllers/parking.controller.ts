@@ -88,7 +88,7 @@ class ParkingController {
   Update(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.update(new Parking(req.body))
-        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Estacionamento', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
@@ -105,7 +105,7 @@ class ParkingController {
   Delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.delete(Number(req.params.id))
-        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Estacionamento', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
