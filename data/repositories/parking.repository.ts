@@ -4,6 +4,7 @@ import { injectable } from "inversify";
 import { IParkingRepository } from '../interfaces/IRepositories/parkingRepository.interface';
 import Parking from '../models/parking.model';
 import { TransactionType } from '../../commons/enums/transactionType';
+import ParkingAdress from '../models/parking-adress.model';
 
 /**
  * @description
@@ -39,7 +40,7 @@ class ParkingRepository implements IParkingRepository {
       Parking.create(parking, { transaction: _transaction })
         .then(async (createParking: Parking) => {
           await _transaction.commit();
-          resolve({ "parkingId": createParking.id });
+          resolve(createParking.id);
         })
         .catch(async error => {
           await _transaction.rollback();

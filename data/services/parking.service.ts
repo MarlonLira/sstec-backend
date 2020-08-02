@@ -7,6 +7,9 @@ import Attributes from "../../commons/core/attributes";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
+import { IParkingAdressRepository } from "../interfaces/IRepositories/parking-adressRepository.interface";
+import { IParkingAdressService } from "../interfaces/IServices/parking-adressService.interface";
+import ParkingAdress from "../models/parking-adress.model";
 
 /**
  * @description
@@ -26,6 +29,7 @@ export class ParkingService implements IParkingService {
    */
   constructor(
     @inject(TYPES.IParkingRepository) private repository: IParkingRepository,
+    @inject(TYPES.IParkingAdressService) private parkingAdressService: IParkingAdressService,
     @inject(TYPES.ILogService) private log: ILogService) { }
 
   /**
@@ -38,7 +42,11 @@ export class ParkingService implements IParkingService {
   getById(id: number): Promise<Parking> {
     return new Promise((resolve, reject) => {
       this.repository.getById(id)
-        .then((result: Parking) => resolve(result))
+        .then(async (result: Parking) => {
+          const _result: any = result.ToModify();
+          _result.adress = await this.parkingAdressService.getByParkingId(result.id);
+          resolve(_result)
+        })
         .catch(async (error: any) => reject(await this.log.error('Parking', HttpCode.Internal_Server_Error, JSON.stringify(error))));
     });
   }
@@ -53,7 +61,13 @@ export class ParkingService implements IParkingService {
   save(parking: Parking): Promise<any> {
     return new Promise((resolve, reject) => {
       this.repository.save(parking)
-        .then((result: any) => resolve(result))
+        .then(async (result: any) => {
+          console.log(result)
+          parking.adress.parkingId = result;
+          const adress : ParkingAdress = parking.adress.ToModify() as ParkingAdress;
+          await this.parkingAdressService.save(parking.adress);
+          resolve(result)
+        })
         .catch(async (error: any) => reject(await this.log.error('Parking', HttpCode.Internal_Server_Error, JSON.stringify(error))));
     });
   }
@@ -138,7 +152,7 @@ export class ParkingService implements IParkingService {
   }
 
   // Felipe resolve isso
-  pagination(companyId: number,page: number,limiter: number): Promise<Parking[]> {
+  pagination(companyId: number, page: number, limiter: number): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       this.repository.pagination(companyId, page, limiter)
         .then((result: Parking[]) => resolve(result))

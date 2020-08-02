@@ -3,6 +3,8 @@ import { Model, DataTypes } from 'sequelize';
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
+import ParkingAdress from './parking-adress.model';
+import Company from './company.model';
 
 const _instance = Context.getInstance();
 
@@ -23,6 +25,9 @@ class Parking extends Model {
   amount: number;
   companyId: number;
 
+  adress: ParkingAdress;
+  company: Company;
+
   /**
    * Creates an instance of Parking.
    * @author Emerson Souza
@@ -39,6 +44,8 @@ class Parking extends Model {
     this.email = Attributes.ReturnIfValid(json.email);
     this.imgUrl = Attributes.ReturnIfValid(json.imgUrl);
     this.companyId = Attributes.ReturnIfValid(json.companyId);
+    this.adress = Attributes.ReturnIfValid(json.adress);
+    this.company = Attributes.ReturnIfValid(json.company);
   }
 
   ToModify() {

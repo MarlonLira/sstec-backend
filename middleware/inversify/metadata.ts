@@ -11,7 +11,6 @@ import '../../data/controllers/vehicle.controller';
 import '../../data/controllers/rule.controller';
 import '../../data/controllers/parking-promotion.controller';
 import '../../data/controllers/parking-space.controller';
-import '../../data/controllers/parking-adress.controller';
 import '../../data/controllers/scheduling.controller';
 import '../../data/controllers/parking-score.controller';
 import '../../data/controllers/parking-finance.controller';

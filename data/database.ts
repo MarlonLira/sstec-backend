@@ -75,7 +75,7 @@ class Database {
     User.hasMany(Scheduling, { foreignKey: 'userId', as: 'Scheduling' });
     Rule.hasMany(Employee, { foreignKey: 'ruleId', as: 'Employee' });
     Parking.hasMany(ParkingPromotion, { foreignKey: 'parkingId', as: 'ParkingPromotion' });
-    Parking.hasMany(ParkingAdress, { foreignKey: 'parkingId', as: 'ParkingAdress' });
+    Parking.hasOne(ParkingAdress, { foreignKey: 'parkingId', as: 'ParkingAdress' });
     Parking.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'ParkingSpace' });
     Parking.hasMany(ParkingScore, { foreignKey: 'parkingId', as: 'ParkingScore' });
     Parking.hasMany(ParkingFinance, { foreignKey: 'parkingId', as: 'ParkingFinance' });

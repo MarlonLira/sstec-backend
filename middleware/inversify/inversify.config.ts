@@ -35,7 +35,7 @@ import IParkingSpaceRepository from '../../data/interfaces/IRepositories/parking
 import IVehicleRepository from '../../data/interfaces/IRepositories/vehicleRepository.interface';
 import { IRuleRepository } from '../../data/interfaces/IRepositories/ruleRepository.interface';
 import IParkingPromotionRepository from '../../data/interfaces/IRepositories/parking-promotionRepository.interface';
-import IParkingAdressRepository from '../../data/interfaces/IRepositories/parking-adressRepository.interface';
+import { IParkingAdressRepository } from '../../data/interfaces/IRepositories/parking-adressRepository.interface';
 import IParkingScoreRepository from '../../data/interfaces/IRepositories/parking-scoreRepository.interface';
 import ISchedulingRepository from '../../data/interfaces/IRepositories/schedulingRepository.interface';
 import IParkingFinanceRepository from '../../data/interfaces/IRepositories/parking-financeRepository.interface';
@@ -47,6 +47,7 @@ import EmailService from '../../data/services/email.service';
 import { ParkingService } from '../../data/services/parking.service';
 import { RuleService } from '../../data/services/rule.service';
 import { LogService } from '../../data/services/log.service';
+import { ParkingAdressService } from '../../data/services/parking-adress.service';
 
 // Services interfaces
 import { IAuthService } from '../../data/interfaces/IServices/authService.interface';
@@ -54,6 +55,7 @@ import { IEmailService } from '../../data/interfaces/IServices/emailService.inte
 import { IParkingService } from '../../data/interfaces/IServices/parkingService.interface';
 import { IRuleService } from '../../data/interfaces/IServices/ruleService.interface';
 import { ILogService } from '../../data/interfaces/IServices/logService.interface';
+import { IParkingAdressService } from '../../data/interfaces/IServices/parking-adressService.interface';
 
 
 
@@ -64,6 +66,7 @@ const container = new Container();
 container.bind<IAuthService>(TYPES.IAuthService).to(AuthService);
 container.bind<IEmailService>(TYPES.IEmailService).to(EmailService);
 container.bind<IParkingService>(TYPES.IParkingService).to(ParkingService);
+container.bind<IParkingAdressService>(TYPES.IParkingAdressService).to(ParkingAdressService);
 container.bind<IRuleService>(TYPES.IRuleService).to(RuleService);
 container.bind<ILogService>(TYPES.ILogService).to(LogService);
 

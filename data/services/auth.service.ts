@@ -72,7 +72,7 @@ class AuthService implements IAuthService {
       try {
         if (Attributes.IsValid(auth.user)) {
           const foundUser: User = await this._userRepository.GetByEmail(auth.user.email);
-          if (Attributes.IsValid(foundUser) && Crypto.Compare(auth.employee.password, foundUser.password)) {
+          if (Attributes.IsValid(foundUser) && Crypto.Compare(auth.user.password, foundUser.password)) {
             auth.user = foundUser;
             auth.user.password = undefined;
             auth = await this.createUserToken(auth);
