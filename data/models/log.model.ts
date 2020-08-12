@@ -20,7 +20,8 @@ export class Log extends Model {
   message: string;
   source: string;
   code: HttpCode;
-
+  obj: string;
+  isRecord: boolean;
 
   /**
    * Creates an instance of Logger.
@@ -36,6 +37,8 @@ export class Log extends Model {
       this.message = Attributes.ReturnIfValid(json.message);
       this.source = Attributes.ReturnIfValid(json.source);
       this.code = Attributes.ReturnIfValid(json.code);
+      this.obj = Attributes.ReturnIfValid(json.obj);
+      this.isRecord = Attributes.ReturnIfValid(json.isRecord);
     }
   }
 
@@ -64,6 +67,9 @@ Log.init({
   },
   code: {
     type: new DataTypes.STRING(3)
+  },
+  obj: {
+    type: new DataTypes.STRING(255)
   }
 }, {
   sequelize: _instance,

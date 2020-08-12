@@ -7,7 +7,6 @@ import Attributes from "../../commons/core/attributes";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
-import { IParkingAdressRepository } from "../interfaces/IRepositories/parking-adressRepository.interface";
 import { IParkingAdressService } from "../interfaces/IServices/parking-adressService.interface";
 import ParkingAdress from "../models/parking-adress.model";
 
@@ -47,7 +46,8 @@ export class ParkingService implements IParkingService {
           _result.adress = await this.parkingAdressService.getByParkingId(result.id);
           resolve(_result)
         })
-        .catch(async (error: any) => reject(await this.log.error('Parking', HttpCode.Internal_Server_Error, JSON.stringify(error))));
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
   }
 
@@ -62,13 +62,13 @@ export class ParkingService implements IParkingService {
     return new Promise((resolve, reject) => {
       this.repository.save(parking)
         .then(async (result: any) => {
-          console.log(result)
           parking.adress.parkingId = result;
-          const adress : ParkingAdress = parking.adress.ToModify() as ParkingAdress;
+          const adress: ParkingAdress = parking.adress.ToModify() as ParkingAdress;
           await this.parkingAdressService.save(parking.adress);
           resolve(result)
         })
-        .catch(async (error: any) => reject(await this.log.error('Parking', HttpCode.Internal_Server_Error, JSON.stringify(error))));
+        .catch(async (error: any) =>
+          reject(await this.log.error('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
   }
 
@@ -83,7 +83,8 @@ export class ParkingService implements IParkingService {
     return new Promise((resolve, reject) => {
       this.repository.update(parking)
         .then((result: any) => resolve(result))
-        .catch(async (error: any) => reject(await this.log.error('Parking', HttpCode.Internal_Server_Error, JSON.stringify(error))));
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
   }
 
@@ -98,7 +99,8 @@ export class ParkingService implements IParkingService {
     return new Promise((resolve, reject) => {
       this.repository.delete(id)
         .then((result: any) => resolve(result))
-        .catch(async (error: any) => reject(await this.log.error('Parking', HttpCode.Internal_Server_Error, JSON.stringify(error))));
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
   }
 
@@ -114,9 +116,10 @@ export class ParkingService implements IParkingService {
       if (Attributes.IsValid(parking.companyId) && Attributes.IsValid(parking.registryCode)) {
         this.repository.getByRegistryCode(parking.companyId, parking.registryCode)
           .then((result: Parking[]) => resolve(result))
-          .catch(async (error: any) => reject(await this.log.error('Parking', HttpCode.Internal_Server_Error, JSON.stringify(error))));
+          .catch(async (error: any) =>
+            reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
       } else {
-        reject(await this.log.error('Parking', HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided));
+        reject(await this.log.error('Parking', HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, undefined));
       }
     });
   }
@@ -132,7 +135,8 @@ export class ParkingService implements IParkingService {
     return new Promise((resolve, reject) => {
       this.repository.getByEmployeeId(employeeId)
         .then((result: Parking[]) => resolve(result))
-        .catch(async (error: any) => reject(await this.log.error('Parking', HttpCode.Internal_Server_Error, JSON.stringify(error))));
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
   }
 
@@ -147,7 +151,8 @@ export class ParkingService implements IParkingService {
     return new Promise((resolve, reject) => {
       this.repository.toList(companyId)
         .then((result: Parking[]) => resolve(result))
-        .catch(async (error: any) => reject(await this.log.error('Parking', HttpCode.Internal_Server_Error, JSON.stringify(error))));
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
   }
 
@@ -156,7 +161,8 @@ export class ParkingService implements IParkingService {
     return new Promise((resolve, reject) => {
       this.repository.pagination(companyId, page, limiter)
         .then((result: Parking[]) => resolve(result))
-        .catch(async (error: any) => reject(await this.log.error('Parking', HttpCode.Internal_Server_Error, JSON.stringify(error))));
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
   }
 }

@@ -5,6 +5,9 @@ import { Log } from "../models/log.model";
 import { ILogRepository } from "../interfaces/IRepositories/logRepository.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
 import { LogLevel } from "../../commons/enums/log-level";
+import Logger from "../../commons/core/logger";
+import * as Config from '../../config.json';
+const { IsError, IsWarn, IsCrit, IsUnkn, IsInfo } = Config.LogRecord;
 
 @injectable()
 export class LogService implements ILogService {
@@ -21,36 +24,92 @@ export class LogService implements ILogService {
 
   save(log: Log): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.repository.save(log)
-        .then((result: any) => resolve(result))
-        .catch((error: any) => reject(error));
+      Logger.Default(log);
+      if (log.isRecord) {
+        this.repository.save(log)
+          .then((result: any) => resolve(result))
+          .catch((error: any) => reject(error));
+      }
     });
   }
 
-  info(source: string, code: HttpCode, msg: string): Promise<any> {
-    throw new Error("Method not implemented.");
-  }
-  warn(source: string, code: HttpCode, msg: string): Promise<any> {
-    throw new Error("Method not implemented.");
-  }
-  error(source: string, code: HttpCode, msg: string): Promise<any> {
+  info(source: string, code: HttpCode, msg: string, obj: string): Promise<any> {
     return new Promise((resolve, reject) => {
       const _log = new Log();
       _log.source = source;
       _log.code = code;
       _log.message = msg;
-      _log.level = LogLevel.ERROR;
+      _log.obj = obj;
+      _log.level = LogLevel.INFO;
+      _log.isRecord = IsInfo;
 
       this.save(_log)
         .then(() => resolve(_log.message))
         .catch((error: any) => resolve(error));
     });
   }
-  critical(source: string, code: HttpCode, msg: string): Promise<any> {
-    throw new Error("Method not implemented.");
+
+  warn(source: string, code: HttpCode, msg: string, obj: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const _log = new Log();
+      _log.source = source;
+      _log.code = code;
+      _log.message = msg;
+      _log.obj = obj;
+      _log.level = LogLevel.WARNING;
+      _log.isRecord = IsWarn;
+
+      this.save(_log)
+        .then(() => resolve(_log.message))
+        .catch((error: any) => resolve(error));
+    });
   }
+
+  error(source: string, code: HttpCode, msg: string, obj: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const _log = new Log();
+      _log.source = source;
+      _log.code = code;
+      _log.message = msg;
+      _log.obj = obj;
+      _log.level = LogLevel.ERROR;
+      _log.isRecord = IsError;
+
+      this.save(_log)
+        .then(() => resolve(_log.message))
+        .catch((error: any) => resolve(error));
+    });
+  }
+
+  critical(source: string, code: HttpCode, msg: string, obj: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const _log = new Log();
+      _log.source = source;
+      _log.code = code;
+      _log.message = msg;
+      _log.obj = obj;
+      _log.level = LogLevel.CRITICAL;
+      _log.isRecord = IsCrit;
+
+      this.save(_log)
+        .then(() => resolve(_log.message))
+        .catch((error: any) => resolve(error));
+    });
+  }
+
   default(source: string, code: HttpCode, level: LogLevel, msg: string): Promise<any> {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      const _log = new Log();
+      _log.source = source;
+      _log.code = code;
+      _log.message = msg;
+      _log.level = LogLevel.UNKNOWN;
+      _log.isRecord = IsUnkn;
+
+      this.save(_log)
+        .then(() => resolve(_log.message))
+        .catch((error: any) => resolve(error));
+    });
   }
 
 }

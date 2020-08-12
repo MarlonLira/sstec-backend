@@ -6,6 +6,7 @@ import Email from '../models/email.model';
 import { HttpCode } from "../../commons/enums/httpCode";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import TYPES from "../types";
+import { HttpMessage } from "../../commons/enums/httpMessage";
 
 
 @injectable()
@@ -20,7 +21,9 @@ class EmailService implements IEmailService {
       this.mailer.sendMail(email,
         async (error, info) => {
           if (error)
-            resolve(await this.log.error('Rule', HttpCode.Internal_Server_Error, JSON.stringify(error)))
+            resolve(
+              await this.log.critical('EmailService', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))
+            );
           else
             resolve(info);
         }

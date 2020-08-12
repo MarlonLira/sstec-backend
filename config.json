@@ -45,5 +45,12 @@
     "tls": {
       "rejectUnauthorized": false
     }
+  },
+  "LogRecord":{
+    "IsInfo": true,
+    "IsWarn": true,
+    "IsCrit": true,
+    "IsUnkn": true,
+    "IsError": true
   }
 }

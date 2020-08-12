@@ -5,6 +5,7 @@ import { IParkingAdressService } from "../interfaces/IServices/parking-adressSer
 import ParkingAdress from "../models/parking-adress.model";
 import { IParkingAdressRepository } from "../interfaces/IRepositories/parking-adressRepository.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
+import { HttpMessage } from "../../commons/enums/httpMessage";
 
 /**
  * @description
@@ -41,10 +42,9 @@ export class ParkingAdressService implements IParkingAdressService {
   getByParkingId(id: number): Promise<ParkingAdress> {
     return new Promise((resolve, reject) => {
       this.repository.getById(id)
-        .then(async (result: ParkingAdress) => {
-          resolve(result)
-        })
-        .catch(async (error: any) => reject(await this.log.error('Parking', HttpCode.Internal_Server_Error, JSON.stringify(error))));
+        .then(async (result: ParkingAdress) => resolve(result))
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
   }
 
@@ -59,7 +59,8 @@ export class ParkingAdressService implements IParkingAdressService {
     return new Promise((resolve, reject) => {
       this.repository.save(parkingAdress)
         .then((result: any) => resolve(result))
-        .catch(async (error: any) => reject(await this.log.error('Parking', HttpCode.Internal_Server_Error, JSON.stringify(error))));
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
   }
 

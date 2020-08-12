@@ -56,13 +56,13 @@ class AuthService implements IAuthService {
             const result = await Crypto.Encrypt(JSON.stringify(auth), CryptoType.DEFAULT);
             resolve(result);
           } else {
-            reject(await this.log.error('Auth', HttpCode.Bad_Request, HttpMessage.Login_Unauthorized));
+            reject(await this.log.error('Auth', HttpCode.Bad_Request, HttpMessage.Login_Unauthorized, undefined));
           }
         } else {
-          reject(HttpMessage.Parameters_Not_Provided)
+          reject(await this.log.warn('Auth', HttpCode.Internal_Server_Error, HttpMessage.Parameters_Not_Provided, undefined));
         }
       } catch (error) {
-        reject(HttpMessage.Unknown_Error);
+        reject(await this.log.critical('Auth', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)));
       }
     });
   }
@@ -79,13 +79,13 @@ class AuthService implements IAuthService {
             const result = await Crypto.Encrypt(JSON.stringify(auth), CryptoType.DEFAULT);
             resolve(result);
           } else {
-            reject(HttpMessage.Login_Unauthorized)
+            reject(await this.log.error('Auth', HttpCode.Bad_Request, HttpMessage.Login_Unauthorized, undefined));
           }
         } else {
-          reject(HttpMessage.Parameters_Not_Provided)
+          reject(await this.log.warn('Auth', HttpCode.Internal_Server_Error, HttpMessage.Parameters_Not_Provided, undefined));
         }
       } catch (error) {
-        reject(HttpMessage.Unknown_Error);
+        reject(await this.log.critical('Auth', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)));
       }
     });
   }
@@ -105,13 +105,13 @@ class AuthService implements IAuthService {
             const createdEmployee = await this._employeeRepository.Save(auth.employee);
             resolve(createdEmployee);
           } else {
-            reject(HttpMessage.Already_Exists);
+            reject(await this.log.error('Signup Company', HttpCode.Bad_Request, HttpMessage.Already_Exists, undefined));
           }
         } else {
-          reject(HttpMessage.Already_Exists);
+          reject(await this.log.error('Signup Employee', HttpCode.Bad_Request, HttpMessage.Already_Exists, undefined));
         }
       } catch (error) {
-        reject(error);
+        reject(await this.log.critical('Auth', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)));
       }
     });
   }
