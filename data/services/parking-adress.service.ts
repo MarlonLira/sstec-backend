@@ -41,7 +41,7 @@ export class ParkingAdressService implements IParkingAdressService {
    */
   getByParkingId(id: number): Promise<ParkingAdress> {
     return new Promise((resolve, reject) => {
-      this.repository.getById(id)
+      this.repository.getByParkingId(id)
         .then(async (result: ParkingAdress) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
@@ -64,4 +64,19 @@ export class ParkingAdressService implements IParkingAdressService {
     });
   }
 
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {ParkingAdress} parkingAdress
+   * @returns {Promise<any>}
+   * @memberof ParkingAdressService
+   */
+  update(parkingAdress: ParkingAdress): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.repository.update(parkingAdress)
+        .then((result: any) => resolve(result))
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+    });
+  }
 }

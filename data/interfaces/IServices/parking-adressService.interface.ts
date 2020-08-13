@@ -35,4 +35,12 @@ export interface IParkingAdressService {
    */
   save(parkingAdress: ParkingAdress): Promise<any>;
 
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {ParkingAdress} parkingAdress
+   * @returns {Promise<any>}
+   * @memberof IParkingAdressService
+   */
+  update(parkingAdress: ParkingAdress): Promise<any>;
 }

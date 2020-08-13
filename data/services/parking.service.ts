@@ -1,4 +1,4 @@
-import { injectable, inject, id } from "inversify";
+import { injectable, inject } from "inversify";
 import { IParkingRepository } from "../interfaces/IRepositories/parkingRepository.interface";
 import TYPES from "../types";
 import { IParkingService } from "../interfaces/IServices/parkingService.interface";
@@ -63,12 +63,13 @@ export class ParkingService implements IParkingService {
       this.repository.save(parking)
         .then(async (result: any) => {
           parking.adress.parkingId = result;
-          const adress: ParkingAdress = parking.adress.ToModify() as ParkingAdress;
-          await this.parkingAdressService.save(parking.adress);
+          const adress: ParkingAdress = new ParkingAdress(parking.adress);
+          await this.parkingAdressService.save(adress);
           resolve(result)
         })
         .catch(async (error: any) =>
-          reject(await this.log.error('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)))
+        );
     });
   }
 
@@ -82,7 +83,16 @@ export class ParkingService implements IParkingService {
   update(parking: Parking): Promise<any> {
     return new Promise((resolve, reject) => {
       this.repository.update(parking)
-        .then((result: any) => resolve(result))
+        .then(async (result: any) => {
+          const adress: ParkingAdress = new ParkingAdress(parking.adress);
+          if (Attributes.IsValid(adress) && adress.id > 0) {
+            await this.parkingAdressService.update(adress);
+          } else {
+            adress.parkingId = parking.id;
+            await this.parkingAdressService.save(adress);
+          }
+          resolve(result)
+        })
         .catch(async (error: any) =>
           reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
