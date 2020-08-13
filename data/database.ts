@@ -66,16 +66,13 @@ class Database {
     // N:N
 
     // 1:N
-    Company.hasMany(CompanyAdress, { foreignKey: 'companyId', as: 'CompanyAdress' });
     Company.hasMany(Parking, { foreignKey: 'companyId', as: 'Parking' });
-    User.hasMany(UserAdress, { foreignKey: 'userId', as: 'UserAdress' });
     User.hasMany(Vehicle, { foreignKey: 'userId', as: 'Vehicle' });
     User.hasMany(Card, { foreignKey: 'userId', as: 'Card' });
-    User.hasMany(ParkingScore, { foreignKey: 'userId', as: 'ParkingScore' }); // Revisar isso, acredito que seja 1:1
+    User.hasMany(ParkingScore, { foreignKey: 'userId', as: 'ParkingScore' });
     User.hasMany(Scheduling, { foreignKey: 'userId', as: 'Scheduling' });
     Rule.hasMany(Employee, { foreignKey: 'ruleId', as: 'Employee' });
     Parking.hasMany(ParkingPromotion, { foreignKey: 'parkingId', as: 'ParkingPromotion' });
-    Parking.hasOne(ParkingAdress, { foreignKey: 'parkingId', as: 'ParkingAdress' });
     Parking.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'ParkingSpace' });
     Parking.hasMany(ParkingScore, { foreignKey: 'parkingId', as: 'ParkingScore' });
     Parking.hasMany(ParkingFinance, { foreignKey: 'parkingId', as: 'ParkingFinance' });
@@ -83,6 +80,9 @@ class Database {
     ParkingSpace.hasMany(Scheduling, { foreignKey: 'parkingSpaceId', as: 'Scheduling' });
 
     // 1:1
+    Company.hasOne(CompanyAdress, { foreignKey: 'companyId', as: 'CompanyAdress' });
+    User.hasOne(UserAdress, { foreignKey: 'userId', as: 'UserAdress' });
+    Parking.hasOne(ParkingAdress, { foreignKey: 'parkingId', as: 'ParkingAdress' });
 
     /* #endregion */
 

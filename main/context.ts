@@ -29,15 +29,7 @@ class Context {
         dialect: 'mssql',
         logging: _logging,
         omitNull: true,
-        timezone: '-03:00',
-        dialectOptions: {
-          options: {
-            trustServerCertificate: true
-          },
-          ssl: {
-            rejectUnauthorized: false,
-          }
-        }
+        timezone: '-03:00'
       }
     );
     return sequelize;
