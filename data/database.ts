@@ -21,6 +21,7 @@ import ParkingScore from './models/parking-score.model';
 import ParkingFinance from './models/parking-finance.model';
 import { Log } from './models/log.model';
 import { AccountRecovery } from './models/account-recovery.model';
+import { ParkingFile } from './models/parking-file.model';
 
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
@@ -56,7 +57,8 @@ class Database {
       { name: 'ParkingScore', entity: ParkingScore.sequelize },
       { name: 'ParkingFinance', entity: ParkingFinance.sequelize },
       { name: 'Log', entity: Log.sequelize },
-      { name: 'AccountRecovery', entity: AccountRecovery.sequelize }
+      { name: 'AccountRecovery', entity: AccountRecovery.sequelize },
+      { name: 'ParkingFile', entity: ParkingFile.sequelize }
     ];
 
     Logger.Info('Database', 'Table verification started!');

@@ -21,6 +21,7 @@ import SchedulingRepository from '../../data/repositories/scheduling.repository'
 import ParkingScoreRepository from '../../data/repositories/parking-score.repository';
 import ParkingFinanceRepository from '../../data/repositories/parking-finance.repository';
 import { LogRepository } from '../../data/repositories/log.repository';
+import { ParkingFileRepository } from '../../data/repositories/parkingFile.repository';
 
 // Repositories interfaces
 import IUserRepository from '../../data/interfaces/IRepositories/userRepository.interface';
@@ -40,6 +41,7 @@ import IParkingScoreRepository from '../../data/interfaces/IRepositories/parking
 import ISchedulingRepository from '../../data/interfaces/IRepositories/schedulingRepository.interface';
 import IParkingFinanceRepository from '../../data/interfaces/IRepositories/parking-financeRepository.interface';
 import { ILogRepository } from '../../data/interfaces/IRepositories/logRepository.interface';
+import { IParkingFileRepository } from '../../data/interfaces/IRepositories/parkingFileRepository.interface';
 
 // Services
 import AuthService from '../../data/services/auth.service';
@@ -48,6 +50,7 @@ import { ParkingService } from '../../data/services/parking.service';
 import { RuleService } from '../../data/services/rule.service';
 import { LogService } from '../../data/services/log.service';
 import { ParkingAdressService } from '../../data/services/parking-adress.service';
+import UploadService from '../../data/services/upload.service';
 
 // Services interfaces
 import { IAuthService } from '../../data/interfaces/IServices/authService.interface';
@@ -56,8 +59,7 @@ import { IParkingService } from '../../data/interfaces/IServices/parkingService.
 import { IRuleService } from '../../data/interfaces/IServices/ruleService.interface';
 import { ILogService } from '../../data/interfaces/IServices/logService.interface';
 import { IParkingAdressService } from '../../data/interfaces/IServices/parking-adressService.interface';
-
-
+import { IUploadService } from '../../data/interfaces/IServices/uploadService.interface';
 
 
 // Binds
@@ -69,6 +71,7 @@ container.bind<IParkingService>(TYPES.IParkingService).to(ParkingService);
 container.bind<IParkingAdressService>(TYPES.IParkingAdressService).to(ParkingAdressService);
 container.bind<IRuleService>(TYPES.IRuleService).to(RuleService);
 container.bind<ILogService>(TYPES.ILogService).to(LogService);
+container.bind<IUploadService>(TYPES.IUploadService).to(UploadService);
 
 // Repositories Binds
 container.bind<IUserRepository>(TYPES.IUserRepository).to(UserRepository);
@@ -88,5 +91,6 @@ container.bind<ISchedulingRepository>(TYPES.ISchedulingRepository).to(Scheduling
 container.bind<IParkingScoreRepository>(TYPES.IParkingScoreRepository).to(ParkingScoreRepository);
 container.bind<IParkingFinanceRepository>(TYPES.IParkingFinanceRepository).to(ParkingFinanceRepository);
 container.bind<ILogRepository>(TYPES.ILogRepository).to(LogRepository);
+container.bind<IParkingFileRepository>(TYPES.IParkingFileRepository).to(ParkingFileRepository);
 
 export default container;

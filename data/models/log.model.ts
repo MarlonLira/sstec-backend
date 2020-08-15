@@ -59,9 +59,6 @@ Log.init({
   message: {
     type: new DataTypes.STRING(255)
   },
-  date: {
-    type: new DataTypes.DATE()
-  },
   source: {
     type: new DataTypes.STRING(20)
   },
