@@ -17,11 +17,20 @@ class UploadService implements IUploadService {
   private form: IncomingForm;
 
   constructor(
-    @inject(TYPES.IParkingFileRepository) private repository: IParkingFileRepository,
+    @inject(TYPES.IParkingFileRepository) private pFileRepository: IParkingFileRepository,
     @inject(TYPES.ILogService) private log: ILogService) {
     this.form = new IncomingForm();
     this.form.uploadDir = PathDir;
     this.form.keepExtensions = true;
+  }
+
+  toListByParkingId(parkingId: number): Promise<ParkingFile[]> {
+     return new Promise((resolve, reject) => {
+      this.pFileRepository.toList(parkingId)
+        .then((result: ParkingFile[]) => resolve(result))
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Upload', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+    });
   }
 
   saveParkingFile(req: any, res: any): Promise<any> {
@@ -46,7 +55,7 @@ class UploadService implements IUploadService {
       });
 
       this.form.on('end', () => {
-        this.repository.save(parkingFile)
+        this.pFileRepository.save(parkingFile)
           .then(result => resolve(result))
           .catch(async error => {
             reject(await this.log.critical('Upload', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)))

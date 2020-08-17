@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { controller, httpPost, request, response } from "inversify-express-utils";
+import { controller, httpPost, request, response, httpGet } from "inversify-express-utils";
 import { inject } from "inversify";
 
 import TYPES from '../types';
@@ -26,6 +26,17 @@ class UploadController {
       }
     });
   }
+
+  @httpGet('/uploads/parkingId/:parkingId')
+  searchAll(@request() req: Request, @response() res: Response): Promise<any> {
+    return new Promise((resolve) => {
+      this.service.toListByParkingId(Number(req.params.parkingId))
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Upload', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Upload')));
+    });
+  }
+
+
 }
 
 export default UploadController;

@@ -21,7 +21,6 @@ class Parking extends Model {
   registryCode: string;
   phone: string;
   email: string;
-  imgUrl: string;
   amount: number;
   companyId: number;
 
@@ -42,7 +41,6 @@ class Parking extends Model {
     this.registryCode = Attributes.ReturnIfValid(json.registryCode);
     this.phone = Attributes.ReturnIfValid(json.phone);
     this.email = Attributes.ReturnIfValid(json.email);
-    this.imgUrl = Attributes.ReturnIfValid(json.imgUrl);
     this.companyId = Attributes.ReturnIfValid(json.companyId);
     this.adress = Attributes.ReturnIfValid(json.adress);
     this.company = Attributes.ReturnIfValid(json.company);
@@ -75,10 +73,6 @@ Parking.init({
   email: {
     type: new DataTypes.STRING(50),
     validate: { isEmail: true }
-  },
-  imgUrl: {
-    type: new DataTypes.STRING(100),
-    validate: { isUrl: true }
   },
   amount: {
     type: new DataTypes.INTEGER()

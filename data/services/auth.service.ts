@@ -102,6 +102,7 @@ class AuthService implements IAuthService {
           if (!Attributes.IsValid(companies)) {
             const createdCompany = await this._companyRepository.Save(auth.company);
             auth.employee.companyId = createdCompany.id;
+            auth.employee.ruleId = 1;
             const createdEmployee = await this._employeeRepository.Save(auth.employee);
             resolve(createdEmployee);
           } else {
