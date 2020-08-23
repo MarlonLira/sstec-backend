@@ -102,9 +102,18 @@ class AuthService implements IAuthService {
           if (!Attributes.IsValid(companies)) {
             const createdCompany = await this._companyRepository.Save(auth.company);
             auth.employee.companyId = createdCompany.id;
-            auth.employee.ruleId = 1;
-            const createdEmployee = await this._employeeRepository.Save(auth.employee);
-            resolve(createdEmployee);
+            auth.employee.ruleId = 2;
+
+            this._employeeRepository.Save(auth.employee)
+              .then((result: Employee) => {
+                result.password = undefined;
+                resolve(result);
+              })
+              .catch(async (error: any) => {
+                await this._companyRepository.Delete(auth.employee.companyId);
+                reject(await this.log.error('Signup Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)));
+              });
+
           } else {
             reject(await this.log.error('Signup Company', HttpCode.Bad_Request, HttpMessage.Already_Exists, undefined));
           }
@@ -146,23 +155,30 @@ class AuthService implements IAuthService {
   accountRecoveryEmployee(auth: Auth): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        const foundEmployee: Employee = Attributes.ReturnIfValid(
-          await this._employeeRepository.GetByEmail(auth.employee.email),
-          await this._employeeRepository.GetByRegistryCode(auth.employee.registryCode)
+        const foundEmployee: Employee = await Attributes.ReturnIfValid(
+          await this._employeeRepository.GetByRegistryCode(auth.employee.registryCode),
+          await this._employeeRepository.GetByEmail(auth.employee.email)
         );
         if (Attributes.IsValid(foundEmployee)) {
-          const _email = new Email();
-          _email.from = 'help.simpleparking@gmail.com';
-          _email.subject = 'Recuperação de Conta';
-          _email.text = 'Clique no link abaixo e digite sua nova senha';
-          _email.to = foundEmployee.email;
+          console.log(foundEmployee);
+          if (Attributes.IsValid(foundEmployee.email)) {
+            const _email = new Email();
+            _email.from = 'help.simpleparking@gmail.com';
+            _email.subject = 'Recuperação de Conta';
+            _email.text = 'Clique no link abaixo e digite sua nova senha';
+            _email.to = foundEmployee.email;
 
-          await this._emailService.send(_email);
+            await this._emailService.send(_email);
 
-          resolve(foundEmployee.email);
+            resolve(this.protectedEmail(foundEmployee.email));
+          } else {
+            reject(await this.log.error('Auth', HttpCode.Expectation_Failed, HttpMessage.Parameters_Not_Provided, undefined));
+          }
+        } else {
+          reject(await this.log.error('Employee', HttpCode.Not_Found, HttpMessage.Not_Found, undefined));
         }
       } catch (error) {
-        reject(error);
+        reject(await this.log.critical('Auth', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)));
       }
     });
   }
@@ -208,6 +224,19 @@ class AuthService implements IAuthService {
       resolve(auth);
     });
   }
+
+  protectedEmail = (email: string) => {
+    const result = 
+    `
+    ${email.substring(4, 0)}****
+    ${email.substring(email.indexOf('@'), email.indexOf('@') - 1)}
+    ${email.substring(email.indexOf('@'), email.indexOf('@') + 4)}****
+    ${email.substring(email.length -4)}
+    `
+    return result;
+  }
+
+  // marlonlira2@gmail.com
 }
 
 export default AuthService;

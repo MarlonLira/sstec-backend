@@ -22,10 +22,11 @@ class UploadService implements IUploadService {
     this.form = new IncomingForm();
     this.form.uploadDir = PathDir;
     this.form.keepExtensions = true;
+    this.createFolderIfNotExists(this.form.uploadDir);
   }
 
   toListByParkingId(parkingId: number): Promise<ParkingFile[]> {
-     return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.pFileRepository.toList(parkingId)
         .then((result: ParkingFile[]) => resolve(result))
         .catch(async (error: any) =>
@@ -41,9 +42,7 @@ class UploadService implements IUploadService {
 
       this.form.on('fileBegin', (id, file) => {
         const dir = `${PathDir}/${id}`;
-        if (!fs.existsSync(dir)) {
-          fs.mkdirSync(dir);
-        }
+        this.createFolderIfNotExists(dir);
         file.path = `${dir}/${file.name}`;
       });
 
@@ -62,6 +61,12 @@ class UploadService implements IUploadService {
           });
       });
     });
+  }
+
+  createFolderIfNotExists(path) {
+    if (!fs.existsSync(path)) {
+      fs.mkdirSync(path);
+    }
   }
 
 }
