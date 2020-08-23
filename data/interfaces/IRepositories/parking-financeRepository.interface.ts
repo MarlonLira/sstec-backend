@@ -1,4 +1,4 @@
-import ParkingFinance from '../../models/parkingFinance.model';
+import ParkingFinance from '../../models/parking-finance.model';
 
 
 /**

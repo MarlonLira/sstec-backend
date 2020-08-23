@@ -45,5 +45,15 @@
     "tls": {
       "rejectUnauthorized": false
     }
+  },
+  "LogRecord": {
+    "IsInfo": true,
+    "IsWarn": true,
+    "IsCrit": true,
+    "IsUnkn": true,
+    "IsError": true
+  },
+  "Upload": {
+    "PathDir": "C:/uploads"
   }
 }

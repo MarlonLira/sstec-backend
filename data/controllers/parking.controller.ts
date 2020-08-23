@@ -34,7 +34,7 @@ class ParkingController {
    * @memberof ParkingController
    */
   @httpPost('/parking')
-  Save(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+  save(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.save(new Parking(req.body))
         .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento', result)))
@@ -51,10 +51,19 @@ class ParkingController {
    * @memberof ParkingController
    */
   @httpGet('/parking/companyId/:companyId/registryCode/:registryCode')
-  Search(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+  search(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.getByRegistryCode(new Parking(req.params))
-        .then((result: Parking[]) => resolve(Http.SendMessage(res, HttpCode.Found, HttpMessage.Found, 'Estacionamento', result)))
+        .then((result: Parking[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
+    });
+  }
+
+  @httpGet('/parking/:id')
+  searchById(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+    return new Promise((resolve) => {
+      this.service.getById(Number(req.params.id))
+        .then((result: Parking) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
@@ -68,7 +77,7 @@ class ParkingController {
    * @memberof ParkingController
    */
   @httpGet('/parkings/companyId/:companyId')
-  SearchAll(@request() req: Request, @response() res: Response): Promise<any> {
+  searchAll(@request() req: Request, @response() res: Response): Promise<any> {
     return new Promise((resolve) => {
       this.service.toList(Number(req.params.companyId))
         .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
@@ -85,10 +94,10 @@ class ParkingController {
    * @memberof ParkingController
    */
   @httpPut('/parking')
-  Update(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+  update(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.update(new Parking(req.body))
-        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Estacionamento', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
@@ -102,10 +111,10 @@ class ParkingController {
    * @memberof ParkingController
    */
   @httpDelete('/parking/:id')
-  Delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+  delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.delete(Number(req.params.id))
-        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Estacionamento', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }

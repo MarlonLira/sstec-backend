@@ -1,6 +1,11 @@
 help.simpleparking@gmail.com
 sstec2020
 
-smtp
+--smtp--
 smtp.gmail.com
 pass: hikpucfalhaqxkhd
+
+--imgbb--
+help.simpleparking@gmail.com
+pass: hikpucfalhaqxkhd
+apiKey: 839a1d4a4b0425d1a2e69d94dd0b8b3e

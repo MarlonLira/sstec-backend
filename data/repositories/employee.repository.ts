@@ -31,12 +31,10 @@ class EmployeeRepository implements IEmployeeRepository {
       Employee.create(employee, { transaction: _transaction })
         .then(async (createdEmployee: Employee) => {
           await _transaction.commit();
-          resolve({
-            "parkingId": createdEmployee.parkingId,
-            "employeeId": createdEmployee.id
-          })
+          resolve(createdEmployee);
         })
         .catch(async error => {
+          console.log(error);
           await _transaction.rollback();
           reject(error);
         });
@@ -77,9 +75,9 @@ class EmployeeRepository implements IEmployeeRepository {
    * @param {string} registryCode
    * @memberof EmployeeRepository
    */
-  GetByRegistryCode(_registryCode: string): Promise<Employee[]> {
+  GetByRegistryCode(_registryCode: string): Promise<Employee> {
     return new Promise((resolve, reject) => {
-      Employee.findAll({
+      Employee.findOne({
         where: {
           registryCode: {
             [Op.eq]: _registryCode
@@ -88,7 +86,7 @@ class EmployeeRepository implements IEmployeeRepository {
             [Op.ne]: TransactionType.DELETED
           }
         }
-      }).then((result: Employee[]) => {
+      }).then((result: Employee) => {
         resolve(result);
       }).catch(error => {
         reject(error);

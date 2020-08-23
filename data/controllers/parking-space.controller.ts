@@ -2,9 +2,8 @@ import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import IParkingSpaceController from "../interfaces/IControllers/IParkingSpaceController";
 import IParkingSpaceRepository from '../interfaces/IRepositories/parking-spaceRepository.interface';
-import ParkingSpace from "../models/parkingSpace.model";
+import ParkingSpace from "../models/parking-space.model";
 import TYPES from '../types';
 import Attributes from "../../commons/core/attributes";
 import Http from '../../commons/core/http';
@@ -12,14 +11,8 @@ import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { TransactionType } from "../../commons/enums/transactionType";
 
-/**
- * @description
- * @author Emerson Souza
- * @class ParkingSpaceController
- * @implements {IParkingSpaceController}
- */
 @controller('')
-class ParkingSpaceController implements IParkingSpaceController {
+class ParkingSpaceController {
 
   /**
    * Creates an instance of ParkingSpaceController.

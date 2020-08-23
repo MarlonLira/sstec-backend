@@ -2,23 +2,16 @@ import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import IParkingPromotionController from "../interfaces/IControllers/IParkingPromotionController";
 import IParkingPromotionRepository from '../interfaces/IRepositories/parking-promotionRepository.interface';
-import ParkingPromotion from "../models/parkingPromotion.model";
+import ParkingPromotion from "../models/parking-promotion.model";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import Attributes from "../../commons/core/attributes";
 
-/**
- * @description
- * @author Felipe Seabra
- * @class ParkingPromotionController
- * @implements {IParkingPromotionController}
- */
 @controller('')
-class ParkingPromotionController implements IParkingPromotionController {
+class ParkingPromotionController {
 
   /**
    * Creates an instance of ParkingPromotionController.

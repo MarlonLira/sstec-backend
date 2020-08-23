@@ -1,5 +1,5 @@
 import Parking from '../../models/parking.model';
-import ParkingScore from '../../models/parkingScore.model';
+import ParkingScore from '../../models/parking-score.model';
 
 /**
  * @description

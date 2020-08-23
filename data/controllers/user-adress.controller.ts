@@ -2,22 +2,15 @@ import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import IUserAdressController from "../interfaces/IControllers/IUserAdressController";
 import IUserAdressRepository from '../interfaces/IRepositories/user-adressRepository.interface';
-import UserAdress from "../models/userAdress.model";
+import UserAdress from "../models/user-adress.model";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 
-/**
- * @description
- * @author Gustavo Gusmão
- * @class UserAdressController
- * @implements {IUserAdressController}
- */
 @controller('')
-class UserAdressController implements IUserAdressController {
+class UserAdressController {
 
   /**
    * Creates an instance of UserAdressController.

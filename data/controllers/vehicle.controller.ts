@@ -2,7 +2,6 @@ import { Response, Request } from "express";
 import { controller, httpPost, request, response, httpGet, httpDelete, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import IVehicleController from "../interfaces/IControllers/IVehicleController";
 import IVehicleRepository from '../interfaces/IRepositories/vehicleRepository.interface';
 import TYPES from '../types';
 import Vehicle from "../models/vehicle.model";
@@ -11,14 +10,8 @@ import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import Attributes from '../../commons/core/attributes';
 
-/**
- * @description
- * @author Marlon Lira
- * @class VehicleController
- * @implements {IVehicleController}
- */
 @controller('')
-class VehicleController implements IVehicleController {
+class VehicleController {
 
   /**
    * Creates an instance of VehicleController.

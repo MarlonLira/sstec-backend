@@ -2,7 +2,6 @@ import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import ICardController from '../interfaces/IControllers/ICardController';
 import ICardRepository from '../interfaces/IRepositories/cardRepository.interface';
 import Card from "../models/card.model";
 import TYPES from '../types';
@@ -13,14 +12,8 @@ import Attributes from "../../commons/core/attributes";
 import { CryptoType } from "../../commons/enums/cryptoType";
 import Crypto from '../../commons/core/crypto';
 
-/**
- * @description
- * @author Gustavo Gusmão
- * @class CardController
- * @implements {ICardController}
- */
 @controller('')
-class CardController implements ICardController {
+class CardController {
 
   /**
    * Creates an instance of CardController.

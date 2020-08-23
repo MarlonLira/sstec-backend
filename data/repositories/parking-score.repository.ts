@@ -2,7 +2,7 @@ import { injectable } from "inversify";
 import { Op } from 'sequelize';
 
 import IParkingScoreRepository from '../interfaces/IRepositories/parking-scoreRepository.interface';
-import ParkingScore from '../models/parkingScore.model';
+import ParkingScore from '../models/parking-score.model';
 import { TransactionType } from "../../commons/enums/transactionType";
 import Parking from "../models/parking.model";
 

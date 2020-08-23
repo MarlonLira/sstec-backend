@@ -1,12 +1,40 @@
 import { Op } from 'sequelize';
 import { injectable } from "inversify";
 
-import IParkingAdressRepository from '../interfaces/IRepositories/parking-adressRepository.interface';
-import ParkingAdress from '../models/parkingAdress.model';
+import { IParkingAdressRepository } from '../interfaces/IRepositories/parking-adressRepository.interface';
+import ParkingAdress from '../models/parking-adress.model';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 @injectable()
 class ParkingAdressRepository implements IParkingAdressRepository {
+
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {number} parkingId
+   * @returns {Promise<ParkingAdress>}
+   * @memberof ParkingAdressRepository
+   */
+  getByParkingId(parkingId: number): Promise<ParkingAdress> {
+    return new Promise((resolve, reject) => {
+      ParkingAdress.findOne({
+        where: {
+          parkingId: {
+            [Op.eq]: parkingId
+          },
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        }
+      })
+        .then((result: ParkingAdress) => {
+          resolve(result);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
 
   /**
    * @description
@@ -15,7 +43,7 @@ class ParkingAdressRepository implements IParkingAdressRepository {
    * @returns
    * @memberof ParkingAdressRepository
    */
-  Update(parkingAdress: ParkingAdress) {
+  update(parkingAdress: ParkingAdress) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingAdress.sequelize.transaction();
       ParkingAdress.update(parkingAdress.ToModify(),
@@ -43,7 +71,7 @@ class ParkingAdressRepository implements IParkingAdressRepository {
    * @param {ParkingAdress} parkingAdress
    * @memberof ParkingAdressRepository
    */
-  Save(parkingAdress: ParkingAdress): Promise <any>{
+  save(parkingAdress: ParkingAdress): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingAdress.sequelize.transaction();
       parkingAdress.status = TransactionType.ACTIVE;
@@ -65,7 +93,7 @@ class ParkingAdressRepository implements IParkingAdressRepository {
    * @returns {Promise <any>}
    * @memberof ParkingAdressRepository
    */
-  Delete(_id: number): Promise <any>{
+  delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingAdress.sequelize.transaction();
       ParkingAdress.destroy({
@@ -92,14 +120,14 @@ class ParkingAdressRepository implements IParkingAdressRepository {
    * @returns
    * @memberof ParkingAdressRepository
    */
-  GetById(parkingAdressId: number): Promise <ParkingAdress>{
+  getById(parkingAdressId: number): Promise<ParkingAdress> {
     return new Promise((resolve, reject) => {
       ParkingAdress.findOne({
-        where:{
-          id:{
+        where: {
+          id: {
             [Op.eq]: parkingAdressId
           },
-          status:{
+          status: {
             [Op.ne]: TransactionType.DELETED
           }
         }
@@ -113,11 +141,11 @@ class ParkingAdressRepository implements IParkingAdressRepository {
     });
   }
 
-  ToList(_parkingId): Promise <ParkingAdress[]>{
+  toList(_parkingId): Promise<ParkingAdress[]> {
     return new Promise((resolve, reject) => {
       ParkingAdress.findAll({
         where: {
-          parkingId:{
+          parkingId: {
             [Op.eq]: _parkingId
           },
           status: {

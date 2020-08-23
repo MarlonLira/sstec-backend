@@ -11,7 +11,8 @@
     "build": "npm run ts:build",
     "app": "node dist/src/app.js",
     "dev": "nodemon dist/src/app.js",
-    "dev-debugger": "nodemon --inspect dist/src/app.js"
+    "dev-debugger": "nodemon --inspect dist/src/app.js",
+    "install:clean": "npm rm -rf node_modules/ && npm rm -rf package-lock.json && npm install -y"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,7 @@
     "@types/cors": "^2.8.6",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.3",
+    "@types/formidable": "^1.0.31",
     "@types/jsonwebtoken": "^8.3.5",
     "@types/node": "^12.12.30",
     "@types/sequelize": "^4.28.8",
@@ -43,6 +45,7 @@
     "crypto-js": "^4.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "formidable": "^1.2.2",
     "inversify": "^5.0.1",
     "inversify-express-utils": "^6.3.2",
     "jsonwebtoken": "^8.5.1",
@@ -51,7 +54,7 @@
     "pg": "^7.14.0",
     "pg-hstore": "^2.3.3",
     "reflect-metadata": "^0.1.13",
-    "sequelize": "^5.21.5",
+    "sequelize": "^6.3.4",
     "socket.io": "^2.3.0",
     "swagger-ui-express": "^4.1.4",
     "tedious": "^8.2.0",

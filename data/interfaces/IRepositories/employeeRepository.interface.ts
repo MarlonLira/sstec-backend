@@ -24,7 +24,7 @@ interface IEmployeeRepository {
    * @returns {Promise<Employee>}
    * @memberof IEmployeeRepository
    */
-  GetByRegistryCode(_registryCode: string): Promise<Employee[]>;
+  GetByRegistryCode(_registryCode: string): Promise<Employee>;
 
   /**
    * @description

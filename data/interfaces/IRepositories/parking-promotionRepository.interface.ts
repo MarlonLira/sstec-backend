@@ -1,4 +1,4 @@
-import ParkingPromotion from '../../models/parkingPromotion.model';
+import ParkingPromotion from '../../models/parking-promotion.model';
 
 /**
  * @description

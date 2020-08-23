@@ -7,7 +7,7 @@ import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from '../../commons/enums/httpMessage';
 import { ILogService } from '../interfaces/IServices/logService.interface';
-import { Log } from '../models/logger.model';
+import { Log } from '../models/log.model';
 
 /**
  * @description

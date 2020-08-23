@@ -2,7 +2,7 @@ import { injectable } from "inversify";
 import { Op, QueryTypes, where, Sequelize, Model } from 'sequelize';
 
 import IParkingSpaceRepository from '../interfaces/IRepositories/parking-spaceRepository.interface';
-import ParkingSpace from '../models/parkingSpace.model';
+import ParkingSpace from '../models/parking-space.model';
 import { TransactionType } from "../../commons/enums/transactionType";
 import Scheduling from '../models/scheduling.model';
 import { type } from "os";

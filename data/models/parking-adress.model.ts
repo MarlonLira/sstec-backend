@@ -6,7 +6,6 @@ import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
 
-
 /**
  * @description
  * @author Felipe Seabra
@@ -95,15 +94,12 @@ ParkingAdress.init({
   },
   latitude: {
     type: new DataTypes.STRING(5),
-    allowNull: false
   },
   longitude: {
     type: new DataTypes.STRING(5),
-    allowNull: false
   },
   complement: {
-    type: new DataTypes.STRING(40),
-    allowNull: false
+    type: new DataTypes.STRING(40)
   },
   parkingId: {
     type: new DataTypes.INTEGER(),

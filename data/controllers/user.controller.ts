@@ -3,7 +3,6 @@ import { controller, httpGet, httpPost, httpDelete, request, response, httpPut }
 import { inject } from "inversify";
 
 import TYPES from '../types';
-import IUserController from '../interfaces/IControllers/IUserController';
 import IUserRepository from '../interfaces/IRepositories/userRepository.interface';
 import User from "../models/user.model";
 import Attributes from '../../commons/core/attributes';
@@ -13,15 +12,8 @@ import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 
-/**
- * @description
- * @author Marlon Lira
- * @export
- * @class UserController
- * @implements {IUserController}
- */
 @controller('')
-class UserController implements IUserController {
+class UserController {
 
   /**
    * Creates an instance of UserController.

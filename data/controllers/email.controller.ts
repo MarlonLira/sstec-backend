@@ -7,19 +7,11 @@ import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { HttpCode } from '../../commons/enums/httpCode';
-import IEmailController from "../interfaces/IControllers/IEmailController";
 import { IEmailService } from "../interfaces/IServices/emailService.interface";
 import Email from "../models/email.model";
 
-
-/**
- * @description
- * @author Marlon Lira
- * @class EmailController
- * @implements {IEmailController}
- */
 @controller('')
-class EmailController implements IEmailController {
+class EmailController{
 
   /**
    * Creates an instance of EmailController.
@@ -51,8 +43,6 @@ class EmailController implements IEmailController {
       }
     });
   }
-
-
 }
 
 export default EmailController;
