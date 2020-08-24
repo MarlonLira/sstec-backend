@@ -26,6 +26,11 @@ import { ParkingFile } from './models/parking-file.model';
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
 
+interface PersistenceModel {
+  name: string;
+  entity: Sequelize
+}
+
 /**
  * @description
  * @author Marlon Lira
@@ -40,7 +45,7 @@ class Database {
    */
   public Build() {
     // The order influences creation in the database
-    const Models = [
+    const models: PersistenceModel[] = [
       { name: 'User', entity: User.sequelize },
       { name: 'Vehicle', entity: Vehicle.sequelize },
       { name: 'UserAdress', entity: UserAdress.sequelize },
@@ -87,20 +92,32 @@ class Database {
     Parking.hasOne(ParkingAdress, { foreignKey: 'parkingId', as: 'ParkingAdress' });
 
     /* #endregion */
-
-    _instance.authenticate()
-      .then(() => {
-        Logger.Info('Database', 'Connection established successfully!');
-        this.CreateTables(Models)
-          .then(result => {
-            Logger.Info('Database', `Table verification ${result}!`);
-          });
-      })
-      .catch(error => {
-        Logger.Error('Database', 'Error when trying to connect to the database!');
-        Logger.Error('Database', error);
+    this.checkAndBuild(models)
+      .catch((error: any) => {
+        if (error.toString().indexOf('ETIMEDOUT') != -1) {
+          Logger.Info('Database', 'trying to connect to the database again!');
+          this.checkAndBuild(models);
+        }
       });
+  }
 
+  private checkAndBuild(models: PersistenceModel[]): Promise<any> {
+    return new Promise((resolve, reject) => {
+      _instance.authenticate()
+        .then(() => {
+          Logger.Info('Database', 'Connection established successfully!');
+          this.CreateTables(models)
+            .then(result => {
+              Logger.Info('Database', `Table verification ${result}!`);
+              resolve(true);
+            });
+        })
+        .catch(error => {
+          Logger.Error('Database', 'Error when trying to connect to the database!');
+          Logger.Error('Database', error);
+          reject(error);
+        });
+    })
   }
 
   private async CreateTables(models: { name: string, entity: Sequelize }[]) {

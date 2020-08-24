@@ -235,8 +235,6 @@ class AuthService implements IAuthService {
     `
     return result;
   }
-
-  // marlonlira2@gmail.com
 }
 
 export default AuthService;

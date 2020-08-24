@@ -37,11 +37,12 @@ class UploadService implements IUploadService {
   saveParkingFile(req: any, res: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const parkingFile = new ParkingFile();
+      const parkingPath = `${PathDir}/parking`;
 
       this.form.parse(req);
-
+      this.createFolderIfNotExists(parkingPath);
       this.form.on('fileBegin', (id, file) => {
-        const dir = `${PathDir}/${id}`;
+        const dir = `${parkingPath}/${id}`;
         this.createFolderIfNotExists(dir);
         file.path = `${dir}/${file.name}`;
       });
