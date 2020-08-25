@@ -2,6 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
+import { CompanyAdress } from './company-adress.model';
 
 const _instance = Context.getInstance();
 
@@ -10,13 +11,15 @@ const _instance = Context.getInstance();
  * @author Gustavo Gusmão
  * @class Company
  */
-class Company extends Model {
+export class Company extends Model {
 
   id!: number;
   status!: TransactionType;
   name!: string;
   registryCode!: string;
   phone!: string;
+
+  adress: CompanyAdress;
 
   /**
    * Creates an instance of Company.
@@ -31,9 +34,10 @@ class Company extends Model {
     this.status = Attributes.ReturnIfValid(json.status);
     this.registryCode = Attributes.ReturnIfValid(json.registryCode);
     this.phone = Attributes.ReturnIfValid(json.phone);
+    this.adress = Attributes.ReturnIfValid(json.adress);
   }
 
-  ToModify(){
+  ToModify() {
     return this.toJSON();
   }
 }
@@ -64,5 +68,3 @@ Company.init({
   sequelize: _instance,
   tableName: 'Company'
 });
-
-export default Company;

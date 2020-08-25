@@ -5,7 +5,7 @@ import { inject } from "inversify";
 import TYPES from '../types';
 
 import { IAuthService } from '../interfaces/IServices/authService.interface';
-import Auth from "../models/auth.model";
+import { Auth } from "../models/auth.model";
 import Http from '../../commons/core/http';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { HttpCode } from '../../commons/enums/httpCode';

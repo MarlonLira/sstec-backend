@@ -2,9 +2,8 @@ import { Op, QueryTypes } from 'sequelize';
 import { injectable } from "inversify";
 
 import { IParkingRepository } from '../interfaces/IRepositories/parkingRepository.interface';
-import Parking from '../models/parking.model';
+import { Parking } from '../models/parking.model';
 import { TransactionType } from '../../commons/enums/transactionType';
-import ParkingAdress from '../models/parking-adress.model';
 
 /**
  * @description
@@ -162,34 +161,6 @@ class ParkingRepository implements IParkingRepository {
           mapToModel: true
         }
       )
-        .then((result: Parking[]) => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
-  }
-
-  /**
-   * @description
-   * @author Emerson Souza
-   * @returns {Promise<Parking[]>}
-   * @memberof ParkingRepository
-   */
-  pagination(_companyId: number, page: number, limiter: number): Promise<Parking[]> {
-    return new Promise((resolve, reject) => {
-      Parking.findAll({
-        where: {
-          companyId: {
-            [Op.eq]: _companyId
-          },
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
-        }, limit: limiter,
-        offset: page = Number(page - 1)
-      })
         .then((result: Parking[]) => {
           resolve(result);
         })

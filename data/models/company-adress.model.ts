@@ -6,13 +6,7 @@ import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
 
-/**
- * @description
- * @author Gustavo Gusmão
- * @class CompanyAdress
- * @extends {Model}
- */
-class CompanyAdress extends Model {
+export class CompanyAdress extends Model {
 
   id!: number;
   status!: TransactionType;
@@ -95,5 +89,3 @@ CompanyAdress.init({
   sequelize: _instance,
   tableName: 'CompanyAdress'
 });
-
-export default CompanyAdress;

@@ -2,8 +2,8 @@ import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import ICompanyRepository from '../interfaces/IRepositories/companyRepository.interface';
-import Company from "../models/company.model";
+import { ICompanyRepository } from '../interfaces/IRepositories/companyRepository.interface';
+import { Company } from "../models/company.model";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
@@ -34,10 +34,10 @@ class CompanyController {
   Save(@request() req: Request<any>, @response() res: Response<any>) {
     const _company = new Company(req.body.company);
     return new Promise((resolve) => {
-      this._companyRepository.GetByRegistryCode(_company.registryCode)
+      this._companyRepository.getByRegistryCode(_company.registryCode)
         .then((found: Company) => {
           if (!Attributes.IsValid(found)) {
-            this._companyRepository.Save(_company)
+            this._companyRepository.save(_company)
               .then(result => {
                 resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Empresa', result));
               })
@@ -64,7 +64,7 @@ class CompanyController {
     return new Promise((resolve) => {
       const _company = new Company(req.params);
       if (Attributes.IsValid(_company.registryCode)) {
-        this._companyRepository.GetByRegistryCode(_company.registryCode)
+        this._companyRepository.getByRegistryCode(_company.registryCode)
           .then(result => {
             resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Empresa', result))
           })
@@ -90,7 +90,7 @@ class CompanyController {
     return new Promise((resolve) => {
       const _company = new Company(req.body.company);
       if (Attributes.IsValid(_company.id)) {
-        this._companyRepository.Update(_company)
+        this._companyRepository.update(_company)
           .then(result => {
             resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Empresa', result));
           })
@@ -115,7 +115,7 @@ class CompanyController {
   Delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _id: number = req.params.id;
-      this._companyRepository.Delete(_id)
+      this._companyRepository.delete(_id)
         .then(result => {
           resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Empresa', result));
         })

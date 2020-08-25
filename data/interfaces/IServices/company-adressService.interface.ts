@@ -1,8 +1,9 @@
 import { CompanyAdress } from '../../models/company-adress.model';
 
-export interface ICompanyAdressRepository {
+export interface ICompanyAdressService {
+
+  getById(id: number): Promise<CompanyAdress>;
+  getByCompanyId(id: number): Promise<CompanyAdress>;
   save(companyAdress: CompanyAdress): Promise<any>;
-  getByCompanyId(_companyId: number): Promise<CompanyAdress>;
   update(companyAdress: CompanyAdress): Promise<any>;
-  delete(_id: number): Promise<any>;
 }

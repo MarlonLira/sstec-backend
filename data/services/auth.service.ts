@@ -1,12 +1,12 @@
 import { IAuthService } from "../interfaces/IServices/authService.interface";
 import { injectable, inject } from "inversify";
 import * as jwt from 'jsonwebtoken';
-import Auth from '../models/auth.model';
+import { Auth } from '../models/auth.model';
 import TYPES from "../types";
 import IUserRepository from "../interfaces/IRepositories/userRepository.interface";
 import { IRuleRepository } from "../interfaces/IRepositories/ruleRepository.interface";
 import { IParkingRepository } from "../interfaces/IRepositories/parkingRepository.interface";
-import ICompanyRepository from "../interfaces/IRepositories/companyRepository.interface";
+import { ICompanyRepository } from "../interfaces/IRepositories/companyRepository.interface";
 import IEmployeeRepository from "../interfaces/IRepositories/employeeRepository.interface";
 import { CryptoType } from "../../commons/enums/cryptoType";
 import Attributes from "../../commons/core/attributes";
@@ -14,9 +14,9 @@ import Crypto from '../../commons/core/crypto';
 import Employee from "../models/employee.model";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import User from "../models/user.model";
-import Company from "../models/company.model";
+import { Company } from "../models/company.model";
 import { IEmailService } from "../interfaces/IServices/emailService.interface";
-import Email from "../models/email.model";
+import { Email } from "../models/email.model";
 import { HttpCode } from "../../commons/enums/httpCode";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 
@@ -27,7 +27,7 @@ import { ILogService } from "../interfaces/IServices/logService.interface";
  * @implements {IAuthService}
  */
 @injectable()
-class AuthService implements IAuthService {
+export class AuthService implements IAuthService {
 
   constructor(
     @inject(TYPES.IEmployeeRepository) private _employeeRepository: IEmployeeRepository,
@@ -45,7 +45,7 @@ class AuthService implements IAuthService {
         if (Attributes.IsValid(auth.employee)) {
           const foundEmployee: Employee = await this._employeeRepository.GetByEmail(auth.employee.email);
           if (Attributes.IsValid(foundEmployee) && Crypto.Compare(auth.employee.password, foundEmployee.password)) {
-            auth.company = await this._companyRepository.GetById(foundEmployee.companyId);
+            auth.company = await this._companyRepository.getById(foundEmployee.companyId);
             auth.parking = (await this._parkingRepository.getByEmployeeId(foundEmployee.id))[0];
             auth.employee = foundEmployee;
             auth.employee.password = undefined;
@@ -98,9 +98,9 @@ class AuthService implements IAuthService {
           await this._employeeRepository.GetByRegistryCode(auth.employee.registryCode)
         );
         if (!Attributes.IsValid(foundEmployee)) {
-          const companies: Company[] = await this._companyRepository.GetByRegistryCode(auth.company.registryCode);
+          const companies: Company[] = await this._companyRepository.getByRegistryCode(auth.company.registryCode);
           if (!Attributes.IsValid(companies)) {
-            const createdCompany = await this._companyRepository.Save(auth.company);
+            const createdCompany = await this._companyRepository.save(auth.company);
             auth.employee.companyId = createdCompany.id;
             auth.employee.ruleId = 2;
 
@@ -110,7 +110,7 @@ class AuthService implements IAuthService {
                 resolve(result);
               })
               .catch(async (error: any) => {
-                await this._companyRepository.Delete(auth.employee.companyId);
+                await this._companyRepository.delete(auth.employee.companyId);
                 reject(await this.log.error('Signup Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)));
               });
 
@@ -226,15 +226,13 @@ class AuthService implements IAuthService {
   }
 
   protectedEmail = (email: string) => {
-    const result = 
-    `
+    const result =
+      `
     ${email.substring(4, 0)}****
     ${email.substring(email.indexOf('@'), email.indexOf('@') - 1)}
     ${email.substring(email.indexOf('@'), email.indexOf('@') + 4)}****
-    ${email.substring(email.length -4)}
+    ${email.substring(email.length - 4)}
     `
     return result;
   }
 }
-
-export default AuthService;

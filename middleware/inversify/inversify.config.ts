@@ -7,8 +7,8 @@ import TYPES from '../../data/types';
 import UserRepository from '../../data/repositories/user.repository';
 import UserAdressRepository from '../../data/repositories/user-adress.repository';
 import CardRepository from '../../data/repositories/card.repository';
-import CompanyRepository from '../../data/repositories/company.repository';
-import CompanyAdressRepository from '../../data/repositories/company-adress.repository';
+import { CompanyRepository } from '../../data/repositories/company.repository';
+import { CompanyAdressRepository } from '../../data/repositories/company-adress.repository';
 import EmployeeRepository from '../../data/repositories/employee.repository';
 import PaymentRepository from '../../data/repositories/payment.repository';
 import VehicleRepository from '../../data/repositories/vehicle.repository';
@@ -27,8 +27,8 @@ import { ParkingFileRepository } from '../../data/repositories/parkingFile.repos
 import IUserRepository from '../../data/interfaces/IRepositories/userRepository.interface';
 import IUserAdressRepository from '../../data/interfaces/IRepositories/user-adressRepository.interface';
 import ICardRepository from '../../data/interfaces/IRepositories/cardRepository.interface';
-import ICompanyRepository from '../../data/interfaces/IRepositories/companyRepository.interface';
-import ICompanyAdressRepository from '../../data/interfaces/IRepositories/company-adressRepository.interface';
+import { ICompanyRepository } from '../../data/interfaces/IRepositories/companyRepository.interface';
+import { ICompanyAdressRepository } from '../../data/interfaces/IRepositories/company-adressRepository.interface';
 import IEmployeeRepository from '../../data/interfaces/IRepositories/employeeRepository.interface';
 import IPaymentRepository from '../../data/interfaces/IRepositories/paymentRepository.interface';
 import { IParkingRepository } from '../../data/interfaces/IRepositories/parkingRepository.interface';
@@ -44,13 +44,14 @@ import { ILogRepository } from '../../data/interfaces/IRepositories/logRepositor
 import { IParkingFileRepository } from '../../data/interfaces/IRepositories/parkingFileRepository.interface';
 
 // Services
-import AuthService from '../../data/services/auth.service';
-import EmailService from '../../data/services/email.service';
+import { AuthService } from '../../data/services/auth.service';
+import { EmailService } from '../../data/services/email.service';
 import { ParkingService } from '../../data/services/parking.service';
+import { CompanyService } from '../../data/services/company.service';
 import { RuleService } from '../../data/services/rule.service';
 import { LogService } from '../../data/services/log.service';
 import { ParkingAdressService } from '../../data/services/parking-adress.service';
-import UploadService from '../../data/services/upload.service';
+import { UploadService } from '../../data/services/upload.service';
 
 // Services interfaces
 import { IAuthService } from '../../data/interfaces/IServices/authService.interface';
@@ -60,14 +61,18 @@ import { IRuleService } from '../../data/interfaces/IServices/ruleService.interf
 import { ILogService } from '../../data/interfaces/IServices/logService.interface';
 import { IParkingAdressService } from '../../data/interfaces/IServices/parking-adressService.interface';
 import { IUploadService } from '../../data/interfaces/IServices/uploadService.interface';
+import { ICompanyService } from '../../data/interfaces/IServices/companyService.interface';
+
 
 
 // Binds
 const container = new Container();
+
 // Services Binds
 container.bind<IAuthService>(TYPES.IAuthService).to(AuthService);
 container.bind<IEmailService>(TYPES.IEmailService).to(EmailService);
 container.bind<IParkingService>(TYPES.IParkingService).to(ParkingService);
+container.bind<ICompanyService>(TYPES.ICompanyService).to(CompanyService);
 container.bind<IParkingAdressService>(TYPES.IParkingAdressService).to(ParkingAdressService);
 container.bind<IRuleService>(TYPES.IRuleService).to(RuleService);
 container.bind<ILogService>(TYPES.ILogService).to(LogService);

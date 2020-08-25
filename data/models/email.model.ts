@@ -1,6 +1,6 @@
 import Attributes from '../../commons/core/attributes';
 
-class Email {
+export class Email {
 
   subject: string;
   text: string;
@@ -16,5 +16,3 @@ class Email {
     }
   }
 }
-
-export default Email;

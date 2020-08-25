@@ -1,12 +1,10 @@
 import { injectable } from "inversify";
-import { Op, QueryTypes, where, Sequelize, Model } from 'sequelize';
+import { Op, QueryTypes, Sequelize } from 'sequelize';
 
 import IParkingSpaceRepository from '../interfaces/IRepositories/parking-spaceRepository.interface';
 import ParkingSpace from '../models/parking-space.model';
 import { TransactionType } from "../../commons/enums/transactionType";
 import Scheduling from '../models/scheduling.model';
-import { type } from "os";
-import { raw } from "body-parser";
 
 @injectable()
 class ParkingSpaceRepository implements IParkingSpaceRepository {
@@ -94,43 +92,43 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
     });
   }
 
- /**
-   * @description
-   * @author Felipe Seabra 
-   * @param {ParkingSpace} parkingSpace
-   * @returns {Promise<any>}
-   * @memberof ParkingSpaceRepository
-   */
-  DeleteGroupType(parkingSpace: ParkingSpace): Promise<any>{
-    return new Promise(async (resolve, reject)=>{
-    const _transaction = await ParkingSpace.sequelize.transaction();
-    ParkingSpace.update({
-      status: TransactionType.DELETED,
+  /**
+    * @description
+    * @author Felipe Seabra 
+    * @param {ParkingSpace} parkingSpace
+    * @returns {Promise<any>}
+    * @memberof ParkingSpaceRepository
+    */
+  DeleteGroupType(parkingSpace: ParkingSpace): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await ParkingSpace.sequelize.transaction();
+      ParkingSpace.update({
+        status: TransactionType.DELETED,
       },
-    {
-      where:{
-        type:{
-          [Op.eq]: parkingSpace.type
-        },
-        parkingId:{
-          [Op.eq]: parkingSpace.parkingId,
-        },
-        status:{
-          [Op.eq]: TransactionType.ACTIVE
-        }
-      },
-      limit: Number(parkingSpace.amount),
-      transaction: _transaction,
-      validate: false
-    })
-    .then(async result =>{
-      await _transaction.commit();
-      resolve(result);
-    })
-    .catch(async error => {
-      await _transaction.rollback();
-      reject(error);
-    });
+        {
+          where: {
+            type: {
+              [Op.eq]: parkingSpace.type
+            },
+            parkingId: {
+              [Op.eq]: parkingSpace.parkingId,
+            },
+            status: {
+              [Op.eq]: TransactionType.ACTIVE
+            }
+          },
+          limit: Number(parkingSpace.amount),
+          transaction: _transaction,
+          validate: false
+        })
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async error => {
+          await _transaction.rollback();
+          reject(error);
+        });
     });
   }
 
@@ -190,19 +188,19 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
   ToGroupedList(_parkingspace: ParkingSpace): Promise<ParkingSpace[]> {
     return new Promise(async (resolve, reject) => {
       ParkingSpace.findAll({
-        where:{
-          parkingId:{ [Op.eq]: _parkingspace.parkingId },
-          status:{[Op.eq]: TransactionType.ACTIVE},
+        where: {
+          parkingId: { [Op.eq]: _parkingspace.parkingId },
+          status: { [Op.eq]: TransactionType.ACTIVE },
         },
         group: ['type'],
-        attributes: ['*', [Sequelize.fn('COUNT', Sequelize.col('type')), 'amount' ]],
+        attributes: ['*', [Sequelize.fn('COUNT', Sequelize.col('type')), 'amount']],
         raw: true
       }).then((parkingSpace: ParkingSpace[]) => {
         resolve(parkingSpace);
       })
-      .catch(error => {
-        reject(error);
-      });
+        .catch(error => {
+          reject(error);
+        });
     });
   }
 

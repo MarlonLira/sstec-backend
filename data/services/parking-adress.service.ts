@@ -1,8 +1,8 @@
-import { injectable, inject, id } from "inversify";
+import { injectable, inject } from "inversify";
 import TYPES from "../types";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { IParkingAdressService } from "../interfaces/IServices/parking-adressService.interface";
-import ParkingAdress from "../models/parking-adress.model";
+import { ParkingAdress } from "../models/parking-adress.model";
 import { IParkingAdressRepository } from "../interfaces/IRepositories/parking-adressRepository.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
 import { HttpMessage } from "../../commons/enums/httpMessage";

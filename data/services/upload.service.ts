@@ -13,7 +13,7 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
 const { PathDir } = Config.Upload;
 
 @injectable()
-class UploadService implements IUploadService {
+export class UploadService implements IUploadService {
   private form: IncomingForm;
 
   constructor(
@@ -71,5 +71,3 @@ class UploadService implements IUploadService {
   }
 
 }
-
-export default UploadService;

@@ -6,13 +6,7 @@ import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
 
-/**
- * @description
- * @author Felipe Seabra
- * @class ParkingAdress
- * @extends {Model}
- */
-class ParkingAdress extends Model {
+export class ParkingAdress extends Model {
   id!: number;
   status!: TransactionType;
   country!: string;
@@ -50,7 +44,7 @@ class ParkingAdress extends Model {
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
   }
 
-  ToModify(){
+  ToModify() {
     return this.toJSON();
   }
 }
@@ -106,9 +100,7 @@ ParkingAdress.init({
     allowNull: false
   }
 },
-{
-  sequelize: _instance,
-  tableName: 'ParkingAdress'
-});
-
-export default ParkingAdress;
+  {
+    sequelize: _instance,
+    tableName: 'ParkingAdress'
+  });

@@ -8,10 +8,10 @@ import Http from '../../commons/core/http';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { HttpCode } from '../../commons/enums/httpCode';
 import { IEmailService } from "../interfaces/IServices/emailService.interface";
-import Email from "../models/email.model";
+import { Email } from "../models/email.model";
 
 @controller('')
-class EmailController{
+class EmailController {
 
   /**
    * Creates an instance of EmailController.
