@@ -146,6 +146,17 @@ class EmployeeRepository implements IEmployeeRepository {
     });
   }
 
+  GetById(id: number): Promise<Employee> {
+    return new Promise((resolve, reject) => {
+      Employee.findByPk(id)
+      .then((result: Employee) => {
+        resolve(result);
+      }).catch(error => {
+        reject(error);
+      });
+    });
+  }
+
   /**
    * @description
    * @author Gustavo Gusmão

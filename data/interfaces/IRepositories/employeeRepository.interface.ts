@@ -44,6 +44,9 @@ interface IEmployeeRepository {
    */
   GetByCompanyId(_companyId: number): Promise<Employee[]>;
 
+
+  GetById(id: number): Promise<Employee>;
+
   /**
    * @description
    * @author Gustavo Gusmão
