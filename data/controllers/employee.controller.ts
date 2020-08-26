@@ -35,7 +35,7 @@ class EmployeeController {
    * @memberof EmployeeController
    */
   @httpPost('/employee')
-  Save(@request() req: Request<any>, @response() res: Response<any>) {
+  post(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise(async (resolve) => {
       const _employee = new Employee(req.body.employee);
       const foundEmployee = Attributes.ReturnIfValid(
@@ -107,7 +107,7 @@ class EmployeeController {
    */
   @httpGet('/employees/parkingId/:parkingId')
   @httpGet('/employees/companyId/:companyId')
-  SearchAll(@request() req: Request<any>, @response() res: Response<any>) {
+  getAll(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise(async (resolve) => {
       try {
         const _employee = new Employee(req.params);
@@ -135,7 +135,7 @@ class EmployeeController {
    * @memberof EmployeeController
    */
   @httpPut('/employee')
-  Update(@request() req: Request<any>, @response() res: Response<any>) {
+  put(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _employee = new Employee(req.body);
       if (Attributes.IsValid(_employee.password)){
@@ -156,7 +156,7 @@ class EmployeeController {
   }
 
   @httpGet('/employee/:id')
-  SearchById(@request() req: Request<any>, @response() res: Response<any>) {
+  getById(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       this.service.getById(Number(req.params.id))
       .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionário', result)))
@@ -173,7 +173,7 @@ class EmployeeController {
    * @memberof EmployeeController
    */
   @httpDelete('/employee/:id')
-  Delete(@request() req: Request<any>, @response() res: Response<any>) {
+  delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _id: number = req.params.id;
       this._employeeRepository.Delete(_id)

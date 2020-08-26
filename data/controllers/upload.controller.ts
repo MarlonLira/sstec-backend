@@ -16,7 +16,7 @@ class UploadController {
   ) { }
 
   @httpPost('/parking/upload')
-  ParkingUpload(@request() req: Request, @response() res: Response) {
+  parkingUpload(@request() req: Request, @response() res: Response) {
     return new Promise(async (resolve, reject) => {
       try {
         const result = await this.service.saveParkingFile(req, res);
@@ -28,15 +28,13 @@ class UploadController {
   }
 
   @httpGet('/uploads/parkingId/:parkingId')
-  searchAll(@request() req: Request, @response() res: Response): Promise<any> {
+  getAll(@request() req: Request, @response() res: Response): Promise<any> {
     return new Promise((resolve) => {
       this.service.toListByParkingId(Number(req.params.parkingId))
         .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Upload', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Upload')));
     });
   }
-
-
 }
 
 export default UploadController;

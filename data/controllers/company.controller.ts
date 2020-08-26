@@ -10,28 +10,13 @@ import { HttpCode } from '../../commons/enums/httpCode';
 import Attributes from "../../commons/core/attributes";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 
-
 @controller('')
 class CompanyController {
 
-  /**
-   * Creates an instance of CompanyController.
-   * @author Gustavo Gusmão
-   * @param {ICompanyRepository} _companyRepository
-   * @memberof CompanyController
-   */
   constructor(@inject(TYPES.ICompanyRepository) private _companyRepository: ICompanyRepository) { }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @returns
-   * @memberof CompanyController
-   */
   @httpPost('/company')
-  Save(@request() req: Request<any>, @response() res: Response<any>) {
+  post(@request() req: Request<any>, @response() res: Response<any>) {
     const _company = new Company(req.body.company);
     return new Promise((resolve) => {
       this._companyRepository.getByRegistryCode(_company.registryCode)
@@ -51,16 +36,8 @@ class CompanyController {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Request} req
-   * @param {Response} res
-   * @returns
-   * @memberof CompanyController
-   */
   @httpGet('/company/registryCode/:registryCode')
-  Search(@request() req: Request, @response() res: Response) {
+  getByRegistryCode(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
       const _company = new Company(req.params);
       if (Attributes.IsValid(_company.registryCode)) {
@@ -77,16 +54,8 @@ class CompanyController {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @returns
-   * @memberof CompanyController
-   */
   @httpPut('/company')
-  Update(@request() req: Request<any>, @response() res: Response<any>) {
+  put(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _company = new Company(req.body.company);
       if (Attributes.IsValid(_company.id)) {
@@ -103,16 +72,8 @@ class CompanyController {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @returns
-   * @memberof CompanyController
-   */
   @httpDelete('/company/:id')
-  Delete(@request() req: Request<any>, @response() res: Response<any>) {
+  delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _id: number = req.params.id;
       this._companyRepository.delete(_id)

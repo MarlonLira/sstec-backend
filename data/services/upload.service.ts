@@ -25,6 +25,34 @@ export class UploadService implements IUploadService {
     this.createFolderIfNotExists(this.form.uploadDir);
   }
 
+  save(req: any, folderName: string): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let filePath = '';
+        this.form.uploadDir += folderName;
+
+        this.form.parse(req);
+        this.createFolderIfNotExists(this.form.uploadDir);
+        this.form.on('fileBegin', (id, file) => {
+          this.form.uploadDir += `/${id}`;
+          this.createFolderIfNotExists(this.form.uploadDir);
+          file.path = `${this.form.uploadDir}/${file.name}`;
+        });
+
+        this.form.on('file', (id, file) => {
+          filePath = file.path;
+          const readStream = fs.createReadStream(file.path);
+        });
+
+        this.form.on('end', () => {
+          resolve(filePath);
+        });
+      } catch (error) {
+        reject(await this.log.critical('Upload', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)))
+      }
+    });
+  }
+
   toListByParkingId(parkingId: number): Promise<ParkingFile[]> {
     return new Promise((resolve, reject) => {
       this.pFileRepository.toList(parkingId)
@@ -64,7 +92,7 @@ export class UploadService implements IUploadService {
     });
   }
 
-  createFolderIfNotExists(path) {
+  private createFolderIfNotExists(path) {
     if (!fs.existsSync(path)) {
       fs.mkdirSync(path);
     }

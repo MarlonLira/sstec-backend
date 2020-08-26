@@ -29,7 +29,7 @@
       "schema": "zMgq639h8l"
     },
     "ForceSync": false,
-    "AlterSync": true,
+    "AlterSync": false,
     "DropAllTable": false,
     "Logging": false,
     "IsLogger": false
@@ -54,6 +54,6 @@
     "IsError": true
   },
   "Upload": {
-    "PathDir": "C:/uploads"
+    "PathDir": "C:/uploads/"
   }
 }

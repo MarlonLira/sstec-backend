@@ -9,32 +9,13 @@ import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { IParkingService } from "../interfaces/IServices/parkingService.interface";
 
-/**
- * @description
- * @author Marlon Lira
- * @class ParkingController
- */
 @controller('')
 class ParkingController {
 
-  /**
-   * Creates an instance of ParkingController.
-   * @author Marlon Lira
-   * @param {IParkingService} service
-   * @memberof ParkingController
-   */
   constructor(@inject(TYPES.IParkingService) private service: IParkingService) { }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @returns {Promise<any>}
-   * @memberof ParkingController
-   */
   @httpPost('/parking')
-  save(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+  post(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.save(new Parking(req.body))
         .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento', result)))
@@ -42,16 +23,8 @@ class ParkingController {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @returns {Promise<any>}
-   * @memberof ParkingController
-   */
   @httpGet('/parking/companyId/:companyId/registryCode/:registryCode')
-  search(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+  getByRegistryCode(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.getByRegistryCode(new Parking(req.params))
         .then((result: Parking[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
@@ -60,7 +33,7 @@ class ParkingController {
   }
 
   @httpGet('/parking/:id')
-  searchById(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+  getById(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.getById(Number(req.params.id))
         .then((result: Parking) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
@@ -68,16 +41,8 @@ class ParkingController {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Request} req
-   * @param {Response} res
-   * @returns {Promise<any>}
-   * @memberof ParkingController
-   */
   @httpGet('/parkings/companyId/:companyId')
-  searchAll(@request() req: Request, @response() res: Response): Promise<any> {
+  getAll(@request() req: Request, @response() res: Response): Promise<any> {
     return new Promise((resolve) => {
       this.service.toList(Number(req.params.companyId))
         .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
@@ -85,16 +50,8 @@ class ParkingController {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @returns {Promise<any>}
-   * @memberof ParkingController
-   */
   @httpPut('/parking')
-  update(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+  put(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.update(new Parking(req.body))
         .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Estacionamento', result)))
@@ -102,14 +59,6 @@ class ParkingController {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @returns {Promise<any>}
-   * @memberof ParkingController
-   */
   @httpDelete('/parking/:id')
   delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {

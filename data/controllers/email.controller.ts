@@ -32,7 +32,7 @@ class EmailController {
    * @memberof EmailController
    */
   @httpPost('/email')
-  Send(@request() req: Request, @response() res: Response) {
+  post(@request() req: Request, @response() res: Response) {
     return new Promise(async (resolve, reject) => {
       const _email = new Email(req.body);
       try {

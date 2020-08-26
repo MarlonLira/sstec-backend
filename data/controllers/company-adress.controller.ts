@@ -21,7 +21,7 @@ class CompanyAdressController {
   constructor(@inject(TYPES.ICompanyAdressRepository) private _companyAdressRepository: ICompanyAdressRepository) { }
 
   @httpPost('/companyAdress')
-  Save(@request() req: Request<any>, @response() res: Response<any>) {
+  post(@request() req: Request<any>, @response() res: Response<any>) {
     const _companyAdress = new CompanyAdress(req.body.companyAdress);
     return new Promise((resolve) => {
       this._companyAdressRepository.save(_companyAdress)
@@ -34,15 +34,8 @@ class CompanyAdressController {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @memberof CompanyAdressController
-   */
   @httpGet('/companyAdress/companyId/:companyId')
-  Search(@request() req: Request<any>, @response() res: Response<any>) {
+  getByCompanyId(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _companyId: number = req.params.companyId;
       this._companyAdressRepository.getByCompanyId(_companyId)
@@ -56,7 +49,7 @@ class CompanyAdressController {
   }
 
   @httpPut('/companyAdress')
-  Update(@request() req: Request<any>, @response() res: Response<any>) {
+  put(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _companyAdress = new CompanyAdress(req.body.companyAdress);
       this._companyAdressRepository.update(_companyAdress)
@@ -70,7 +63,7 @@ class CompanyAdressController {
   }
 
   @httpDelete('/companyAdress/:id')
-  Delete(@request() req: Request<any>, @response() res: Response<any>) {
+  delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _companyAdressId: number = req.params.id;
       this._companyAdressRepository.delete(_companyAdressId)
