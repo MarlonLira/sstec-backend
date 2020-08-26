@@ -19,6 +19,8 @@ import { IEmailService } from "../interfaces/IServices/emailService.interface";
 import { Email } from "../models/email.model";
 import { HttpCode } from "../../commons/enums/httpCode";
 import { ILogService } from "../interfaces/IServices/logService.interface";
+import { IParkingService } from "../interfaces/IServices/parkingService.interface";
+import { IRuleService } from "../interfaces/IServices/ruleService.interface";
 
 /**
  * @description
@@ -32,8 +34,8 @@ export class AuthService implements IAuthService {
   constructor(
     @inject(TYPES.IEmployeeRepository) private _employeeRepository: IEmployeeRepository,
     @inject(TYPES.ICompanyRepository) private _companyRepository: ICompanyRepository,
-    @inject(TYPES.IParkingRepository) private _parkingRepository: IParkingRepository,
-    @inject(TYPES.IRuleRepository) private _ruleRepository: IRuleRepository,
+    @inject(TYPES.IParkingService) private _parkingService: IParkingService,
+    @inject(TYPES.IRuleService) private _ruleService: IRuleService,
     @inject(TYPES.IUserRepository) private _userRepository: IUserRepository,
     @inject(TYPES.IEmailService) private _emailService: IEmailService,
     @inject(TYPES.ILogService) private log: ILogService
@@ -46,11 +48,11 @@ export class AuthService implements IAuthService {
           const foundEmployee: Employee = await this._employeeRepository.GetByEmail(auth.employee.email);
           if (Attributes.IsValid(foundEmployee) && Crypto.Compare(auth.employee.password, foundEmployee.password)) {
             auth.company = await this._companyRepository.getById(foundEmployee.companyId);
-            auth.parking = (await this._parkingRepository.getByEmployeeId(foundEmployee.id))[0];
+            auth.parking = (await this._parkingService.getByEmployeeId(foundEmployee.id))[0];
             auth.employee = foundEmployee;
             auth.employee.password = undefined;
             auth.authenticationLevel = Attributes.IsValid(foundEmployee.ruleId)
-              ? (await this._ruleRepository.getById(foundEmployee.ruleId)).level
+              ? (await this._ruleService.getById(foundEmployee.ruleId)).level
               : null;
             auth = await this.createEmployeeToken(auth);
             const result = await Crypto.Encrypt(JSON.stringify(auth), CryptoType.DEFAULT);
