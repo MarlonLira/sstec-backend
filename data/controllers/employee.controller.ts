@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
+import { controller, httpGet, httpPost, httpDelete, request, response, httpPut, results } from "inversify-express-utils";
 import { inject } from "inversify";
 
 import IEmployeeRepository from '../interfaces/IRepositories/employeeRepository.interface';
@@ -11,6 +11,7 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
 import Attributes from "../../commons/core/attributes";
 import { CryptoType } from '../../commons/enums/cryptoType';
 import Crypto from '../../commons/core/crypto';
+import { IEmployeeService } from "../interfaces/IServices/employeeService.interface";
 
 @controller('')
 class EmployeeController {
@@ -21,7 +22,9 @@ class EmployeeController {
    * @param {IEmployeeRepository} _employeeRepository
    * @memberof EmployeeController
    */
-  constructor(@inject(TYPES.IEmployeeRepository) private _employeeRepository: IEmployeeRepository) { }
+  constructor(
+  @inject(TYPES.IEmployeeRepository) private _employeeRepository: IEmployeeRepository,
+  @inject(TYPES.IEmployeeService) private service: IEmployeeService) { }
 
   /**
    * @description
@@ -134,14 +137,14 @@ class EmployeeController {
   @httpPut('/employee')
   Update(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      const _employee = new Employee(req.body.employee);
+      const _employee = new Employee(req.body);
       if (Attributes.IsValid(_employee.password)){
         _employee.password = Crypto.Encrypt(_employee.password, CryptoType.PASSWORD);
       }
       if (Attributes.IsValid(_employee.id)) {
         this._employeeRepository.Update(_employee)
           .then(result => {
-            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Funcionário', result));
+            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Funcionário', result));
           })
           .catch(error => {
             resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
@@ -149,6 +152,15 @@ class EmployeeController {
       } else {
         resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Funcionário'));
       }
+    });
+  }
+
+  @httpGet('/employee/:id')
+  SearchById(@request() req: Request<any>, @response() res: Response<any>) {
+    return new Promise((resolve) => {
+      this.service.getById(Number(req.params.id))
+      .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionário', result)))
+      .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Funcionário')));
     });
   }
 

@@ -19,6 +19,7 @@ class Employee extends Model {
   public phone!: string;
   public email!: string;
   public password: string;
+  public about: string;
   public parkingId!: number;
   public companyId!: number;
   public ruleId!: number;
@@ -38,6 +39,7 @@ class Employee extends Model {
     this.password = Attributes.ReturnIfValid(json.password);
     this.phone = Attributes.ReturnIfValid(json.phone);
     this.email = Attributes.ReturnIfValid(json.email);
+    this.about = Attributes.ReturnIfValid(json.about);
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
     this.companyId = Attributes.ReturnIfValid(json.companyId);
     this.ruleId = Attributes.ReturnIfValid(json.ruleId);
@@ -75,6 +77,10 @@ Employee.init({
   email: {
     type: new DataTypes.STRING(50),
     validate: { isEmail: true },
+    allowNull: false
+  },
+  about: {
+    type: new DataTypes.STRING(100),
     allowNull: false
   },
   parkingId: {

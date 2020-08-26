@@ -8,6 +8,7 @@ const TYPES = {
   IRuleService: Symbol('IRuleService'),
   ILogService: Symbol('ILogService'),
   IUploadService: Symbol('IUploadService'),
+  IEmployeeService: Symbol('IEmployeeService'),
 
   // Repositories Types
   IUserRepository: Symbol('IUserRepository'),
