@@ -11,7 +11,7 @@ import { CompanyAdress } from "../models/company-adress.model";
 export class CompanyAdressService implements ICompanyAdressService {
 
   constructor(
-    @inject(TYPES.IParkingAdressRepository) private repository: ICompanyAdressRepository,
+    @inject(TYPES.ICompanyAdressRepository) private repository: ICompanyAdressRepository,
     @inject(TYPES.ILogService) private log: ILogService) { }
 
   getById(id: number): Promise<CompanyAdress> {

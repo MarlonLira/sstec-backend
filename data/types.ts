@@ -4,6 +4,7 @@ const TYPES = {
   IEmailService: Symbol('IEmailService'),
   IParkingService: Symbol('IParkingService'),
   ICompanyService: Symbol('ICompanyService'),
+  ICompanyAdressService: Symbol('ICompanyAdressService'),
   IParkingAdressService: Symbol('IParkingAdressService'),
   IRuleService: Symbol('IRuleService'),
   ILogService: Symbol('ILogService'),

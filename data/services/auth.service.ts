@@ -21,6 +21,7 @@ import { HttpCode } from "../../commons/enums/httpCode";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { IParkingService } from "../interfaces/IServices/parkingService.interface";
 import { IRuleService } from "../interfaces/IServices/ruleService.interface";
+import { ICompanyService } from "../interfaces/IServices/companyService.interface";
 
 /**
  * @description
@@ -33,7 +34,7 @@ export class AuthService implements IAuthService {
 
   constructor(
     @inject(TYPES.IEmployeeRepository) private _employeeRepository: IEmployeeRepository,
-    @inject(TYPES.ICompanyRepository) private _companyRepository: ICompanyRepository,
+    @inject(TYPES.ICompanyService) private _companyService: ICompanyService,
     @inject(TYPES.IParkingService) private _parkingService: IParkingService,
     @inject(TYPES.IRuleService) private _ruleService: IRuleService,
     @inject(TYPES.IUserRepository) private _userRepository: IUserRepository,
@@ -47,7 +48,7 @@ export class AuthService implements IAuthService {
         if (Attributes.IsValid(auth.employee)) {
           const foundEmployee: Employee = await this._employeeRepository.GetByEmail(auth.employee.email);
           if (Attributes.IsValid(foundEmployee) && Crypto.Compare(auth.employee.password, foundEmployee.password)) {
-            auth.company = await this._companyRepository.getById(foundEmployee.companyId);
+            auth.company = await this._companyService.getById(foundEmployee.companyId);
             auth.parking = (await this._parkingService.getByEmployeeId(foundEmployee.id))[0];
             auth.employee = foundEmployee;
             auth.employee.password = undefined;
@@ -100,9 +101,9 @@ export class AuthService implements IAuthService {
           await this._employeeRepository.GetByRegistryCode(auth.employee.registryCode)
         );
         if (!Attributes.IsValid(foundEmployee)) {
-          const companies: Company[] = await this._companyRepository.getByRegistryCode(auth.company.registryCode);
-          if (!Attributes.IsValid(companies)) {
-            const createdCompany = await this._companyRepository.save(auth.company);
+          const company: Company = await this._companyService.getByRegistryCode(auth.company.registryCode);
+          if (!Attributes.IsValid(company)) {
+            const createdCompany = await this._companyService.save(auth.company);
             auth.employee.companyId = createdCompany.id;
             auth.employee.ruleId = 2;
 
@@ -112,7 +113,7 @@ export class AuthService implements IAuthService {
                 resolve(result);
               })
               .catch(async (error: any) => {
-                await this._companyRepository.delete(auth.employee.companyId);
+                await this._companyService.delete(auth.employee.companyId);
                 reject(await this.log.error('Signup Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)));
               });
 

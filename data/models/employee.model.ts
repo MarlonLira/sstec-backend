@@ -82,7 +82,7 @@ Employee.init({
     allowNull: false
   },
   about: {
-    type: new DataTypes.STRING(100),
+    type: new DataTypes.STRING(255),
   },
   imageUrl: {
     type: new DataTypes.STRING(255),

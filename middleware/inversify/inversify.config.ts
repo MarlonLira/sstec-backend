@@ -53,6 +53,7 @@ import { LogService } from '../../data/services/log.service';
 import { ParkingAdressService } from '../../data/services/parking-adress.service';
 import { UploadService } from '../../data/services/upload.service';
 import { EmployeeService } from '../../data/services/employee.service';
+import { CompanyAdressService } from '../../data/services/company-adress.service';
 
 // Services interfaces
 import { IAuthService } from '../../data/interfaces/IServices/authService.interface';
@@ -64,6 +65,8 @@ import { IParkingAdressService } from '../../data/interfaces/IServices/parking-a
 import { IUploadService } from '../../data/interfaces/IServices/uploadService.interface';
 import { ICompanyService } from '../../data/interfaces/IServices/companyService.interface';
 import { IEmployeeService } from '../../data/interfaces/IServices/employeeService.interface';
+import { ICompanyAdressService } from '../../data/interfaces/IServices/company-adressService.interface';
+
 
 // Binds
 const container = new Container();
@@ -73,6 +76,7 @@ container.bind<IAuthService>(TYPES.IAuthService).to(AuthService);
 container.bind<IEmailService>(TYPES.IEmailService).to(EmailService);
 container.bind<IParkingService>(TYPES.IParkingService).to(ParkingService);
 container.bind<ICompanyService>(TYPES.ICompanyService).to(CompanyService);
+container.bind<ICompanyAdressService>(TYPES.ICompanyAdressService).to(CompanyAdressService);
 container.bind<IParkingAdressService>(TYPES.IParkingAdressService).to(ParkingAdressService);
 container.bind<IRuleService>(TYPES.IRuleService).to(RuleService);
 container.bind<ILogService>(TYPES.ILogService).to(LogService);

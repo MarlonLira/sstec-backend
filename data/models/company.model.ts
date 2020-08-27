@@ -6,11 +6,6 @@ import { CompanyAdress } from './company-adress.model';
 
 const _instance = Context.getInstance();
 
-/**
- * @description
- * @author Gustavo Gusmão
- * @class Company
- */
 export class Company extends Model {
 
   id!: number;
@@ -18,15 +13,11 @@ export class Company extends Model {
   name!: string;
   registryCode!: string;
   phone!: string;
+  about: string;
+  imageUrl: string;
 
   adress: CompanyAdress;
 
-  /**
-   * Creates an instance of Company.
-   * @author Gustavo Gusmão
-   * @param {*} [json]
-   * @memberof Company
-   */
   constructor(json?: any) {
     super()
     this.id = Attributes.ReturnIfValid(json.id);
@@ -34,6 +25,8 @@ export class Company extends Model {
     this.status = Attributes.ReturnIfValid(json.status);
     this.registryCode = Attributes.ReturnIfValid(json.registryCode);
     this.phone = Attributes.ReturnIfValid(json.phone);
+    this.about = Attributes.ReturnIfValid(json.about);
+    this.imageUrl = Attributes.ReturnIfValid(json.imageurl);
     this.adress = Attributes.ReturnIfValid(json.adress);
   }
 
@@ -42,7 +35,6 @@ export class Company extends Model {
   }
 }
 
-// Todos os atributos que não podem ser nulos no banco tem que ter 'allowNull: false'
 Company.init({
   id: {
     type: new DataTypes.INTEGER(),
@@ -63,6 +55,12 @@ Company.init({
   },
   phone: {
     type: new DataTypes.STRING(12)
+  },
+  about: {
+    type: new DataTypes.STRING(255)
+  },
+  imageUrl: {
+    type: new DataTypes.STRING(255)
   }
 }, {
   sequelize: _instance,

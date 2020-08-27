@@ -6,6 +6,4 @@ export interface ICompanyService {
   update(company: Company): Promise<any>;
   delete(id: number): Promise<any>;
   getByRegistryCode(registryCode: string): Promise<Company>;
-  getByEmployeeId(employeeId: number): Promise<Company>;
-  toList(): Promise<Company[]>;
 }

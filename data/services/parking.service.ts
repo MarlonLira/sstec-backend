@@ -44,9 +44,8 @@ export class ParkingService implements IParkingService {
         .then(async (result: Parking) => {
           const _result: any = result.ToModify();
           _result.adress = await this.adressService.getByParkingId(result.id);
-          resolve(_result)
-        })
-        .catch(async (error: any) =>
+          resolve(_result);
+        }).catch(async (error: any) =>
           reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
   }
@@ -66,10 +65,8 @@ export class ParkingService implements IParkingService {
           const adress: ParkingAdress = new ParkingAdress(parking.adress);
           await this.adressService.save(adress);
           resolve(result)
-        })
-        .catch(async (error: any) =>
-          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)))
-        );
+        }).catch(async (error: any) =>
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
   }
 
