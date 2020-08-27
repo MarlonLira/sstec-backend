@@ -13,6 +13,7 @@ export class Company extends Model {
   name!: string;
   registryCode!: string;
   phone!: string;
+  email!: string;
   about: string;
   imageUrl: string;
 
@@ -25,6 +26,7 @@ export class Company extends Model {
     this.status = Attributes.ReturnIfValid(json.status);
     this.registryCode = Attributes.ReturnIfValid(json.registryCode);
     this.phone = Attributes.ReturnIfValid(json.phone);
+    this.email = Attributes.ReturnIfValid(json.email);
     this.about = Attributes.ReturnIfValid(json.about);
     this.imageUrl = Attributes.ReturnIfValid(json.imageurl);
     this.adress = Attributes.ReturnIfValid(json.adress);
@@ -52,6 +54,10 @@ Company.init({
   registryCode: {
     type: new DataTypes.STRING(14),
     allowNull: false
+  },
+  email: {
+    type: new DataTypes.STRING(50),
+    validate: { isEmail: true }
   },
   phone: {
     type: new DataTypes.STRING(12)
