@@ -128,12 +128,8 @@ export class CompanyRepository implements ICompanyRepository {
   getById(id: number) {
     return new Promise((resolve, reject) => {
       Company.findByPk(id)
-        .then(result => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((result: Company) => resolve(result))
+        .catch(error => reject(error));
     });
   }
 }

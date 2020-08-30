@@ -28,7 +28,7 @@ export class Company extends Model {
     this.phone = Attributes.ReturnIfValid(json.phone);
     this.email = Attributes.ReturnIfValid(json.email);
     this.about = Attributes.ReturnIfValid(json.about);
-    this.imageUrl = Attributes.ReturnIfValid(json.imageurl);
+    this.imageUrl = Attributes.ReturnIfValid(json.imageUrl);
     this.adress = Attributes.ReturnIfValid(json.adress);
   }
 
