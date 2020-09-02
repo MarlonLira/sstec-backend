@@ -192,13 +192,14 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
           parkingId: { [Op.eq]: _parkingspace.parkingId },
           status: { [Op.eq]: TransactionType.ACTIVE },
         },
-        group: ['type'],
-        attributes: ['*', [Sequelize.fn('COUNT', Sequelize.col('type')), 'amount']],
+        group: ['type', 'value'],
+        attributes: ['value', 'type', [Sequelize.fn('COUNT', Sequelize.col('type')), 'amount']],
         raw: true
       }).then((parkingSpace: ParkingSpace[]) => {
         resolve(parkingSpace);
       })
         .catch(error => {
+          console.log(error);
           reject(error);
         });
     });
