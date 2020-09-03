@@ -34,7 +34,7 @@ class ParkingSpaceController {
   Save(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise(async (resolve) => {
       try {
-        const _parkingSpace = new ParkingSpace(req.body.parkingSpace);
+        const _parkingSpace = new ParkingSpace(req.body);
         const result = [];
         if (Attributes.IsValid(_parkingSpace.amount)) {
           const listEx: ParkingSpace[] = (await this._parkingSpaceRepository.GetDeletedByParkingId(_parkingSpace));
