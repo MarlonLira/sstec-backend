@@ -56,6 +56,7 @@ export class EmployeeService implements IEmployeeService {
       this.repository.GetById(id)
         .then(async (result: Employee) => {
           const _result: any = result.ToModify();
+          _result.password = undefined;
           resolve(_result);
         })
         .catch(async (error: any) =>
