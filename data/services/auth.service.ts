@@ -163,17 +163,20 @@ export class AuthService implements IAuthService {
           await this._employeeRepository.GetByEmail(auth.employee.email)
         );
         if (Attributes.IsValid(foundEmployee)) {
-          console.log(foundEmployee);
           if (Attributes.IsValid(foundEmployee.email)) {
             const _email = new Email();
+            const _newPassword = Crypto.randomPassword();
             _email.from = 'help.simpleparking@gmail.com';
             _email.subject = 'Recuperação de Conta';
-            _email.text = 'Clique no link abaixo e digite sua nova senha';
+            _email.text = `Clique no link abaixo e digite sua nova senha ${_newPassword}`;
             _email.to = foundEmployee.email;
+            foundEmployee.password = Crypto.Encrypt(_newPassword, CryptoType.PASSWORD);
+            this._employeeRepository.Update(foundEmployee)
+              .then(async () => {
+                await this._emailService.send(_email);
+                resolve(this.protectedEmail(foundEmployee.email));
+              })
 
-            await this._emailService.send(_email);
-
-            resolve(this.protectedEmail(foundEmployee.email));
           } else {
             reject(await this.log.error('Auth', HttpCode.Expectation_Failed, HttpMessage.Parameters_Not_Provided, undefined));
           }
