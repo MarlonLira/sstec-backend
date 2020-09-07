@@ -1,4 +1,4 @@
-import { injectable, inject } from "inversify";
+import { injectable, inject, id } from "inversify";
 import IEmployeeRepository from "../interfaces/IRepositories/employeeRepository.interface";
 import TYPES from "../types";
 import { IEmployeeService } from "../interfaces/IServices/employeeService.interface";
@@ -7,6 +7,9 @@ import Attributes from "../../commons/core/attributes";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
+
+
+
 
 @injectable()
 export class EmployeeService implements IEmployeeService {
@@ -20,35 +23,84 @@ export class EmployeeService implements IEmployeeService {
   }
 
   getByRegistryCode(_registryCode: string): Promise<Employee> {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      this.repository.GetByEmail(_registryCode)
+        .then(async (result: Employee) =>  resolve(result))
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+    });
   }
 
   getByEmail(_email: string): Promise<Employee> {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      this.repository.GetByEmail(_email)
+        .then(async (result: Employee) =>  resolve(result))
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+    });
   }
 
   getByCompanyId(_companyId: number): Promise<Employee[]> {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      this.repository.GetByCompanyId(_companyId)
+        .then(async (result: Employee[]) => resolve(result))
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+    });
   }
 
   getByParkingId(_parkingId: number): Promise<Employee[]> {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      this.repository.GetByParkingId(_parkingId)
+        .then(async (result: Employee[]) => resolve(result))
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))))
+    })
   }
 
   toList(): Promise<Employee[]> {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      this.repository.ToList()
+        .then((result: Employee[]) => resolve(result))
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))))
+    });
   }
 
   save(employee: Employee): Promise<any> {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      this.repository.Save(employee)
+        .then(async (result: any) => resolve(result))
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+    });
   }
 
   update(employee: Employee): Promise<any> {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      this.repository.Update(employee)
+        .then(async (result: any) => {
+          const _employee: Employee = new Employee(employee.id);
+          if (Attributes.IsValid(id) && employee.id > 0) {
+            await this.repository.Update(employee);
+          } else {
+            _employee.id = employee.id;
+            await this.repository.Save(_employee);
+          }
+          resolve(result)
+        })
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))))
+    })
   }
 
   delete(id: number): Promise<any> {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      this.repository.Delete(id)
+        .then((result: any) => resolve(result))
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))))
+    })
   }
 
   getById(id: number): Promise<Employee> {
