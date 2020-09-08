@@ -37,7 +37,7 @@ class EmployeeController {
   @httpPost('/employee')
   post(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise(async (resolve) => {
-      const _employee = new Employee(req.body.employee);
+      const _employee = new Employee(req.body);
       const foundEmployee = Attributes.ReturnIfValid(
         await this._employeeRepository.GetByRegistryCode(_employee.registryCode),
         await this._employeeRepository.GetByEmail(_employee.email)
