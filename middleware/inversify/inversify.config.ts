@@ -54,6 +54,7 @@ import { ParkingAdressService } from '../../data/services/parking-adress.service
 import { UploadService } from '../../data/services/upload.service';
 import { EmployeeService } from '../../data/services/employee.service';
 import { CompanyAdressService } from '../../data/services/company-adress.service';
+import { ParkingSpaceService } from '../../data/services/parking-space.service';
 
 // Services interfaces
 import { IAuthService } from '../../data/interfaces/IServices/authService.interface';
@@ -66,7 +67,7 @@ import { IUploadService } from '../../data/interfaces/IServices/uploadService.in
 import { ICompanyService } from '../../data/interfaces/IServices/companyService.interface';
 import { IEmployeeService } from '../../data/interfaces/IServices/employeeService.interface';
 import { ICompanyAdressService } from '../../data/interfaces/IServices/company-adressService.interface';
-
+import { IParkingSpaceService } from '../../data/interfaces/IServices/parkingSpaceService.interface';
 
 // Binds
 const container = new Container();
@@ -82,6 +83,7 @@ container.bind<IRuleService>(TYPES.IRuleService).to(RuleService);
 container.bind<ILogService>(TYPES.ILogService).to(LogService);
 container.bind<IUploadService>(TYPES.IUploadService).to(UploadService);
 container.bind<IEmployeeService>(TYPES.IEmployeeService).to(EmployeeService);
+container.bind<IParkingSpaceService>(TYPES.IParkingSpaceService).to(ParkingSpaceService);
 
 // Repositories Binds
 container.bind<IUserRepository>(TYPES.IUserRepository).to(UserRepository);
