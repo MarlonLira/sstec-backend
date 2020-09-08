@@ -2,6 +2,8 @@ import { Model, DataTypes } from 'sequelize';
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
+import { Rule } from './rule.model';
+import { Parking } from './parking.model';
 
 const _instance = Context.getInstance();
 
@@ -25,6 +27,9 @@ class Employee extends Model {
   public companyId!: number;
   public ruleId!: number;
 
+  public rule: Rule;
+  public parking: Parking;
+
   /**
    * Creates an instance of Employee.
    * @author Marlon Lira
@@ -43,8 +48,10 @@ class Employee extends Model {
     this.about = Attributes.ReturnIfValid(json.about);
     this.imageUrl = Attributes.ReturnIfValid(json.imageUrl);
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
+    this.parking = Attributes.ReturnIfValid(json.parking);
     this.companyId = Attributes.ReturnIfValid(json.companyId);
     this.ruleId = Attributes.ReturnIfValid(json.ruleId);
+    this.rule = Attributes.ReturnIfValid(json.rule);
   }
 
   ToModify() {
