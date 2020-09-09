@@ -84,11 +84,12 @@ class SchedulingController {
                 });
             }
           } else {
-            this._schedulingRepository.Save(_scheduling)
-              .then(result => {
-                global.SocketServer.emit('get.schedulings', result);
-                resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result))
-              });
+            resolve(Http.SendMessage(res, HttpCode.Not_Found, HttpMessage.Not_Found, 'Agendamento'))
+            // this._schedulingRepository.Save(_scheduling)
+            //   .then(result => {
+            //     global.SocketServer.emit('get.schedulings', result);
+            //     resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento', result))
+            //   });
           }
         } else {
           resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Agendamento'));

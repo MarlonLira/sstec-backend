@@ -34,7 +34,6 @@ class EmployeeRepository implements IEmployeeRepository {
           resolve(createdEmployee);
         })
         .catch(async error => {
-          console.log(error);
           await _transaction.rollback();
           reject(error);
         });
