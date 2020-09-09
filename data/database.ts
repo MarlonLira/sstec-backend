@@ -16,7 +16,7 @@ import { Rule } from './models/rule.model';
 import ParkingPromotion from './models/parking-promotion.model';
 import ParkingSpace from './models/parking-space.model';
 import { ParkingAdress } from './models/parking-adress.model';
-import Scheduling from './models/scheduling.model';
+import { Scheduling } from './models/scheduling.model';
 import ParkingScore from './models/parking-score.model';
 import ParkingFinance from './models/parking-finance.model';
 import { Log } from './models/log.model';

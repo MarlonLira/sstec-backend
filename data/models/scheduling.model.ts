@@ -10,7 +10,7 @@ const _instance = Context.getInstance();
  * @author Gustavo Gusmão
  * @class Scheduling
  */
-class Scheduling extends Model {
+export class Scheduling extends Model {
 
   id!: number;
   status!: TransactionType;
@@ -111,5 +111,3 @@ Scheduling.init({
   sequelize: _instance,
   tableName: 'Scheduling'
 });
-
-export default Scheduling;
