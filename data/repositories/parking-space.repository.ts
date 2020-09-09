@@ -156,7 +156,7 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
         "                             OR (S1.AVALIABLETIME < :avaliableTime AND S1.UNAVAILABLETIME > :unavailableTime )))" +
         "     AND PS.STATUS NOT IN ('EX', 'PD')" +
         "     AND PS.PARKINGID = :parkingId" +
-        "     AND PS.TYPE = :type",
+        "     AND PS.TYPE IN (:type, 'BOTH')",
         {
           replacements: {
             date: scheduling.date,
@@ -199,7 +199,6 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
         resolve(parkingSpace);
       })
         .catch(error => {
-          console.log(error);
           reject(error);
         });
     });
