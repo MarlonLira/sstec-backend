@@ -42,6 +42,10 @@ class Http {
         return Http.SendMessage(res, HttpCode.Bad_Request, error, entity);
       case HttpMessage.Login_Unauthorized:
         return Http.SendMessage(res, HttpCode.Bad_Request, error, entity);
+      case HttpMessage.Not_Found:
+        return Http.SendMessage(res, HttpCode.Not_Found, error, entity);
+      case HttpMessage.Already_Exists:
+        return Http.SendMessage(res, HttpCode.Bad_Request, error, entity);
       default:
         return Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, entity, error);
     }
