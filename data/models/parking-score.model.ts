@@ -12,7 +12,7 @@ const _instance = Context.getInstance();
  * @class ParkingScore
  * @extends {Model}
  */
-class ParkingScore extends Model {
+export class ParkingScore extends Model {
   id!: number;
   attendanceScore: number;
   securityScore: number;
@@ -70,5 +70,3 @@ ParkingScore.init({
   sequelize: _instance,
   tableName: 'ParkingScore'
 });
-
-export default ParkingScore;

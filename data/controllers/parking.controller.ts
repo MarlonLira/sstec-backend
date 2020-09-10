@@ -42,7 +42,7 @@ class ParkingController {
   }
 
   @httpGet('/parkings/companyId/:companyId')
-  getAll(@request() req: Request, @response() res: Response): Promise<any> {
+  getByCompanyId(@request() req: Request, @response() res: Response): Promise<any> {
     return new Promise((resolve) => {
       this.service.toList(Number(req.params.companyId))
         .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
