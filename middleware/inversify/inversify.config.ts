@@ -15,7 +15,7 @@ import VehicleRepository from '../../data/repositories/vehicle.repository';
 import ParkingRepository from '../../data/repositories/parking.repository';
 import { RuleRepository } from '../../data/repositories/rule.repository';
 import ParkingPromotionRepository from '../../data/repositories/parking-promotion.repository';
-import ParkingSpaceRepository from '../../data/repositories/parking-space.repository';
+import { ParkingSpaceRepository } from '../../data/repositories/parking-space.repository';
 import ParkingAdressRepository from '../../data/repositories/parking-adress.repository';
 import { SchedulingRepository } from '../../data/repositories/scheduling.repository';
 import ParkingScoreRepository from '../../data/repositories/parking-score.repository';
@@ -32,7 +32,7 @@ import { ICompanyAdressRepository } from '../../data/interfaces/IRepositories/co
 import IEmployeeRepository from '../../data/interfaces/IRepositories/employeeRepository.interface';
 import IPaymentRepository from '../../data/interfaces/IRepositories/paymentRepository.interface';
 import { IParkingRepository } from '../../data/interfaces/IRepositories/parkingRepository.interface';
-import IParkingSpaceRepository from '../../data/interfaces/IRepositories/parking-spaceRepository.interface';
+import { IParkingSpaceRepository } from '../../data/interfaces/IRepositories/parking-spaceRepository.interface';
 import IVehicleRepository from '../../data/interfaces/IRepositories/vehicleRepository.interface';
 import { IRuleRepository } from '../../data/interfaces/IRepositories/ruleRepository.interface';
 import IParkingPromotionRepository from '../../data/interfaces/IRepositories/parking-promotionRepository.interface';
@@ -70,7 +70,7 @@ import { IUploadService } from '../../data/interfaces/IServices/uploadService.in
 import { ICompanyService } from '../../data/interfaces/IServices/companyService.interface';
 import { IEmployeeService } from '../../data/interfaces/IServices/employeeService.interface';
 import { ICompanyAdressService } from '../../data/interfaces/IServices/company-adressService.interface';
-import { IParkingSpaceService } from '../../data/interfaces/IServices/parkingSpaceService.interface';
+import { IParkingSpaceService } from '../../data/interfaces/IServices/parking-spaceService.interface';
 import { ISchedulingService } from '../../data/interfaces/IServices/schedulingService.interface';
 import { IParkingScoreService } from '../../data/interfaces/IServices/parking-scoreService.interface';
 

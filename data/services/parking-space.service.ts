@@ -4,11 +4,11 @@ import Attributes from "../../commons/core/attributes";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
-import { IParkingSpaceService } from "../interfaces/IServices/parkingSpaceService.interface";
-import IParkingSpaceRepository from "../interfaces/IRepositories/parking-spaceRepository.interface";
-import ParkingSpace from "../models/parking-space.model";
+import { IParkingSpaceService } from "../interfaces/IServices/parking-spaceService.interface";
+import { IParkingSpaceRepository } from "../interfaces/IRepositories/parking-spaceRepository.interface";
+import { ParkingSpace } from "../models/parking-space.model";
 import { TransactionType } from "../../commons/enums/transactionType";
-import Scheduling from "../models/scheduling.model";
+import { Scheduling } from "../models/scheduling.model";
 
 @injectable()
 export class ParkingSpaceService implements IParkingSpaceService {

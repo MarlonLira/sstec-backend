@@ -1,5 +1,5 @@
-import ParkingSpace from '../../models/parking-space.model';
-import Scheduling from '../../models/scheduling.model';
+import { ParkingSpace } from '../../models/parking-space.model';
+import { Scheduling } from '../../models/scheduling.model';
 
 export interface IParkingSpaceService {
 
