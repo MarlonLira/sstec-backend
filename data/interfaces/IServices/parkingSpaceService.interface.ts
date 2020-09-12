@@ -11,11 +11,9 @@ export interface IParkingSpaceService {
 
   getById(id: number): Promise<ParkingSpace>;
 
-  getByParkingId(parkingId: number): Promise<ParkingSpace[]>;
-
   getAvailable(scheduling: Scheduling): Promise<ParkingSpace[]>;
 
-  toGroupedList(parkingSpace: ParkingSpace): Promise<ParkingSpace[]>;
+  getByParkinkId(id: number): Promise<ParkingSpace[]>;
 
   deleteGroupType(parkingSpace: ParkingSpace): Promise<any>;
 

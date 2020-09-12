@@ -180,16 +180,16 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
 
   /**
    * @description
-   * @author Felipe Seabra
-   * @param {number} _parkingId
+   * @author Gustavo Gusmão
+   * @param {number} id
    * @returns {Promise<ParkingSpace[]>}
    * @memberof ParkingSpaceRepository
    */
-  toGroupedList(_parkingspace: ParkingSpace): Promise<ParkingSpace[]> {
+  getByParkingId(id: number): Promise<ParkingSpace[]> {
     return new Promise(async (resolve, reject) => {
       ParkingSpace.findAll({
         where: {
-          parkingId: { [Op.eq]: _parkingspace.parkingId },
+          parkingId: { [Op.eq]: id },
           status: { [Op.eq]: TransactionType.ACTIVE },
         },
         group: ['type', 'value'],
@@ -199,7 +199,6 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
         resolve(parkingSpace);
       })
         .catch(error => {
-          console.log(error);
           reject(error);
         });
     });
@@ -216,34 +215,6 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
     return new Promise((resolve, reject) => {
       ParkingSpace.findByPk(id)
         .then((parkingSpace: ParkingSpace) => {
-          resolve(parkingSpace)
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
-  }
-
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} parkingId
-   * @returns {Promise<ParkingSpace[]>}
-   * @memberof ParkingSpaceRepository
-   */
-  getByParkingId(_parkingId: number): Promise<ParkingSpace[]> {
-    return new Promise((resolve, reject) => {
-      ParkingSpace.findAll(
-        {
-          where:
-          {
-            parkingId: _parkingId,
-            status: {
-              [Op.ne]: TransactionType.DELETED
-            }
-          },
-        })
-        .then((parkingSpace: ParkingSpace[]) => {
           resolve(parkingSpace)
         })
         .catch(error => {
@@ -284,12 +255,7 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Emerson Souza
-   * @returns {Promise<ParkingSpace[]>}
-   * @memberof ParkingSpaceRepository
-   */
+
   toList(): Promise<ParkingSpace[]> {
     return new Promise((resolve, reject) => {
       ParkingSpace.findAll({

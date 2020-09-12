@@ -56,7 +56,7 @@ class SchedulingController {
           Attributes.IsValid(_scheduling.parkingId) &&
           Attributes.IsValid(_scheduling.vehicleId)
         ) {
-          const _availableParkingSpace = await this._parkingSpaceRepository.GetAvailable(_scheduling);
+          const _availableParkingSpace = await this._parkingSpaceRepository.getAvailable(_scheduling);
           if (Attributes.IsValid(_availableParkingSpace)) {
             _scheduling.parkingSpaceId = _availableParkingSpace[0].id;
             _scheduling.userName = (await this._userRepository.GetById(_scheduling.userId)).name;
