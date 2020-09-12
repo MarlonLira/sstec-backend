@@ -11,6 +11,7 @@ const TYPES = {
   IUploadService: Symbol('IUploadService'),
   IEmployeeService: Symbol('IEmployeeService'),
   ISchedulingService: Symbol('ISchedulingService'),
+  IParkingScoreService: Symbol('IParkingScoreService'),
 
   // Repositories Types
   IUserRepository: Symbol('IUserRepository'),

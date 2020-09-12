@@ -55,6 +55,7 @@ import { UploadService } from '../../data/services/upload.service';
 import { EmployeeService } from '../../data/services/employee.service';
 import { CompanyAdressService } from '../../data/services/company-adress.service';
 import { SchedulingService } from '../../data/services/scheduling.service';
+import { ParkingScoreService } from '../../data/services/parking-score.service';
 
 // Services interfaces
 import { IAuthService } from '../../data/interfaces/IServices/authService.interface';
@@ -68,6 +69,8 @@ import { ICompanyService } from '../../data/interfaces/IServices/companyService.
 import { IEmployeeService } from '../../data/interfaces/IServices/employeeService.interface';
 import { ICompanyAdressService } from '../../data/interfaces/IServices/company-adressService.interface';
 import { ISchedulingService } from '../../data/interfaces/IServices/schedulingService.interface';
+import { IParkingScoreService } from '../../data/interfaces/IServices/parking-scoreService.interface';
+
 
 // Binds
 const container = new Container();
@@ -84,6 +87,7 @@ container.bind<ILogService>(TYPES.ILogService).to(LogService);
 container.bind<IUploadService>(TYPES.IUploadService).to(UploadService);
 container.bind<IEmployeeService>(TYPES.IEmployeeService).to(EmployeeService);
 container.bind<ISchedulingService>(TYPES.ISchedulingService).to(SchedulingService);
+container.bind<IParkingScoreService>(TYPES.IParkingScoreService).to(ParkingScoreService);
 
 // Repositories Binds
 container.bind<IUserRepository>(TYPES.IUserRepository).to(UserRepository);
