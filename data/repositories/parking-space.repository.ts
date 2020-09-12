@@ -4,7 +4,7 @@ import { Op, QueryTypes, Sequelize } from 'sequelize';
 import IParkingSpaceRepository from '../interfaces/IRepositories/parking-spaceRepository.interface';
 import ParkingSpace from '../models/parking-space.model';
 import { TransactionType } from "../../commons/enums/transactionType";
-import Scheduling from '../models/scheduling.model';
+import { Scheduling } from '../models/scheduling.model';
 
 @injectable()
 class ParkingSpaceRepository implements IParkingSpaceRepository {
@@ -156,7 +156,7 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
         "                             OR (S1.AVALIABLETIME < :avaliableTime AND S1.UNAVAILABLETIME > :unavailableTime )))" +
         "     AND PS.STATUS NOT IN ('EX', 'PD')" +
         "     AND PS.PARKINGID = :parkingId" +
-        "     AND PS.TYPE = :type",
+        "     AND PS.TYPE IN (:type, 'BOTH')",
         {
           replacements: {
             date: scheduling.date,

@@ -26,7 +26,6 @@ export class CompanyService implements ICompanyService {
           _result.adress = await this.adressService.getByCompanyId(result.id);
           resolve(_result);
         }).catch(async (error: any) => {
-          console.log(error);
           reject(await this.log.critical('Empresa', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)))
         });
     });

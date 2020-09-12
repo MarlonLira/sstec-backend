@@ -1,5 +1,5 @@
 import ParkingSpace from '../../models/parking-space.model';
-import Scheduling from '../../models/scheduling.model';
+import { Scheduling } from '../../models/scheduling.model';
 
 /**
  * @description
@@ -78,6 +78,7 @@ interface IParkingSpaceRepository {
    * @memberof IParkingSpaceRepository
    */
   deleteGroupType(parkingSpace:ParkingSpace): Promise<any>;
+
   /**
    * @description
    * @author Gustavo Gusmão

@@ -23,8 +23,8 @@ class EmployeeController {
    * @memberof EmployeeController
    */
   constructor(
-  @inject(TYPES.IEmployeeRepository) private _employeeRepository: IEmployeeRepository,
-  @inject(TYPES.IEmployeeService) private service: IEmployeeService) { }
+    @inject(TYPES.IEmployeeRepository) private _employeeRepository: IEmployeeRepository,
+    @inject(TYPES.IEmployeeService) private service: IEmployeeService) { }
 
   /**
    * @description
@@ -37,7 +37,7 @@ class EmployeeController {
   @httpPost('/employee')
   post(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise(async (resolve) => {
-      const _employee = new Employee(req.body.employee);
+      const _employee = new Employee(req.body);
       const foundEmployee = Attributes.ReturnIfValid(
         await this._employeeRepository.GetByRegistryCode(_employee.registryCode),
         await this._employeeRepository.GetByEmail(_employee.email)
@@ -78,14 +78,14 @@ class EmployeeController {
           foundEmployees = foundEmployees.find(r => r.parkingId === Number(_employee.parkingId));
           resolve(Http.SendMessage(res, HttpCode.Found, HttpMessage.Found, 'Funcionário', foundEmployees))
         } else if (Attributes.IsValid(_employee.parkingId) && Attributes.IsValid(_employee.name)) {
-          foundEmployees = await this._employeeRepository.GetByName(_employee.name, Number(_employee.parkingId),0);
+          foundEmployees = await this._employeeRepository.GetByName(_employee.name, Number(_employee.parkingId), 0);
           resolve(Http.SendMessage(res, HttpCode.Found, HttpMessage.Found, 'Funcionário', foundEmployees))
         } else if (Attributes.IsValid(_employee.companyId) && Attributes.IsValid(_employee.registryCode)) {
           foundEmployees = await this._employeeRepository.GetByRegistryCode(_employee.registryCode);
           foundEmployees = foundEmployees.find(r => r.companyId === Number(_employee.companyId));
           resolve(Http.SendMessage(res, HttpCode.Found, HttpMessage.Found, 'Funcionário', foundEmployees))
         } else if (Attributes.IsValid(_employee.companyId) && Attributes.IsValid(_employee.name)) {
-          foundEmployees = await this._employeeRepository.GetByName(_employee.name,0,Number(_employee.companyId));
+          foundEmployees = await this._employeeRepository.GetByName(_employee.name, 0, Number(_employee.companyId));
           foundEmployees = foundEmployees.find(r => r.companyId === Number(_employee.companyId));
           resolve(Http.SendMessage(res, HttpCode.Found, HttpMessage.Found, 'Funcionário', foundEmployees))
         } else {
@@ -138,7 +138,7 @@ class EmployeeController {
   put(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       const _employee = new Employee(req.body);
-      if (Attributes.IsValid(_employee.password)){
+      if (Attributes.IsValid(_employee.password)) {
         _employee.password = Crypto.Encrypt(_employee.password, CryptoType.PASSWORD);
       }
       if (Attributes.IsValid(_employee.id)) {
@@ -159,8 +159,8 @@ class EmployeeController {
   getById(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       this.service.getById(Number(req.params.id))
-      .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionário', result)))
-      .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Funcionário')));
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionário', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Funcionário')));
     });
   }
 

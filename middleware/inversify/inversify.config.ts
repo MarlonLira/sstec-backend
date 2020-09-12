@@ -17,7 +17,7 @@ import { RuleRepository } from '../../data/repositories/rule.repository';
 import ParkingPromotionRepository from '../../data/repositories/parking-promotion.repository';
 import ParkingSpaceRepository from '../../data/repositories/parking-space.repository';
 import ParkingAdressRepository from '../../data/repositories/parking-adress.repository';
-import SchedulingRepository from '../../data/repositories/scheduling.repository';
+import { SchedulingRepository } from '../../data/repositories/scheduling.repository';
 import ParkingScoreRepository from '../../data/repositories/parking-score.repository';
 import ParkingFinanceRepository from '../../data/repositories/parking-finance.repository';
 import { LogRepository } from '../../data/repositories/log.repository';
@@ -38,7 +38,7 @@ import { IRuleRepository } from '../../data/interfaces/IRepositories/ruleReposit
 import IParkingPromotionRepository from '../../data/interfaces/IRepositories/parking-promotionRepository.interface';
 import { IParkingAdressRepository } from '../../data/interfaces/IRepositories/parking-adressRepository.interface';
 import IParkingScoreRepository from '../../data/interfaces/IRepositories/parking-scoreRepository.interface';
-import ISchedulingRepository from '../../data/interfaces/IRepositories/schedulingRepository.interface';
+import { ISchedulingRepository } from '../../data/interfaces/IRepositories/schedulingRepository.interface';
 import IParkingFinanceRepository from '../../data/interfaces/IRepositories/parking-financeRepository.interface';
 import { ILogRepository } from '../../data/interfaces/IRepositories/logRepository.interface';
 import { IParkingFileRepository } from '../../data/interfaces/IRepositories/parkingFileRepository.interface';
@@ -55,6 +55,9 @@ import { UploadService } from '../../data/services/upload.service';
 import { EmployeeService } from '../../data/services/employee.service';
 import { CompanyAdressService } from '../../data/services/company-adress.service';
 import { ParkingSpaceService } from '../../data/services/parking-space.service';
+import { SchedulingService } from '../../data/services/scheduling.service';
+import { ParkingScoreService } from '../../data/services/parking-score.service';
+
 
 // Services interfaces
 import { IAuthService } from '../../data/interfaces/IServices/authService.interface';
@@ -68,6 +71,8 @@ import { ICompanyService } from '../../data/interfaces/IServices/companyService.
 import { IEmployeeService } from '../../data/interfaces/IServices/employeeService.interface';
 import { ICompanyAdressService } from '../../data/interfaces/IServices/company-adressService.interface';
 import { IParkingSpaceService } from '../../data/interfaces/IServices/parkingSpaceService.interface';
+import { ISchedulingService } from '../../data/interfaces/IServices/schedulingService.interface';
+import { IParkingScoreService } from '../../data/interfaces/IServices/parking-scoreService.interface';
 
 // Binds
 const container = new Container();
@@ -84,6 +89,8 @@ container.bind<ILogService>(TYPES.ILogService).to(LogService);
 container.bind<IUploadService>(TYPES.IUploadService).to(UploadService);
 container.bind<IEmployeeService>(TYPES.IEmployeeService).to(EmployeeService);
 container.bind<IParkingSpaceService>(TYPES.IParkingSpaceService).to(ParkingSpaceService);
+container.bind<ISchedulingService>(TYPES.ISchedulingService).to(SchedulingService);
+container.bind<IParkingScoreService>(TYPES.IParkingScoreService).to(ParkingScoreService);
 
 // Repositories Binds
 container.bind<IUserRepository>(TYPES.IUserRepository).to(UserRepository);
