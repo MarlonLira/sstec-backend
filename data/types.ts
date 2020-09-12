@@ -10,6 +10,7 @@ const TYPES = {
   ILogService: Symbol('ILogService'),
   IUploadService: Symbol('IUploadService'),
   IEmployeeService: Symbol('IEmployeeService'),
+  IParkingSpaceService: Symbol('IParkingSpaceService'),
   ISchedulingService: Symbol('ISchedulingService'),
   IParkingScoreService: Symbol('IParkingScoreService'),
 
