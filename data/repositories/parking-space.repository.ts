@@ -1,13 +1,13 @@
 import { injectable } from "inversify";
 import { Op, QueryTypes, Sequelize } from 'sequelize';
 
-import IParkingSpaceRepository from '../interfaces/IRepositories/parking-spaceRepository.interface';
-import ParkingSpace from '../models/parking-space.model';
+import { IParkingSpaceRepository } from '../interfaces/IRepositories/parking-spaceRepository.interface';
+import { ParkingSpace } from '../models/parking-space.model';
 import { TransactionType } from "../../commons/enums/transactionType";
 import { Scheduling } from '../models/scheduling.model';
 
 @injectable()
-class ParkingSpaceRepository implements IParkingSpaceRepository {
+export class ParkingSpaceRepository implements IParkingSpaceRepository {
 
   /**
    * @description
@@ -274,5 +274,3 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
     });
   }
 }
-
-export default ParkingSpaceRepository;

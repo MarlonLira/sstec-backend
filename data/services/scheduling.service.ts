@@ -4,7 +4,6 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
 import { ISchedulingService } from "../interfaces/IServices/schedulingService.interface";
-import IParkingSpaceRepository from "../interfaces/IRepositories/parking-spaceRepository.interface";
 import IParkingPromotionRepository from "../interfaces/IRepositories/parking-promotionRepository.interface";
 import IUserRepository from "../interfaces/IRepositories/userRepository.interface";
 import IVehicleRepository from "../interfaces/IRepositories/vehicleRepository.interface";
@@ -12,13 +11,14 @@ import ICardRepository from "../interfaces/IRepositories/cardRepository.interfac
 import Attributes from "../../commons/core/attributes";
 import { ISchedulingRepository } from "../interfaces/IRepositories/schedulingRepository.interface";
 import { Scheduling } from "../models/scheduling.model";
+import { IParkingSpaceService } from "../interfaces/IServices/parking-spaceService.interface";
 
 @injectable()
 export class SchedulingService implements ISchedulingService {
 
   constructor(
     @inject(TYPES.ISchedulingRepository) private repository: ISchedulingRepository,
-    @inject(TYPES.IParkingSpaceRepository) private parkingSpaceService: IParkingSpaceRepository,
+    @inject(TYPES.IParkingSpaceService) private parkingSpaceService: IParkingSpaceService,
     @inject(TYPES.IParkingPromotionRepository) private parkingPromotionService: IParkingPromotionRepository,
     @inject(TYPES.IUserRepository) private userService: IUserRepository,
     @inject(TYPES.IVehicleRepository) private vehicleService: IVehicleRepository,
@@ -34,7 +34,7 @@ export class SchedulingService implements ISchedulingService {
           Attributes.IsValid(scheduling.parkingId) &&
           Attributes.IsValid(scheduling.vehicleId)
         ) {
-          const _availableParkingSpace = await this.parkingSpaceService.GetAvailable(scheduling);
+          const _availableParkingSpace = await this.parkingSpaceService.getAvailable(scheduling);
           if (Attributes.IsValid(_availableParkingSpace)) {
             scheduling.parkingSpaceId = _availableParkingSpace[0].id;
             scheduling.userName = (await this.userService.GetById(scheduling.userId)).name;

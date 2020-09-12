@@ -1,4 +1,4 @@
-import ParkingSpace from '../../models/parking-space.model';
+import { ParkingSpace } from '../../models/parking-space.model';
 import { Scheduling } from '../../models/scheduling.model';
 
 /**
@@ -6,7 +6,7 @@ import { Scheduling } from '../../models/scheduling.model';
  * @author Emerson Souza
  * @interface IParkingSpaceRepository
  */
-interface IParkingSpaceRepository {
+export interface IParkingSpaceRepository {
 
   /**
    * @description
@@ -77,7 +77,7 @@ interface IParkingSpaceRepository {
    * @returns {Promise<any>}
    * @memberof IParkingSpaceRepository
    */
-  deleteGroupType(parkingSpace:ParkingSpace): Promise<any>;
+  deleteGroupType(parkingSpace: ParkingSpace): Promise<any>;
 
   /**
    * @description
@@ -86,7 +86,5 @@ interface IParkingSpaceRepository {
    * @returns {Promise<ParkingSpace[]>}
    * @memberof IParkingSpaceRepository
    */
- getDeletedByParkingId(_parkingspace: ParkingSpace): Promise<ParkingSpace[]>;
+  getDeletedByParkingId(_parkingspace: ParkingSpace): Promise<ParkingSpace[]>;
 }
-
-export default IParkingSpaceRepository;
