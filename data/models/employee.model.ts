@@ -78,7 +78,8 @@ Employee.init({
     allowNull: false
   },
   password: {
-    type: new DataTypes.STRING(100)
+    type: new DataTypes.STRING(100),
+    allowNull: false
   },
   phone: {
     type: new DataTypes.STRING(14)
