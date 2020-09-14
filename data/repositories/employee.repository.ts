@@ -188,12 +188,15 @@ class EmployeeRepository implements IEmployeeRepository {
    * @author Marlon Lira
    * @memberof EmployeeRepository
    */
-  ToList(): Promise<Employee[]> {
+  ToList(companyId: number): Promise<Employee[]> {
     return new Promise((resolve, reject) => {
       Employee.findAll({
         where: {
           status: {
             [Op.ne]: TransactionType.DELETED
+          },
+          companyId:{
+            [Op.eq]: companyId
           }
         }
       })

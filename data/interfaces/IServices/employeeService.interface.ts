@@ -14,7 +14,7 @@ export interface IEmployeeService {
 
   getByParkingId(_parkingId: number): Promise<Employee[]>;
 
-  toList(): Promise<Employee[]>;
+  toList(companyId: number): Promise<Employee[]>;
 
   save(employee : Employee) : Promise<any>;
 

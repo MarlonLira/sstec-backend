@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { controller, httpGet, httpPost, httpDelete, request, response, httpPut, results } from "inversify-express-utils";
+import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
 import IEmployeeRepository from '../interfaces/IRepositories/employeeRepository.interface';
@@ -36,24 +36,10 @@ class EmployeeController {
    */
   @httpPost('/employee')
   post(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise(async (resolve) => {
-      const _employee = new Employee(req.body);
-      const foundEmployee = Attributes.ReturnIfValid(
-        await this._employeeRepository.GetByRegistryCode(_employee.registryCode),
-        await this._employeeRepository.GetByEmail(_employee.email)
-      );
-      if (!Attributes.IsValid(foundEmployee)) {
-        this._employeeRepository.Save(_employee)
-          .then(result => {
-            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Funcionário', result))
-          })
-          .catch(error => {
-            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
-          });
-      } else {
-        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Already_Exists, 'Funcionário'));
-      }
-
+    return new Promise((resolve) => {
+      this.service.save(new Employee(req.body))
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Funcionario', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Funcionario')));
     });
   }
 
@@ -66,7 +52,6 @@ class EmployeeController {
    */
   @httpGet('/employee/parkingId/:parkingId/registryCode/:registryCode')
   @httpGet('/employee/parkingId/:parkingId/name/:name')
-  @httpGet('/employee/companyId/:companyId/registryCode/:registryCode')
   @httpGet('/employee/companyId/:companyId/name/:name')
   Search(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise(async (resolve) => {
@@ -97,6 +82,14 @@ class EmployeeController {
     });
   }
 
+  @httpGet('/employee/companyId/:companyId/registryCode/:registryCode')
+  getByRegistryCode(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+    return new Promise((resolve) => {
+      this.service.getByRegistryCode(req.params.registryCode)
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionario', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Funcionario')));
+    });
+  }
   /**
    * @description
    * @author Gustavo Gusmão
@@ -105,28 +98,31 @@ class EmployeeController {
    * @returns
    * @memberof EmployeeController
    */
-  @httpGet('/employees/parkingId/:parkingId')
   @httpGet('/employees/companyId/:companyId')
   getAll(@request() req: Request<any>, @response() res: Response<any>) {
-    return new Promise(async (resolve) => {
-      try {
-        const _employee = new Employee(req.params);
-        let result: Employee[] = null;
-        if (Attributes.IsValid(_employee.parkingId)) {
-          result = await this._employeeRepository.GetByParkingId(_employee.parkingId);
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionário', result))
-        } else if (Attributes.IsValid(_employee.companyId)) {
-          result = await this._employeeRepository.GetByCompanyId(_employee.companyId);
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionário', result))
-        } else {
-          resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Funcionário'));
-        }
-      } catch (error) {
-        resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
-      }
+    return new Promise((resolve) => {
+      this.service.toList(Number(req.params.companyId))
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionario', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Funcionario')));
     });
   }
 
+  @httpGet('/employees/parkingId/:parkingId')
+  getByParkingId(@request() req: Request<any>, @response() res: Response<any>) {
+    return new Promise((resolve) => {
+      this.service.getByParkingId(Number(req.params.parkingId))
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionario', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Funcionario')));
+    });
+  }
+
+  getByEmail(@request() req: Request<any>, @response() res: Response<any>) {
+    return new Promise((resolve) => {
+      this.service.getByEmail(req.params.email)
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionario', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Funcionario')));
+    });
+  }
   /**
    * @description
    * @author Marlon Lira
@@ -137,21 +133,9 @@ class EmployeeController {
   @httpPut('/employee')
   put(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      const _employee = new Employee(req.body);
-      if (Attributes.IsValid(_employee.password)) {
-        _employee.password = Crypto.Encrypt(_employee.password, CryptoType.PASSWORD);
-      }
-      if (Attributes.IsValid(_employee.id)) {
-        this._employeeRepository.Update(_employee)
-          .then(result => {
-            resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Funcionário', result));
-          })
-          .catch(error => {
-            resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
-          });
-      } else {
-        resolve(Http.SendMessage(res, HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, 'Funcionário'));
-      }
+      this.service.update(new Employee(req.body))
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Funcionario', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Funcionario')));
     });
   }
 
@@ -159,8 +143,8 @@ class EmployeeController {
   getById(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
       this.service.getById(Number(req.params.id))
-        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionário', result)))
-        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Funcionário')));
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionario', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Funcionario')));
     });
   }
 
@@ -175,14 +159,9 @@ class EmployeeController {
   @httpDelete('/employee/:id')
   delete(@request() req: Request<any>, @response() res: Response<any>) {
     return new Promise((resolve) => {
-      const _id: number = req.params.id;
-      this._employeeRepository.Delete(_id)
-        .then(result => {
-          resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Funcionário', result));
-        })
-        .catch(error => {
-          resolve(Http.SendMessage(res, HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, 'Funcionário', error));
-        });
+      this.service.delete(Number(req.params.id))
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Funcionario', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Funcionario')));
     });
   }
 }
