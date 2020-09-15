@@ -9,6 +9,7 @@ import { TransactionType } from '../../commons/enums/transactionType';
 
 @injectable()
 export class EmployeeRepository implements IEmployeeRepository {
+  private _attributes = ['id', 'status', 'name', 'registryCode', 'phone', 'email', 'about', 'imageUrl', 'parkingId', 'companyId', 'ruleId']
 
   save(employee: Employee): Promise<any> {
     return new Promise(async (resolve, reject) => {
@@ -30,6 +31,7 @@ export class EmployeeRepository implements IEmployeeRepository {
   getByName(name: string, _parkingId: number = 0, _companyId: number = 0): Promise<Employee[]> {
     return new Promise((resolve, reject) => {
       Employee.findAll({
+        attributes: this._attributes,
         where: {
           name: {
             [Op.like]: `%${name}%`
@@ -52,6 +54,7 @@ export class EmployeeRepository implements IEmployeeRepository {
   getByRegistryCode(_registryCode: string): Promise<Employee> {
     return new Promise((resolve, reject) => {
       Employee.findOne({
+        attributes: this._attributes,
         where: {
           registryCode: {
             [Op.eq]: _registryCode
@@ -71,6 +74,7 @@ export class EmployeeRepository implements IEmployeeRepository {
   getByEmail(_email: string): Promise<Employee> {
     return new Promise((resolve, reject) => {
       Employee.findOne({
+        attributes: this._attributes,
         where: {
           email: {
             [Op.eq]: _email
@@ -90,6 +94,7 @@ export class EmployeeRepository implements IEmployeeRepository {
   getByCompanyId(_companyId: number): Promise<Employee[]> {
     return new Promise((resolve, reject) => {
       Employee.findAll({
+        attributes: this._attributes,
         where: {
           companyId: {
             [Op.eq]: _companyId
@@ -98,11 +103,8 @@ export class EmployeeRepository implements IEmployeeRepository {
             [Op.ne]: TransactionType.DELETED
           }
         }
-      }).then((result: Employee[]) => {
-        resolve(result);
-      }).catch(error => {
-        reject(error);
-      });
+      }).then((result: Employee[]) => resolve(result)
+      ).catch(error => reject(error));
     });
   }
 
@@ -120,6 +122,7 @@ export class EmployeeRepository implements IEmployeeRepository {
   getByParkingId(_parkingId: number): Promise<Employee[]> {
     return new Promise((resolve, reject) => {
       Employee.findAll({
+        attributes: this._attributes,
         where: {
           parkingId: {
             [Op.eq]: _parkingId
