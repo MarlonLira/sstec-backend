@@ -10,7 +10,7 @@ import UserAdress from './models/user-adress.model';
 import Card from './models/card.model';
 import { Company } from './models/company.model';
 import { CompanyAdress } from './models/company-adress.model';
-import Employee from './models/employee.model';
+import { Employee } from './models/employee.model';
 import { Parking } from './models/parking.model';
 import { Rule } from './models/rule.model';
 import ParkingPromotion from './models/parking-promotion.model';

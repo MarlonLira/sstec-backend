@@ -4,14 +4,11 @@ import * as jwt from 'jsonwebtoken';
 import { Auth } from '../models/auth.model';
 import TYPES from "../types";
 import IUserRepository from "../interfaces/IRepositories/userRepository.interface";
-import { IRuleRepository } from "../interfaces/IRepositories/ruleRepository.interface";
-import { IParkingRepository } from "../interfaces/IRepositories/parkingRepository.interface";
-import { ICompanyRepository } from "../interfaces/IRepositories/companyRepository.interface";
-import IEmployeeRepository from "../interfaces/IRepositories/employeeRepository.interface";
+import { IEmployeeRepository } from "../interfaces/IRepositories/employeeRepository.interface";
 import { CryptoType } from "../../commons/enums/cryptoType";
 import Attributes from "../../commons/core/attributes";
 import Crypto from '../../commons/core/crypto';
-import Employee from "../models/employee.model";
+import { Employee } from "../models/employee.model";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import User from "../models/user.model";
 import { Company } from "../models/company.model";
@@ -23,12 +20,6 @@ import { IParkingService } from "../interfaces/IServices/parkingService.interfac
 import { IRuleService } from "../interfaces/IServices/ruleService.interface";
 import { ICompanyService } from "../interfaces/IServices/companyService.interface";
 
-/**
- * @description
- * @author Marlon Lira
- * @class AuthService
- * @implements {IAuthService}
- */
 @injectable()
 export class AuthService implements IAuthService {
 
@@ -46,7 +37,7 @@ export class AuthService implements IAuthService {
     return new Promise(async (resolve, reject) => {
       try {
         if (Attributes.IsValid(auth.employee)) {
-          const foundEmployee: Employee = await this._employeeRepository.GetByEmail(auth.employee.email);
+          const foundEmployee: Employee = await this._employeeRepository.getByEmail(auth.employee.email);
           if (Attributes.IsValid(foundEmployee) && Crypto.Compare(auth.employee.password, foundEmployee.password)) {
             auth.company = await this._companyService.getById(foundEmployee.companyId);
             auth.parking = (await this._parkingService.getByEmployeeId(foundEmployee.id))[0];
@@ -97,8 +88,8 @@ export class AuthService implements IAuthService {
     return new Promise(async (resolve, reject) => {
       try {
         const foundEmployee = Attributes.ReturnIfValid(
-          await this._employeeRepository.GetByEmail(auth.employee.email),
-          await this._employeeRepository.GetByRegistryCode(auth.employee.registryCode)
+          await this._employeeRepository.getByEmail(auth.employee.email),
+          await this._employeeRepository.getByRegistryCode(auth.employee.registryCode)
         );
         if (!Attributes.IsValid(foundEmployee)) {
           const company: Company = await this._companyService.getByRegistryCode(auth.company.registryCode);
@@ -107,7 +98,7 @@ export class AuthService implements IAuthService {
             auth.employee.companyId = createdCompany.id;
             auth.employee.ruleId = 2;
 
-            this._employeeRepository.Save(auth.employee)
+            this._employeeRepository.save(auth.employee)
               .then((result: Employee) => {
                 result.password = undefined;
                 resolve(result);
@@ -133,13 +124,6 @@ export class AuthService implements IAuthService {
     throw new Error("Method not implemented.");
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Auth} auth
-   * @returns
-   * @memberof AuthService
-   */
   checkToken(auth: Auth) {
     return new Promise((resolve) => {
       jwt.verify(auth.token, process.env.SECRET, (err) => {
@@ -148,19 +132,12 @@ export class AuthService implements IAuthService {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Auth} auth
-   * @returns {Promise<any>}
-   * @memberof AuthService
-   */
   accountRecoveryEmployee(auth: Auth): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
         const foundEmployee: Employee = await Attributes.ReturnIfValid(
-          await this._employeeRepository.GetByRegistryCode(auth.employee.registryCode),
-          await this._employeeRepository.GetByEmail(auth.employee.email)
+          await this._employeeRepository.getByRegistryCode(auth.employee.registryCode),
+          await this._employeeRepository.getByEmail(auth.employee.email)
         );
         if (Attributes.IsValid(foundEmployee)) {
           if (Attributes.IsValid(foundEmployee.email)) {
@@ -171,7 +148,7 @@ export class AuthService implements IAuthService {
             _email.text = `Clique no link abaixo e digite sua nova senha ${_newPassword}`;
             _email.to = foundEmployee.email;
             foundEmployee.password = Crypto.Encrypt(_newPassword, CryptoType.PASSWORD);
-            this._employeeRepository.Update(foundEmployee)
+            this._employeeRepository.update(foundEmployee)
               .then(async () => {
                 await this._emailService.send(_email);
                 resolve(this.protectedEmail(foundEmployee.email));
@@ -189,13 +166,6 @@ export class AuthService implements IAuthService {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Auth} auth
-   * @returns {Promise<Auth>}
-   * @memberof AuthService
-   */
   createEmployeeToken(auth: Auth): Promise<Auth> {
     return new Promise((resolve) => {
       const id = auth.employee.id;
@@ -210,13 +180,6 @@ export class AuthService implements IAuthService {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Auth} auth
-   * @returns {Promise<Auth>}
-   * @memberof AuthService
-   */
   createUserToken(auth: Auth): Promise<Auth> {
     return new Promise((resolve) => {
       const id = auth.user.id;

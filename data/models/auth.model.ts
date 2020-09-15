@@ -1,5 +1,5 @@
 import User from './user.model';
-import Employee from './employee.model';
+import { Employee } from './employee.model';
 import Attributes from '../../commons/core/attributes';
 import { Company } from './company.model';
 import { Parking } from './parking.model';
