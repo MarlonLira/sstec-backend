@@ -23,6 +23,15 @@ class EmployeeController {
     });
   }
 
+  @httpGet('/employees/companyId/:companyId')
+  getByCompanyId(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+    return new Promise((resolve) => {
+      this.service.getByCompanyId(req.params.companyId)
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Funcionario', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Funcionario')));
+    });
+  }
+
   @httpGet('/employee/registryCode/:registryCode')
   getByRegistryCode(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {

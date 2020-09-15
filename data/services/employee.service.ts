@@ -40,7 +40,9 @@ export class EmployeeService implements IEmployeeService {
   getByCompanyId(_companyId: number): Promise<Employee[]> {
     return new Promise((resolve, reject) => {
       this.repository.getByCompanyId(_companyId)
-        .then(async (result: Employee[]) => resolve(result))
+        .then(async (result: Employee[]) => {
+          resolve(result);
+        })
         .catch(async (error: any) =>
           reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
