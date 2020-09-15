@@ -62,7 +62,7 @@ interface IEmployeeRepository {
    * @returns {Promise<Employee[]>}
    * @memberof IEmployeeRepository
    */
-  ToList(): Promise<Employee[]>;
+  ToList(id: number): Promise<Employee[]>;
 
   /**
    * @description

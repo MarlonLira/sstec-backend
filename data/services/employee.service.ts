@@ -27,7 +27,7 @@ export class EmployeeService implements IEmployeeService {
       this.repository.GetByEmail(_registryCode)
         .then(async (result: Employee) =>  resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
   }
 
@@ -36,7 +36,7 @@ export class EmployeeService implements IEmployeeService {
       this.repository.GetByEmail(_email)
         .then(async (result: Employee) =>  resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
   }
 
@@ -45,7 +45,7 @@ export class EmployeeService implements IEmployeeService {
       this.repository.GetByCompanyId(_companyId)
         .then(async (result: Employee[]) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
   }
 
@@ -58,9 +58,9 @@ export class EmployeeService implements IEmployeeService {
     })
   }
 
-  toList(): Promise<Employee[]> {
+  toList(companyId: number): Promise<Employee[]> {
     return new Promise((resolve, reject) => {
-      this.repository.ToList()
+      this.repository.ToList(companyId)
         .then((result: Employee[]) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))))
@@ -112,7 +112,7 @@ export class EmployeeService implements IEmployeeService {
           resolve(_result);
         })
         .catch(async (error: any) =>
-          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
   }
 }
