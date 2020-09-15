@@ -9,7 +9,7 @@ import UserAdressRepository from '../../data/repositories/user-adress.repository
 import CardRepository from '../../data/repositories/card.repository';
 import { CompanyRepository } from '../../data/repositories/company.repository';
 import { CompanyAdressRepository } from '../../data/repositories/company-adress.repository';
-import EmployeeRepository from '../../data/repositories/employee.repository';
+import { EmployeeRepository } from '../../data/repositories/employee.repository';
 import PaymentRepository from '../../data/repositories/payment.repository';
 import VehicleRepository from '../../data/repositories/vehicle.repository';
 import ParkingRepository from '../../data/repositories/parking.repository';
@@ -29,7 +29,7 @@ import IUserAdressRepository from '../../data/interfaces/IRepositories/user-adre
 import ICardRepository from '../../data/interfaces/IRepositories/cardRepository.interface';
 import { ICompanyRepository } from '../../data/interfaces/IRepositories/companyRepository.interface';
 import { ICompanyAdressRepository } from '../../data/interfaces/IRepositories/company-adressRepository.interface';
-import IEmployeeRepository from '../../data/interfaces/IRepositories/employeeRepository.interface';
+import { IEmployeeRepository } from '../../data/interfaces/IRepositories/employeeRepository.interface';
 import IPaymentRepository from '../../data/interfaces/IRepositories/paymentRepository.interface';
 import { IParkingRepository } from '../../data/interfaces/IRepositories/parkingRepository.interface';
 import { IParkingSpaceRepository } from '../../data/interfaces/IRepositories/parking-spaceRepository.interface';
@@ -57,7 +57,6 @@ import { CompanyAdressService } from '../../data/services/company-adress.service
 import { ParkingSpaceService } from '../../data/services/parking-space.service';
 import { SchedulingService } from '../../data/services/scheduling.service';
 import { ParkingScoreService } from '../../data/services/parking-score.service';
-
 
 // Services interfaces
 import { IAuthService } from '../../data/interfaces/IServices/authService.interface';

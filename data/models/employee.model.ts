@@ -13,7 +13,7 @@ const _instance = Context.getInstance();
  * @class Employee
  * @extends {Model}
  */
-class Employee extends Model {
+export class Employee extends Model {
   public id!: number;
   public status!: TransactionType;
   public name!: string;
@@ -108,5 +108,3 @@ Employee.init({
   sequelize: _instance,
   tableName: 'Employee'
 });
-
-export default Employee;

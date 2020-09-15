@@ -1,4 +1,4 @@
-import Employee from '../../models/employee.model';
+import { Employee } from '../../models/employee.model';
 
 export interface IEmployeeService {
 
@@ -14,11 +14,9 @@ export interface IEmployeeService {
 
   getByParkingId(_parkingId: number): Promise<Employee[]>;
 
-  toList(companyId: number): Promise<Employee[]>;
+  save(employee: Employee): Promise<any>;
 
-  save(employee : Employee) : Promise<any>;
-
-  update(employee : Employee): Promise<any>;
+  update(employee: Employee): Promise<any>;
 
   delete(id: number): Promise<any>;
 }
