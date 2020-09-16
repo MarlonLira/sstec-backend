@@ -1,4 +1,4 @@
-import { Model, DataTypes, BelongsToGetAssociationMixin } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
@@ -6,13 +6,7 @@ import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
 
-/**
- * @description
- * @author Gustavo Gusmão
- * @class Card
- * @extends {Model}
- */
-class Card extends Model {
+export class Card extends Model {
 
   id!: number;
   status!: TransactionType;
@@ -24,12 +18,6 @@ class Card extends Model {
   type: string;
   userId: number;
 
-  /**
-   * Creates an instance of Card.
-   * @author Gustavo Gusmão
-   * @param {*} [json]
-   * @memberof Card
-   */
   constructor(json?: any) {
     super()
     this.id = Attributes.ReturnIfValid(json.id);
@@ -43,7 +31,7 @@ class Card extends Model {
     this.userId = Attributes.ReturnIfValid(json.userId);
   }
 
-  ToModify(){
+  ToModify() {
     return this.toJSON();
   }
 }
@@ -81,7 +69,7 @@ Card.init({
     type: new DataTypes.STRING(6),
     allowNull: false
   },
-  userId:{
+  userId: {
     type: new DataTypes.INTEGER(),
     allowNull: false
   }
@@ -89,5 +77,3 @@ Card.init({
   sequelize: _instance,
   tableName: 'Card'
 });
-
-export default Card;

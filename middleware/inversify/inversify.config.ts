@@ -6,7 +6,7 @@ import TYPES from '../../data/types';
 // Repositories
 import UserRepository from '../../data/repositories/user.repository';
 import UserAdressRepository from '../../data/repositories/user-adress.repository';
-import CardRepository from '../../data/repositories/card.repository';
+import { CardRepository } from '../../data/repositories/card.repository';
 import { CompanyRepository } from '../../data/repositories/company.repository';
 import { CompanyAdressRepository } from '../../data/repositories/company-adress.repository';
 import { EmployeeRepository } from '../../data/repositories/employee.repository';
@@ -57,6 +57,7 @@ import { CompanyAdressService } from '../../data/services/company-adress.service
 import { ParkingSpaceService } from '../../data/services/parking-space.service';
 import { SchedulingService } from '../../data/services/scheduling.service';
 import { ParkingScoreService } from '../../data/services/parking-score.service';
+import { CardService } from '../../data/services/card.service';
 
 // Services interfaces
 import { IAuthService } from '../../data/interfaces/IServices/authService.interface';
@@ -72,6 +73,7 @@ import { ICompanyAdressService } from '../../data/interfaces/IServices/company-a
 import { IParkingSpaceService } from '../../data/interfaces/IServices/parking-spaceService.interface';
 import { ISchedulingService } from '../../data/interfaces/IServices/schedulingService.interface';
 import { IParkingScoreService } from '../../data/interfaces/IServices/parking-scoreService.interface';
+import { ICardService } from '../../data/interfaces/IServices/cardService.interface';
 
 // Binds
 const container = new Container();
@@ -90,6 +92,7 @@ container.bind<IEmployeeService>(TYPES.IEmployeeService).to(EmployeeService);
 container.bind<IParkingSpaceService>(TYPES.IParkingSpaceService).to(ParkingSpaceService);
 container.bind<ISchedulingService>(TYPES.ISchedulingService).to(SchedulingService);
 container.bind<IParkingScoreService>(TYPES.IParkingScoreService).to(ParkingScoreService);
+container.bind<ICardService>(TYPES.ICardService).to(CardService);
 
 // Repositories Binds
 container.bind<IUserRepository>(TYPES.IUserRepository).to(UserRepository);

@@ -13,6 +13,7 @@ const TYPES = {
   IParkingSpaceService: Symbol('IParkingSpaceService'),
   ISchedulingService: Symbol('ISchedulingService'),
   IParkingScoreService: Symbol('IParkingScoreService'),
+  ICardService: Symbol('ICardService'),
 
   // Repositories Types
   IUserRepository: Symbol('IUserRepository'),

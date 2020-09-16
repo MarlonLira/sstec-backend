@@ -31,13 +31,6 @@ export class ParkingService implements IParkingService {
     @inject(TYPES.IParkingAdressService) private adressService: IParkingAdressService,
     @inject(TYPES.ILogService) private log: ILogService) { }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} id
-   * @returns {Promise<Parking>}
-   * @memberof ParkingService
-   */
   getById(id: number): Promise<Parking> {
     return new Promise((resolve, reject) => {
       this.repository.getById(id)
@@ -50,13 +43,6 @@ export class ParkingService implements IParkingService {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Parking} parking
-   * @returns {Promise<any>}
-   * @memberof ParkingService
-   */
   save(parking: Parking): Promise<any> {
     return new Promise((resolve, reject) => {
       this.repository.save(parking)
@@ -70,13 +56,6 @@ export class ParkingService implements IParkingService {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Parking} parking
-   * @returns {Promise<any>}
-   * @memberof ParkingService
-   */
   update(parking: Parking): Promise<any> {
     return new Promise((resolve, reject) => {
       this.repository.update(parking)
@@ -95,13 +74,6 @@ export class ParkingService implements IParkingService {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} id
-   * @returns {Promise<any>}
-   * @memberof ParkingService
-   */
   delete(id: number): Promise<any> {
     return new Promise((resolve, reject) => {
       this.repository.delete(id)
@@ -111,13 +83,6 @@ export class ParkingService implements IParkingService {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Parking} parking
-   * @returns {Promise<Parking[]>}
-   * @memberof ParkingService
-   */
   getByRegistryCode(parking: Parking): Promise<Parking[]> {
     return new Promise(async (resolve, reject) => {
       if (Attributes.IsValid(parking.companyId) && Attributes.IsValid(parking.registryCode)) {
@@ -131,13 +96,6 @@ export class ParkingService implements IParkingService {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} employeeId
-   * @returns {Promise<Parking[]>}
-   * @memberof ParkingService
-   */
   getByEmployeeId(employeeId: number): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       this.repository.getByEmployeeId(employeeId)
@@ -147,13 +105,6 @@ export class ParkingService implements IParkingService {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} companyId
-   * @returns {Promise<Parking[]>}
-   * @memberof ParkingService
-   */
   toList(companyId: number): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       this.repository.toList(companyId)

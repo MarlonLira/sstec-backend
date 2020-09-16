@@ -7,7 +7,7 @@ import Context from '../main/context';
 import User from './models/user.model';
 import Vehicle from './models/vehicle.model';
 import UserAdress from './models/user-adress.model';
-import Card from './models/card.model';
+import { Card } from './models/card.model';
 import { Company } from './models/company.model';
 import { CompanyAdress } from './models/company-adress.model';
 import { Employee } from './models/employee.model';
