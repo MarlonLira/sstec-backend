@@ -39,7 +39,7 @@ export class SchedulingService implements ISchedulingService {
             scheduling.parkingSpaceId = _availableParkingSpace[0].id;
             scheduling.userName = (await this.userService.GetById(scheduling.userId)).name;
             scheduling.vehiclePlate = (await this.vehicleService.GetById(scheduling.vehicleId)).licensePlate;
-            scheduling.cardNumber = (await this.cardRepository.GetById(scheduling.cardId)).number;
+            scheduling.cardNumber = (await this.cardRepository.getById(scheduling.cardId)).number;
 
             const _userSchedulings: Scheduling[] = await this.repository.getByUserId(scheduling.userId);
             if (Attributes.IsValid(_userSchedulings)) {
