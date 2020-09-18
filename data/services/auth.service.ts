@@ -3,14 +3,14 @@ import { injectable, inject } from "inversify";
 import * as jwt from 'jsonwebtoken';
 import { Auth } from '../models/auth.model';
 import TYPES from "../types";
-import IUserRepository from "../interfaces/IRepositories/userRepository.interface";
+import { IUserRepository } from "../interfaces/IRepositories/userRepository.interface";
 import { IEmployeeRepository } from "../interfaces/IRepositories/employeeRepository.interface";
 import { CryptoType } from "../../commons/enums/cryptoType";
 import Attributes from "../../commons/core/attributes";
 import Crypto from '../../commons/core/crypto';
 import { Employee } from "../models/employee.model";
 import { HttpMessage } from "../../commons/enums/httpMessage";
-import User from "../models/user.model";
+import { User } from "../models/user.model";
 import { Company } from "../models/company.model";
 import { IEmailService } from "../interfaces/IServices/emailService.interface";
 import { Email } from "../models/email.model";
@@ -65,7 +65,7 @@ export class AuthService implements IAuthService {
     return new Promise(async (resolve, reject) => {
       try {
         if (Attributes.IsValid(auth.user)) {
-          const foundUser: User = await this._userRepository.GetByEmail(auth.user.email);
+          const foundUser: User = await this._userRepository.getByEmail(auth.user.email);
           if (Attributes.IsValid(foundUser) && Crypto.Compare(auth.user.password, foundUser.password)) {
             auth.user = foundUser;
             auth.user.password = undefined;

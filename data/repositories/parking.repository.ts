@@ -5,14 +5,8 @@ import { IParkingRepository } from '../interfaces/IRepositories/parkingRepositor
 import { Parking } from '../models/parking.model';
 import { TransactionType } from '../../commons/enums/transactionType';
 
-/**
- * @description
- * @author Emerson Souza
- * @class ParkingRepository
- * @implements {IParkingRepository}
- */
 @injectable()
-class ParkingRepository implements IParkingRepository {
+export class ParkingRepository implements IParkingRepository {
 
   getById(id: number): Promise<Parking> {
     return new Promise((resolve, reject) => {
@@ -26,12 +20,6 @@ class ParkingRepository implements IParkingRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Emerson Souza
-   * @param {Parking} parking
-   * @memberof ParkingRepository
-   */
   save(parking: Parking): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
@@ -48,12 +36,6 @@ class ParkingRepository implements IParkingRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Emerson Souza
-   * @param {Parking} parking
-   * @memberof ParkingRepository
-   */
   update(parking: Parking): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
@@ -77,13 +59,6 @@ class ParkingRepository implements IParkingRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Emerson Souza
-   * @param {number} _id
-   * @returns {Promise<any>}
-   * @memberof ParkingRepository
-   */
   delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
@@ -108,13 +83,6 @@ class ParkingRepository implements IParkingRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Emerson Souza
-   * @param {string} registryCode
-   * @returns {Promise<Parking>}
-   * @memberof ParkingRepository
-   */
   getByRegistryCode(companyId: number, registryCode: string): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       Parking.findAll({
@@ -137,13 +105,6 @@ class ParkingRepository implements IParkingRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} _employeeId
-   * @returns {Promise<Parking>}
-   * @memberof ParkingRepository
-   */
   getByEmployeeId(_employeeId: number): Promise<Parking[]> {
     return new Promise(async (resolve, reject) => {
       Parking.sequelize.query(
@@ -191,5 +152,3 @@ class ParkingRepository implements IParkingRepository {
     });
   }
 }
-
-export default ParkingRepository;

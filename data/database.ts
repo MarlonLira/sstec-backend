@@ -4,9 +4,9 @@ import Logger from '../commons/core/logger';
 import Context from '../main/context';
 
 // Entities
-import User from './models/user.model';
+import { User } from './models/user.model';
 import Vehicle from './models/vehicle.model';
-import UserAdress from './models/user-adress.model';
+import { UserAdress } from './models/user-adress.model';
 import ParkingFinance from './models/parking-finance.model';
 import ParkingPromotion from './models/parking-promotion.model';
 import { Card } from './models/card.model';

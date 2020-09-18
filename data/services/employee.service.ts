@@ -1,9 +1,8 @@
-import { injectable, inject, id } from "inversify";
+import { injectable, inject } from "inversify";
 import { IEmployeeRepository } from "../interfaces/IRepositories/employeeRepository.interface";
 import TYPES from "../types";
 import { IEmployeeService } from "../interfaces/IServices/employeeService.interface";
 import { Employee } from "../models/employee.model";
-import Attributes from "../../commons/core/attributes";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
@@ -69,16 +68,7 @@ export class EmployeeService implements IEmployeeService {
   update(employee: Employee): Promise<any> {
     return new Promise((resolve, reject) => {
       this.repository.update(employee)
-        .then(async (result: any) => {
-          const _employee: Employee = new Employee(employee.id);
-          if (Attributes.IsValid(id) && employee.id > 0) {
-            await this.repository.update(employee);
-          } else {
-            _employee.id = employee.id;
-            await this.repository.save(_employee);
-          }
-          resolve(result)
-        })
+        .then(result => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))))
     })

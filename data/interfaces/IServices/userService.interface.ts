@@ -1,6 +1,6 @@
 import { User } from '../../models/user.model';
 
-export interface IUserRepository {
+export interface IUserService {
   getByName(name: string): Promise<User[]>;
   getByRegistryCode(registryCode: string): Promise<User[]>;
   getByEmail(_email: string): Promise<User>;
