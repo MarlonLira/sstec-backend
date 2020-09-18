@@ -1,29 +1,24 @@
 import { Op } from 'sequelize';
 import { injectable } from "inversify";
 
-import IUserAdressRepository from '../interfaces/IRepositories/user-adressRepository.interface';
-import UserAdress from '../models/user-adress.model';
+import { IUserAdressRepository } from '../interfaces/IRepositories/user-adressRepository.interface';
+import { UserAdress } from '../models/user-adress.model';
 import { TransactionType } from '../../commons/enums/transactionType';
 
-/**
- * @description
- * @author Gustavo Gusmão
- * @class UserAdressRepository
- * @implements {IUserAdressRepository}
- */
 @injectable()
-class UserAdressRepository implements IUserAdressRepository {
+export class UserAdressRepository implements IUserAdressRepository {
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {number} _userId
-   * @returns {Promise<UserAdress[]>}
-   * @memberof UserAdressRepository
-   */
-  GetByUserId(_userId: number): Promise<UserAdress[]> {
+  getById(id: number): Promise<UserAdress> {
+    return new Promise((resolve, reject) => {
+      UserAdress.findByPk(id)
+        .then((parking: UserAdress) => resolve(parking))
+        .catch(error => reject(error));
+    });
+  }
+
+  getByUserId(_userId: number): Promise<UserAdress> {
     return new Promise(async (resolve, reject) => {
-      UserAdress.findAll(
+      UserAdress.findOne(
         {
           where: {
             userId: _userId,
@@ -33,29 +28,19 @@ class UserAdressRepository implements IUserAdressRepository {
           }
         }
       )
-        .then((foundUserAdress: UserAdress[]) => {
-          resolve(foundUserAdress);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((userAdress: UserAdress) => resolve(userAdress))
+        .catch(error => reject(error));
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {user} user
-   * @memberof UserAdressRepository
-   */
-  Update(_userAdress: UserAdress): Promise<any> {
+  update(userAdress: UserAdress): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await UserAdress.sequelize.transaction();
-      UserAdress.update(_userAdress.toJSON(),
+      UserAdress.update(userAdress.ToModify(),
         {
           where:
           {
-            id: _userAdress.userId
+            id: userAdress.userId
           },
           transaction: _transaction,
           validate: false
@@ -71,15 +56,7 @@ class UserAdressRepository implements IUserAdressRepository {
     });
   }
 
-
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {number} _id
-   * @returns {Promise<any>}
-   * @memberof UserAdressRepository
-   */
-  Delete(_id: number): Promise<any> {
+  delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await UserAdress.sequelize.transaction();
       UserAdress.destroy({
@@ -99,14 +76,7 @@ class UserAdressRepository implements IUserAdressRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {UserAdress} userAdress
-   * @returns
-   * @memberof UserAdressRepository
-   */
-  Save(userAdress: UserAdress) {
+  save(userAdress: UserAdress) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await UserAdress.sequelize.transaction();
       userAdress.status = TransactionType.ACTIVE;
@@ -121,5 +91,3 @@ class UserAdressRepository implements IUserAdressRepository {
     });
   }
 }
-
-export default UserAdressRepository;

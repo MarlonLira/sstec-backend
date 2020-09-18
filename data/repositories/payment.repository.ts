@@ -3,7 +3,7 @@ import { injectable } from "inversify";
 import IPaymentRepository from '../interfaces/IRepositories/paymentRepository.interface';
 import Payment from '../models/payment.model';
 import { Card } from '../models/card.model';
-import User from '../models/user.model';
+import { User } from '../models/user.model';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 /**

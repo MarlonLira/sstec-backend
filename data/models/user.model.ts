@@ -3,16 +3,11 @@ import { Model, DataTypes } from 'sequelize';
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
+import { UserAdress } from './user-adress.model';
 
 const _instance = Context.getInstance();
 
-/**
- * @description
- * @author Marlon Lira
- * @class User
- * @extends {Model}
- */
-class User extends Model {
+export class User extends Model {
 
   id!: number;
   status!: TransactionType;
@@ -22,12 +17,8 @@ class User extends Model {
   email!: string;
   password!: string;
 
-  /**
-   * Creates an instance of User.
-   * @author Marlon Lira
-   * @param {*} [json]
-   * @memberof User
-   */
+  adress: UserAdress;
+
   constructor(json?: any) {
     super()
     this.id = Attributes.ReturnIfValid(json.id);
@@ -76,5 +67,3 @@ User.init({
   sequelize: _instance,
   tableName: 'User'
 });
-
-export default User;

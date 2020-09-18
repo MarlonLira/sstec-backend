@@ -4,15 +4,15 @@ import { Container } from 'inversify';
 import TYPES from '../../data/types';
 
 // Repositories
-import UserRepository from '../../data/repositories/user.repository';
-import UserAdressRepository from '../../data/repositories/user-adress.repository';
+import { UserRepository } from '../../data/repositories/user.repository';
+import { UserAdressRepository } from '../../data/repositories/user-adress.repository';
 import { CardRepository } from '../../data/repositories/card.repository';
 import { CompanyRepository } from '../../data/repositories/company.repository';
 import { CompanyAdressRepository } from '../../data/repositories/company-adress.repository';
 import { EmployeeRepository } from '../../data/repositories/employee.repository';
 import PaymentRepository from '../../data/repositories/payment.repository';
 import VehicleRepository from '../../data/repositories/vehicle.repository';
-import ParkingRepository from '../../data/repositories/parking.repository';
+import { ParkingRepository } from '../../data/repositories/parking.repository';
 import { RuleRepository } from '../../data/repositories/rule.repository';
 import ParkingPromotionRepository from '../../data/repositories/parking-promotion.repository';
 import { ParkingSpaceRepository } from '../../data/repositories/parking-space.repository';
@@ -24,8 +24,8 @@ import { LogRepository } from '../../data/repositories/log.repository';
 import { ParkingFileRepository } from '../../data/repositories/parkingFile.repository';
 
 // Repositories interfaces
-import IUserRepository from '../../data/interfaces/IRepositories/userRepository.interface';
-import IUserAdressRepository from '../../data/interfaces/IRepositories/user-adressRepository.interface';
+import { IUserRepository } from '../../data/interfaces/IRepositories/userRepository.interface';
+import { IUserAdressRepository } from '../../data/interfaces/IRepositories/user-adressRepository.interface';
 import ICardRepository from '../../data/interfaces/IRepositories/cardRepository.interface';
 import { ICompanyRepository } from '../../data/interfaces/IRepositories/companyRepository.interface';
 import { ICompanyAdressRepository } from '../../data/interfaces/IRepositories/company-adressRepository.interface';
@@ -58,6 +58,8 @@ import { ParkingSpaceService } from '../../data/services/parking-space.service';
 import { SchedulingService } from '../../data/services/scheduling.service';
 import { ParkingScoreService } from '../../data/services/parking-score.service';
 import { CardService } from '../../data/services/card.service';
+import { UserAdressService } from '../../data/services/user-adress.service';
+import { UserService } from '../../data/services/user.service';
 
 // Services interfaces
 import { IAuthService } from '../../data/interfaces/IServices/authService.interface';
@@ -74,6 +76,8 @@ import { IParkingSpaceService } from '../../data/interfaces/IServices/parking-sp
 import { ISchedulingService } from '../../data/interfaces/IServices/schedulingService.interface';
 import { IParkingScoreService } from '../../data/interfaces/IServices/parking-scoreService.interface';
 import { ICardService } from '../../data/interfaces/IServices/cardService.interface';
+import { IUserAdressService } from '../../data/interfaces/IServices/user-adressService.interface';
+import { IUserService } from '../../data/interfaces/IServices/userService.interface';
 
 // Binds
 const container = new Container();
@@ -85,6 +89,7 @@ container.bind<IParkingService>(TYPES.IParkingService).to(ParkingService);
 container.bind<ICompanyService>(TYPES.ICompanyService).to(CompanyService);
 container.bind<ICompanyAdressService>(TYPES.ICompanyAdressService).to(CompanyAdressService);
 container.bind<IParkingAdressService>(TYPES.IParkingAdressService).to(ParkingAdressService);
+container.bind<IUserAdressService>(TYPES.IUserAdressService).to(UserAdressService);
 container.bind<IRuleService>(TYPES.IRuleService).to(RuleService);
 container.bind<ILogService>(TYPES.ILogService).to(LogService);
 container.bind<IUploadService>(TYPES.IUploadService).to(UploadService);
@@ -93,6 +98,7 @@ container.bind<IParkingSpaceService>(TYPES.IParkingSpaceService).to(ParkingSpace
 container.bind<ISchedulingService>(TYPES.ISchedulingService).to(SchedulingService);
 container.bind<IParkingScoreService>(TYPES.IParkingScoreService).to(ParkingScoreService);
 container.bind<ICardService>(TYPES.ICardService).to(CardService);
+container.bind<IUserService>(TYPES.IUserService).to(UserService);
 
 // Repositories Binds
 container.bind<IUserRepository>(TYPES.IUserRepository).to(UserRepository);

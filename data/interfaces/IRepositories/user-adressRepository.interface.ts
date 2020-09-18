@@ -1,15 +1,9 @@
-import UserAdress from '../../models/user-adress.model';
+import { UserAdress } from '../../models/user-adress.model';
 
-/**
- * @description
- * @author Gustavo Gusmão
- * @interface IUserAdressRepository
- */
-interface IUserAdressRepository {
-  Save(userAdress: UserAdress): Promise<any>;
-  GetByUserId(_userId: number): Promise<UserAdress[]>;
-  Update(userAdress: UserAdress): Promise<any>;
-  Delete(_id: number): Promise<any>;
+export interface IUserAdressRepository {
+  save(userAdress: UserAdress): Promise<any>;
+  getByUserId(userId: number): Promise<UserAdress>;
+  getById(id: number): Promise<UserAdress>;
+  update(userAdress: UserAdress): Promise<any>;
+  delete(id: number): Promise<any>;
 }
-
-export default IUserAdressRepository;

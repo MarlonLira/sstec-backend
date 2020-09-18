@@ -6,6 +6,7 @@ const TYPES = {
   ICompanyService: Symbol('ICompanyService'),
   ICompanyAdressService: Symbol('ICompanyAdressService'),
   IParkingAdressService: Symbol('IParkingAdressService'),
+  IUserAdressService: Symbol('IUserAdressService'),
   IRuleService: Symbol('IRuleService'),
   ILogService: Symbol('ILogService'),
   IUploadService: Symbol('IUploadService'),
@@ -14,6 +15,7 @@ const TYPES = {
   ISchedulingService: Symbol('ISchedulingService'),
   IParkingScoreService: Symbol('IParkingScoreService'),
   ICardService: Symbol('ICardService'),
+  IUserService: Symbol('IUserService'),
 
   // Repositories Types
   IUserRepository: Symbol('IUserRepository'),
