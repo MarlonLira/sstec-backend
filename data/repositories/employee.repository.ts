@@ -74,7 +74,6 @@ export class EmployeeRepository implements IEmployeeRepository {
   getByEmail(_email: string): Promise<Employee> {
     return new Promise((resolve, reject) => {
       Employee.findOne({
-        attributes: this._attributes,
         where: {
           email: {
             [Op.eq]: _email

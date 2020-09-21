@@ -37,7 +37,9 @@ export class AuthService implements IAuthService {
     return new Promise(async (resolve, reject) => {
       try {
         if (Attributes.IsValid(auth.employee)) {
+          console.log(auth)
           const foundEmployee: Employee = await this._employeeRepository.getByEmail(auth.employee.email);
+          console.log(foundEmployee)
           if (Attributes.IsValid(foundEmployee) && Crypto.Compare(auth.employee.password, foundEmployee.password)) {
             auth.company = await this._companyService.getById(foundEmployee.companyId);
             auth.parking = (await this._parkingService.getByEmployeeId(foundEmployee.id))[0];
