@@ -60,6 +60,7 @@ import { ParkingScoreService } from '../../data/services/parking-score.service';
 import { CardService } from '../../data/services/card.service';
 import { UserAdressService } from '../../data/services/user-adress.service';
 import { UserService } from '../../data/services/user.service';
+import { VehicleService } from '../../data/services/vehicle.service';
 
 // Services interfaces
 import { IAuthService } from '../../data/interfaces/IServices/authService.interface';
@@ -78,6 +79,7 @@ import { IParkingScoreService } from '../../data/interfaces/IServices/parking-sc
 import { ICardService } from '../../data/interfaces/IServices/cardService.interface';
 import { IUserAdressService } from '../../data/interfaces/IServices/user-adressService.interface';
 import { IUserService } from '../../data/interfaces/IServices/userService.interface';
+import { IVehicleService } from '../../data/interfaces/IServices/vehicleService.interface';
 
 // Binds
 const container = new Container();
@@ -99,6 +101,7 @@ container.bind<ISchedulingService>(TYPES.ISchedulingService).to(SchedulingServic
 container.bind<IParkingScoreService>(TYPES.IParkingScoreService).to(ParkingScoreService);
 container.bind<ICardService>(TYPES.ICardService).to(CardService);
 container.bind<IUserService>(TYPES.IUserService).to(UserService);
+container.bind<IVehicleService>(TYPES.IVehicleService).to(VehicleService);
 
 // Repositories Binds
 container.bind<IUserRepository>(TYPES.IUserRepository).to(UserRepository);

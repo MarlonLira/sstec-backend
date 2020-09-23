@@ -5,13 +5,13 @@ import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
 import { ISchedulingService } from "../interfaces/IServices/schedulingService.interface";
 import IParkingPromotionRepository from "../interfaces/IRepositories/parking-promotionRepository.interface";
-import IVehicleRepository from "../interfaces/IRepositories/vehicleRepository.interface";
 import ICardRepository from "../interfaces/IRepositories/cardRepository.interface";
 import Attributes from "../../commons/core/attributes";
 import { ISchedulingRepository } from "../interfaces/IRepositories/schedulingRepository.interface";
 import { Scheduling } from "../models/scheduling.model";
 import { IParkingSpaceService } from "../interfaces/IServices/parking-spaceService.interface";
 import { IUserService } from "../interfaces/IServices/userService.interface";
+import { IVehicleService } from "../interfaces/IServices/vehicleService.interface";
 
 @injectable()
 export class SchedulingService implements ISchedulingService {
@@ -21,7 +21,7 @@ export class SchedulingService implements ISchedulingService {
     @inject(TYPES.IParkingSpaceService) private parkingSpaceService: IParkingSpaceService,
     @inject(TYPES.IParkingPromotionRepository) private parkingPromotionService: IParkingPromotionRepository,
     @inject(TYPES.IUserService) private userService: IUserService,
-    @inject(TYPES.IVehicleRepository) private vehicleService: IVehicleRepository,
+    @inject(TYPES.IVehicleService) private vehicleService: IVehicleService,
     @inject(TYPES.ICardRepository) private cardRepository: ICardRepository,
     @inject(TYPES.ILogService) private log: ILogService) { }
 
@@ -38,7 +38,7 @@ export class SchedulingService implements ISchedulingService {
           if (Attributes.IsValid(_availableParkingSpace)) {
             scheduling.parkingSpaceId = _availableParkingSpace[0].id;
             scheduling.userName = (await this.userService.getById(scheduling.userId)).name;
-            scheduling.vehiclePlate = (await this.vehicleService.GetById(scheduling.vehicleId)).licensePlate;
+            scheduling.vehiclePlate = (await this.vehicleService.getById(scheduling.vehicleId)).licensePlate;
             scheduling.cardNumber = (await this.cardRepository.getById(scheduling.cardId)).number;
 
             const _userSchedulings: Scheduling[] = await this.repository.getByUserId(scheduling.userId);

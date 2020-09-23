@@ -5,23 +5,10 @@ import Vehicle from '../models/vehicle.model';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 
-/**
- * @description
- * @author Marlon Lira
- * @class VehicleRepository
- * @implements {IVehicleRepository}
- */
 @injectable()
 class VehicleRepository implements IVehicleRepository {
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} id
-   * @returns {Promise<Vehicle[]>}
-   * @memberof VehicleRepository
-   */
-  GetById(id: number): Promise<Vehicle> {
+  getById(id: number): Promise<Vehicle> {
     return new Promise((resolve, reject) => {
       Vehicle.findByPk(id)
         .then((foundVehicle: Vehicle) => {
@@ -33,14 +20,7 @@ class VehicleRepository implements IVehicleRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} userId
-   * @returns {Promise<Vehicle[]>}
-   * @memberof VehicleRepository
-   */
-  GetByUserId(_userId: number): Promise<Vehicle[]> {
+  getByUserId(_userId: number): Promise<Vehicle[]> {
     return new Promise((resolve, reject) => {
       Vehicle.findAll({
         where: {
@@ -59,15 +39,7 @@ class VehicleRepository implements IVehicleRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Vehicle} vehicle
-   * @param {User} user
-   * @returns {Promise<any>}
-   * @memberof VehicleRepository
-   */
-  Save(vehicle: Vehicle): Promise<any> {
+  save(vehicle: Vehicle): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Vehicle.sequelize.transaction();
       vehicle.status = TransactionType.ACTIVE;
@@ -83,14 +55,7 @@ class VehicleRepository implements IVehicleRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {string} licensePlate
-   * @returns {Promise<Vehicle>}
-   * @memberof VehicleRepository
-   */
-  GetByLicensePlate(_licensePlate: string): Promise<Vehicle> {
+  getByLicensePlate(_licensePlate: string): Promise<Vehicle> {
     return new Promise((resolve, reject) => {
       Vehicle.findOne({
         where: {
@@ -108,14 +73,7 @@ class VehicleRepository implements IVehicleRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Vehicle} vehicle
-   * @returns {Promise<any>}
-   * @memberof VehicleRepository
-   */
-  Update(vehicle: Vehicle): Promise<any> {
+  update(vehicle: Vehicle): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Vehicle.sequelize.transaction();
       Vehicle.update(vehicle.ToModify(),
@@ -137,14 +95,7 @@ class VehicleRepository implements IVehicleRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} id
-   * @returns {Promise<any>}
-   * @memberof VehicleRepository
-   */
-  Delete(_id: number): Promise<any> {
+  delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Vehicle.sequelize.transaction();
       Vehicle.update({
