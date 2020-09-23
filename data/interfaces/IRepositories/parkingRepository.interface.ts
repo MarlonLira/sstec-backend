@@ -1,4 +1,4 @@
-import Parking from '../../models/parking.model';
+import { Parking } from '../../models/parking.model';
 
 /**
  * @description
@@ -24,9 +24,6 @@ export interface IParkingRepository {
    * @memberof IParkingRepository
    */
   update(parking: Parking): Promise<any>;
-
- // Felipe
-  pagination(_companyId: number, page: number, limiter: number): Promise<Parking[]>;
 
   /**
    * @description

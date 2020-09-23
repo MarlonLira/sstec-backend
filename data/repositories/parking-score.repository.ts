@@ -2,9 +2,7 @@ import { injectable } from "inversify";
 import { Op } from 'sequelize';
 
 import IParkingScoreRepository from '../interfaces/IRepositories/parking-scoreRepository.interface';
-import ParkingScore from '../models/parking-score.model';
-import { TransactionType } from "../../commons/enums/transactionType";
-import Parking from "../models/parking.model";
+import {ParkingScore} from '../models/parking-score.model';
 
 @injectable()
 class ParkingScoreRepository implements IParkingScoreRepository {
@@ -16,7 +14,7 @@ class ParkingScoreRepository implements IParkingScoreRepository {
    * @returns {Promise<any>}
    * @memberof ParkingScoreRepository
    */
-  Save(parkingScore: ParkingScore): Promise<any> {
+  save(parkingScore: ParkingScore): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingScore.sequelize.transaction();
       ParkingScore.create(parkingScore, { transaction: _transaction })
@@ -40,7 +38,7 @@ class ParkingScoreRepository implements IParkingScoreRepository {
    * @returns {Promise<any>}
    * @memberof ParkingScoreRepository
    */
-  Update(parkingScore: ParkingScore): Promise<any> {
+  update(parkingScore: ParkingScore): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingScore.sequelize.transaction();
       ParkingScore.update(parkingScore.ToModify(),
@@ -69,7 +67,7 @@ class ParkingScoreRepository implements IParkingScoreRepository {
    * @returns {Promise<ParkingScore[]>}
    * @memberof ParkingScoreRepository
    */
-  ToList(_parkingId: number): Promise<ParkingScore[]> {
+  getByParkingId(_parkingId: number): Promise<ParkingScore[]> {
     return new Promise((resolve, reject) => {
       ParkingScore.findAll({
         where: {
@@ -94,7 +92,7 @@ class ParkingScoreRepository implements IParkingScoreRepository {
    * @returns {Promise<ParkingScore>}
    * @memberof ParkingScoreRepository
    */
-  GetById(id: number): Promise<ParkingScore> {
+  getById(id: number): Promise<ParkingScore> {
     return new Promise((resolve, reject) => {
       ParkingScore.findByPk(id)
         .then((parkingScore: ParkingScore) => {
@@ -113,7 +111,7 @@ class ParkingScoreRepository implements IParkingScoreRepository {
    * @returns {Promise<any>}
    * @memberof ParkingScoreRepository
    */
-  Delete(_id: number): Promise<any> {
+  delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingScore.sequelize.transaction();
       ParkingScore.destroy({

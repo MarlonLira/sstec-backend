@@ -1,6 +1,6 @@
 import Payment from '../../models/payment.model';
-import User from '../../models/user.model';
-import Card from '../../models/card.model';
+import { User } from '../../models/user.model';
+import { Card } from '../../models/card.model';
 
 /**
  * @description

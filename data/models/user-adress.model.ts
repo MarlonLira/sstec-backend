@@ -6,13 +6,7 @@ import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
 
-/**
- * @description
- * @author Gustavo Gusmão
- * @class UserAdress
- * @extends {Model}
- */
-class UserAdress extends Model {
+export class UserAdress extends Model {
 
   id!: number;
   status!: TransactionType;
@@ -26,12 +20,6 @@ class UserAdress extends Model {
   complement!: string;
   userId!: number;
 
-  /**
-   * Creates an instance of UserAdress.
-   * @author Gustavo Gusmão
-   * @param {*} [json]
-   * @memberof UserAdress
-   */
   constructor(json?: any) {
     super()
     this.id = Attributes.ReturnIfValid(json.id);
@@ -46,6 +34,7 @@ class UserAdress extends Model {
     this.complement = Attributes.ReturnIfValid(json.complement);
     this.userId = Attributes.ReturnIfValid(json.userId);
   }
+  
   ToModify(){
     return this.toJSON();
   }
@@ -95,5 +84,3 @@ UserAdress.init({
   sequelize: _instance,
   tableName: 'UserAdress'
 });
-
-export default UserAdress;

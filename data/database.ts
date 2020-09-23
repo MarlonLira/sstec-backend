@@ -4,27 +4,32 @@ import Logger from '../commons/core/logger';
 import Context from '../main/context';
 
 // Entities
-import User from './models/user.model';
+import { User } from './models/user.model';
 import Vehicle from './models/vehicle.model';
-import UserAdress from './models/user-adress.model';
-import Card from './models/card.model';
-import Company from './models/company.model';
-import CompanyAdress from './models/company-adress.model';
-import Employee from './models/employee.model';
-import Parking from './models/parking.model';
-import { Rule } from './models/rule.model';
-import ParkingPromotion from './models/parking-promotion.model';
-import ParkingSpace from './models/parking-space.model';
-import ParkingAdress from './models/parking-adress.model';
-import Scheduling from './models/scheduling.model';
-import ParkingScore from './models/parking-score.model';
+import { UserAdress } from './models/user-adress.model';
 import ParkingFinance from './models/parking-finance.model';
+import ParkingPromotion from './models/parking-promotion.model';
+import { Card } from './models/card.model';
+import { Company } from './models/company.model';
+import { CompanyAdress } from './models/company-adress.model';
+import { Employee } from './models/employee.model';
+import { Parking } from './models/parking.model';
+import { Rule } from './models/rule.model';
+import { ParkingSpace } from './models/parking-space.model';
+import { ParkingAdress } from './models/parking-adress.model';
+import { Scheduling } from './models/scheduling.model';
+import { ParkingScore } from './models/parking-score.model';
 import { Log } from './models/log.model';
 import { AccountRecovery } from './models/account-recovery.model';
 import { ParkingFile } from './models/parking-file.model';
 
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
+
+interface PersistenceModel {
+  name: string;
+  entity: Sequelize
+}
 
 /**
  * @description
@@ -40,7 +45,7 @@ class Database {
    */
   public Build() {
     // The order influences creation in the database
-    const Models = [
+    const models: PersistenceModel[] = [
       { name: 'User', entity: User.sequelize },
       { name: 'Vehicle', entity: Vehicle.sequelize },
       { name: 'UserAdress', entity: UserAdress.sequelize },
@@ -87,20 +92,32 @@ class Database {
     Parking.hasOne(ParkingAdress, { foreignKey: 'parkingId', as: 'ParkingAdress' });
 
     /* #endregion */
-
-    _instance.authenticate()
-      .then(() => {
-        Logger.Info('Database', 'Connection established successfully!');
-        this.CreateTables(Models)
-          .then(result => {
-            Logger.Info('Database', `Table verification ${result}!`);
-          });
-      })
-      .catch(error => {
-        Logger.Error('Database', 'Error when trying to connect to the database!');
-        Logger.Error('Database', error);
+    this.checkAndBuild(models)
+      .catch((error: any) => {
+        if (error.toString().indexOf('ETIMEDOUT') != -1) {
+          Logger.Info('Database', 'trying to connect to the database again!');
+          this.checkAndBuild(models);
+        }
       });
+  }
 
+  private checkAndBuild(models: PersistenceModel[]): Promise<any> {
+    return new Promise((resolve, reject) => {
+      _instance.authenticate()
+        .then(() => {
+          Logger.Info('Database', 'Connection established successfully!');
+          this.CreateTables(models)
+            .then(result => {
+              Logger.Info('Database', `Table verification ${result}!`);
+              resolve(true);
+            });
+        })
+        .catch(error => {
+          Logger.Error('Database', 'Error when trying to connect to the database!');
+          Logger.Error('Database', error);
+          reject(error);
+        });
+    })
   }
 
   private async CreateTables(models: { name: string, entity: Sequelize }[]) {

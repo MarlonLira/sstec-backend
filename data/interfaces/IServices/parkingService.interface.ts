@@ -1,4 +1,4 @@
-import Parking from '../../models/parking.model';
+import { Parking } from '../../models/parking.model';
 
 export interface IParkingService {
 
@@ -55,10 +55,5 @@ export interface IParkingService {
    * @memberof IParkingService
    */
   getByEmployeeId(employeeId: number): Promise<Parking[]>;
-
-  // Felipe
-  pagination(companyId: number, page: number, limiter: number): Promise<Parking[]>;
-
   toList(companyId: number): Promise<Parking[]>;
-
 }

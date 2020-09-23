@@ -1,12 +1,12 @@
-import ParkingSpace from '../../models/parking-space.model';
-import Scheduling from '../../models/scheduling.model';
+import { ParkingSpace } from '../../models/parking-space.model';
+import { Scheduling } from '../../models/scheduling.model';
 
 /**
  * @description
  * @author Emerson Souza
  * @interface IParkingSpaceRepository
  */
-interface IParkingSpaceRepository {
+export interface IParkingSpaceRepository {
 
   /**
    * @description
@@ -15,7 +15,7 @@ interface IParkingSpaceRepository {
    * @returns {Promise<any>}
    * @memberof IParkingSpaceRepository
    */
-  Save(parkingSpace: ParkingSpace): Promise<any>;
+  save(parkingSpace: ParkingSpace): Promise<any>;
 
   /**
    * @description
@@ -24,7 +24,7 @@ interface IParkingSpaceRepository {
    * @returns {Promise<any>}
    * @memberof IParkingSpaceRepository
    */
-  Update(parkingSpace: ParkingSpace): Promise<any>;
+  update(parkingSpace: ParkingSpace): Promise<any>;
 
   /**
    * @description
@@ -32,7 +32,7 @@ interface IParkingSpaceRepository {
    * @returns {Promise<ParkingSpace[]>}
    * @memberof IParkingSpaceRepository
    */
-  ToList(): Promise<ParkingSpace[]>;
+  toList(parkingId: number): Promise<ParkingSpace[]>;
 
   /**
    * @description
@@ -41,16 +41,16 @@ interface IParkingSpaceRepository {
    * @returns {Promise<ParkingSpace>}
    * @memberof IParkingSpaceRepository
    */
-  GetById(id: number): Promise<ParkingSpace>;
+  getById(id: number): Promise<ParkingSpace>;
 
   /**
    * @description
    * @author Marlon Lira
-   * @param {number} parkingId
+   * @param {number} id
    * @returns {Promise<ParkingSpace[]>}
    * @memberof IParkingSpaceRepository
    */
-  GetByParkingId(parkingId: number): Promise<ParkingSpace[]>;
+  getByParkingId(id: number): Promise<ParkingSpace[]>;
 
   /**
    * @description
@@ -59,7 +59,7 @@ interface IParkingSpaceRepository {
    * @returns {Promise<ParkingSpace[]>}
    * @memberof IParkingSpaceRepository
    */
-  GetAvailable(scheduling: Scheduling): Promise<ParkingSpace[]>;
+  getAvailable(scheduling: Scheduling): Promise<ParkingSpace[]>;
 
   /**
    * @description
@@ -68,17 +68,7 @@ interface IParkingSpaceRepository {
    * @returns {Promise<any>}
    * @memberof IParkingSpaceRepository
    */
-  Delete(id: number): Promise<any>;
-
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {number} _parkingId
-   * @returns {Promise<any>}
-   * @memberof IParkingSpaceRepository
-   */
-  ToGroupedList(parkingspace: ParkingSpace): Promise<ParkingSpace[]>;
-
+  delete(id: number): Promise<any>;
 
   /**
    * @description
@@ -87,7 +77,8 @@ interface IParkingSpaceRepository {
    * @returns {Promise<any>}
    * @memberof IParkingSpaceRepository
    */
-  DeleteGroupType(parkingSpace:ParkingSpace): Promise<any>;
+  deleteGroupType(parkingSpace: ParkingSpace): Promise<any>;
+
   /**
    * @description
    * @author Gustavo Gusmão
@@ -95,7 +86,5 @@ interface IParkingSpaceRepository {
    * @returns {Promise<ParkingSpace[]>}
    * @memberof IParkingSpaceRepository
    */
-  GetDeletedByParkingId(_parkingspace: ParkingSpace): Promise<ParkingSpace[]>;
+  getDeletedByParkingId(_parkingspace: ParkingSpace): Promise<ParkingSpace[]>;
 }
-
-export default IParkingSpaceRepository;

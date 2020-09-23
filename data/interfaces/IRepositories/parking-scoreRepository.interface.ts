@@ -1,5 +1,4 @@
-import Parking from '../../models/parking.model';
-import ParkingScore from '../../models/parking-score.model';
+  import {ParkingScore} from '../../models/parking-score.model';
 
 /**
  * @description
@@ -16,7 +15,7 @@ interface IParkingScoreRepository {
    * @returns {Promise<any>}
    * @memberof IParkingScoreRepository
    */
-  Save(parkingScore: ParkingScore): Promise<any>;
+  save(parkingScore: ParkingScore): Promise<any>;
 
   /**
    * @descriptionS
@@ -25,7 +24,7 @@ interface IParkingScoreRepository {
    * @returns {Promise<any>}
    * @memberof IParkingScoreRepository
    */
-  Update(parkingScore: ParkingScore): Promise<any>;
+  update(parkingScore: ParkingScore): Promise<any>;
 
   /**
    * @description
@@ -33,7 +32,7 @@ interface IParkingScoreRepository {
    * @returns {Promise<ParkingScore[]>}
    * @memberof IParkingScoreRepository
    */
-  ToList(_parkingId:number): Promise<ParkingScore[]>;
+  getByParkingId(_parkingId:number): Promise<ParkingScore[]>;
 
   /**
    * @description
@@ -42,7 +41,7 @@ interface IParkingScoreRepository {
    * @returns {Promise<ParkingScore>}
    * @memberof IParkingScoreRepository
    */
-  GetById(id: number): Promise<ParkingScore>;
+  getById(id: number): Promise<ParkingScore>;
 
   /**
    * @description
@@ -51,7 +50,7 @@ interface IParkingScoreRepository {
    * @returns {Promise<any>}
    * @memberof IParkingScoreRepository
    */
-  Delete(id: number): Promise<any>;
+  delete(id: number): Promise<any>;
 }
 
 export default IParkingScoreRepository;

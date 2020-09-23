@@ -2,6 +2,8 @@ import { Model, DataTypes } from 'sequelize';
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
+import { Rule } from './rule.model';
+import { Parking } from './parking.model';
 
 const _instance = Context.getInstance();
 
@@ -11,7 +13,7 @@ const _instance = Context.getInstance();
  * @class Employee
  * @extends {Model}
  */
-class Employee extends Model {
+export class Employee extends Model {
   public id!: number;
   public status!: TransactionType;
   public name!: string;
@@ -19,9 +21,14 @@ class Employee extends Model {
   public phone!: string;
   public email!: string;
   public password: string;
+  public about: string;
+  public imageUrl: string;
   public parkingId!: number;
   public companyId!: number;
   public ruleId!: number;
+
+  public rule: Rule;
+  public parking: Parking;
 
   /**
    * Creates an instance of Employee.
@@ -38,9 +45,13 @@ class Employee extends Model {
     this.password = Attributes.ReturnIfValid(json.password);
     this.phone = Attributes.ReturnIfValid(json.phone);
     this.email = Attributes.ReturnIfValid(json.email);
+    this.about = Attributes.ReturnIfValid(json.about);
+    this.imageUrl = Attributes.ReturnIfValid(json.imageUrl);
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
+    this.parking = Attributes.ReturnIfValid(json.parking);
     this.companyId = Attributes.ReturnIfValid(json.companyId);
     this.ruleId = Attributes.ReturnIfValid(json.ruleId);
+    this.rule = Attributes.ReturnIfValid(json.rule);
   }
 
   ToModify() {
@@ -67,7 +78,8 @@ Employee.init({
     allowNull: false
   },
   password: {
-    type: new DataTypes.STRING(100)
+    type: new DataTypes.STRING(100),
+    allowNull: false
   },
   phone: {
     type: new DataTypes.STRING(14)
@@ -76,6 +88,12 @@ Employee.init({
     type: new DataTypes.STRING(50),
     validate: { isEmail: true },
     allowNull: false
+  },
+  about: {
+    type: new DataTypes.STRING(255),
+  },
+  imageUrl: {
+    type: new DataTypes.STRING(255),
   },
   parkingId: {
     type: new DataTypes.INTEGER()
@@ -90,5 +108,3 @@ Employee.init({
   sequelize: _instance,
   tableName: 'Employee'
 });
-
-export default Employee;

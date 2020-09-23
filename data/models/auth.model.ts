@@ -1,15 +1,15 @@
-import User from './user.model';
-import Employee from './employee.model';
+import { User } from './user.model';
+import { Employee } from './employee.model';
 import Attributes from '../../commons/core/attributes';
-import Company from './company.model';
-import Parking from './parking.model';
+import { Company } from './company.model';
+import { Parking } from './parking.model';
 
 /**
  * @description
  * @author Marlon Lira
  * @class Auth
  */
-class Auth {
+export class Auth {
 
   token!: string;
   validated!: boolean;
@@ -35,5 +35,3 @@ class Auth {
     this.parking = Attributes.IsValid(json.parking) ? new Parking(json.parking) : undefined;
   }
 }
-
-export default Auth;

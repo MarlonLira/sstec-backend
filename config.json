@@ -54,6 +54,6 @@
     "IsError": true
   },
   "Upload": {
-    "PathDir": "C:/uploads"
+    "PathDir": "C:/uploads/"
   }
 }

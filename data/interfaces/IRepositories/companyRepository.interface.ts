@@ -1,16 +1,9 @@
-import Company from '../../models/company.model';
+import { Company } from '../../models/company.model';
 
-/**
- * @description
- * @author Gustavo Gusmão
- * @interface ICompanyRepository
- */
-interface ICompanyRepository {
-  Save(company: Company);
-  Update(company: Company);
-  GetByRegistryCode(registryCode: string);
-  GetById(id: number);
-  Delete(id: number);
+export interface ICompanyRepository {
+  save(company: Company);
+  update(company: Company);
+  getByRegistryCode(registryCode: string);
+  getById(id: number);
+  delete(id: number);
 }
-
-export default ICompanyRepository;

@@ -34,7 +34,7 @@
   "jsRules": {
     "max-line-length": {
       "options": [
-        140
+        160
       ]
     }
   }

@@ -1,15 +1,13 @@
 import { injectable } from "inversify";
-import { Op, QueryTypes, where, Sequelize, Model } from 'sequelize';
+import { Op, QueryTypes, Sequelize } from 'sequelize';
 
-import IParkingSpaceRepository from '../interfaces/IRepositories/parking-spaceRepository.interface';
-import ParkingSpace from '../models/parking-space.model';
+import { IParkingSpaceRepository } from '../interfaces/IRepositories/parking-spaceRepository.interface';
+import { ParkingSpace } from '../models/parking-space.model';
 import { TransactionType } from "../../commons/enums/transactionType";
-import Scheduling from '../models/scheduling.model';
-import { type } from "os";
-import { raw } from "body-parser";
+import { Scheduling } from '../models/scheduling.model';
 
 @injectable()
-class ParkingSpaceRepository implements IParkingSpaceRepository {
+export class ParkingSpaceRepository implements IParkingSpaceRepository {
 
   /**
    * @description
@@ -18,7 +16,7 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
    * @returns {Promise<any>}
    * @memberof ParkingSpaceRepository
    */
-  Save(parkingSpace: ParkingSpace): Promise<any> {
+  save(parkingSpace: ParkingSpace): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingSpace.sequelize.transaction();
       parkingSpace.status = TransactionType.ACTIVE;
@@ -40,7 +38,7 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
    * @returns {Promise<any>}
    * @memberof ParkingSpaceRepository
    */
-  Update(parkingSpace: ParkingSpace): Promise<any> {
+  update(parkingSpace: ParkingSpace): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingSpace.sequelize.transaction();
       ParkingSpace.update(parkingSpace.ToModify(),
@@ -70,7 +68,7 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
    * @returns {Promise<any>}
    * @memberof ParkingSpaceRepository
    */
-  Delete(_id: number): Promise<any> {
+  delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingSpace.sequelize.transaction();
       ParkingSpace.update({
@@ -94,43 +92,43 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
     });
   }
 
- /**
+  /**
    * @description
    * @author Felipe Seabra 
    * @param {ParkingSpace} parkingSpace
    * @returns {Promise<any>}
    * @memberof ParkingSpaceRepository
    */
-  DeleteGroupType(parkingSpace: ParkingSpace): Promise<any>{
-    return new Promise(async (resolve, reject)=>{
-    const _transaction = await ParkingSpace.sequelize.transaction();
-    ParkingSpace.update({
-      status: TransactionType.DELETED,
+  deleteGroupType(parkingSpace: ParkingSpace): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await ParkingSpace.sequelize.transaction();
+      ParkingSpace.update({
+        status: TransactionType.DELETED,
       },
-    {
-      where:{
-        type:{
-          [Op.eq]: parkingSpace.type
-        },
-        parkingId:{
-          [Op.eq]: parkingSpace.parkingId,
-        },
-        status:{
-          [Op.eq]: TransactionType.ACTIVE
-        }
-      },
-      limit: Number(parkingSpace.amount),
-      transaction: _transaction,
-      validate: false
-    })
-    .then(async result =>{
-      await _transaction.commit();
-      resolve(result);
-    })
-    .catch(async error => {
-      await _transaction.rollback();
-      reject(error);
-    });
+        {
+          where: {
+            type: {
+              [Op.eq]: parkingSpace.type
+            },
+            parkingId: {
+              [Op.eq]: parkingSpace.parkingId,
+            },
+            status: {
+              [Op.eq]: TransactionType.ACTIVE
+            }
+          },
+          limit: Number(parkingSpace.amount),
+          transaction: _transaction,
+          validate: false
+        })
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async error => {
+          await _transaction.rollback();
+          reject(error);
+        });
     });
   }
 
@@ -141,7 +139,7 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
    * @returns {Promise<ParkingSpace[]>}
    * @memberof ParkingSpaceRepository
    */
-  GetAvailable(scheduling: Scheduling): Promise<ParkingSpace[]> {
+  getAvailable(scheduling: Scheduling): Promise<ParkingSpace[]> {
     return new Promise(async (resolve, reject) => {
       ParkingSpace.sequelize.query(
         "   SELECT PS.* FROM ParkingSpace AS PS" +
@@ -158,7 +156,7 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
         "                             OR (S1.AVALIABLETIME < :avaliableTime AND S1.UNAVAILABLETIME > :unavailableTime )))" +
         "     AND PS.STATUS NOT IN ('EX', 'PD')" +
         "     AND PS.PARKINGID = :parkingId" +
-        "     AND PS.TYPE = :type",
+        "     AND PS.TYPE IN (:type, 'BOTH')",
         {
           replacements: {
             date: scheduling.date,
@@ -182,27 +180,27 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
 
   /**
    * @description
-   * @author Felipe Seabra
-   * @param {number} _parkingId
+   * @author Gustavo Gusmão
+   * @param {number} id
    * @returns {Promise<ParkingSpace[]>}
    * @memberof ParkingSpaceRepository
    */
-  ToGroupedList(_parkingspace: ParkingSpace): Promise<ParkingSpace[]> {
+  getByParkingId(id: number): Promise<ParkingSpace[]> {
     return new Promise(async (resolve, reject) => {
       ParkingSpace.findAll({
-        where:{
-          parkingId:{ [Op.eq]: _parkingspace.parkingId },
-          status:{[Op.eq]: TransactionType.ACTIVE},
+        where: {
+          parkingId: { [Op.eq]: id },
+          status: { [Op.eq]: TransactionType.ACTIVE },
         },
-        group: ['type'],
-        attributes: ['*', [Sequelize.fn('COUNT', Sequelize.col('type')), 'amount' ]],
+        group: ['type', 'value'],
+        attributes: ['value', 'type', [Sequelize.fn('COUNT', Sequelize.col('type')), 'amount']],
         raw: true
       }).then((parkingSpace: ParkingSpace[]) => {
         resolve(parkingSpace);
       })
-      .catch(error => {
-        reject(error);
-      });
+        .catch(error => {
+          reject(error);
+        });
     });
   }
 
@@ -213,38 +211,10 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
    * @returns {Promise<ParkingSpace>}
    * @memberof ParkingSpaceRepository
    */
-  GetById(id: number): Promise<ParkingSpace> {
+  getById(id: number): Promise<ParkingSpace> {
     return new Promise((resolve, reject) => {
       ParkingSpace.findByPk(id)
         .then((parkingSpace: ParkingSpace) => {
-          resolve(parkingSpace)
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
-  }
-
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} parkingId
-   * @returns {Promise<ParkingSpace[]>}
-   * @memberof ParkingSpaceRepository
-   */
-  GetByParkingId(_parkingId: number): Promise<ParkingSpace[]> {
-    return new Promise((resolve, reject) => {
-      ParkingSpace.findAll(
-        {
-          where:
-          {
-            parkingId: _parkingId,
-            status: {
-              [Op.ne]: TransactionType.DELETED
-            }
-          },
-        })
-        .then((parkingSpace: ParkingSpace[]) => {
           resolve(parkingSpace)
         })
         .catch(error => {
@@ -260,7 +230,7 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
    * @returns {Promise<any>}
    * @memberof ParkingSpaceRepository
    */
-  GetDeletedByParkingId(_parkingspace: ParkingSpace): Promise<ParkingSpace[]> {
+  getDeletedByParkingId(_parkingspace: ParkingSpace): Promise<ParkingSpace[]> {
     return new Promise((resolve, reject) => {
       ParkingSpace.findAll(
         {
@@ -285,13 +255,8 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Emerson Souza
-   * @returns {Promise<ParkingSpace[]>}
-   * @memberof ParkingSpaceRepository
-   */
-  ToList(): Promise<ParkingSpace[]> {
+
+  toList(): Promise<ParkingSpace[]> {
     return new Promise((resolve, reject) => {
       ParkingSpace.findAll({
         where: {
@@ -309,5 +274,3 @@ class ParkingSpaceRepository implements IParkingSpaceRepository {
     });
   }
 }
-
-export default ParkingSpaceRepository;

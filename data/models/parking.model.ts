@@ -3,18 +3,12 @@ import { Model, DataTypes } from 'sequelize';
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
-import ParkingAdress from './parking-adress.model';
-import Company from './company.model';
+import { ParkingAdress } from './parking-adress.model';
+import { Company } from './company.model';
 
 const _instance = Context.getInstance();
 
-/**
- * @description
- * @author Emerson Souza
- * @class Parking
- * @extends {Model}
- */
-class Parking extends Model {
+export class Parking extends Model {
   id!: number;
   status!: TransactionType;
   name: string;
@@ -85,5 +79,3 @@ Parking.init({
   sequelize: _instance,
   tableName: 'Parking'
 });
-
-export default Parking;

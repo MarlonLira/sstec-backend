@@ -10,6 +10,8 @@ export interface IUploadService {
    */
   saveParkingFile(req: any, res: any): Promise<any>;
 
+  save(req: any, folderName: string): Promise<any>;
+
   /**
    * @description
    * @author Marlon Lira
@@ -17,5 +19,5 @@ export interface IUploadService {
    * @returns {Promise<ParkingFile[]>}
    * @memberof IUploadService
    */
-  toListByParkingId(parkingId: number) : Promise<ParkingFile[]>
+  toListByParkingId(parkingId: number): Promise<ParkingFile[]>
 }

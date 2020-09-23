@@ -1,4 +1,4 @@
-import Email from '../../models/email.model';
+import { Email } from '../../models/email.model';
 /**
  * @description
  * @author Marlon Lira

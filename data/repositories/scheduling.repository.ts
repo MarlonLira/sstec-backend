@@ -1,7 +1,7 @@
 import { Op, QueryTypes } from 'sequelize';
 
-import ISchedulingRepository from '../interfaces/IRepositories/schedulingRepository.interface';
-import Scheduling from '../models/scheduling.model';
+import { ISchedulingRepository } from '../interfaces/IRepositories/schedulingRepository.interface';
+import { Scheduling } from '../models/scheduling.model';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 
@@ -12,16 +12,9 @@ import { TransactionType } from '../../commons/enums/transactionType';
  * @implements {ISchedulingRepository}
  */
 @injectable()
-class SchedulingRepository implements ISchedulingRepository {
+export class SchedulingRepository implements ISchedulingRepository {
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Scheduling} scheduling
-   * @returns {Promise<any>}
-   * @memberof SchedulingRepository
-   */
-  Save(scheduling: Scheduling): Promise<any> {
+  save(scheduling: Scheduling): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Scheduling.sequelize.transaction();
       scheduling.status = TransactionType.ACTIVE;
@@ -37,33 +30,15 @@ class SchedulingRepository implements ISchedulingRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {number} id
-   * @returns {Promise<Scheduling>}
-   * @memberof SchedulingRepository
-   */
-  GetById(id: number): Promise<Scheduling> {
+  getById(id: number): Promise<Scheduling> {
     return new Promise(async (resolve, reject) => {
       Scheduling.findByPk(id)
-        .then((foundScheduling: Scheduling) => {
-          resolve(foundScheduling)
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((result: Scheduling) => resolve(result))
+        .catch(error => reject(error));
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Scheduling} scheduling
-   * @returns {Promise<Scheduling[]>}
-   * @memberof SchedulingRepository
-   */
-  ReturnIfExists(scheduling: Scheduling): Promise<Scheduling[]> {
+  returnIfExists(scheduling: Scheduling): Promise<Scheduling[]> {
     return new Promise(async (resolve, reject) => {
       Scheduling.sequelize.query(
         "   SELECT S.* FROM Scheduling AS S" +
@@ -89,23 +64,12 @@ class SchedulingRepository implements ISchedulingRepository {
           mapToModel: true
         }
       )
-        .then((result: Scheduling[]) => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((result: Scheduling[]) => resolve(result))
+        .catch(error => reject(error));
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} _parkingId
-   * @returns {Promise<Scheduling[]>}
-   * @memberof SchedulingRepository
-   */
-  GetByParkingId(_parkingId: number): Promise<Scheduling[]> {
+  getByParkingId(_parkingId: number): Promise<Scheduling[]> {
     return new Promise((resolve, reject) => {
       Scheduling.findAll({
         where: {
@@ -117,23 +81,12 @@ class SchedulingRepository implements ISchedulingRepository {
           }
         }
       })
-        .then((result: Scheduling[]) => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((result: Scheduling[]) => resolve(result))
+        .catch(error => reject(error));
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} _companyId
-   * @returns {Promise<Scheduling[]>}
-   * @memberof SchedulingRepository
-   */
-  GetByCompanyId(_companyId: number): Promise<Scheduling[]> {
+  getByCompanyId(_companyId: number): Promise<Scheduling[]> {
     return new Promise(async (resolve, reject) => {
       Scheduling.sequelize.query(
         "   SELECT S.* FROM Scheduling AS S" +
@@ -152,23 +105,12 @@ class SchedulingRepository implements ISchedulingRepository {
           mapToModel: true
         }
       )
-        .then((result: Scheduling[]) => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((result: Scheduling[]) => resolve(result))
+        .catch(error => reject(error));
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {number} _userId
-   * @returns {Promise<Scheduling[]>}
-   * @memberof SchedulingRepository
-   */
-  GetByUserId(_userId: number): Promise<Scheduling[]> {
+  getByUserId(_userId: number): Promise<Scheduling[]> {
     return new Promise(async (resolve, reject) => {
       Scheduling.findAll(
         {
@@ -180,23 +122,12 @@ class SchedulingRepository implements ISchedulingRepository {
           }
         }
       )
-        .then((foundSchedulings: Scheduling[]) => {
-          resolve(foundSchedulings);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((result: Scheduling[]) => resolve(result))
+        .catch(error => reject(error));
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {number} _id
-   * @returns {Promise<any>}
-   * @memberof SchedulingRepository
-   */
-  Delete(_id: number): Promise<any> {
+  delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Scheduling.sequelize.transaction();
       Scheduling.update({
@@ -220,14 +151,7 @@ class SchedulingRepository implements ISchedulingRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Scheduling} scheduling
-   * @returns {Promise<any>}
-   * @memberof SchedulingRepository
-   */
-  Update(scheduling: Scheduling): Promise<any> {
+  update(scheduling: Scheduling): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Scheduling.sequelize.transaction();
       Scheduling.update(scheduling.ToModify(),
@@ -250,5 +174,3 @@ class SchedulingRepository implements ISchedulingRepository {
     });
   }
 }
-
-export default SchedulingRepository;

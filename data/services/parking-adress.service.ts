@@ -1,8 +1,9 @@
-import { injectable, inject, id } from "inversify";
+import { injectable, inject } from "inversify";
 import TYPES from "../types";
+import { InnerException } from "../../commons/core/innerException";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { IParkingAdressService } from "../interfaces/IServices/parking-adressService.interface";
-import ParkingAdress from "../models/parking-adress.model";
+import { ParkingAdress } from "../models/parking-adress.model";
 import { IParkingAdressRepository } from "../interfaces/IRepositories/parking-adressRepository.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
 import { HttpMessage } from "../../commons/enums/httpMessage";
@@ -44,7 +45,7 @@ export class ParkingAdressService implements IParkingAdressService {
       this.repository.getByParkingId(id)
         .then(async (result: ParkingAdress) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -60,7 +61,7 @@ export class ParkingAdressService implements IParkingAdressService {
       this.repository.save(parkingAdress)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -76,7 +77,7 @@ export class ParkingAdressService implements IParkingAdressService {
       this.repository.update(parkingAdress)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 }

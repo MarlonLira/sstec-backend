@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
 
-import ICompanyRepository from '../interfaces/IRepositories/companyRepository.interface';
-import Company from '../models/company.model';
+import { ICompanyRepository } from '../interfaces/IRepositories/companyRepository.interface';
+import { Company } from '../models/company.model';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 
@@ -12,7 +12,7 @@ import { TransactionType } from '../../commons/enums/transactionType';
  * @implements {ICompanyRepository}
  */
 @injectable()
-class CompanyRepository implements ICompanyRepository {
+export class CompanyRepository implements ICompanyRepository {
 
   /**
    * @description
@@ -21,7 +21,7 @@ class CompanyRepository implements ICompanyRepository {
    * @returns
    * @memberof CompanyRepository
    */
-  Save(company: Company) {
+  save(company: Company) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Company.sequelize.transaction();
       company.status = TransactionType.ACTIVE;
@@ -42,7 +42,7 @@ class CompanyRepository implements ICompanyRepository {
    * @param {Company} company
    * @memberof CompanyRepository
    */
-  Update(company: Company) {
+  update(company: Company) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Company.sequelize.transaction();
       Company.update(company.toJSON(),
@@ -70,7 +70,7 @@ class CompanyRepository implements ICompanyRepository {
    * @param {number} id
    * @memberof CompanyRepository
    */
-  Delete(_id: number) {
+  delete(_id: number) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Company.sequelize.transaction();
       Company.update({ status: TransactionType.DELETED },
@@ -97,16 +97,16 @@ class CompanyRepository implements ICompanyRepository {
    * @returns
    * @memberof CompanyRepository
    */
-  GetByRegistryCode(registryCode: string): Promise<Company[]> {
+  getByRegistryCode(registryCode: string): Promise<Company[]> {
     return new Promise((resolve, reject) => {
       Company.findAll({
         where: {
           registryCode: {
             [Op.like]: `${registryCode}%`
           },
-            status: {
-              [Op.ne]: TransactionType.DELETED
-            }
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
         }
       })
         .then((foundCompany: Company[]) => {
@@ -125,17 +125,11 @@ class CompanyRepository implements ICompanyRepository {
    * @returns
    * @memberof CompanyRepository
    */
-  GetById(id: number) {
+  getById(id: number) {
     return new Promise((resolve, reject) => {
       Company.findByPk(id)
-        .then(result => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((result: Company) => resolve(result))
+        .catch(error => reject(error));
     });
   }
 }
-
-export default CompanyRepository;

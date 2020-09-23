@@ -8,10 +8,10 @@ import Http from '../../commons/core/http';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { HttpCode } from '../../commons/enums/httpCode';
 import { IEmailService } from "../interfaces/IServices/emailService.interface";
-import Email from "../models/email.model";
+import { Email } from "../models/email.model";
 
 @controller('')
-class EmailController{
+class EmailController {
 
   /**
    * Creates an instance of EmailController.
@@ -32,7 +32,7 @@ class EmailController{
    * @memberof EmailController
    */
   @httpPost('/email')
-  Send(@request() req: Request, @response() res: Response) {
+  post(@request() req: Request, @response() res: Response) {
     return new Promise(async (resolve, reject) => {
       const _email = new Email(req.body);
       try {

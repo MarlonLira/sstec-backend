@@ -1,4 +1,4 @@
-import Auth from '../../models/auth.model';
+import { Auth } from '../../models/auth.model';
 
 /**
  * @description
