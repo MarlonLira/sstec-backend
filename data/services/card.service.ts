@@ -1,5 +1,6 @@
 import { injectable, inject } from "inversify";
 import TYPES from "../types";
+import { InnerException } from "../../commons/core/innerException";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
 import { HttpMessage } from "../../commons/enums/httpMessage";
@@ -45,7 +46,7 @@ export class CardService implements ICardService {
           }
         }
       } catch (error: any) {
-        reject(await this.log.critical('Cartão', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)));
+        reject(await this.log.critical('Cartão', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
       }
     });
   }
@@ -59,7 +60,7 @@ export class CardService implements ICardService {
       this.repository.update(card)
         .then(result => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Cartão', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Cartão', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -68,7 +69,7 @@ export class CardService implements ICardService {
       this.repository.delete(id)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Cartão', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Cartão', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -77,7 +78,7 @@ export class CardService implements ICardService {
       this.repository.getById(id)
         .then(async (result: Card) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Cartão', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Cartão', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -86,7 +87,7 @@ export class CardService implements ICardService {
       this.repository.getByUserId(userId)
         .then(async (result: Card[]) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Cartão', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Cartão', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 }

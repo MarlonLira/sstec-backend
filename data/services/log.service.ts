@@ -1,5 +1,6 @@
 import { injectable, inject } from "inversify";
 import TYPES from "../types";
+import { InnerException } from "../../commons/core/innerException";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { Log } from "../models/log.model";
 import { ILogRepository } from "../interfaces/IRepositories/logRepository.interface";
@@ -81,7 +82,7 @@ export class LogService implements ILogService {
     });
   }
 
-  critical(source: string, code: HttpCode, msg: string, obj: string): Promise<any> {
+  critical(source: string, code: HttpCode, msg: string, obj: any): Promise<any> {
     return new Promise((resolve, reject) => {
       const _log = new Log();
       _log.source = source;
