@@ -1,5 +1,6 @@
 import { injectable, inject } from "inversify";
 import TYPES from "../types";
+import { InnerException } from "../../commons/core/innerException";
 import Attributes from "../../commons/core/attributes";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
@@ -26,7 +27,7 @@ export class CompanyService implements ICompanyService {
           _result.adress = await this.adressService.getByCompanyId(result.id);
           resolve(_result);
         }).catch(async (error: any) => {
-          reject(await this.log.critical('Empresa', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)))
+          reject(await this.log.critical('Empresa', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)))
         });
     });
   }
@@ -39,7 +40,7 @@ export class CompanyService implements ICompanyService {
             this.repository.save(company)
               .then(result => resolve(result))
               .catch(async (error: any) =>
-                reject(await this.log.critical('Empresa', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+                reject(await this.log.critical('Empresa', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
           } else {
             reject(await this.log.critical('Empresa', HttpCode.Bad_Request, HttpMessage.Already_Exists, undefined));
           }
@@ -61,7 +62,7 @@ export class CompanyService implements ICompanyService {
           resolve(result);
         })
         .catch(async (error: any) =>
-          reject(await this.log.critical('Empresa', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Empresa', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -70,7 +71,7 @@ export class CompanyService implements ICompanyService {
       this.repository.delete(id)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Empresa', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Empresa', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -80,7 +81,7 @@ export class CompanyService implements ICompanyService {
         this.repository.getByRegistryCode(registryCode)
           .then((result: Company) => resolve(result))
           .catch(async (error: any) =>
-            reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+            reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
       } else {
         reject(await this.log.error('Parking', HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, undefined));
       }

@@ -1,6 +1,6 @@
 import { CryptoType } from '../enums/cryptoType';
 import * as CryptoJS from 'crypto-js'
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 /**
  * @description

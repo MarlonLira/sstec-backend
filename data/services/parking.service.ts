@@ -1,6 +1,7 @@
 import { injectable, inject } from "inversify";
 import { IParkingRepository } from "../interfaces/IRepositories/parkingRepository.interface";
 import TYPES from "../types";
+import { InnerException } from "../../commons/core/innerException";
 import { IParkingService } from "../interfaces/IServices/parkingService.interface";
 import { Parking } from "../models/parking.model";
 import Attributes from "../../commons/core/attributes";
@@ -39,7 +40,7 @@ export class ParkingService implements IParkingService {
           _result.adress = await this.adressService.getByParkingId(result.id);
           resolve(_result);
         }).catch(async (error: any) =>
-          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -52,7 +53,7 @@ export class ParkingService implements IParkingService {
           await this.adressService.save(adress);
           resolve(result)
         }).catch(async (error: any) =>
-          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -70,7 +71,7 @@ export class ParkingService implements IParkingService {
           resolve(result)
         })
         .catch(async (error: any) =>
-          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -79,7 +80,7 @@ export class ParkingService implements IParkingService {
       this.repository.delete(id)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -89,7 +90,7 @@ export class ParkingService implements IParkingService {
         this.repository.getByRegistryCode(parking.companyId, parking.registryCode)
           .then((result: Parking[]) => resolve(result))
           .catch(async (error: any) =>
-            reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+            reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
       } else {
         reject(await this.log.error('Parking', HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, undefined));
       }
@@ -101,7 +102,7 @@ export class ParkingService implements IParkingService {
       this.repository.getByEmployeeId(employeeId)
         .then((result: Parking[]) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -110,7 +111,7 @@ export class ParkingService implements IParkingService {
       this.repository.toList(companyId)
         .then((result: Parking[]) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 }

@@ -1,5 +1,6 @@
 import { injectable, inject } from "inversify";
 import TYPES from "../types";
+import { InnerException } from "../../commons/core/innerException";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
 import { HttpMessage } from "../../commons/enums/httpMessage";
@@ -19,7 +20,7 @@ export class UserAdressService implements IUserAdressService {
       this.repository.save(userAdress)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('User Adress', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('User Adress', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -28,7 +29,7 @@ export class UserAdressService implements IUserAdressService {
       this.repository.update(userAdress)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('User Adress', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('User Adress', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -37,7 +38,7 @@ export class UserAdressService implements IUserAdressService {
       this.repository.getById(id)
         .then(async (result: UserAdress) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('User Adress', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('User Adress', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -46,7 +47,7 @@ export class UserAdressService implements IUserAdressService {
       this.repository.getByUserId(id)
         .then((result: UserAdress) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('User Adress', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('User Adress', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 }

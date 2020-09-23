@@ -1,6 +1,7 @@
 import { injectable, inject } from "inversify";
 import { IParkingRepository } from "../interfaces/IRepositories/parkingRepository.interface";
 import TYPES from "../types";
+import { InnerException } from "../../commons/core/innerException";
 import { IParkingService } from "../interfaces/IServices/parkingService.interface";
 import { Parking } from "../models/parking.model";
 import Attributes from "../../commons/core/attributes";
@@ -35,7 +36,7 @@ export class UserService implements IUserService {
         .then(async (result: User[]) => {
           resolve(result);
         }).catch(async (error: any) =>
-          reject(await this.log.critical('User', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('User', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -51,7 +52,7 @@ export class UserService implements IUserService {
           _result.adress = await this.adressService.getByUserId(result.id);
           resolve(_result);
         }).catch(async (error: any) =>
-          reject(await this.log.critical('User', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('User', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -73,7 +74,7 @@ export class UserService implements IUserService {
                 resolve(result);
               })
               .catch(async (error: any) =>
-                reject(await this.log.critical('User', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+                reject(await this.log.critical('User', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
           } else {
             reject(await this.log.critical('User', HttpCode.Bad_Request, HttpMessage.Already_Exists, undefined));
           }
@@ -86,7 +87,7 @@ export class UserService implements IUserService {
       this.repository.update(user)
         .then(result => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('User', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('User', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -95,7 +96,7 @@ export class UserService implements IUserService {
       this.repository.delete(id)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('User', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('User', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 

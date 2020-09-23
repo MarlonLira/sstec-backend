@@ -1,6 +1,7 @@
 import { injectable, inject } from "inversify";
 import { IParkingRepository } from "../interfaces/IRepositories/parkingRepository.interface";
 import TYPES from "../types";
+import { InnerException } from "../../commons/core/innerException";
 import { IParkingScoreService } from "../interfaces/IServices/parking-scoreService.interface";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
@@ -21,7 +22,7 @@ export class ParkingScoreService implements IParkingScoreService {
       this.repository.getById(id)
         .then(async (result: ParkingScore) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -30,7 +31,7 @@ export class ParkingScoreService implements IParkingScoreService {
       this.repository.save(parkingScore)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Parking Score', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Parking Score', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -39,7 +40,7 @@ export class ParkingScoreService implements IParkingScoreService {
       this.repository.update(parkingScore)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Parking Score', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Parking Score', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -48,7 +49,7 @@ export class ParkingScoreService implements IParkingScoreService {
       this.repository.delete(id)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Parking Score', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Parking Score', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -57,7 +58,7 @@ export class ParkingScoreService implements IParkingScoreService {
       this.repository.getByParkingId(parkingId)
         .then((result: ParkingScore[]) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Parking Score', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Parking Score', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 }
