@@ -1,5 +1,6 @@
 import { injectable, inject } from "inversify";
 import TYPES from "../types";
+import { InnerException } from "../../commons/core/innerException";
 import { IRuleRepository } from "../interfaces/IRepositories/ruleRepository.interface";
 import { IRuleService } from "../interfaces/IServices/ruleService.interface";
 import { Rule } from "../models/rule.model";
@@ -19,7 +20,7 @@ export class RuleService implements IRuleService {
       this.repository.save(rule)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Rule', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Rule', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -28,7 +29,7 @@ export class RuleService implements IRuleService {
       this.repository.update(rule)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Rule', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Rule', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -37,7 +38,7 @@ export class RuleService implements IRuleService {
       this.repository.delete(id)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Rule', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Rule', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -46,7 +47,7 @@ export class RuleService implements IRuleService {
       this.repository.getById(id)
         .then((result: Rule) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Rule', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Rule', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -55,7 +56,7 @@ export class RuleService implements IRuleService {
       this.repository.getByName(name)
         .then((result: Rule[]) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Rule', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Rule', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -64,7 +65,7 @@ export class RuleService implements IRuleService {
       this.repository.toList()
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Rule', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Rule', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 

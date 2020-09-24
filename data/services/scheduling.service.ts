@@ -1,5 +1,6 @@
 import { injectable, inject } from "inversify";
 import TYPES from "../types";
+import { InnerException } from "../../commons/core/innerException";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
@@ -69,7 +70,7 @@ export class SchedulingService implements ISchedulingService {
           reject(await this.log.error('Scheduling', HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, undefined));
         }
       } catch (error) {
-        reject(await this.log.critical('Scheduling', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)));
+        reject(await this.log.critical('Scheduling', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
       }
     });
   }
@@ -82,7 +83,7 @@ export class SchedulingService implements ISchedulingService {
           resolve(result);
         })
         .catch(async (error: any) =>
-          reject(await this.log.critical('Scheduling', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Scheduling', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -94,7 +95,7 @@ export class SchedulingService implements ISchedulingService {
           resolve(result);
         })
         .catch(async (error: any) =>
-          reject(await this.log.critical('Scheduling', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Scheduling', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -103,7 +104,7 @@ export class SchedulingService implements ISchedulingService {
       this.repository.getById(id)
         .then((result: Scheduling) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Scheduling', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Scheduling', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -112,7 +113,7 @@ export class SchedulingService implements ISchedulingService {
       this.repository.getByUserId(id)
         .then((result: Scheduling[]) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Scheduling', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Scheduling', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -121,7 +122,7 @@ export class SchedulingService implements ISchedulingService {
       this.repository.getByCompanyId(id)
         .then((result: Scheduling[]) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Scheduling', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Scheduling', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -130,7 +131,7 @@ export class SchedulingService implements ISchedulingService {
       this.repository.getByParkingId(id)
         .then((result: Scheduling[]) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Scheduling', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Scheduling', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 }

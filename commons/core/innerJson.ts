@@ -1,19 +1,4 @@
-/**
- * @description
- * @author Marlon Lira
- * @class InnerJson
- */
-class InnerJson {
-
-  /**
-   * @description
-   * @author Marlon Lira
-   * @static
-   * @param {*} json
-   * @param {string[]} requiredAttributes
-   * @returns
-   * @memberof InnerJson
-   */
+export class InnerJson {
   static IsValid(json: any, requiredAttributes: string[]) {
     let result = false;
     let count = 0;
@@ -31,5 +16,3 @@ class InnerJson {
     return result;
   }
 }
-
-export default InnerJson;

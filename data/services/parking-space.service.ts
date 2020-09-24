@@ -1,5 +1,6 @@
 import { injectable, inject } from "inversify";
 import TYPES from "../types";
+import { InnerException } from "../../commons/core/innerException";
 import Attributes from "../../commons/core/attributes";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
@@ -29,7 +30,7 @@ export class ParkingSpaceService implements IParkingSpaceService {
       this.repository.getAvailable(scheduling)
         .then((result: ParkingSpace[]) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -46,7 +47,7 @@ export class ParkingSpaceService implements IParkingSpaceService {
         this.repository.deleteGroupType(parkingSpace)
           .then(result => resolve(result))
           .catch(error =>
-            reject(this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+            reject(this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
       } else {
         reject(this.log.critical('Vaga', HttpCode.Bad_Request, HttpMessage.Not_Found, undefined));
       }
@@ -65,7 +66,7 @@ export class ParkingSpaceService implements IParkingSpaceService {
       this.repository.getById(id)
         .then(async (result: ParkingSpace) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -81,7 +82,7 @@ export class ParkingSpaceService implements IParkingSpaceService {
       this.repository.getByParkingId(id)
         .then((result: ParkingSpace[]) => resolve(result))
         .catch(error => {
-          reject(this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)));
+          reject(this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
         });
     });
   }
@@ -119,7 +120,7 @@ export class ParkingSpaceService implements IParkingSpaceService {
           reject(await this.log.critical('Vaga', HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, undefined));
         }
       } catch (error) {
-        reject(await this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)));
+        reject(await this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
       };
     });
   }
@@ -139,7 +140,7 @@ export class ParkingSpaceService implements IParkingSpaceService {
           resolve(result);
         })
         .catch(error => {
-          reject(this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)));
+          reject(this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
         })
     });
   }
@@ -156,7 +157,7 @@ export class ParkingSpaceService implements IParkingSpaceService {
       this.repository.toList(parkingId)
         .then((result: ParkingSpace[]) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 

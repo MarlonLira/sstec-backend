@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import * as Config from '../../config.json';
 import { ParkingFile } from "../models/parking-file.model";
 import TYPES from "../types";
+import { InnerException } from "../../commons/core/innerException";
 import { IParkingFileRepository } from "../interfaces/IRepositories/parkingFileRepository.interface";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
@@ -48,7 +49,7 @@ export class UploadService implements IUploadService {
           resolve(filePath);
         });
       } catch (error) {
-        reject(await this.log.critical('Upload', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)))
+        reject(await this.log.critical('Upload', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)))
       }
     });
   }
@@ -58,7 +59,7 @@ export class UploadService implements IUploadService {
       this.pFileRepository.toList(parkingId)
         .then((result: ParkingFile[]) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Upload', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+          reject(await this.log.critical('Upload', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -86,7 +87,7 @@ export class UploadService implements IUploadService {
         this.pFileRepository.save(parkingFile)
           .then(result => resolve(result))
           .catch(async error => {
-            reject(await this.log.critical('Upload', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)))
+            reject(await this.log.critical('Upload', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)))
           });
       });
     });

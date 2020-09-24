@@ -3,6 +3,7 @@ import { injectable, inject } from "inversify";
 import * as jwt from 'jsonwebtoken';
 import { Auth } from '../models/auth.model';
 import TYPES from "../types";
+import { InnerException } from "../../commons/core/innerException";
 import { IUserRepository } from "../interfaces/IRepositories/userRepository.interface";
 import { IEmployeeRepository } from "../interfaces/IRepositories/employeeRepository.interface";
 import { CryptoType } from "../../commons/enums/cryptoType";
@@ -56,7 +57,7 @@ export class AuthService implements IAuthService {
           reject(await this.log.warn('Auth', HttpCode.Internal_Server_Error, HttpMessage.Parameters_Not_Provided, undefined));
         }
       } catch (error) {
-        reject(await this.log.critical('Auth', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)));
+        reject(await this.log.critical('Auth', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
       }
     });
   }
@@ -79,7 +80,7 @@ export class AuthService implements IAuthService {
           reject(await this.log.warn('Auth', HttpCode.Internal_Server_Error, HttpMessage.Parameters_Not_Provided, undefined));
         }
       } catch (error) {
-        reject(await this.log.critical('Auth', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)));
+        reject(await this.log.critical('Auth', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
       }
     });
   }
@@ -105,7 +106,7 @@ export class AuthService implements IAuthService {
               })
               .catch(async (error: any) => {
                 await this._companyService.delete(auth.employee.companyId);
-                reject(await this.log.error('Signup Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)));
+                reject(await this.log.error('Signup Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
               });
 
           } else {
@@ -115,7 +116,7 @@ export class AuthService implements IAuthService {
           reject(await this.log.error('Signup Employee', HttpCode.Bad_Request, HttpMessage.Already_Exists, undefined));
         }
       } catch (error) {
-        reject(await this.log.critical('Auth', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)));
+        reject(await this.log.critical('Auth', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
       }
     });
   }
@@ -161,7 +162,7 @@ export class AuthService implements IAuthService {
           reject(await this.log.error('Employee', HttpCode.Not_Found, HttpMessage.Not_Found, undefined));
         }
       } catch (error) {
-        reject(await this.log.critical('Auth', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)));
+        reject(await this.log.critical('Auth', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
       }
     });
   }
