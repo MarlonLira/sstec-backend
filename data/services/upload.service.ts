@@ -21,7 +21,7 @@ export class UploadService implements IUploadService {
     @inject(TYPES.IParkingFileRepository) private pFileRepository: IParkingFileRepository,
     @inject(TYPES.ILogService) private log: ILogService) {
     this.form = new IncomingForm();
-    this.form.uploadDir = PathDir;
+    this.form.uploadDir = `${__dirname}/${PathDir}`;
     this.form.keepExtensions = true;
     this.createFolderIfNotExists(this.form.uploadDir);
   }
@@ -66,7 +66,7 @@ export class UploadService implements IUploadService {
   saveParkingFile(req: any, res: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const parkingFile = new ParkingFile();
-      const parkingPath = `${PathDir}/parking`;
+      const parkingPath = `${this.form.uploadDir}/parking`;
 
       this.form.parse(req);
       this.createFolderIfNotExists(parkingPath);
