@@ -1,6 +1,6 @@
 {
   "name": "sstec-backend",
-  "version": "1.0.4",
+  "version": "2.0.0",
   "description": "",
   "main": "dist/src/app.js",
   "scripts": {
@@ -35,6 +35,7 @@
     "@types/formidable": "^1.0.31",
     "@types/jsonwebtoken": "^8.3.5",
     "@types/node": "^12.12.30",
+    "@types/nodemailer": "^6.4.0",
     "@types/sequelize": "^4.28.8",
     "@types/socket.io": "^2.1.8",
     "bcryptjs": "^2.4.3",
@@ -61,7 +62,6 @@
     "typescript": "^3.8.3"
   },
   "devDependencies": {
-    "@types/nodemailer": "^6.4.0",
     "tslint": "^6.1.1"
   }
 }

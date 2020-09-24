@@ -46,7 +46,7 @@ export class CardService implements ICardService {
           }
         }
       } catch (error) {
-        reject(await this.log.critical('Cartão', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error)));
+        reject(await this.log.critical('Cartão', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
       }
     });
   }
