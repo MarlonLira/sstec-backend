@@ -18,7 +18,7 @@ export class UploadService implements IUploadService {
   private form: IncomingForm;
 
   constructor(
-    @inject(TYPES.IParkingFileRepository) private pFileRepository: IParkingFileRepository,
+    @inject(TYPES.IParkingFileRepository) private repository: IParkingFileRepository,
     @inject(TYPES.ILogService) private log: ILogService) {
     this.form = new IncomingForm();
     this.form.uploadDir = `${__dirname}/${PathDir}`;
@@ -26,40 +26,21 @@ export class UploadService implements IUploadService {
     this.createFolderIfNotExists(this.form.uploadDir);
   }
 
-  save(req: any, folderName: string): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let filePath = '';
-        this.form.uploadDir += folderName;
-
-        this.form.parse(req);
-        this.createFolderIfNotExists(this.form.uploadDir);
-        this.form.on('fileBegin', (id, file) => {
-          this.form.uploadDir += `/${id}`;
-          this.createFolderIfNotExists(this.form.uploadDir);
-          file.path = `${this.form.uploadDir}/${file.name}`;
-        });
-
-        this.form.on('file', (id, file) => {
-          filePath = file.path;
-          const readStream = fs.createReadStream(file.path);
-        });
-
-        this.form.on('end', () => {
-          resolve(filePath);
-        });
-      } catch (error) {
-        reject(await this.log.critical('Upload', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)))
-      }
+  save(parkingFile: ParkingFile): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.repository.save(parkingFile)
+        .then(async (result: any) => resolve(result))
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Parking File', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
   toListByParkingId(parkingId: number): Promise<ParkingFile[]> {
     return new Promise((resolve, reject) => {
-      this.pFileRepository.toList(parkingId)
+      this.repository.toList(parkingId)
         .then((result: ParkingFile[]) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Upload', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+          reject(await this.log.critical('Parking File', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -78,13 +59,13 @@ export class UploadService implements IUploadService {
 
       this.form.on('file', (id, file) => {
         parkingFile.parkingId = Number(id);
-        parkingFile.path = file.path;
+        parkingFile.encoded = file.path;
         parkingFile.name = file.name;
         const readStream = fs.createReadStream(file.path);
       });
 
       this.form.on('end', () => {
-        this.pFileRepository.save(parkingFile)
+        this.repository.save(parkingFile)
           .then(result => resolve(result))
           .catch(async error => {
             reject(await this.log.critical('Upload', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)))

@@ -7,6 +7,7 @@ import { IUploadService } from "../interfaces/IServices/uploadService.interface"
 import Http from "../../commons/core/http";
 import { HttpCode } from "../../commons/enums/httpCode";
 import { HttpMessage } from "../../commons/enums/httpMessage";
+import { ParkingFile } from "../models/parking-file.model";
 
 @controller('')
 class UploadController {
@@ -27,8 +28,17 @@ class UploadController {
     });
   }
 
+  @httpPost('/parkingFile/')
+  post(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+    return new Promise((resolve) => {
+      this.service.save(new ParkingFile(req.body))
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
+    });
+  }
+
   @httpGet('/uploads/parkingId/:parkingId')
-  getAll(@request() req: Request, @response() res: Response): Promise<any> {
+  getByParkingId(@request() req: Request, @response() res: Response): Promise<any> {
     return new Promise((resolve) => {
       this.service.toListByParkingId(Number(req.params.parkingId))
         .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Upload', result)))

@@ -10,7 +10,7 @@ export interface IUploadService {
    */
   saveParkingFile(req: any, res: any): Promise<any>;
 
-  save(req: any, folderName: string): Promise<any>;
+  save(parkingFile: ParkingFile): Promise<any>;
 
   /**
    * @description
