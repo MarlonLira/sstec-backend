@@ -41,6 +41,7 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
   update(parkingSpace: ParkingSpace): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingSpace.sequelize.transaction();
+      console.log(parkingSpace)
       ParkingSpace.update(parkingSpace.ToModify(),
         {
           where:
@@ -193,9 +194,33 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
           status: { [Op.eq]: TransactionType.ACTIVE },
         },
         group: ['type', 'value'],
-        attributes: ['value', 'type', [Sequelize.fn('COUNT', Sequelize.col('type')), 'amount']],
+        attributes: ['value', 'type', 'parkingId', [Sequelize.fn('COUNT', Sequelize.col('type')), 'amount']],
         raw: true
       }).then((parkingSpace: ParkingSpace[]) => {
+        resolve(parkingSpace);
+      })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {number} id
+   * @returns {Promise<ParkingSpace[]>}
+   * @memberof ParkingSpaceRepository
+   */
+  getListByParkingId(id: number): Promise<ParkingSpace[]> {
+    return new Promise(async (resolve, reject) => {
+      ParkingSpace.findAll({
+        where: {
+          parkingId: { [Op.eq]: id },
+          status: { [Op.eq]: TransactionType.ACTIVE },
+        }
+      }
+      ).then((parkingSpace: ParkingSpace[]) => {
         resolve(parkingSpace);
       })
         .catch(error => {

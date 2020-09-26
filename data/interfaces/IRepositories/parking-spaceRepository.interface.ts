@@ -87,4 +87,15 @@ export interface IParkingSpaceRepository {
    * @memberof IParkingSpaceRepository
    */
   getDeletedByParkingId(_parkingspace: ParkingSpace): Promise<ParkingSpace[]>;
+
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {number} id
+   * @returns {Promise<ParkingSpace[]>}
+   * @memberof IParkingSpaceRepository
+   */
+  getListByParkingId(id: number): Promise<ParkingSpace[]>;
+
+
 }
