@@ -7,7 +7,7 @@ const _instance = Context.getInstance();
 export class ParkingFile extends Model {
   id: number;
   name: string;
-  encoded: File;
+  encoded: any;
   type: string;
   parkingId: number;
 
@@ -42,8 +42,10 @@ ParkingFile.init({
     allowNull: false
   },
   encoded: {
-    type: new DataTypes.BLOB(),
-    allowNull: false
+    type: new DataTypes.BLOB('long'),
+    get() {
+      return this.getDataValue('encoded').toString('base64');
+    },
   },
   parkingId: {
     type: new DataTypes.INTEGER(),

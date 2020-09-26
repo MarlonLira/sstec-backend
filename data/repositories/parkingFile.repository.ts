@@ -2,9 +2,32 @@ import { injectable } from "inversify";
 import { IParkingFileRepository } from "../interfaces/IRepositories/parkingFileRepository.interface";
 import { ParkingFile } from "../models/parking-file.model";
 import { Op } from 'sequelize';
+import { Parking } from "../models/parking.model";
 
 @injectable()
 export class ParkingFileRepository implements IParkingFileRepository {
+
+  delete(id: number): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await Parking.sequelize.transaction();
+      ParkingFile.destroy({
+        where: {
+          id: {
+            [Op.eq]: id
+          }
+        },
+        transaction: _transaction
+      })
+        .then(async result => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async error => {
+          await _transaction.rollback();
+          reject(error);
+        });
+    });
+  }
 
   getById(id: number): Promise<ParkingFile> {
     throw new Error("Method not implemented.");

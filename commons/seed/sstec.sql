@@ -26,11 +26,11 @@ values('AT', 'Alice', '155369855210', '8133408099', 'Alice@gmail.com', '123456',
 ('AT', 'Lorenzo', '155367566210', '8199488099', 'Lorenzo@gmail.com', '123456', '2020-05-09 21:57:27', '2020-05-09 21:57:27');
 
 insert into Rule(status, name, level, createdAt, updatedAt)
-values('AT', 'adm', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
-('AT', 'assist', 2, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
-('AT', 'manobrista', 3, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
-('AT', 'gerente', 4, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
-('AT', 'supervisor', 5, '2020-05-09 21:57:27', '2020-05-09 21:57:27');
+values('AT', 'Developer', 0, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
+('AT', ' Administrator', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
+('AT', 'Supervisor', 2, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
+('AT', 'Assistant', 3, '2020-05-09 21:57:27', '2020-05-09 21:57:27');
+
 
 insert into UserAdress(status, country, state, city, street, number, zipCode, complement, userId, createdAt, updatedAt)
 values ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Principal', 99, '52090168', ' ', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),

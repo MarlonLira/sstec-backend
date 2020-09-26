@@ -3,7 +3,7 @@ import * as Config from '../config.json';
 import Attributes from "../commons/core/attributes";
 
 const _logging = Config.Database.Logging;
-const _dbConfig = Config.Database.MySqlWEB;
+const _dbConfig = Config.Database.MySqlWEB_DEV;
 
 /**
  * @description
@@ -29,7 +29,13 @@ class Context {
         dialect: 'mysql',
         logging: _logging,
         omitNull: true,
-        timezone: '-03:00'
+        timezone: '-03:00',
+        pool: {
+          max: 5,
+          min: 0,
+          acquire: 30000,
+          idle: 10000
+        }
       }
     );
     return sequelize;
