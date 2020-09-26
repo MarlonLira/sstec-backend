@@ -68,8 +68,8 @@ class Server {
         const swaggerUi = require('swagger-ui-express');
 
         this.inversifyExpress.setConfig((server) => {
-          server.use(bodyParser.urlencoded({ extended: true }));
-          server.use(bodyParser.json());
+          server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+          server.use(bodyParser.json({limit: '50mb'}));
           server.use(allowCors);
           server.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
         });

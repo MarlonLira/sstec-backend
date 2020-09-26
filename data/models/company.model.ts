@@ -15,7 +15,7 @@ export class Company extends Model {
   phone!: string;
   email!: string;
   about: string;
-  imageUrl: string;
+  image: any;
 
   adress: CompanyAdress;
 
@@ -28,7 +28,7 @@ export class Company extends Model {
     this.phone = Attributes.ReturnIfValid(json.phone);
     this.email = Attributes.ReturnIfValid(json.email);
     this.about = Attributes.ReturnIfValid(json.about);
-    this.imageUrl = Attributes.ReturnIfValid(json.imageUrl);
+    this.image = Attributes.ReturnIfValid(json.image);
     this.adress = Attributes.ReturnIfValid(json.adress);
   }
 
@@ -65,8 +65,11 @@ Company.init({
   about: {
     type: new DataTypes.STRING(255)
   },
-  imageUrl: {
-    type: new DataTypes.STRING(255)
+  image: {
+    type: new DataTypes.BLOB("medium"),
+    get() {
+      return this.getDataValue('image') ? this.getDataValue('image').toString('base64') : undefined;
+    }
   }
 }, {
   sequelize: _instance,
