@@ -22,7 +22,7 @@ export class Employee extends Model {
   public email!: string;
   public password: string;
   public about: string;
-  public imageUrl: string;
+  public image: any;
   public parkingId!: number;
   public companyId!: number;
   public ruleId!: number;
@@ -30,12 +30,6 @@ export class Employee extends Model {
   public rule: Rule;
   public parking: Parking;
 
-  /**
-   * Creates an instance of Employee.
-   * @author Marlon Lira
-   * @param {*} [json]
-   * @memberof Employee
-   */
   constructor(json?: any) {
     super()
     this.id = Attributes.ReturnIfValid(json.id);
@@ -46,7 +40,7 @@ export class Employee extends Model {
     this.phone = Attributes.ReturnIfValid(json.phone);
     this.email = Attributes.ReturnIfValid(json.email);
     this.about = Attributes.ReturnIfValid(json.about);
-    this.imageUrl = Attributes.ReturnIfValid(json.imageUrl);
+    this.image = Attributes.ReturnIfValid(json.image);
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
     this.parking = Attributes.ReturnIfValid(json.parking);
     this.companyId = Attributes.ReturnIfValid(json.companyId);
@@ -92,9 +86,6 @@ Employee.init({
   about: {
     type: new DataTypes.STRING(255),
   },
-  imageUrl: {
-    type: new DataTypes.STRING(255),
-  },
   parkingId: {
     type: new DataTypes.INTEGER()
   },
@@ -103,6 +94,9 @@ Employee.init({
   },
   ruleId: {
     type: new DataTypes.INTEGER()
+  },
+  image:{
+    type: new DataTypes.BLOB('long')
   }
 }, {
   sequelize: _instance,
