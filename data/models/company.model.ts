@@ -65,8 +65,11 @@ Company.init({
   about: {
     type: new DataTypes.STRING(255)
   },
-  image:{
-    type: new DataTypes.BLOB('long')
+  image: {
+    type: new DataTypes.BLOB("medium"),
+    get() {
+      return this.getDataValue('image') ? this.getDataValue('image').toString('base64') : undefined;
+    }
   }
 }, {
   sequelize: _instance,

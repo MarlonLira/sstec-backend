@@ -36,7 +36,7 @@
       "schema": "BdtJSgUu2L"
     },
     "ForceSync": false,
-    "AlterSync": true,
+    "AlterSync": false,
     "DropAllTable": false,
     "Logging": false,
     "IsLogger": false

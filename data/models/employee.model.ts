@@ -7,12 +7,6 @@ import { Parking } from './parking.model';
 
 const _instance = Context.getInstance();
 
-/**
- * @description
- * @author Marlon Lira
- * @class Employee
- * @extends {Model}
- */
 export class Employee extends Model {
   public id!: number;
   public status!: TransactionType;
@@ -96,7 +90,10 @@ Employee.init({
     type: new DataTypes.INTEGER()
   },
   image:{
-    type: new DataTypes.BLOB('long')
+    type: new DataTypes.BLOB("medium"),
+    get() {
+      return this.getDataValue('image') ? this.getDataValue('image').toString('base64') : undefined;
+    }
   }
 }, {
   sequelize: _instance,

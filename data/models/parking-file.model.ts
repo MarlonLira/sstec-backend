@@ -42,9 +42,9 @@ ParkingFile.init({
     allowNull: false
   },
   encoded: {
-    type: new DataTypes.BLOB('long'),
+    type: new DataTypes.BLOB("medium"),
     get() {
-      return this.getDataValue('encoded').toString('base64');
+      return this.getDataValue('encoded') ? this.getDataValue('encoded').toString('base64') : undefined;
     },
   },
   parkingId: {
