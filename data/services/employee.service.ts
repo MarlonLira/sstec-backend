@@ -7,6 +7,8 @@ import { Employee } from "../models/employee.model";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
+import Crypto from '../../commons/core/crypto';
+import { CryptoType } from "../../commons/enums/cryptoType";
 
 @injectable()
 export class EmployeeService implements IEmployeeService {
@@ -68,6 +70,10 @@ export class EmployeeService implements IEmployeeService {
 
   update(employee: Employee): Promise<any> {
     return new Promise((resolve, reject) => {
+      if (employee.password) {
+        employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
+      }
+
       this.repository.update(employee)
         .then(result => resolve(result))
         .catch(async (error: any) =>

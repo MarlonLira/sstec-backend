@@ -9,7 +9,7 @@ import { TransactionType } from '../../commons/enums/transactionType';
 
 @injectable()
 export class EmployeeRepository implements IEmployeeRepository {
-  private _attributes = ['id', 'status', 'name', 'registryCode', 'phone', 'email', 'about', 'imageUrl', 'parkingId', 'companyId', 'ruleId']
+  private _attributes = ['id', 'status', 'name', 'registryCode', 'phone', 'email', 'about', 'image', 'parkingId', 'companyId', 'ruleId']
 
   save(employee: Employee): Promise<any> {
     return new Promise(async (resolve, reject) => {
@@ -109,7 +109,7 @@ export class EmployeeRepository implements IEmployeeRepository {
 
   getById(id: number): Promise<Employee> {
     return new Promise((resolve, reject) => {
-      Employee.findByPk(id)
+      Employee.findByPk(id, { attributes: this._attributes, })
         .then((result: Employee) => {
           resolve(result);
         }).catch(error => {
