@@ -78,7 +78,7 @@ export class EmployeeService implements IEmployeeService {
         .then(result => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))))
-    })
+    });
   }
 
   delete(id: number): Promise<any> {
