@@ -146,7 +146,7 @@ export class AuthService implements IAuthService {
             const _newPassword = Crypto.randomPassword();
             _email.from = 'help.simpleparking@gmail.com';
             _email.subject = 'Recuperação de Conta';
-            _email.text = `Clique no link abaixo e digite sua nova senha ${_newPassword}`;
+            _email.text = `Sua nova senha: ${_newPassword}`;
             _email.to = foundEmployee.email;
             foundEmployee.password = Crypto.Encrypt(_newPassword, CryptoType.PASSWORD);
             this._employeeRepository.update(foundEmployee)

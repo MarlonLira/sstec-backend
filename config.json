@@ -28,6 +28,13 @@
       "password": "9Fg8x4cdCo",
       "schema": "zMgq639h8l"
     },
+    "MySqlWEB_DEV": {
+      "host": "remotemysql.com",
+      "port": 3306,
+      "username": "BdtJSgUu2L",
+      "password": "LWwGRBp3zh",
+      "schema": "BdtJSgUu2L"
+    },
     "ForceSync": false,
     "AlterSync": false,
     "DropAllTable": false,
@@ -52,8 +59,5 @@
     "IsCrit": true,
     "IsUnkn": true,
     "IsError": true
-  },
-  "Upload": {
-    "PathDir": "uploads/"
   }
 }

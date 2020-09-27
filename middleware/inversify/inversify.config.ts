@@ -51,7 +51,7 @@ import { CompanyService } from '../../data/services/company.service';
 import { RuleService } from '../../data/services/rule.service';
 import { LogService } from '../../data/services/log.service';
 import { ParkingAdressService } from '../../data/services/parking-adress.service';
-import { UploadService } from '../../data/services/upload.service';
+import { ParkingFileService } from '../../data/services/parking-file.service';
 import { EmployeeService } from '../../data/services/employee.service';
 import { CompanyAdressService } from '../../data/services/company-adress.service';
 import { ParkingSpaceService } from '../../data/services/parking-space.service';
@@ -69,7 +69,7 @@ import { IParkingService } from '../../data/interfaces/IServices/parkingService.
 import { IRuleService } from '../../data/interfaces/IServices/ruleService.interface';
 import { ILogService } from '../../data/interfaces/IServices/logService.interface';
 import { IParkingAdressService } from '../../data/interfaces/IServices/parking-adressService.interface';
-import { IUploadService } from '../../data/interfaces/IServices/uploadService.interface';
+import { IParkingFileService } from '../../data/interfaces/IServices/parking-fileService.interface';
 import { ICompanyService } from '../../data/interfaces/IServices/companyService.interface';
 import { IEmployeeService } from '../../data/interfaces/IServices/employeeService.interface';
 import { ICompanyAdressService } from '../../data/interfaces/IServices/company-adressService.interface';
@@ -94,7 +94,7 @@ container.bind<IParkingAdressService>(TYPES.IParkingAdressService).to(ParkingAdr
 container.bind<IUserAdressService>(TYPES.IUserAdressService).to(UserAdressService);
 container.bind<IRuleService>(TYPES.IRuleService).to(RuleService);
 container.bind<ILogService>(TYPES.ILogService).to(LogService);
-container.bind<IUploadService>(TYPES.IUploadService).to(UploadService);
+container.bind<IParkingFileService>(TYPES.IParkingFileService).to(ParkingFileService);
 container.bind<IEmployeeService>(TYPES.IEmployeeService).to(EmployeeService);
 container.bind<IParkingSpaceService>(TYPES.IParkingSpaceService).to(ParkingSpaceService);
 container.bind<ISchedulingService>(TYPES.ISchedulingService).to(SchedulingService);

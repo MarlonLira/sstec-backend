@@ -99,21 +99,27 @@ export class ParkingSpaceService implements IParkingSpaceService {
       try {
         const result = [];
         if (Attributes.IsValid(parkingSpace.amount)) {
+          const list: ParkingSpace[] = ((await this.repository.getListByParkingId(parkingSpace.parkingId)).filter(x => x.type === parkingSpace.type))
           const listEx: ParkingSpace[] = (await this.repository.getDeletedByParkingId(parkingSpace));
           const rest = parkingSpace.amount - listEx.length;
-          if (Attributes.IsValid(listEx)) {
+          if (Attributes.IsValid(listEx) && list.length < parkingSpace.amount) {
             listEx.forEach(async (foundParkingSpace: ParkingSpace) => {
               foundParkingSpace.value = parkingSpace.value;
               foundParkingSpace.status = TransactionType.ACTIVE;
               this.repository.update(foundParkingSpace);
               result.push(foundParkingSpace.id);
             });
+
+            if (listEx.length < parkingSpace.amount) {
+              for (let i = 0; i < rest; i++) {
+                result.push(await this.repository.save(parkingSpace));
+              };
+            }
+          } else {
+            parkingSpace.amount = list.length - parkingSpace.amount;
+            await this.deleteGroupType(parkingSpace)
           }
-          if (listEx.length < parkingSpace.amount) {
-            for (let i = 0; i < rest; i++) {
-              result.push(await this.repository.save(parkingSpace));
-            };
-          }
+
           await this.updateAll(parkingSpace);
           resolve(result);
         } else {
@@ -171,7 +177,7 @@ export class ParkingSpaceService implements IParkingSpaceService {
   updateAll(_parkingSpace: ParkingSpace) {
     return new Promise((resolve) => {
       const result = [];
-      this.repository.getByParkingId(_parkingSpace.id)
+      this.repository.getListByParkingId(_parkingSpace.parkingId)
         .then((parkingSpaces: ParkingSpace[]) => {
           const foundParkingSpaces = parkingSpaces.filter(ps => ps.type === _parkingSpace.type);
           if (Attributes.IsValid(foundParkingSpaces)) {

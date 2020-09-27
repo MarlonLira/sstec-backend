@@ -16,6 +16,7 @@ export class User extends Model {
   phone!: string;
   email!: string;
   password!: string;
+  image!: any;
 
   adress: UserAdress;
 
@@ -28,6 +29,7 @@ export class User extends Model {
     this.phone = Attributes.ReturnIfValid(json.phone);
     this.email = Attributes.ReturnIfValid(json.email);
     this.password = Attributes.ReturnIfValid(json.password);
+    this.image = Attributes.ReturnIfValid(json.image);
   }
 
   ToModify() {
@@ -62,6 +64,12 @@ User.init({
   },
   password: {
     type: new DataTypes.STRING(100)
+  },
+  image: {
+    type: new DataTypes.BLOB("medium"),
+    get() {
+      return this.getDataValue('image') ? this.getDataValue('image').toString('base64') : undefined;
+    }
   }
 }, {
   sequelize: _instance,

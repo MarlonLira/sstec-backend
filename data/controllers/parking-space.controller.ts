@@ -75,7 +75,7 @@ class ParkingSpaceController {
   @httpPut('/parkingSpace')
   put(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
-      this.service.update(new ParkingSpace(req.body))
+      this.service.save(new ParkingSpace(req.body))
         .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Vaga', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Vaga')));
     });
