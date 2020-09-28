@@ -8,13 +8,6 @@ import { TransactionType } from '../../commons/enums/transactionType';
 @injectable()
 class ParkingAdressRepository implements IParkingAdressRepository {
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} parkingId
-   * @returns {Promise<ParkingAdress>}
-   * @memberof ParkingAdressRepository
-   */
   getByParkingId(parkingId: number): Promise<ParkingAdress> {
     return new Promise((resolve, reject) => {
       ParkingAdress.findOne({
@@ -36,13 +29,6 @@ class ParkingAdressRepository implements IParkingAdressRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Felipe Seabra
-   * @param {ParkingAdress} parkingAdress
-   * @returns
-   * @memberof ParkingAdressRepository
-   */
   update(parkingAdress: ParkingAdress) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingAdress.sequelize.transaction();
@@ -65,12 +51,6 @@ class ParkingAdressRepository implements IParkingAdressRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Felipe Seabra
-   * @param {ParkingAdress} parkingAdress
-   * @memberof ParkingAdressRepository
-   */
   save(parkingAdress: ParkingAdress): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingAdress.sequelize.transaction();
@@ -86,13 +66,6 @@ class ParkingAdressRepository implements IParkingAdressRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {number} _id
-   * @returns {Promise <any>}
-   * @memberof ParkingAdressRepository
-   */
   delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingAdress.sequelize.transaction();
@@ -113,13 +86,6 @@ class ParkingAdressRepository implements IParkingAdressRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Felipe Seabra
-   * @param {number} parkingAdressId
-   * @returns
-   * @memberof ParkingAdressRepository
-   */
   getById(parkingAdressId: number): Promise<ParkingAdress> {
     return new Promise((resolve, reject) => {
       ParkingAdress.findOne({
@@ -141,24 +107,11 @@ class ParkingAdressRepository implements IParkingAdressRepository {
     });
   }
 
-  toList(_parkingId): Promise<ParkingAdress[]> {
+  toList(): Promise<ParkingAdress[]> {
     return new Promise((resolve, reject) => {
-      ParkingAdress.findAll({
-        where: {
-          parkingId: {
-            [Op.eq]: _parkingId
-          },
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
-        }
-      })
-        .then(result => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
+      ParkingAdress.findAll()
+        .then(result => resolve(result))
+        .catch(error => reject(error));
     });
   }
 }

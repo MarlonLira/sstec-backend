@@ -4,9 +4,21 @@ import { injectable } from "inversify";
 import { IParkingRepository } from '../interfaces/IRepositories/parkingRepository.interface';
 import { Parking } from '../models/parking.model';
 import { TransactionType } from '../../commons/enums/transactionType';
+import { ParkingAdress } from '../models/parking-adress.model';
+import { Company } from '../models/company.model';
 
 @injectable()
 export class ParkingRepository implements IParkingRepository {
+
+  toList(): Promise<Parking[]> {
+    return new Promise((resolve, reject) => {
+      Parking.findAll({
+        include: [{ model: ParkingAdress, as: 'ParkingAdress' }]
+      })
+        .then((parking: Parking[]) => resolve(parking))
+        .catch(error => reject(error));
+    });
+  }
 
   getById(id: number): Promise<Parking> {
     return new Promise((resolve, reject) => {
@@ -131,7 +143,7 @@ export class ParkingRepository implements IParkingRepository {
     });
   }
 
-  toList(_companyId: number): Promise<Parking[]> {
+  getByCompanyId(_companyId: number): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       Parking.findAll({
         where: {

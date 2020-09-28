@@ -21,12 +21,6 @@ export class Parking extends Model {
   adress: ParkingAdress;
   company: Company;
 
-  /**
-   * Creates an instance of Parking.
-   * @author Emerson Souza
-   * @param {*} [json]
-   * @memberof Parking
-   */
   constructor(json?: any) {
     super()
     this.id = Attributes.ReturnIfValid(json.id);

@@ -22,24 +22,19 @@ export class ParkingAdressService implements IParkingAdressService {
     @inject(TYPES.IParkingAdressRepository) private repository: IParkingAdressRepository,
     @inject(TYPES.ILogService) private log: ILogService) { }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} id
-   * @returns {Promise<ParkingAdress>}
-   * @memberof ParkingAdressService
-   */
+  toList(): Promise<ParkingAdress[]> {
+    return new Promise((resolve, reject) => {
+      this.repository.toList()
+        .then(async (result: ParkingAdress[]) => resolve(result))
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+    });
+  }
+
   getById(id: number): Promise<ParkingAdress> {
     throw new Error("Method not implemented.");
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} id
-   * @returns {Promise<ParkingAdress>}
-   * @memberof ParkingAdressService
-   */
   getByParkingId(id: number): Promise<ParkingAdress> {
     return new Promise((resolve, reject) => {
       this.repository.getByParkingId(id)
@@ -49,13 +44,6 @@ export class ParkingAdressService implements IParkingAdressService {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {ParkingAdress} parkingAdress
-   * @returns {Promise<any>}
-   * @memberof ParkingAdressService
-   */
   save(parkingAdress: ParkingAdress): Promise<any> {
     return new Promise((resolve, reject) => {
       this.repository.save(parkingAdress)
@@ -65,13 +53,6 @@ export class ParkingAdressService implements IParkingAdressService {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {ParkingAdress} parkingAdress
-   * @returns {Promise<any>}
-   * @memberof ParkingAdressService
-   */
   update(parkingAdress: ParkingAdress): Promise<any> {
     return new Promise((resolve, reject) => {
       this.repository.update(parkingAdress)

@@ -41,10 +41,19 @@ class ParkingController {
     });
   }
 
+  @httpGet('/parkings')
+  get(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+    return new Promise((resolve) => {
+      this.service.toList()
+        .then((result: Parking[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
+    });
+  }
+
   @httpGet('/parkings/companyId/:companyId')
   getByCompanyId(@request() req: Request, @response() res: Response): Promise<any> {
     return new Promise((resolve) => {
-      this.service.toList(Number(req.params.companyId))
+      this.service.getByCompanyId(Number(req.params.companyId))
         .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
