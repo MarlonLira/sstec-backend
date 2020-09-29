@@ -68,9 +68,11 @@ export class UserService implements IUserService {
             user.password = Attributes.IsValid(user.password) ? Crypto.Encrypt(user.password, CryptoType.PASSWORD) : undefined;
             this.repository.save(user)
               .then(async (result: User) => {
-                result.adress.userId = result.id;
-                const adress: UserAdress = new UserAdress(result.adress);
-                await this.adressService.save(adress);
+                if (user.adress) {
+                  const adress: UserAdress = new UserAdress(user.adress);
+                  adress.userId = result.id;
+                  await this.adressService.save(adress);
+                }
                 resolve(result);
               })
               .catch(async (error: any) =>
