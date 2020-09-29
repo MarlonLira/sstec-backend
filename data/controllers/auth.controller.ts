@@ -104,9 +104,18 @@ class AuthController {
    * @memberof AuthController
    */
   @httpPost('/employee/signup')
-  signUp(@request() req: Request, @response() res: Response<any>) {
+  signup(@request() req: Request, @response() res: Response<any>) {
     return new Promise((resolve) => {
       this.service.signupCompany(new Auth(req.body))
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Login', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Login')));
+    });
+  }
+
+  @httpPost('/user/signup')
+  signupUser(@request() req: Request, @response() res: Response<any>) {
+    return new Promise((resolve) => {
+      this.service.signupUser(new Auth(req.body))
         .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Login', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Login')));
     });

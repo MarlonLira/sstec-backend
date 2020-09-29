@@ -20,6 +20,7 @@ import { ILogService } from "../interfaces/IServices/logService.interface";
 import { IParkingService } from "../interfaces/IServices/parkingService.interface";
 import { IRuleService } from "../interfaces/IServices/ruleService.interface";
 import { ICompanyService } from "../interfaces/IServices/companyService.interface";
+import { IUserService } from "../interfaces/IServices/userService.interface";
 
 @injectable()
 export class AuthService implements IAuthService {
@@ -29,7 +30,7 @@ export class AuthService implements IAuthService {
     @inject(TYPES.ICompanyService) private _companyService: ICompanyService,
     @inject(TYPES.IParkingService) private _parkingService: IParkingService,
     @inject(TYPES.IRuleService) private _ruleService: IRuleService,
-    @inject(TYPES.IUserRepository) private _userRepository: IUserRepository,
+    @inject(TYPES.IUserService) private _userService: IUserService,
     @inject(TYPES.IEmailService) private _emailService: IEmailService,
     @inject(TYPES.ILogService) private log: ILogService
   ) { }
@@ -66,7 +67,7 @@ export class AuthService implements IAuthService {
     return new Promise(async (resolve, reject) => {
       try {
         if (Attributes.IsValid(auth.user)) {
-          const foundUser: User = await this._userRepository.getByEmail(auth.user.email);
+          const foundUser: User = await this._userService.getByEmail(auth.user.email);
           if (Attributes.IsValid(foundUser) && Crypto.Compare(auth.user.password, foundUser.password)) {
             auth.user = foundUser;
             auth.user.password = undefined;
@@ -122,7 +123,14 @@ export class AuthService implements IAuthService {
   }
 
   signupUser(auth: Auth): Promise<any> {
-    throw new Error("Method not implemented.");
+    return new Promise(async (resolve, reject) => {
+      try {
+        this._userService.save(auth.user)
+          .then(result => resolve(result));
+      } catch (error) {
+        reject(await this.log.critical('Auth', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
+      }
+    });
   }
 
   checkToken(auth: Auth) {
