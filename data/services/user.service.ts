@@ -40,8 +40,16 @@ export class UserService implements IUserService {
     });
   }
 
-  getByEmail(_email: string): Promise<User> {
-    throw new Error("Method not implemented.");
+  getByEmail(email: string): Promise<User> {
+    return new Promise((resolve, reject) => {
+      this.repository.getByEmail(email)
+        .then(async (result: User) => {
+          const _result: any = result.ToModify();
+          _result.adress = await this.adressService.getByUserId(result.id);
+          resolve(_result);
+        }).catch(async (error: any) =>
+          reject(await this.log.critical('User', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+    });
   }
 
   getById(id: number): Promise<User> {
