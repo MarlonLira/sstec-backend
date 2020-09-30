@@ -22,6 +22,7 @@ import { ParkingScore } from './models/parking-score.model';
 import { Log } from './models/log.model';
 import { AccountRecovery } from './models/account-recovery.model';
 import { ParkingFile } from './models/parking-file.model';
+import { RouteSecurity } from './models/route-security.model';
 
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
@@ -63,7 +64,8 @@ class Database {
       { name: 'ParkingFinance', entity: ParkingFinance.sequelize },
       { name: 'Log', entity: Log.sequelize },
       { name: 'AccountRecovery', entity: AccountRecovery.sequelize },
-      { name: 'ParkingFile', entity: ParkingFile.sequelize }
+      { name: 'ParkingFile', entity: ParkingFile.sequelize },
+      { name: 'RouteSecurity', entity: RouteSecurity.sequelize }
     ];
 
     Logger.Info('Database', 'Table verification started!');
@@ -74,17 +76,22 @@ class Database {
 
     // 1:N
     Company.hasMany(Parking, { foreignKey: 'companyId', as: 'Parking' });
+    Company.hasMany(RouteSecurity, { foreignKey: 'companyId', as: 'RouteSecurity' });
     User.hasMany(Vehicle, { foreignKey: 'userId', as: 'Vehicle' });
     User.hasMany(Card, { foreignKey: 'userId', as: 'Card' });
     User.hasMany(ParkingScore, { foreignKey: 'userId', as: 'ParkingScore' });
     User.hasMany(Scheduling, { foreignKey: 'userId', as: 'Scheduling' });
+    User.hasMany(AccountRecovery, { foreignKey: 'userId', as: 'AccountRecovery' });
     Rule.hasMany(Employee, { foreignKey: 'ruleId', as: 'Employee' });
+    Rule.hasMany(RouteSecurity, { foreignKey: 'ruleId', as: 'RouteSecurity' });
     Parking.hasMany(ParkingPromotion, { foreignKey: 'parkingId', as: 'ParkingPromotion' });
     Parking.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'ParkingSpace' });
     Parking.hasMany(ParkingScore, { foreignKey: 'parkingId', as: 'ParkingScore' });
     Parking.hasMany(ParkingFinance, { foreignKey: 'parkingId', as: 'ParkingFinance' });
     Parking.hasMany(Employee, { foreignKey: 'parkingId', as: 'Employee' });
+    Parking.hasMany(ParkingFile, { foreignKey: 'parkingId', as: 'ParkingFile' });
     ParkingSpace.hasMany(Scheduling, { foreignKey: 'parkingSpaceId', as: 'Scheduling' });
+    Employee.hasMany(AccountRecovery, { foreignKey: 'employeeId', as: 'AccountRecovery' });
 
     // 1:1
     Company.hasOne(CompanyAdress, { foreignKey: 'companyId', as: 'CompanyAdress' });
@@ -138,6 +145,7 @@ class Database {
             force: ForceSync,
             alter: AlterSync,
             logging: (IsLogger ? msg => Logger.Info(models[count].name, msg) : IsLogger)
+            
           })
           .then(() => {
             Logger.Info(models[count].name, 'verification finished!')

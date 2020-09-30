@@ -1,0 +1,73 @@
+import { Response, Request } from 'express';
+import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
+import { inject } from "inversify";
+
+import TYPES from '../types';
+import Http from '../../commons/core/http';
+import { HttpCode } from '../../commons/enums/httpCode';
+import { HttpMessage } from '../../commons/enums/httpMessage';
+import { IRouteSecurityService } from '../interfaces/IServices/route-securityService.interface';
+import { RouteSecurity } from '../models/route-security.model';
+
+@controller('')
+class RouteSecurityController {
+
+  constructor(@inject(TYPES.IRouteSecurityService) private service: IRouteSecurityService) { }
+
+  @httpPost('/routeSecurity')
+  save(@request() req: Request, @response() res: Response) {
+    return new Promise((resolve) => {
+      this.service.save(new RouteSecurity(req.body))
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Nivel de Acesso', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
+    });
+  }
+
+  @httpGet('/routeSecurity/:id')
+  searchById(@request() req: Request, @response() res: Response) {
+    return new Promise((resolve) => {
+      this.service.getById(Number(req.params.id))
+        .then((result: RouteSecurity) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Nivel de Acesso', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
+
+    });
+  }
+
+  @httpGet('/routeSecurity/name/:name')
+  searchByName(@request() req: Request, @response() res: Response) {
+    return new Promise((resolve) => {
+      this.service.getByName(String(req.params.name))
+        .then((result: RouteSecurity[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Nivel de Acesso', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
+    });
+  }
+
+  @httpGet('/routeSecurity')
+  searchAll(@request() req: Request, @response() res: Response) {
+    return new Promise((resolve) => {
+      this.service.toList()
+        .then((result: RouteSecurity[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Nivel de Acesso', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
+    });
+  }
+
+  @httpPut('/routeSecurity')
+  update(@request() req: Request, @response() res: Response) {
+    return new Promise((resolve) => {
+      this.service.update(new RouteSecurity(req.body))
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Nivel de Acesso', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
+    });
+  }
+
+  @httpDelete('/routeSecurity/:id')
+  delete(@request() req: Request, @response() res: Response) {
+    return new Promise((resolve) => {
+      this.service.delete(Number(req.params.id))
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Nivel de Acesso', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
+    });
+  }
+}
+
+export default RouteSecurityController;
