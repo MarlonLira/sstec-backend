@@ -2,7 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
-import { CompanyAdress } from './company-adress.model';
+import { CompanyAddress } from './company-address.model';
 
 const _instance = Context.getInstance();
 
@@ -17,7 +17,7 @@ export class Company extends Model {
   about: string;
   image: any;
 
-  adress: CompanyAdress;
+  address: CompanyAddress;
 
   constructor(json?: any) {
     super()
@@ -29,7 +29,7 @@ export class Company extends Model {
     this.email = Attributes.ReturnIfValid(json.email);
     this.about = Attributes.ReturnIfValid(json.about);
     this.image = Attributes.ReturnIfValid(json.image);
-    this.adress = Attributes.ReturnIfValid(json.adress);
+    this.address = Attributes.ReturnIfValid(json.address);
   }
 
   ToModify() {

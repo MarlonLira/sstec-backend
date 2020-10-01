@@ -1,16 +1,16 @@
 import { Op } from 'sequelize';
 import { injectable } from "inversify";
 
-import { IParkingAdressRepository } from '../interfaces/IRepositories/parking-adressRepository.interface';
-import { ParkingAdress } from '../models/parking-adress.model';
+import { IParkingAddressRepository } from '../interfaces/IRepositories/parking-addressRepository.interface';
+import { ParkingAddress } from '../models/parking-address.model';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 @injectable()
-class ParkingAdressRepository implements IParkingAdressRepository {
+class ParkingAddressRepository implements IParkingAddressRepository {
 
-  getByParkingId(parkingId: number): Promise<ParkingAdress> {
+  getByParkingId(parkingId: number): Promise<ParkingAddress> {
     return new Promise((resolve, reject) => {
-      ParkingAdress.findOne({
+      ParkingAddress.findOne({
         where: {
           parkingId: {
             [Op.eq]: parkingId
@@ -20,7 +20,7 @@ class ParkingAdressRepository implements IParkingAdressRepository {
           }
         }
       })
-        .then((result: ParkingAdress) => {
+        .then((result: ParkingAddress) => {
           resolve(result);
         })
         .catch(error => {
@@ -29,13 +29,13 @@ class ParkingAdressRepository implements IParkingAdressRepository {
     });
   }
 
-  update(parkingAdress: ParkingAdress) {
+  update(parkingAddress: ParkingAddress) {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingAdress.sequelize.transaction();
-      ParkingAdress.update(parkingAdress.ToModify(),
+      const _transaction = await ParkingAddress.sequelize.transaction();
+      ParkingAddress.update(parkingAddress.ToModify(),
         {
           where: {
-            id: parkingAdress.id
+            id: parkingAddress.id
           },
           transaction: _transaction,
           validate: false
@@ -51,14 +51,14 @@ class ParkingAdressRepository implements IParkingAdressRepository {
     });
   }
 
-  save(parkingAdress: ParkingAdress): Promise<any> {
+  save(parkingAddress: ParkingAddress): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingAdress.sequelize.transaction();
-      parkingAdress.status = TransactionType.ACTIVE;
-      ParkingAdress.create(parkingAdress, { transaction: _transaction })
-        .then(async (createParkingAdress: ParkingAdress) => {
+      const _transaction = await ParkingAddress.sequelize.transaction();
+      parkingAddress.status = TransactionType.ACTIVE;
+      ParkingAddress.create(parkingAddress, { transaction: _transaction })
+        .then(async (createParkingAddress: ParkingAddress) => {
           await _transaction.commit();
-          resolve({ "ParkingAdress": createParkingAdress.id })
+          resolve({ "ParkingAddress": createParkingAddress.id })
         }).catch(async error => {
           await _transaction.rollback();
           reject(error);
@@ -68,8 +68,8 @@ class ParkingAdressRepository implements IParkingAdressRepository {
 
   delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingAdress.sequelize.transaction();
-      ParkingAdress.destroy({
+      const _transaction = await ParkingAddress.sequelize.transaction();
+      ParkingAddress.destroy({
         where: {
           id: _id
         },
@@ -86,19 +86,19 @@ class ParkingAdressRepository implements IParkingAdressRepository {
     });
   }
 
-  getById(parkingAdressId: number): Promise<ParkingAdress> {
+  getById(parkingAddressId: number): Promise<ParkingAddress> {
     return new Promise((resolve, reject) => {
-      ParkingAdress.findOne({
+      ParkingAddress.findOne({
         where: {
           id: {
-            [Op.eq]: parkingAdressId
+            [Op.eq]: parkingAddressId
           },
           status: {
             [Op.ne]: TransactionType.DELETED
           }
         }
       })
-        .then((result: ParkingAdress) => {
+        .then((result: ParkingAddress) => {
           resolve(result);
         })
         .catch(error => {
@@ -107,13 +107,13 @@ class ParkingAdressRepository implements IParkingAdressRepository {
     });
   }
 
-  toList(): Promise<ParkingAdress[]> {
+  toList(): Promise<ParkingAddress[]> {
     return new Promise((resolve, reject) => {
-      ParkingAdress.findAll()
+      ParkingAddress.findAll()
         .then(result => resolve(result))
         .catch(error => reject(error));
     });
   }
 }
 
-export default ParkingAdressRepository;
+export default ParkingAddressRepository;

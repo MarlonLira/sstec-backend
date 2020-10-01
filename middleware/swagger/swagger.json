@@ -17,8 +17,8 @@
       "description": "Operations about user"
     },
     {
-      "name": "useradress",
-      "description": "Operations about user adress"
+      "name": "useraddress",
+      "description": "Operations about user address"
     },
     {
       "name": "vehicle",
@@ -29,8 +29,8 @@
       "description": "Operations about company"
     },
     {
-      "name": "companyadress",
-      "description": "Operations about company adress"
+      "name": "companyaddress",
+      "description": "Operations about company address"
     },
     {
       "name": "employee",
@@ -49,8 +49,8 @@
       "description": "Operations about parking"
     },
     {
-      "name": "parkingadress",
-      "description": "Operations about parking adress"
+      "name": "parkingaddress",
+      "description": "Operations about parking address"
     },
     {
       "name": "parkingspace",
@@ -62,10 +62,10 @@
     }
   ],
   "paths": {
-    "/companyadress/{id}": {
+    "/companyaddress/{id}": {
       "get": {
         "tags": [
-          "companyadress"
+          "companyaddress"
         ],
         "produces": [
           "application/json"
@@ -75,7 +75,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "Id of company adress to return",
+            "description": "Id of company address to return",
             "required": true,
             "type": "integer",
             "format": "int64"
@@ -88,10 +88,10 @@
         }
       }
     },
-    "/companyadresses": {
+    "/companyaddresses": {
       "get": {
         "tags": [
-          "companyadress"
+          "companyaddress"
         ],
         "produces": [
           "application/json"
@@ -105,10 +105,10 @@
         }
       }
     },
-    "/companyadress": {
+    "/companyaddress": {
       "put": {
         "tags": [
-          "companyadress"
+          "companyaddress"
         ],
         "consumes": [
           "application/json"
@@ -121,10 +121,10 @@
           {
             "in": "body",
             "name": "body",
-            "description": "company adress object",
+            "description": "company address object",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CompanyAdress"
+              "$ref": "#/definitions/CompanyAddress"
             }
           }
         ],
@@ -136,7 +136,7 @@
       },
       "post": {
         "tags": [
-          "companyadress"
+          "companyaddress"
         ],
         "consumes": [
           "application/json"
@@ -149,10 +149,10 @@
           {
             "in": "body",
             "name": "body",
-            "description": "company adress object",
+            "description": "company address object",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CompanyAdress"
+              "$ref": "#/definitions/CompanyAddress"
             }
           }
         ],
@@ -163,10 +163,10 @@
         }
       }
     },
-    "/useradress/{id}": {
+    "/useraddress/{id}": {
       "get": {
         "tags": [
-          "useradress"
+          "useraddress"
         ],
         "produces": [
           "application/json"
@@ -176,7 +176,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "Id of user adress to return",
+            "description": "Id of user address to return",
             "required": true,
             "type": "integer",
             "format": "int64"
@@ -189,10 +189,10 @@
         }
       }
     },
-    "/useradresses": {
+    "/useraddresses": {
       "get": {
         "tags": [
-          "useradress"
+          "useraddress"
         ],
         "produces": [
           "application/json"
@@ -206,10 +206,10 @@
         }
       }
     },
-    "/useradress": {
+    "/useraddress": {
       "put": {
         "tags": [
-          "useradress"
+          "useraddress"
         ],
         "consumes": [
           "application/json"
@@ -222,10 +222,10 @@
           {
             "in": "body",
             "name": "body",
-            "description": "user adress object",
+            "description": "user address object",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/UserAdress"
+              "$ref": "#/definitions/UserAddress"
             }
           }
         ],
@@ -237,7 +237,7 @@
       },
       "post": {
         "tags": [
-          "useradress"
+          "useraddress"
         ],
         "consumes": [
           "application/json"
@@ -250,10 +250,10 @@
           {
             "in": "body",
             "name": "body",
-            "description": "user adress object",
+            "description": "user address object",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/UserAdress"
+              "$ref": "#/definitions/UserAddress"
             }
           }
         ],
@@ -264,10 +264,10 @@
         }
       }
     },
-    "/parkingadress/{id}": {
+    "/parkingaddress/{id}": {
       "get": {
         "tags": [
-          "parkingadress"
+          "parkingaddress"
         ],
         "produces": [
           "application/json"
@@ -277,7 +277,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "Id of parking adress to return",
+            "description": "Id of parking address to return",
             "required": true,
             "type": "integer",
             "format": "int64"
@@ -290,10 +290,10 @@
         }
       }
     },
-    "/parkingadresses": {
+    "/parkingaddresses": {
       "get": {
         "tags": [
-          "parkingadress"
+          "parkingaddress"
         ],
         "produces": [
           "application/json"
@@ -307,10 +307,10 @@
         }
       }
     },
-    "/parkingadress": {
+    "/parkingaddress": {
       "put": {
         "tags": [
-          "parkingadress"
+          "parkingaddress"
         ],
         "consumes": [
           "application/json"
@@ -323,10 +323,10 @@
           {
             "in": "body",
             "name": "body",
-            "description": "parking adress object",
+            "description": "parking address object",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ParkingAdress"
+              "$ref": "#/definitions/ParkingAddress"
             }
           }
         ],
@@ -338,7 +338,7 @@
       },
       "post": {
         "tags": [
-          "parkingadress"
+          "parkingaddress"
         ],
         "consumes": [
           "application/json"
@@ -351,10 +351,10 @@
           {
             "in": "body",
             "name": "body",
-            "description": "parking adress object",
+            "description": "parking address object",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ParkingAdress"
+              "$ref": "#/definitions/ParkingAddress"
             }
           }
         ],
@@ -1556,10 +1556,10 @@
         "name": "Company"
       }
     },
-    "CompanyAdress": {
+    "CompanyAddress": {
       "type": "object",
       "properties": {
-        "companyAdress": {
+        "companyAddress": {
           "type": "object",
           "properties": {
             "id": {
@@ -1794,10 +1794,10 @@
         "name": "ParkingPromotion"
       }
     },
-    "ParkingAdress": {
+    "ParkingAddress": {
       "type": "object",
       "properties": {
-        "parkingAdress": {
+        "parkingAddress": {
           "type": "object",
           "properties": {
             "id": {
@@ -1844,7 +1844,7 @@
         }
       },
       "xml": {
-        "name": "ParkingAdress"
+        "name": "ParkingAddress"
       }
     }
   }

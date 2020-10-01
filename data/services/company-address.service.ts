@@ -4,42 +4,42 @@ import { InnerException } from "../../commons/core/innerException";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
 import { HttpMessage } from "../../commons/enums/httpMessage";
-import { ICompanyAdressService } from "../interfaces/IServices/company-adressService.interface";
-import { ICompanyAdressRepository } from "../interfaces/IRepositories/company-adressRepository.interface";
-import { CompanyAdress } from "../models/company-adress.model";
+import { ICompanyAddressService } from "../interfaces/IServices/company-addressService.interface";
+import { ICompanyAddressRepository } from "../interfaces/IRepositories/company-addressRepository.interface";
+import { CompanyAddress } from "../models/company-address.model";
 
 @injectable()
-export class CompanyAdressService implements ICompanyAdressService {
+export class CompanyAddressService implements ICompanyAddressService {
 
   constructor(
-    @inject(TYPES.ICompanyAdressRepository) private repository: ICompanyAdressRepository,
+    @inject(TYPES.ICompanyAddressRepository) private repository: ICompanyAddressRepository,
     @inject(TYPES.ILogService) private log: ILogService) { }
 
-  getById(id: number): Promise<CompanyAdress> {
+  getById(id: number): Promise<CompanyAddress> {
     throw new Error("Method not implemented.");
   }
 
-  getByCompanyId(id: number): Promise<CompanyAdress> {
+  getByCompanyId(id: number): Promise<CompanyAddress> {
     return new Promise((resolve, reject) => {
       this.repository.getByCompanyId(id)
-        .then(async (result: CompanyAdress) => resolve(result))
+        .then(async (result: CompanyAddress) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Company', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
-  save(companyAdress: CompanyAdress): Promise<any> {
+  save(companyAddress: CompanyAddress): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.repository.save(companyAdress)
+      this.repository.save(companyAddress)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Company', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
-  update(parkingAdress: CompanyAdress): Promise<any> {
+  update(parkingAddress: CompanyAddress): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.repository.update(parkingAdress)
+      this.repository.update(parkingAddress)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Company', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));

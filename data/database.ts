@@ -6,17 +6,17 @@ import Context from '../main/context';
 // Entities
 import { User } from './models/user.model';
 import Vehicle from './models/vehicle.model';
-import { UserAdress } from './models/user-adress.model';
+import { UserAddress } from './models/user-address.model';
 import ParkingFinance from './models/parking-finance.model';
 import ParkingPromotion from './models/parking-promotion.model';
 import { Card } from './models/card.model';
 import { Company } from './models/company.model';
-import { CompanyAdress } from './models/company-adress.model';
+import { CompanyAddress } from './models/company-address.model';
 import { Employee } from './models/employee.model';
 import { Parking } from './models/parking.model';
 import { Rule } from './models/rule.model';
 import { ParkingSpace } from './models/parking-space.model';
-import { ParkingAdress } from './models/parking-adress.model';
+import { ParkingAddress } from './models/parking-address.model';
 import { Scheduling } from './models/scheduling.model';
 import { ParkingScore } from './models/parking-score.model';
 import { Log } from './models/log.model';
@@ -49,16 +49,16 @@ class Database {
     const models: PersistenceModel[] = [
       { name: 'User', entity: User.sequelize },
       { name: 'Vehicle', entity: Vehicle.sequelize },
-      { name: 'UserAdress', entity: UserAdress.sequelize },
+      { name: 'UserAddress', entity: UserAddress.sequelize },
       { name: 'Card', entity: Card.sequelize },
       { name: 'Company', entity: Company.sequelize },
-      { name: 'CompanyAdress', entity: CompanyAdress.sequelize },
+      { name: 'CompanyAddress', entity: CompanyAddress.sequelize },
       { name: 'Employee', entity: Employee.sequelize },
       { name: 'Parking', entity: Parking.sequelize },
       { name: 'Rule', entity: Rule.sequelize },
       { name: 'ParkingPromotion', entity: ParkingPromotion.sequelize },
       { name: 'ParkingSpace', entity: ParkingSpace.sequelize },
-      { name: 'ParkingAdress', entity: ParkingAdress.sequelize },
+      { name: 'ParkingAddress', entity: ParkingAddress.sequelize },
       { name: 'Scheduling', entity: Scheduling.sequelize },
       { name: 'ParkingScore', entity: ParkingScore.sequelize },
       { name: 'ParkingFinance', entity: ParkingFinance.sequelize },
@@ -94,9 +94,9 @@ class Database {
     Employee.hasMany(AccountRecovery, { foreignKey: 'employeeId', as: 'AccountRecovery' });
 
     // 1:1
-    Company.hasOne(CompanyAdress, { foreignKey: 'companyId', as: 'CompanyAdress' });
-    User.hasOne(UserAdress, { foreignKey: 'userId', as: 'UserAdress' });
-    Parking.hasOne(ParkingAdress, { foreignKey: 'parkingId', as: 'ParkingAdress' });
+    Company.hasOne(CompanyAddress, { foreignKey: 'companyId', as: 'CompanyAddress' });
+    User.hasOne(UserAddress, { foreignKey: 'userId', as: 'UserAddress' });
+    Parking.hasOne(ParkingAddress, { foreignKey: 'parkingId', as: 'ParkingAddress' });
 
     /* #endregion */
     this.checkAndBuild(models)

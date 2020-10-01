@@ -6,7 +6,7 @@ import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
 
-export class CompanyAdress extends Model {
+export class CompanyAddress extends Model {
 
   id!: number;
   status!: TransactionType;
@@ -21,10 +21,10 @@ export class CompanyAdress extends Model {
   companyId!: number;
 
   /**
-   * Creates an instance of CompanyAdress.
+   * Creates an instance of CompanyAddress.
    * @author Gustavo Gusmão
    * @param {*} [json]
-   * @memberof CompanyAdress
+   * @memberof CompanyAddress
    */
   constructor(json?: any) {
     super()
@@ -45,7 +45,7 @@ export class CompanyAdress extends Model {
   }
 }
 
-CompanyAdress.init({
+CompanyAddress.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,
@@ -87,5 +87,5 @@ CompanyAdress.init({
   }
 }, {
   sequelize: _instance,
-  tableName: 'CompanyAdress'
+  tableName: 'CompanyAddress'
 });
