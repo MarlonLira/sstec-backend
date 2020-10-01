@@ -3,6 +3,7 @@ import { Op } from 'sequelize';
 import { injectable } from "inversify";
 import { IRouteSecurityRepository } from '../interfaces/IRepositories/route-securityRepository.interface';
 import { RouteSecurity } from '../models/route-security.model';
+import { Rule } from '../models/rule.model';
 
 
 @injectable()
@@ -80,6 +81,20 @@ export class RouteSecurityRepository implements IRouteSecurityRepository {
   toList(): Promise<RouteSecurity[]> {
     return new Promise((resolve, reject) => {
       RouteSecurity.findAll()
+        .then(result => resolve(result))
+        .catch(error => reject(error));
+    });
+  }
+
+  getByCompanyId(id: number): Promise<RouteSecurity[]> {
+    return new Promise((resolve, reject) => {
+      RouteSecurity.findAll({
+        where: {
+          companyId: {
+            [Op.eq]: id
+          }
+        }
+      })
         .then(result => resolve(result))
         .catch(error => reject(error));
     });

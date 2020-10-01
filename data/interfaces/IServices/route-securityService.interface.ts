@@ -6,5 +6,6 @@ export interface IRouteSecurityService {
   delete(id: number): Promise<any>;
   getById(id: number): Promise<RouteSecurity>;
   getByName(name: string): Promise<RouteSecurity[]>;
+  getByCompanyId(id: number): Promise<RouteSecurity[]>
   toList(): Promise<RouteSecurity[]>;
 }

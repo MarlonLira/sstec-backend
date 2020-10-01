@@ -18,35 +18,44 @@ class RouteSecurityController {
   save(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
       this.service.save(new RouteSecurity(req.body))
-        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Nivel de Acesso', result)))
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Route Security', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
 
   @httpGet('/routeSecurity/:id')
-  searchById(@request() req: Request, @response() res: Response) {
+  getById(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
       this.service.getById(Number(req.params.id))
-        .then((result: RouteSecurity) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Nivel de Acesso', result)))
+        .then((result: RouteSecurity) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Route Security', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
 
     });
   }
 
   @httpGet('/routeSecurity/name/:name')
-  searchByName(@request() req: Request, @response() res: Response) {
+  getByName(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
       this.service.getByName(String(req.params.name))
-        .then((result: RouteSecurity[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Nivel de Acesso', result)))
+        .then((result: RouteSecurity[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Route Security', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
 
   @httpGet('/routeSecurity')
-  searchAll(@request() req: Request, @response() res: Response) {
+  getAll(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
       this.service.toList()
-        .then((result: RouteSecurity[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Nivel de Acesso', result)))
+        .then((result: RouteSecurity[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Route Security', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
+    });
+  }
+
+  @httpGet('/routeSecurity/companyId/:companyId')
+  getByCompanyId(@request() req: Request, @response() res: Response) {
+    return new Promise((resolve) => {
+      this.service.getByCompanyId(Number(req.params.companyId))
+        .then((result: RouteSecurity[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Route Security', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
@@ -55,7 +64,7 @@ class RouteSecurityController {
   update(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
       this.service.update(new RouteSecurity(req.body))
-        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Nivel de Acesso', result)))
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Route Security', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
@@ -64,7 +73,7 @@ class RouteSecurityController {
   delete(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
       this.service.delete(Number(req.params.id))
-        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Nivel de Acesso', result)))
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Route Security', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }

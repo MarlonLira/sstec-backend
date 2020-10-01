@@ -22,6 +22,7 @@ import ParkingScoreRepository from '../../data/repositories/parking-score.reposi
 import ParkingFinanceRepository from '../../data/repositories/parking-finance.repository';
 import { LogRepository } from '../../data/repositories/log.repository';
 import { ParkingFileRepository } from '../../data/repositories/parkingFile.repository';
+import { RouteSecurityRepository } from '../../data/repositories/route-security.repository';
 
 // Repositories interfaces
 import { IUserRepository } from '../../data/interfaces/IRepositories/userRepository.interface';
@@ -42,6 +43,7 @@ import { ISchedulingRepository } from '../../data/interfaces/IRepositories/sched
 import IParkingFinanceRepository from '../../data/interfaces/IRepositories/parking-financeRepository.interface';
 import { ILogRepository } from '../../data/interfaces/IRepositories/logRepository.interface';
 import { IParkingFileRepository } from '../../data/interfaces/IRepositories/parkingFileRepository.interface';
+import { IRouteSecurityRepository } from '../../data/interfaces/IRepositories/route-securityRepository.interface';
 
 // Services
 import { AuthService } from '../../data/services/auth.service';
@@ -61,6 +63,7 @@ import { CardService } from '../../data/services/card.service';
 import { UserAdressService } from '../../data/services/user-adress.service';
 import { UserService } from '../../data/services/user.service';
 import { VehicleService } from '../../data/services/vehicle.service';
+import { RouteSecurityService } from '../../data/services/route-security.service';
 
 // Services interfaces
 import { IAuthService } from '../../data/interfaces/IServices/authService.interface';
@@ -80,6 +83,7 @@ import { ICardService } from '../../data/interfaces/IServices/cardService.interf
 import { IUserAdressService } from '../../data/interfaces/IServices/user-adressService.interface';
 import { IUserService } from '../../data/interfaces/IServices/userService.interface';
 import { IVehicleService } from '../../data/interfaces/IServices/vehicleService.interface';
+import { IRouteSecurityService } from '../../data/interfaces/IServices/route-securityService.interface';
 
 // Binds
 const container = new Container();
@@ -102,6 +106,7 @@ container.bind<IParkingScoreService>(TYPES.IParkingScoreService).to(ParkingScore
 container.bind<ICardService>(TYPES.ICardService).to(CardService);
 container.bind<IUserService>(TYPES.IUserService).to(UserService);
 container.bind<IVehicleService>(TYPES.IVehicleService).to(VehicleService);
+container.bind<IRouteSecurityService>(TYPES.IRouteSecurityService).to(RouteSecurityService);
 
 // Repositories Binds
 container.bind<IUserRepository>(TYPES.IUserRepository).to(UserRepository);
@@ -122,5 +127,6 @@ container.bind<IParkingScoreRepository>(TYPES.IParkingScoreRepository).to(Parkin
 container.bind<IParkingFinanceRepository>(TYPES.IParkingFinanceRepository).to(ParkingFinanceRepository);
 container.bind<ILogRepository>(TYPES.ILogRepository).to(LogRepository);
 container.bind<IParkingFileRepository>(TYPES.IParkingFileRepository).to(ParkingFileRepository);
+container.bind<IRouteSecurityRepository>(TYPES.IRouteSecurityRepository).to(RouteSecurityRepository);
 
 export default container;

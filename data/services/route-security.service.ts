@@ -7,12 +7,14 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
 import { IRouteSecurityService } from "../interfaces/IServices/route-securityService.interface";
 import { RouteSecurity } from "../models/route-security.model";
 import { IRouteSecurityRepository } from "../interfaces/IRepositories/route-securityRepository.interface";
+import { IRuleService } from "../interfaces/IServices/ruleService.interface";
 
 @injectable()
 export class RouteSecurityService implements IRouteSecurityService {
 
   constructor(
     @inject(TYPES.IRouteSecurityRepository) private repository: IRouteSecurityRepository,
+    @inject(TYPES.IRuleService) private ruleService: IRuleService,
     @inject(TYPES.ILogService) private log: ILogService) { }
 
   save(routeSecurity: RouteSecurity): Promise<any> {
@@ -45,6 +47,7 @@ export class RouteSecurityService implements IRouteSecurityService {
   getById(id: number): Promise<RouteSecurity> {
     throw new Error("Method not implemented.");
   }
+
   getByName(name: string): Promise<RouteSecurity[]> {
     throw new Error("Method not implemented.");
   }
@@ -52,7 +55,36 @@ export class RouteSecurityService implements IRouteSecurityService {
   toList(): Promise<RouteSecurity[]> {
     return new Promise((resolve, reject) => {
       this.repository.toList()
-        .then((result: RouteSecurity[]) => resolve(result))
+        .then(async (result: RouteSecurity[]) => {
+          const rules = await this.ruleService.toList();
+          const routeSecurity = [];
+
+          result.forEach((items: RouteSecurity) => {
+            const _result: any = items.ToModify();
+            _result.rule = rules.find(x => x.id === items.ruleId);
+            routeSecurity.push(_result);
+          })
+          resolve(routeSecurity);
+        })
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Route Security', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+    });
+  }
+
+  getByCompanyId(id: number): Promise<RouteSecurity[]> {
+    return new Promise((resolve, reject) => {
+      this.repository.getByCompanyId(id)
+        .then(async (result: RouteSecurity[]) => {
+          const rules = await this.ruleService.toList();
+          const routeSecurity = [];
+
+          result.forEach((items: RouteSecurity) => {
+            const _result: any = items.ToModify();
+            _result.rule = rules.find(x => x.id === items.ruleId);
+            routeSecurity.push(_result);
+          })
+          resolve(routeSecurity);
+        })
         .catch(async (error: any) =>
           reject(await this.log.critical('Route Security', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
