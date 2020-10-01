@@ -87,10 +87,10 @@ ParkingAdress.init({
     allowNull: false
   },
   latitude: {
-    type: new DataTypes.STRING(5),
+    type: new DataTypes.STRING(10),
   },
   longitude: {
-    type: new DataTypes.STRING(5),
+    type: new DataTypes.STRING(10),
   },
   complement: {
     type: new DataTypes.STRING(40)
