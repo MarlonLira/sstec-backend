@@ -21,6 +21,7 @@ import { IParkingService } from "../interfaces/IServices/parkingService.interfac
 import { IRuleService } from "../interfaces/IServices/ruleService.interface";
 import { ICompanyService } from "../interfaces/IServices/companyService.interface";
 import { IUserService } from "../interfaces/IServices/userService.interface";
+import { IRouteSecurityService } from "../interfaces/IServices/route-securityService.interface";
 
 @injectable()
 export class AuthService implements IAuthService {
@@ -32,6 +33,7 @@ export class AuthService implements IAuthService {
     @inject(TYPES.IRuleService) private _ruleService: IRuleService,
     @inject(TYPES.IUserService) private _userService: IUserService,
     @inject(TYPES.IEmailService) private _emailService: IEmailService,
+    @inject(TYPES.IRouteSecurityService) private _routeSecurityService: IRouteSecurityService,
     @inject(TYPES.ILogService) private log: ILogService
   ) { }
 
@@ -43,6 +45,7 @@ export class AuthService implements IAuthService {
           if (Attributes.IsValid(foundEmployee) && Crypto.Compare(auth.employee.password, foundEmployee.password)) {
             auth.company = await this._companyService.getById(foundEmployee.companyId);
             auth.parking = (await this._parkingService.getByEmployeeId(foundEmployee.id))[0];
+            auth.routeSecurity = await this._routeSecurityService.getByCompanyId(foundEmployee.companyId);
             auth.employee = foundEmployee;
             auth.employee.password = undefined;
             auth.authenticationLevel = Attributes.IsValid(foundEmployee.ruleId)

@@ -3,7 +3,7 @@ import { Model, DataTypes } from 'sequelize';
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
-import { UserAdress } from './user-adress.model';
+import { UserAddress } from './user-address.model';
 
 const _instance = Context.getInstance();
 
@@ -18,7 +18,7 @@ export class User extends Model {
   password!: string;
   image!: any;
 
-  adress: UserAdress;
+  address: UserAddress;
 
   constructor(json?: any) {
     super()

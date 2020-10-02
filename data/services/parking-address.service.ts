@@ -2,9 +2,9 @@ import { injectable, inject } from "inversify";
 import TYPES from "../types";
 import { InnerException } from "../../commons/core/innerException";
 import { ILogService } from "../interfaces/IServices/logService.interface";
-import { IParkingAdressService } from "../interfaces/IServices/parking-adressService.interface";
-import { ParkingAdress } from "../models/parking-adress.model";
-import { IParkingAdressRepository } from "../interfaces/IRepositories/parking-adressRepository.interface";
+import { IParkingAddressService } from "../interfaces/IServices/parking-addressService.interface";
+import { ParkingAddress } from "../models/parking-address.model";
+import { IParkingAddressRepository } from "../interfaces/IRepositories/parking-addressRepository.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 
@@ -12,50 +12,50 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
  * @description
  * @author Marlon Lira
  * @export
- * @class ParkingAdressService
- * @implements {IParkingAdressService}
+ * @class ParkingAddressService
+ * @implements {IParkingAddressService}
  */
 @injectable()
-export class ParkingAdressService implements IParkingAdressService {
+export class ParkingAddressService implements IParkingAddressService {
 
   constructor(
-    @inject(TYPES.IParkingAdressRepository) private repository: IParkingAdressRepository,
+    @inject(TYPES.IParkingAddressRepository) private repository: IParkingAddressRepository,
     @inject(TYPES.ILogService) private log: ILogService) { }
 
-  toList(): Promise<ParkingAdress[]> {
+  toList(): Promise<ParkingAddress[]> {
     return new Promise((resolve, reject) => {
       this.repository.toList()
-        .then(async (result: ParkingAdress[]) => resolve(result))
+        .then(async (result: ParkingAddress[]) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
-  getById(id: number): Promise<ParkingAdress> {
+  getById(id: number): Promise<ParkingAddress> {
     throw new Error("Method not implemented.");
   }
 
-  getByParkingId(id: number): Promise<ParkingAdress> {
+  getByParkingId(id: number): Promise<ParkingAddress> {
     return new Promise((resolve, reject) => {
       this.repository.getByParkingId(id)
-        .then(async (result: ParkingAdress) => resolve(result))
+        .then(async (result: ParkingAddress) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
-  save(parkingAdress: ParkingAdress): Promise<any> {
+  save(parkingAddress: ParkingAddress): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.repository.save(parkingAdress)
+      this.repository.save(parkingAddress)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
-  update(parkingAdress: ParkingAdress): Promise<any> {
+  update(parkingAddress: ParkingAddress): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.repository.update(parkingAdress)
+      this.repository.update(parkingAddress)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));

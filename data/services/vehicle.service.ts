@@ -6,7 +6,6 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
 import IVehicleRepository from "../interfaces/IRepositories/vehicleRepository.interface";
-import Attributes from "../../commons/core/attributes";
 
 @injectable()
 export class VehicleService implements IVehicleService {
@@ -17,12 +16,13 @@ export class VehicleService implements IVehicleService {
 
   getByUserId(userId: number): Promise<Vehicle[]> {
     return new Promise(async (resolve, reject) => {
-        this.repository.getByUserId(userId)
-          .then(async (result: Vehicle[]) => resolve(result))
-          .catch(async (error: any) =>
-            reject(await this.log.critical('Vehicle', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
+      this.repository.getByUserId(userId)
+        .then(async (result: Vehicle[]) => resolve(result))
+        .catch(async (error: any) =>
+          reject(await this.log.critical('Vehicle', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
   }
+
   getByLicensePlate(_licensePlate: string): Promise<Vehicle[]> {
     return new Promise((resolve, reject) => {
       this.repository.getByLicensePlate(_licensePlate)

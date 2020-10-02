@@ -8,8 +8,8 @@ import Attributes from "../../commons/core/attributes";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
-import { IParkingAdressService } from "../interfaces/IServices/parking-adressService.interface";
-import { ParkingAdress } from "../models/parking-adress.model";
+import { IParkingAddressService } from "../interfaces/IServices/parking-addressService.interface";
+import { ParkingAddress } from "../models/parking-address.model";
 
 /**
  * @description
@@ -29,19 +29,19 @@ export class ParkingService implements IParkingService {
    */
   constructor(
     @inject(TYPES.IParkingRepository) private repository: IParkingRepository,
-    @inject(TYPES.IParkingAdressService) private adressService: IParkingAdressService,
+    @inject(TYPES.IParkingAddressService) private addressService: IParkingAddressService,
     @inject(TYPES.ILogService) private log: ILogService) { }
 
   toList(): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       this.repository.toList()
         .then(async (result: Parking[]) => {
-          const adresses = await this.adressService.toList();
+          const addresses = await this.addressService.toList();
           const parkings = [];
 
           result.forEach((parking: Parking) => {
             const _result: any = parking.ToModify();
-            _result.adress = adresses.find(x => x.parkingId === parking.id);
+            _result.address = addresses.find(x => x.parkingId === parking.id);
             parkings.push(_result);
           })
 
@@ -57,7 +57,7 @@ export class ParkingService implements IParkingService {
       this.repository.getById(id)
         .then(async (result: Parking) => {
           const _result: any = result.ToModify();
-          _result.adress = await this.adressService.getByParkingId(result.id);
+          _result.address = await this.addressService.getByParkingId(result.id);
           resolve(_result);
         }).catch(async (error: any) =>
           reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
@@ -68,9 +68,9 @@ export class ParkingService implements IParkingService {
     return new Promise((resolve, reject) => {
       this.repository.save(parking)
         .then(async (result: any) => {
-          parking.adress.parkingId = result;
-          const adress: ParkingAdress = new ParkingAdress(parking.adress);
-          await this.adressService.save(adress);
+          parking.address.parkingId = result;
+          const address: ParkingAddress = new ParkingAddress(parking.address);
+          await this.addressService.save(address);
           resolve(result)
         }).catch(async (error: any) =>
           reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
@@ -81,12 +81,12 @@ export class ParkingService implements IParkingService {
     return new Promise((resolve, reject) => {
       this.repository.update(parking)
         .then(async (result: any) => {
-          const adress: ParkingAdress = new ParkingAdress(parking.adress);
-          if (Attributes.IsValid(adress) && adress.id > 0) {
-            await this.adressService.update(adress);
+          const address: ParkingAddress = new ParkingAddress(parking.address);
+          if (Attributes.IsValid(address) && address.id > 0) {
+            await this.addressService.update(address);
           } else {
-            adress.parkingId = parking.id;
-            await this.adressService.save(adress);
+            address.parkingId = parking.id;
+            await this.addressService.save(address);
           }
           resolve(result)
         })

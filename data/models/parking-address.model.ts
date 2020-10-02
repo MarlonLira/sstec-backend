@@ -6,8 +6,7 @@ import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
 
-export class UserAdress extends Model {
-
+export class ParkingAddress extends Model {
   id!: number;
   status!: TransactionType;
   country!: string;
@@ -16,12 +15,20 @@ export class UserAdress extends Model {
   district!: string;
   street!: string;
   number: number;
-  zipCode: string;
-  complement!: string;
-  userId!: number;
+  zipCode!: string;
+  latitude: string;
+  longitude: string;
+  complement: string;
+  parkingId!: number;
 
+  /**
+   * Creates an instance of ParkingAddress.
+   * @author Felipe Seabra
+   * @param {*} [json]
+   * @memberof ParkingAddress
+   */
   constructor(json?: any) {
-    super()
+    super();
     this.id = Attributes.ReturnIfValid(json.id);
     this.status = Attributes.ReturnIfValid(json.status);
     this.country = Attributes.ReturnIfValid(json.country);
@@ -31,16 +38,18 @@ export class UserAdress extends Model {
     this.street = Attributes.ReturnIfValid(json.street);
     this.number = Attributes.ReturnIfValid(json.number);
     this.zipCode = Attributes.ReturnIfValid(json.zipCode);
+    this.latitude = Attributes.ReturnIfValid(json.latitude);
+    this.longitude = Attributes.ReturnIfValid(json.longitude);
     this.complement = Attributes.ReturnIfValid(json.complement);
-    this.userId = Attributes.ReturnIfValid(json.userId);
+    this.parkingId = Attributes.ReturnIfValid(json.parkingId);
   }
-  
-  ToModify(){
+
+  ToModify() {
     return this.toJSON();
   }
 }
 
-UserAdress.init({
+ParkingAddress.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,
@@ -51,36 +60,47 @@ UserAdress.init({
     allowNull: false
   },
   country: {
-    type: new DataTypes.STRING(15)
+    type: new DataTypes.STRING(30),
+    allowNull: false
   },
   state: {
-    type: new DataTypes.STRING(30)
+    type: new DataTypes.STRING(30),
+    allowNull: false
   },
   city: {
-    type: new DataTypes.STRING(30)
+    type: new DataTypes.STRING(30),
+    allowNull: false
   },
   district: {
     type: new DataTypes.STRING(30)
   },
   street: {
-    type: new DataTypes.STRING(50)
+    type: new DataTypes.STRING(30),
+    allowNull: false
   },
   number: {
     type: new DataTypes.INTEGER(),
     allowNull: false
   },
   zipCode: {
-    type: new DataTypes.STRING(20),
+    type: new DataTypes.STRING(8),
     allowNull: false
   },
-  complement: {
-    type: new DataTypes.STRING(10)
+  latitude: {
+    type: new DataTypes.STRING(10),
   },
-  userId: {
+  longitude: {
+    type: new DataTypes.STRING(10),
+  },
+  complement: {
+    type: new DataTypes.STRING(40)
+  },
+  parkingId: {
     type: new DataTypes.INTEGER(),
     allowNull: false
   }
-}, {
-  sequelize: _instance,
-  tableName: 'UserAdress'
-});
+},
+  {
+    sequelize: _instance,
+    tableName: 'ParkingAddress'
+  });
