@@ -130,7 +130,7 @@ export class ParkingService implements IParkingService {
     return new Promise((resolve, reject) => {
       this.repository.getByCompanyId(companyId)
       .then(async (result: Parking[]) => {
-        const adresses = await this.adressService.toList();
+        const adresses = await this.addressService.toList();
         const parkings = [];
 
         result.forEach((parking: Parking) => {
