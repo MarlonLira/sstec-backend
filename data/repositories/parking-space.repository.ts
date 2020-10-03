@@ -41,7 +41,6 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
   update(parkingSpace: ParkingSpace): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingSpace.sequelize.transaction();
-      console.log(parkingSpace)
       ParkingSpace.update(parkingSpace.ToModify(),
         {
           where:
