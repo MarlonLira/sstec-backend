@@ -11,7 +11,7 @@
     "ordered-imports": false,
     "max-line-length": {
       "options": [
-        140
+        160
       ]
     },
     "new-parens": true,
