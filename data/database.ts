@@ -110,10 +110,10 @@ class Database {
 
   private checkAndBuild(models: PersistenceModel[]): Promise<any> {
     return new Promise((resolve, reject) => {
-      _instance.authenticate()
+      _instance.authenticate({ logging: (IsLogger ? msg => Logger.Info('Authenticate', msg) : IsLogger) })
         .then(() => {
           Logger.Info('Database', 'Connection established successfully!');
-          this.CreateTables(models)
+          this.CreateTables2(models)
             .then(result => {
               Logger.Info('Database', `Table verification ${result}!`);
               resolve(true);
@@ -124,7 +124,51 @@ class Database {
           Logger.Error('Database', error);
           reject(error);
         });
-    })
+    });
+  }
+
+  private async CreateTables2(models: { name: string, entity: Sequelize }[], count = 0, success = 0, errors = 0, total = 0) {
+    return new Promise(async (resolve) => {
+      const modelsWithErrors = [];
+
+      if (DropAllTable) {
+        await this.DropAllTables(models);
+      }
+
+      if (total < models.length) {
+        models[count].entity.sync(
+          {
+            force: ForceSync,
+            alter: AlterSync,
+            logging: (IsLogger ? msg => Logger.Info(models[count].name, msg) : IsLogger)
+          })
+          .then(() => {
+            Logger.Info(models[count].name, 'verification finished!');
+            success++;
+            total = success + errors;
+            count++;
+            this.CreateTables2(models, count, success, errors, total);
+          })
+          .catch(error => {
+            Logger.Error(models[count].name, error);
+            modelsWithErrors.push(models[count]);
+            errors++;
+            total = success + errors;
+            count++;
+            this.CreateTables2(models, count, success, errors, total);
+          });
+      } else {
+        Logger.Info('Database', `verification result => Sucess: ${success} | Errors: ${errors} | Total: ${models.length}`);
+
+        if (errors > 0) {
+          Logger.Error('Database', `${errors} errors in the models were found!`);
+          Logger.Warn('Database', 'trying to fix the models');
+          await this.TryFixModels2(modelsWithErrors, resolve);
+        } else {
+          resolve('finished successfully');
+        }
+      }
+    });
   }
 
   private async CreateTables(models: { name: string, entity: Sequelize }[]) {
@@ -145,7 +189,7 @@ class Database {
             force: ForceSync,
             alter: AlterSync,
             logging: (IsLogger ? msg => Logger.Info(models[count].name, msg) : IsLogger)
-            
+
           })
           .then(() => {
             Logger.Info(models[count].name, 'verification finished!')
@@ -172,6 +216,38 @@ class Database {
         }
       }
     });
+  }
+
+  private async TryFixModels2(modelsWithErrors: any[], resolve: (value?: unknown) => void, count = 0, attempts = 0, sucess = 0, errors = 0) {
+    if (attempts < modelsWithErrors.length) {
+      modelsWithErrors[count].entity.sync(
+        {
+          alter: AlterSync,
+          logging: IsLogger ? msg => Logger.Info(modelsWithErrors[count].name, msg) : IsLogger
+        })
+        .then(() => {
+          Logger.Info(modelsWithErrors[count].name, 'correction completed!');
+          sucess++;
+          attempts = sucess + errors;
+          count++;
+          this.TryFixModels2(modelsWithErrors, resolve, count, attempts, sucess, errors);
+        })
+        .catch(error => {
+          Logger.Error(modelsWithErrors[count].name, error);
+          errors++;
+          attempts = sucess + errors;
+          count++;
+          this.TryFixModels2(modelsWithErrors, resolve, count, attempts, sucess, errors);
+        });
+    } else {
+      Logger.Info('Database', `correction attempts => Sucess: ${sucess} | Errors: ${errors} | Total: ${attempts}`);
+      if (errors > 0) {
+        resolve('finished with errors');
+      }
+      else {
+        resolve('finished successfully and corrected errors');
+      }
+    }
   }
 
   private async TryFixModels(modelsWithErrors: any[], resolve: (value?: unknown) => void) {
