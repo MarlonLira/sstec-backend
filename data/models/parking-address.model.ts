@@ -16,8 +16,8 @@ export class ParkingAddress extends Model {
   street!: string;
   number: number;
   zipCode!: string;
-  latitude: string;
-  longitude: string;
+  latitude: number;
+  longitude: number;
   complement: string;
   parkingId!: number;
 
@@ -87,10 +87,10 @@ ParkingAddress.init({
     allowNull: false
   },
   latitude: {
-    type: new DataTypes.STRING(10),
+    type: new DataTypes.DOUBLE,
   },
   longitude: {
-    type: new DataTypes.STRING(10),
+    type: new DataTypes.DOUBLE,
   },
   complement: {
     type: new DataTypes.STRING(40)

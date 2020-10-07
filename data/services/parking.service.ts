@@ -11,22 +11,9 @@ import { HttpCode } from "../../commons/enums/httpCode";
 import { IParkingAddressService } from "../interfaces/IServices/parking-addressService.interface";
 import { ParkingAddress } from "../models/parking-address.model";
 
-/**
- * @description
- * @author Marlon Lira
- * @export
- * @class ParkingService
- * @implements {IParkingService}
- */
 @injectable()
 export class ParkingService implements IParkingService {
 
-  /**
-   * Creates an instance of ParkingService.
-   * @author Marlon Lira
-   * @param {IParkingRepository} repository
-   * @memberof ParkingService
-   */
   constructor(
     @inject(TYPES.IParkingRepository) private repository: IParkingRepository,
     @inject(TYPES.IParkingAddressService) private addressService: IParkingAddressService,
@@ -88,7 +75,7 @@ export class ParkingService implements IParkingService {
             address.parkingId = parking.id;
             await this.addressService.save(address);
           }
-          resolve(result)
+          resolve(result);
         })
         .catch(async (error: any) =>
           reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
@@ -129,18 +116,18 @@ export class ParkingService implements IParkingService {
   getByCompanyId(companyId: number): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       this.repository.getByCompanyId(companyId)
-      .then(async (result: Parking[]) => {
-        const adresses = await this.addressService.toList();
-        const parkings = [];
+        .then(async (result: Parking[]) => {
+          const adresses = await this.addressService.toList();
+          const parkings = [];
 
-        result.forEach((parking: Parking) => {
-          const _result: any = parking.ToModify();
-          _result.adress = adresses.find(x => x.parkingId === parking.id);
-          parkings.push(_result);
+          result.forEach((parking: Parking) => {
+            const _result: any = parking.ToModify();
+            _result.address = adresses.find(x => x.parkingId === parking.id);
+            parkings.push(_result);
+          })
+
+          resolve(parkings);
         })
-
-        resolve(parkings);
-      })
         .catch(async (error: any) =>
           reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
