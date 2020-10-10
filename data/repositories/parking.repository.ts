@@ -153,7 +153,9 @@ export class ParkingRepository implements IParkingRepository {
           status: {
             [Op.ne]: TransactionType.DELETED
           }
-        }
+        },
+        raw: true,
+        nest: true
       })
         .then((result: Parking[]) => resolve(result))
         .catch(error => reject(error));

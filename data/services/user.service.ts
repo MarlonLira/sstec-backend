@@ -1,15 +1,10 @@
 import { injectable, inject } from "inversify";
-import { IParkingRepository } from "../interfaces/IRepositories/parkingRepository.interface";
 import TYPES from "../types";
 import { InnerException } from "../../commons/core/innerException";
-import { IParkingService } from "../interfaces/IServices/parkingService.interface";
-import { Parking } from "../models/parking.model";
 import Attributes from "../../commons/core/attributes";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
-import { IParkingAddressService } from "../interfaces/IServices/parking-addressService.interface";
-import { ParkingAddress } from "../models/parking-address.model";
 import { IUserRepository } from "../interfaces/IRepositories/userRepository.interface";
 import { IUserService } from "../interfaces/IServices/userService.interface";
 import { User } from "../models/user.model";
@@ -55,11 +50,8 @@ export class UserService implements IUserService {
   getById(id: number): Promise<User> {
     return new Promise((resolve, reject) => {
       this.repository.getById(id)
-        .then(async (result: User) => {
-          const _result: any = result.ToAny();
-          _result.address = await this.addressService.getByUserId(result.id);
-          resolve(_result);
-        }).catch(async (error: any) =>
+        .then((result: User) => resolve(result))
+        .catch(async (error: any) =>
           reject(await this.log.critical('User', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }

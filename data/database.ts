@@ -79,9 +79,9 @@ class Database {
     Company.hasMany(RouteSecurity, { foreignKey: 'companyId', as: 'routeSecurity' });
     User.hasMany(Vehicle, { foreignKey: 'userId', as: 'vehicles' });
     User.hasMany(Card, { foreignKey: 'userId', as: 'cards' });
-    User.hasMany(ParkingScore, { foreignKey: 'userId', as: 'ParkingScore' });
-    User.hasMany(Scheduling, { foreignKey: 'userId', as: 'Scheduling' });
-    User.hasMany(AccountRecovery, { foreignKey: 'userId', as: 'AccountRecovery' });
+    User.hasMany(ParkingScore, { foreignKey: 'userId', as: 'parkingScore' });
+    User.hasMany(Scheduling, { foreignKey: 'userId', as: 'scheduling' });
+    User.hasMany(AccountRecovery, { foreignKey: 'userId', as: 'accountRecovery' });
     Rule.hasMany(Employee, { foreignKey: 'ruleId', as: 'Employee' });
     Rule.hasMany(RouteSecurity, { foreignKey: 'ruleId', as: 'RouteSecurity' });
     Parking.hasMany(ParkingPromotion, { foreignKey: 'parkingId', as: 'ParkingPromotion' });

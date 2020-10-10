@@ -116,11 +116,7 @@ export class ParkingService implements IParkingService {
   getByCompanyId(companyId: number): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       this.repository.getByCompanyId(companyId)
-        .then(async (result: Parking[]) => {
-          const _result = [];
-          result.forEach((item: Parking) => _result.push(item.ToAny()));
-          resolve(_result);
-        })
+        .then(async (result: Parking[]) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
