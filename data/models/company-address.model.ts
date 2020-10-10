@@ -40,7 +40,7 @@ export class CompanyAddress extends Model {
     this.complement = Attributes.ReturnIfValid(json.complement);
     this.companyId = Attributes.ReturnIfValid(json.companyId);
   }
-  ToModify() {
+  ToAny() {
     return this.toJSON();
   }
 }

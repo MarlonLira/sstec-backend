@@ -24,7 +24,7 @@ export class CompanyAddressRepository implements ICompanyAddressRepository {
   update(companyAddress: CompanyAddress): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await CompanyAddress.sequelize.transaction();
-      CompanyAddress.update(companyAddress.ToModify(),
+      CompanyAddress.update(companyAddress.ToAny(),
         {
           where:
           {

@@ -50,7 +50,7 @@ export class ParkingRepository implements IParkingRepository {
   update(parking: Parking): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
-      Parking.update(parking.ToModify(),
+      Parking.update(parking.ToAny(),
         {
           where:
           {
@@ -145,6 +145,7 @@ export class ParkingRepository implements IParkingRepository {
   getByCompanyId(_companyId: number): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       Parking.findAll({
+        include: [{ model: ParkingAddress, as: 'address' }],
         where: {
           companyId: {
             [Op.eq]: _companyId
@@ -154,12 +155,8 @@ export class ParkingRepository implements IParkingRepository {
           }
         }
       })
-        .then((result: Parking[]) => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((result: Parking[]) => resolve(result))
+        .catch(error => reject(error));
     });
   }
 }

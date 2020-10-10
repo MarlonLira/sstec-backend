@@ -27,7 +27,7 @@ class Vehicle extends Model {
     this.userId = Attributes.ReturnIfValid(json.userId);
   }
 
-  ToModify(){
+  ToAny(){
     return this.toJSON();
   }
 }

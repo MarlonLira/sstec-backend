@@ -34,8 +34,10 @@ export class Parking extends Model {
     this.company = Attributes.ReturnIfValid(json.company);
   }
 
-  ToModify() {
-    return this.toJSON();
+  ToAny() {
+    const obj: any = this.toJSON();
+    obj.address = this.address;
+    return obj;
   }
 }
 

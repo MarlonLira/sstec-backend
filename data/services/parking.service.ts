@@ -27,7 +27,7 @@ export class ParkingService implements IParkingService {
           const parkings = [];
 
           result.forEach((parking: Parking) => {
-            const _result: any = parking.ToModify();
+            const _result: any = parking.ToAny();
             _result.address = addresses.find(x => x.parkingId === parking.id);
             parkings.push(_result);
           })
@@ -43,7 +43,7 @@ export class ParkingService implements IParkingService {
     return new Promise((resolve, reject) => {
       this.repository.getById(id)
         .then(async (result: Parking) => {
-          const _result: any = result.ToModify();
+          const _result: any = result.ToAny();
           _result.address = await this.addressService.getByParkingId(result.id);
           resolve(_result);
         }).catch(async (error: any) =>
@@ -117,16 +117,9 @@ export class ParkingService implements IParkingService {
     return new Promise((resolve, reject) => {
       this.repository.getByCompanyId(companyId)
         .then(async (result: Parking[]) => {
-          const adresses = await this.addressService.toList();
-          const parkings = [];
-
-          result.forEach((parking: Parking) => {
-            const _result: any = parking.ToModify();
-            _result.address = adresses.find(x => x.parkingId === parking.id);
-            parkings.push(_result);
-          })
-
-          resolve(parkings);
+          const _result = [];
+          result.forEach((item: Parking) => _result.push(item.ToAny()));
+          resolve(_result);
         })
         .catch(async (error: any) =>
           reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));

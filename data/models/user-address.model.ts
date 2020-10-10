@@ -35,7 +35,7 @@ export class UserAddress extends Model {
     this.userId = Attributes.ReturnIfValid(json.userId);
   }
   
-  ToModify(){
+  ToAny(){
     return this.toJSON();
   }
 }

@@ -42,7 +42,7 @@ export class Log extends Model {
     }
   }
 
-  ToModify() {
+  ToAny() {
     return this.toJSON();
   }
 }

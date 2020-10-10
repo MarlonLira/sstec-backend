@@ -22,7 +22,7 @@ export class ParkingFile extends Model {
     }
   }
 
-  ToModify() {
+  ToAny() {
     return this.toJSON();
   }
 }

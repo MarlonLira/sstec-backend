@@ -94,7 +94,7 @@ export class EmployeeService implements IEmployeeService {
     return new Promise((resolve, reject) => {
       this.repository.getById(id)
         .then(async (result: Employee) => {
-          const _result: any = result.ToModify();
+          const _result: any = result.ToAny();
           _result.password = undefined;
           resolve(_result);
         })

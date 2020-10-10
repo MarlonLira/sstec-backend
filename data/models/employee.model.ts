@@ -42,7 +42,7 @@ export class Employee extends Model {
     this.rule = Attributes.ReturnIfValid(json.rule);
   }
 
-  ToModify() {
+  ToAny() {
     return this.toJSON();
   }
 }

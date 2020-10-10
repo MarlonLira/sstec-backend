@@ -38,7 +38,7 @@ export class RuleRepository implements IRuleRepository {
   update(rule: Rule): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Rule.sequelize.transaction();
-      Rule.update(rule.ToModify(),
+      Rule.update(rule.ToAny(),
         {
           where:
           {

@@ -36,7 +36,7 @@ export class UserAddressRepository implements IUserAddressRepository {
   update(userAddress: UserAddress): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await UserAddress.sequelize.transaction();
-      UserAddress.update(userAddress.ToModify(),
+      UserAddress.update(userAddress.ToAny(),
         {
           where:
           {

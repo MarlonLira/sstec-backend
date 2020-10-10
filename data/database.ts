@@ -75,10 +75,10 @@ class Database {
     // N:N
 
     // 1:N
-    Company.hasMany(Parking, { foreignKey: 'companyId', as: 'Parking' });
-    Company.hasMany(RouteSecurity, { foreignKey: 'companyId', as: 'RouteSecurity' });
-    User.hasMany(Vehicle, { foreignKey: 'userId', as: 'Vehicle' });
-    User.hasMany(Card, { foreignKey: 'userId', as: 'Card' });
+    Company.hasMany(Parking, { foreignKey: 'companyId', as: 'parkings' });
+    Company.hasMany(RouteSecurity, { foreignKey: 'companyId', as: 'routeSecurity' });
+    User.hasMany(Vehicle, { foreignKey: 'userId', as: 'vehicles' });
+    User.hasMany(Card, { foreignKey: 'userId', as: 'cards' });
     User.hasMany(ParkingScore, { foreignKey: 'userId', as: 'ParkingScore' });
     User.hasMany(Scheduling, { foreignKey: 'userId', as: 'Scheduling' });
     User.hasMany(AccountRecovery, { foreignKey: 'userId', as: 'AccountRecovery' });
@@ -94,9 +94,9 @@ class Database {
     Employee.hasMany(AccountRecovery, { foreignKey: 'employeeId', as: 'AccountRecovery' });
 
     // 1:1
-    Company.hasOne(CompanyAddress, { foreignKey: 'companyId', as: 'CompanyAddress' });
-    User.hasOne(UserAddress, { foreignKey: 'userId', as: 'UserAddress' });
-    Parking.hasOne(ParkingAddress, { foreignKey: 'parkingId', as: 'ParkingAddress' });
+    Company.hasOne(CompanyAddress, { foreignKey: 'companyId', as: 'address' });
+    User.hasOne(UserAddress, { foreignKey: 'userId', as: 'address' });
+    Parking.hasOne(ParkingAddress, { foreignKey: 'parkingId', as: 'address' });
 
     /* #endregion */
     this.checkAndBuild(models)
@@ -113,7 +113,7 @@ class Database {
       _instance.authenticate({ logging: (IsLogger ? msg => Logger.Info('Authenticate', msg) : IsLogger) })
         .then(() => {
           Logger.Info('Database', 'Connection established successfully!');
-          this.CreateTables2(models)
+          this.CreateTables(models)
             .then(result => {
               Logger.Info('Database', `Table verification ${result}!`);
               resolve(true);
@@ -127,7 +127,7 @@ class Database {
     });
   }
 
-  private async CreateTables2(models: { name: string, entity: Sequelize }[], count = 0, success = 0, errors = 0, total = 0) {
+  private async CreateTables(models: { name: string, entity: Sequelize }[], count = 0, success = 0, errors = 0, total = 0) {
     return new Promise(async (resolve) => {
       const modelsWithErrors = [];
 
@@ -147,7 +147,7 @@ class Database {
             success++;
             total = success + errors;
             count++;
-            this.CreateTables2(models, count, success, errors, total);
+            this.CreateTables(models, count, success, errors, total);
           })
           .catch(error => {
             Logger.Error(models[count].name, error);
@@ -155,7 +155,7 @@ class Database {
             errors++;
             total = success + errors;
             count++;
-            this.CreateTables2(models, count, success, errors, total);
+            this.CreateTables(models, count, success, errors, total);
           });
       } else {
         Logger.Info('Database', `verification result => Sucess: ${success} | Errors: ${errors} | Total: ${models.length}`);
@@ -163,7 +163,7 @@ class Database {
         if (errors > 0) {
           Logger.Error('Database', `${errors} errors in the models were found!`);
           Logger.Warn('Database', 'trying to fix the models');
-          await this.TryFixModels2(modelsWithErrors, resolve);
+          await this.TryFixModels(modelsWithErrors, resolve);
         } else {
           resolve('finished successfully');
         }
@@ -171,54 +171,7 @@ class Database {
     });
   }
 
-  private async CreateTables(models: { name: string, entity: Sequelize }[]) {
-    return new Promise(async (resolve) => {
-      let count = 0;
-      let sucess = 0;
-      let errors = 0;
-      let total = 0;
-      const modelsWithErrors = [];
-
-      if (DropAllTable) {
-        await this.DropAllTables(models);
-      }
-
-      while (count < models.length) {
-        await models[count].entity.sync(
-          {
-            force: ForceSync,
-            alter: AlterSync,
-            logging: (IsLogger ? msg => Logger.Info(models[count].name, msg) : IsLogger)
-
-          })
-          .then(() => {
-            Logger.Info(models[count].name, 'verification finished!')
-            sucess++;
-          })
-          .catch(error => {
-            Logger.Error(models[count].name, error);
-            modelsWithErrors.push(models[count]);
-            errors++;
-          });
-        count++;
-        total = sucess + errors;
-        if (total === models.length) {
-          Logger.Info('Database', `verification result => Sucess: ${sucess} | Errors: ${errors} | Total: ${models.length}`);
-
-          if (errors > 0) {
-            Logger.Error('Database', `${errors} errors in the models were found!`);
-            Logger.Warn('Database', 'trying to fix the models');
-            await this.TryFixModels(modelsWithErrors, resolve);
-          } else {
-            resolve('finished successfully');
-          }
-          break;
-        }
-      }
-    });
-  }
-
-  private async TryFixModels2(modelsWithErrors: any[], resolve: (value?: unknown) => void, count = 0, attempts = 0, sucess = 0, errors = 0) {
+  private async TryFixModels(modelsWithErrors: any[], resolve: (value?: unknown) => void, count = 0, attempts = 0, sucess = 0, errors = 0) {
     if (attempts < modelsWithErrors.length) {
       modelsWithErrors[count].entity.sync(
         {
@@ -230,14 +183,14 @@ class Database {
           sucess++;
           attempts = sucess + errors;
           count++;
-          this.TryFixModels2(modelsWithErrors, resolve, count, attempts, sucess, errors);
+          this.TryFixModels(modelsWithErrors, resolve, count, attempts, sucess, errors);
         })
         .catch(error => {
           Logger.Error(modelsWithErrors[count].name, error);
           errors++;
           attempts = sucess + errors;
           count++;
-          this.TryFixModels2(modelsWithErrors, resolve, count, attempts, sucess, errors);
+          this.TryFixModels(modelsWithErrors, resolve, count, attempts, sucess, errors);
         });
     } else {
       Logger.Info('Database', `correction attempts => Sucess: ${sucess} | Errors: ${errors} | Total: ${attempts}`);
@@ -246,40 +199,6 @@ class Database {
       }
       else {
         resolve('finished successfully and corrected errors');
-      }
-    }
-  }
-
-  private async TryFixModels(modelsWithErrors: any[], resolve: (value?: unknown) => void) {
-    let attempts = 0;
-    let count = 0;
-    let sucess = 0;
-    let errors = 0;
-
-    while (count < modelsWithErrors.length) {
-      await modelsWithErrors[count].entity.sync(
-        {
-          alter: AlterSync,
-          logging: IsLogger ? msg => Logger.Info(modelsWithErrors[count].name, msg) : IsLogger
-        })
-        .then(() => {
-          Logger.Info(modelsWithErrors[count].name, 'correction completed!');
-          sucess++;
-        })
-        .catch(error => {
-          Logger.Error(modelsWithErrors[count].name, error);
-          errors++;
-        });
-      count++;
-      attempts = sucess + errors;
-      if (attempts === modelsWithErrors.length) {
-        Logger.Info('Database', `correction attempts => Sucess: ${sucess} | Errors: ${errors} | Total: ${attempts}`);
-        if (errors > 0) {
-          resolve('finished with errors');
-        }
-        else {
-          resolve('finished successfully and corrected errors');
-        }
       }
     }
   }

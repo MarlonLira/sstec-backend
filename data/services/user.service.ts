@@ -44,7 +44,7 @@ export class UserService implements IUserService {
     return new Promise((resolve, reject) => {
       this.repository.getByEmail(email)
         .then(async (result: User) => {
-          const _result: any = result.ToModify();
+          const _result: any = result.ToAny();
           _result.address = await this.addressService.getByUserId(result.id);
           resolve(_result);
         }).catch(async (error: any) =>
@@ -56,7 +56,7 @@ export class UserService implements IUserService {
     return new Promise((resolve, reject) => {
       this.repository.getById(id)
         .then(async (result: User) => {
-          const _result: any = result.ToModify();
+          const _result: any = result.ToAny();
           _result.address = await this.addressService.getByUserId(result.id);
           resolve(_result);
         }).catch(async (error: any) =>

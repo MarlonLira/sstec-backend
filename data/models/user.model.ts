@@ -4,6 +4,8 @@ import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
 import { UserAddress } from './user-address.model';
+import Vehicle from './vehicle.model';
+import { Card } from './card.model';
 
 const _instance = Context.getInstance();
 
@@ -19,6 +21,8 @@ export class User extends Model {
   image!: any;
 
   address: UserAddress;
+  vehicles: Vehicle[];
+  cards: Card[];
 
   constructor(json?: any) {
     super()
@@ -32,8 +36,12 @@ export class User extends Model {
     this.image = Attributes.ReturnIfValid(json.image);
   }
 
-  ToModify() {
-    return this.toJSON();
+  ToAny() {
+    const obj: any = this.toJSON();
+    obj.address = this.address;
+    obj.vehicles = this.vehicles;
+    obj.cards = this.cards;
+    return obj;
   }
 }
 

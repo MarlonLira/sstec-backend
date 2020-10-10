@@ -32,7 +32,7 @@ class ParkingAddressRepository implements IParkingAddressRepository {
   update(parkingAddress: ParkingAddress) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingAddress.sequelize.transaction();
-      ParkingAddress.update(parkingAddress.ToModify(),
+      ParkingAddress.update(parkingAddress.ToAny(),
         {
           where: {
             id: parkingAddress.id

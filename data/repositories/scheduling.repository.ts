@@ -154,7 +154,7 @@ export class SchedulingRepository implements ISchedulingRepository {
   update(scheduling: Scheduling): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Scheduling.sequelize.transaction();
-      Scheduling.update(scheduling.ToModify(),
+      Scheduling.update(scheduling.ToAny(),
         {
           where:
           {

@@ -63,7 +63,7 @@ export class VehicleService implements IVehicleService {
     return new Promise((resolve, reject) => {
       this.repository.getById(id)
         .then(async (result: Vehicle) => {
-          const _result: any = result.ToModify();
+          const _result: any = result.ToAny();
           resolve(_result);
         })
         .catch(async (error: any) =>

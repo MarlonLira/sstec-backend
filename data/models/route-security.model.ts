@@ -25,7 +25,7 @@ export class RouteSecurity extends Model {
     this.company = Attributes.ReturnIfValid(json.company);
   }
 
-  ToModify() {
+  ToAny() {
     return this.toJSON();
   }
 }

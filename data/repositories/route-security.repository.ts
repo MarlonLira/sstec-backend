@@ -26,7 +26,7 @@ export class RouteSecurityRepository implements IRouteSecurityRepository {
   update(routeSecurity: RouteSecurity): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await RouteSecurity.sequelize.transaction();
-      RouteSecurity.update(routeSecurity.ToModify(),
+      RouteSecurity.update(routeSecurity.ToAny(),
         {
           where:
           {

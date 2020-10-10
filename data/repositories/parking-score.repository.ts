@@ -41,7 +41,7 @@ class ParkingScoreRepository implements IParkingScoreRepository {
   update(parkingScore: ParkingScore): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingScore.sequelize.transaction();
-      ParkingScore.update(parkingScore.ToModify(),
+      ParkingScore.update(parkingScore.ToAny(),
         {
           where:
           {

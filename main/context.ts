@@ -21,7 +21,7 @@ class Context {
    * @returns {Sequelize}
    * @memberof Context
    */
-  private static CreateInstance(): Sequelize {
+  private static createInstance(): Sequelize {
     const sequelize = new Sequelize(_dbConfig.schema, _dbConfig.username, _dbConfig.password,
       {
         port: _dbConfig.port,
@@ -49,7 +49,7 @@ class Context {
    * @memberof Context
    */
   public static getInstance(): Sequelize {
-    this._instance = Attributes.ReturnIfValid(this._instance, this.CreateInstance());
+    this._instance = Attributes.ReturnIfValid(this._instance, this.createInstance());
     return this._instance;
   }
 }

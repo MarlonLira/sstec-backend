@@ -3,6 +3,8 @@ import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
 import { CompanyAddress } from './company-address.model';
+import { Parking } from './parking.model';
+import { RouteSecurity } from './route-security.model';
 
 const _instance = Context.getInstance();
 
@@ -18,6 +20,8 @@ export class Company extends Model {
   image: any;
 
   address: CompanyAddress;
+  parkings: Parking[];
+  routeSecurity: RouteSecurity[];
 
   constructor(json?: any) {
     super()
@@ -32,8 +36,12 @@ export class Company extends Model {
     this.address = Attributes.ReturnIfValid(json.address);
   }
 
-  ToModify() {
-    return this.toJSON();
+  ToAny() {
+    const obj: any = this.toJSON();
+    obj.address = this.address;
+    obj.parkings = this.parkings;
+    obj.routeSecurity = this.routeSecurity;
+    return obj;
   }
 }
 

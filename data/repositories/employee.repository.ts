@@ -141,7 +141,7 @@ export class EmployeeRepository implements IEmployeeRepository {
   update(employee: Employee): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Employee.sequelize.transaction();
-      Employee.update(employee.ToModify(),
+      Employee.update(employee.ToAny(),
         {
           where:
           {
