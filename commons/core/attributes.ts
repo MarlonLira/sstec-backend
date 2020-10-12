@@ -11,6 +11,13 @@ class Attributes {
 
   static ReturnIfValid = (value, defaultValue = undefined) => Attributes.IsValid(value) ? value : defaultValue;
   static isNullOrUndefined = (value: any) => (value === null || value === undefined);
+
+  static encodeImage(value: any) {
+    if (value.image) {
+      value.image = value.image.toString('base64');
+    }
+    return value;
+  }
 }
 
 export default Attributes;

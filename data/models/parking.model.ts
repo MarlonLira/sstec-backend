@@ -5,6 +5,7 @@ import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
 import { ParkingAddress } from './parking-address.model';
 import { Company } from './company.model';
+import { ParkingFile } from './parking-file.model';
 
 const _instance = Context.getInstance();
 
@@ -20,6 +21,7 @@ export class Parking extends Model {
 
   address: ParkingAddress;
   company: Company;
+  files: ParkingFile[];
 
   constructor(json?: any) {
     super()
@@ -32,6 +34,7 @@ export class Parking extends Model {
     this.companyId = Attributes.ReturnIfValid(json.companyId);
     this.address = Attributes.ReturnIfValid(json.address);
     this.company = Attributes.ReturnIfValid(json.company);
+    this.files = Attributes.ReturnIfValid(json.files);
   }
 
   ToAny() {

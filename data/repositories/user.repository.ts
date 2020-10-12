@@ -4,7 +4,6 @@ import { IUserRepository } from '../interfaces/IRepositories/userRepository.inte
 import { User } from '../models/user.model';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
-import { all } from 'inversify-express-utils';
 import { UserAddress } from '../models/user-address.model';
 import { Card } from '../models/card.model';
 import Vehicle from '../models/vehicle.model';

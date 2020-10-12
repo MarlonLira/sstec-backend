@@ -89,9 +89,14 @@ class Database {
     Parking.hasMany(ParkingScore, { foreignKey: 'parkingId', as: 'ParkingScore' });
     Parking.hasMany(ParkingFinance, { foreignKey: 'parkingId', as: 'ParkingFinance' });
     Parking.hasMany(Employee, { foreignKey: 'parkingId', as: 'Employee' });
-    Parking.hasMany(ParkingFile, { foreignKey: 'parkingId', as: 'ParkingFile' });
+    Parking.hasMany(ParkingFile, { foreignKey: 'parkingId', as: 'files' });
     ParkingSpace.hasMany(Scheduling, { foreignKey: 'parkingSpaceId', as: 'Scheduling' });
-    Employee.hasMany(AccountRecovery, { foreignKey: 'employeeId', as: 'AccountRecovery' });
+    Employee.hasMany(AccountRecovery, { foreignKey: 'employeeId', as: 'accountsRecovery' });
+
+    // N:1
+    Employee.belongsTo(Parking, { as: 'parking' });
+    Employee.belongsTo(Company, { as: 'company' });
+    Employee.belongsTo(Rule, { as: 'rule' });
 
     // 1:1
     Company.hasOne(CompanyAddress, { foreignKey: 'companyId', as: 'address' });

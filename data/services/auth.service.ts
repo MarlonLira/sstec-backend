@@ -4,7 +4,6 @@ import * as jwt from 'jsonwebtoken';
 import { Auth } from '../models/auth.model';
 import TYPES from "../types";
 import { InnerException } from "../../commons/core/innerException";
-import { IUserRepository } from "../interfaces/IRepositories/userRepository.interface";
 import { IEmployeeRepository } from "../interfaces/IRepositories/employeeRepository.interface";
 import { CryptoType } from "../../commons/enums/cryptoType";
 import Attributes from "../../commons/core/attributes";
@@ -43,14 +42,12 @@ export class AuthService implements IAuthService {
         if (Attributes.IsValid(auth.employee)) {
           const foundEmployee: Employee = await this._employeeRepository.getByEmail(auth.employee.email);
           if (Attributes.IsValid(foundEmployee) && Crypto.Compare(auth.employee.password, foundEmployee.password)) {
-            auth.company = await this._companyService.getById(foundEmployee.companyId);
-            auth.parking = (await this._parkingService.getByEmployeeId(foundEmployee.id))[0];
+            auth.company = foundEmployee.company;;
+            auth.parking = foundEmployee.parking;
             auth.routeSecurity = await this._routeSecurityService.getByCompanyId(foundEmployee.companyId);
             auth.employee = foundEmployee;
             auth.employee.password = undefined;
-            auth.authenticationLevel = Attributes.IsValid(foundEmployee.ruleId)
-              ? (await this._ruleService.getById(foundEmployee.ruleId)).level
-              : null;
+            auth.authenticationLevel = foundEmployee.rule?.level;
             auth = await this.createEmployeeToken(auth);
             const result = await Crypto.Encrypt(JSON.stringify(auth), CryptoType.DEFAULT);
             resolve(result);
