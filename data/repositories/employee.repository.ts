@@ -111,7 +111,10 @@ export class EmployeeRepository implements IEmployeeRepository {
       Employee.findByPk(id,
         {
           attributes: { exclude: ['password'] },
-          include: [{ model: Rule, as: 'rule' }],
+          include: [
+            { model: Rule, as: 'rule' },
+            { model: Company, as: 'company' }
+          ],
           raw: true,
           nest: true
         })
