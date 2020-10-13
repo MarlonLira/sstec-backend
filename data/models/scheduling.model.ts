@@ -53,7 +53,7 @@ export class Scheduling extends Model {
     this.parkingSpaceId = Attributes.ReturnIfValid(json.parkingSpaceId);
   }
 
-  ToAny() {
+  ToModify() {
     return this.toJSON();
   }
 }

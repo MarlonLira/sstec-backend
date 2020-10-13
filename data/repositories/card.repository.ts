@@ -76,7 +76,7 @@ export class CardRepository implements ICardRepository {
   update(card: Card): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Card.sequelize.transaction();
-      Card.update(card.ToAny(),
+      Card.update(card.ToModify(),
         {
           where:
           {

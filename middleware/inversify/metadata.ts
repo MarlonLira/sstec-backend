@@ -16,7 +16,6 @@ import '../../data/controllers/auth.controller';
 import '../../data/controllers/email.controller';
 import '../../data/controllers/log.controller';
 import '../../data/controllers/parking-file.controller';
-import '../../data/controllers/route-security.controller';
 
 // Others
 

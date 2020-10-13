@@ -3,8 +3,12 @@ import { Employee } from './employee.model';
 import Attributes from '../../commons/core/attributes';
 import { Company } from './company.model';
 import { Parking } from './parking.model';
-import { RouteSecurity } from './route-security.model';
 
+/**
+ * @description
+ * @author Marlon Lira
+ * @class Auth
+ */
 export class Auth {
 
   token!: string;
@@ -13,9 +17,14 @@ export class Auth {
   employee!: Employee;
   company!: Company;
   parking!: Parking;
-  routeSecurity!: RouteSecurity[];
   authenticationLevel!: number;
 
+  /**
+   * Creates an instance of Auth.
+   * @author Marlon Lira
+   * @param {*} [json]
+   * @memberof Auth
+   */
   constructor(json?: any) {
     this.token = Attributes.ReturnIfValid(json.token);
     this.authenticationLevel = Attributes.ReturnIfValid(json.authenticationLevel);
@@ -24,6 +33,5 @@ export class Auth {
     this.employee = Attributes.IsValid(json.employee) ? new Employee(json.employee) : undefined;
     this.company = Attributes.IsValid(json.company) ? new Company(json.company) : undefined;
     this.parking = Attributes.IsValid(json.parking) ? new Parking(json.parking) : undefined;
-    this.routeSecurity = Attributes.IsValid(json.routeSecurity) ? json.routeSecurity : undefined;
   }
 }

@@ -38,7 +38,7 @@ export class AccountRecovery extends Model {
     }
   }
 
-  ToAny() {
+  ToModify() {
     return this.toJSON();
   }
 }

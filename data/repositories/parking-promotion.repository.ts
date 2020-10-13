@@ -23,7 +23,7 @@ class ParkingPromotionRepository implements IParkingPromotionRepository {
   Update(parkingPromotion: ParkingPromotion): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingPromotion.sequelize.transaction();
-      ParkingPromotion.update(parkingPromotion.ToAny(),
+      ParkingPromotion.update(parkingPromotion.ToModify(),
         {
           where: {
             id: parkingPromotion.id

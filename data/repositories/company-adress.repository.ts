@@ -1,34 +1,34 @@
 import { injectable } from "inversify";
 import { Op } from 'sequelize';
 
-import { CompanyAddress } from '../models/company-address.model';
+import { CompanyAdress } from '../models/company-adress.model';
 import { TransactionType } from '../../commons/enums/transactionType';
-import { ICompanyAddressRepository } from "../interfaces/IRepositories/company-addressRepository.interface";
+import { ICompanyAdressRepository } from "../interfaces/IRepositories/company-adressRepository.interface";
 
 @injectable()
-export class CompanyAddressRepository implements ICompanyAddressRepository {
+export class CompanyAdressRepository implements ICompanyAdressRepository {
 
-  getByCompanyId(companyId: number): Promise<CompanyAddress> {
+  getByCompanyId(companyId: number): Promise<CompanyAdress> {
     return new Promise((resolve, reject) => {
-      CompanyAddress.findOne({
+      CompanyAdress.findOne({
         where: {
           companyId: { [Op.eq]: companyId },
           status: { [Op.ne]: TransactionType.DELETED }
         }
       }
-      ).then((result: CompanyAddress) => resolve(result)
+      ).then((result: CompanyAdress) => resolve(result)
       ).catch((error: any) => reject(error));
     });
   }
 
-  update(companyAddress: CompanyAddress): Promise<any> {
+  update(companyAdress: CompanyAdress): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await CompanyAddress.sequelize.transaction();
-      CompanyAddress.update(companyAddress.ToAny(),
+      const _transaction = await CompanyAdress.sequelize.transaction();
+      CompanyAdress.update(companyAdress.ToModify(),
         {
           where:
           {
-            id: { [Op.eq]: companyAddress.id }
+            id: { [Op.eq]: companyAdress.id }
           },
           transaction: _transaction,
           validate: false
@@ -46,8 +46,8 @@ export class CompanyAddressRepository implements ICompanyAddressRepository {
 
   delete(id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await CompanyAddress.sequelize.transaction();
-      CompanyAddress.destroy({
+      const _transaction = await CompanyAdress.sequelize.transaction();
+      CompanyAdress.destroy({
         where: {
           id: { [Op.eq]: id }
         },
@@ -64,11 +64,11 @@ export class CompanyAddressRepository implements ICompanyAddressRepository {
     });
   }
 
-  save(companyAddress: CompanyAddress): Promise<any> {
+  save(companyAdress: CompanyAdress): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await CompanyAddress.sequelize.transaction();
-      companyAddress.status = TransactionType.ACTIVE;
-      CompanyAddress.create(companyAddress, { transaction: _transaction })
+      const _transaction = await CompanyAdress.sequelize.transaction();
+      companyAdress.status = TransactionType.ACTIVE;
+      CompanyAdress.create(companyAdress, { transaction: _transaction })
         .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);

@@ -3,10 +3,8 @@ import { Model, DataTypes } from 'sequelize';
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
-import { ParkingAddress } from './parking-address.model';
+import { ParkingAdress } from './parking-adress.model';
 import { Company } from './company.model';
-import { ParkingFile } from './parking-file.model';
-import { Employee } from './employee.model';
 
 const _instance = Context.getInstance();
 
@@ -20,11 +18,15 @@ export class Parking extends Model {
   amount: number;
   companyId: number;
 
-  address: ParkingAddress;
+  adress: ParkingAdress;
   company: Company;
-  employees: Employee[];
-  files: ParkingFile[];
 
+  /**
+   * Creates an instance of Parking.
+   * @author Emerson Souza
+   * @param {*} [json]
+   * @memberof Parking
+   */
   constructor(json?: any) {
     super()
     this.id = Attributes.ReturnIfValid(json.id);
@@ -34,15 +36,12 @@ export class Parking extends Model {
     this.phone = Attributes.ReturnIfValid(json.phone);
     this.email = Attributes.ReturnIfValid(json.email);
     this.companyId = Attributes.ReturnIfValid(json.companyId);
-    this.address = Attributes.ReturnIfValid(json.address);
+    this.adress = Attributes.ReturnIfValid(json.adress);
     this.company = Attributes.ReturnIfValid(json.company);
-    this.files = Attributes.ReturnIfValid(json.files);
   }
 
-  ToAny() {
-    const obj: any = this.toJSON();
-    obj.address = this.address;
-    return obj;
+  ToModify() {
+    return this.toJSON();
   }
 }
 

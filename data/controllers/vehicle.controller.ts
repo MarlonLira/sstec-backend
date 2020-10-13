@@ -12,6 +12,7 @@ import { IVehicleService } from "../interfaces/IServices/vehicleService.interfac
 @controller('')
 class VehicleController {
 
+
   constructor(@inject(TYPES.IVehicleService) private service: IVehicleService) { }
 
   @httpPost('/vehicle')
@@ -32,6 +33,14 @@ class VehicleController {
     });
   }
 
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns {Promise<any>}
+   * @memberof VehicleController
+   */
   @httpGet('/vehicles/userId/:userId')
   getByUserId(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
@@ -50,15 +59,31 @@ class VehicleController {
     });
   }
 
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns {Promise<any>}
+   * @memberof VehicleController
+   */
   @httpPut('/vehicle')
   put(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
-      this.service.update(new Vehicle(req.body))
+      this.service.update(req.body)
         .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Veículo', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Veículo')));
     });
   }
 
+  /**
+   * @description
+   * @author Marlon Lira
+   * @param {Request<any>} req
+   * @param {Response<any>} res
+   * @returns {Promise<any>}
+   * @memberof VehicleController
+   */
   @httpDelete('/vehicles/:id')
   Delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {

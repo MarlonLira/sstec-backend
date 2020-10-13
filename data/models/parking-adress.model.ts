@@ -6,7 +6,7 @@ import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
 
-export class ParkingAddress extends Model {
+export class ParkingAdress extends Model {
   id!: number;
   status!: TransactionType;
   country!: string;
@@ -16,16 +16,16 @@ export class ParkingAddress extends Model {
   street!: string;
   number: number;
   zipCode!: string;
-  latitude: number;
-  longitude: number;
+  latitude: string;
+  longitude: string;
   complement: string;
   parkingId!: number;
 
   /**
-   * Creates an instance of ParkingAddress.
+   * Creates an instance of ParkingAdress.
    * @author Felipe Seabra
    * @param {*} [json]
-   * @memberof ParkingAddress
+   * @memberof ParkingAdress
    */
   constructor(json?: any) {
     super();
@@ -44,12 +44,12 @@ export class ParkingAddress extends Model {
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
   }
 
-  ToAny() {
+  ToModify() {
     return this.toJSON();
   }
 }
 
-ParkingAddress.init({
+ParkingAdress.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,
@@ -87,10 +87,10 @@ ParkingAddress.init({
     allowNull: false
   },
   latitude: {
-    type: new DataTypes.DOUBLE,
+    type: new DataTypes.STRING(5),
   },
   longitude: {
-    type: new DataTypes.DOUBLE,
+    type: new DataTypes.STRING(5),
   },
   complement: {
     type: new DataTypes.STRING(40)
@@ -102,5 +102,5 @@ ParkingAddress.init({
 },
   {
     sequelize: _instance,
-    tableName: 'ParkingAddress'
+    tableName: 'ParkingAdress'
   });
