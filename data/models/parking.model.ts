@@ -6,6 +6,7 @@ import { TransactionType } from '../../commons/enums/transactionType';
 import { ParkingAddress } from './parking-address.model';
 import { Company } from './company.model';
 import { ParkingFile } from './parking-file.model';
+import { Employee } from './employee.model';
 
 const _instance = Context.getInstance();
 
@@ -21,6 +22,7 @@ export class Parking extends Model {
 
   address: ParkingAddress;
   company: Company;
+  employees: Employee[];
   files: ParkingFile[];
 
   constructor(json?: any) {

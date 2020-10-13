@@ -18,7 +18,7 @@ import ParkingPromotionRepository from '../../data/repositories/parking-promotio
 import { ParkingSpaceRepository } from '../../data/repositories/parking-space.repository';
 import ParkingAddressRepository from '../../data/repositories/parking-address.repository';
 import { SchedulingRepository } from '../../data/repositories/scheduling.repository';
-import ParkingScoreRepository from '../../data/repositories/parking-score.repository';
+import { ParkingScoreRepository } from '../../data/repositories/parking-score.repository';
 import ParkingFinanceRepository from '../../data/repositories/parking-finance.repository';
 import { LogRepository } from '../../data/repositories/log.repository';
 import { ParkingFileRepository } from '../../data/repositories/parkingFile.repository';

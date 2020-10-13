@@ -5,6 +5,7 @@ import { IParkingRepository } from '../interfaces/IRepositories/parkingRepositor
 import { Parking } from '../models/parking.model';
 import { TransactionType } from '../../commons/enums/transactionType';
 import { ParkingAddress } from '../models/parking-address.model';
+import { Employee } from '../models/employee.model';
 
 @injectable()
 export class ParkingRepository implements IParkingRepository {
@@ -12,22 +13,25 @@ export class ParkingRepository implements IParkingRepository {
   toList(): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       Parking.findAll({
-        include: [{ model: ParkingAddress, as: 'ParkingAddress' }]
+        include: [{ model: ParkingAddress, as: 'address' }],
+        raw: true,
+        nest: true
       })
         .then((parking: Parking[]) => resolve(parking))
-        .catch(error => reject(error));
+        .catch((error: any) => reject(error));
     });
   }
 
   getById(id: number): Promise<Parking> {
     return new Promise((resolve, reject) => {
-      Parking.findByPk(id)
-        .then((parking: Parking) => {
-          resolve(parking)
+      Parking.findByPk(id,
+        {
+          include: [{ model: ParkingAddress, as: 'address' }],
+          raw: true,
+          nest: true
         })
-        .catch(error => {
-          reject(error);
-        });
+        .then((parking: Parking) => resolve(parking))
+        .catch((error: any) => reject(error));
     });
   }
 
@@ -36,11 +40,11 @@ export class ParkingRepository implements IParkingRepository {
       const _transaction = await Parking.sequelize.transaction();
       parking.status = TransactionType.ACTIVE;
       Parking.create(parking, { transaction: _transaction })
-        .then(async (createParking: Parking) => {
+        .then(async (result: Parking) => {
           await _transaction.commit();
-          resolve(createParking.id);
+          resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -63,7 +67,7 @@ export class ParkingRepository implements IParkingRepository {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -83,11 +87,11 @@ export class ParkingRepository implements IParkingRepository {
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -108,37 +112,32 @@ export class ParkingRepository implements IParkingRepository {
             [Op.ne]: TransactionType.DELETED
           }
         }
-      }).then((result: Parking[]) => {
-        resolve(result);
-      }).catch(error => {
-        reject(error);
-      });
+      }).then((result: Parking[]) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
-  getByEmployeeId(_employeeId: number): Promise<Parking[]> {
-    return new Promise(async (resolve, reject) => {
-      Parking.sequelize.query(
-        "   SELECT P.* FROM Parking AS P" +
-        "   INNER JOIN Employee AS E" +
-        "     ON E.PARKINGID = P.id" +
-        "     WHERE E.STATUS = 'AT'" +
-        "     AND P.status = 'AT'" +
-        "     AND E.id = :employeeId",
-        {
-          replacements: {
-            employeeId: _employeeId,
-          },
-          type: QueryTypes.SELECT,
-          mapToModel: true
-        }
-      )
-        .then((result: Parking[]) => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
+  getByEmployeeId(_employeeId: number): Promise<Parking> {
+    return new Promise((resolve, reject) => {
+      Parking.findOne({
+        include: [
+          {
+            attributes: { exclude: ['password', 'image'] },
+            model: Employee, as: 'employees',
+            where: {
+              id: { [Op.eq]: _employeeId }
+            }
+          }],
+        where: {
+          status: {
+            [Op.ne]: TransactionType.DELETED
+          }
+        },
+        raw: true,
+        nest: true
+      })
+        .then((result: Parking) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
@@ -158,7 +157,7 @@ export class ParkingRepository implements IParkingRepository {
         nest: true
       })
         .then((result: Parking[]) => resolve(result))
-        .catch(error => reject(error));
+        .catch((error: any) => reject(error));
     });
   }
 }

@@ -6,7 +6,7 @@ export interface IParkingRepository {
   delete(id: number): Promise<any>;
   getById(id: number): Promise<Parking>;
   getByRegistryCode(companyId: number, registryCode: string): Promise<Parking[]>;
-  getByEmployeeId(_employeeId: number): Promise<Parking[]>;
+  getByEmployeeId(_employeeId: number): Promise<Parking>;
   getByCompanyId(_companyId: number): Promise<Parking[]>;
   toList(): Promise<Parking[]>;
 }
