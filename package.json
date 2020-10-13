@@ -1,6 +1,6 @@
 {
   "name": "sstec-backend",
-  "version": "2.0.1",
+  "version": "2.0.0",
   "description": "",
   "main": "dist/src/app.js",
   "scripts": {
@@ -16,15 +16,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MarlonLira/sstec-backend.git"
+    "url": "git+https://github.com/MarlonLira/sstec.git"
   },
   "keywords": [],
   "author": "Marlon Lira",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/MarlonLira/sstec-backend/issues"
+    "url": "https://github.com/MarlonLira/sstec/issues"
   },
-  "homepage": "https://github.com/MarlonLira/sstec-backend#readme",
+  "homepage": "https://github.com/MarlonLira/sstec#readme",
   "dependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/body-parser": "^1.17.1",

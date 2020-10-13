@@ -35,7 +35,7 @@ export class ParkingSpace extends Model {
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
     this.amount = Attributes.ReturnIfValid(json.amount);
   }
-  ToAny() {
+  ToModify() {
     return this.toJSON();
   }
 }

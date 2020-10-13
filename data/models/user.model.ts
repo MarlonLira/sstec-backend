@@ -3,9 +3,7 @@ import { Model, DataTypes } from 'sequelize';
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
-import { UserAddress } from './user-address.model';
-import Vehicle from './vehicle.model';
-import { Card } from './card.model';
+import { UserAdress } from './user-adress.model';
 
 const _instance = Context.getInstance();
 
@@ -20,9 +18,7 @@ export class User extends Model {
   password!: string;
   image!: any;
 
-  address: UserAddress;
-  vehicles: Vehicle[];
-  cards: Card[];
+  adress: UserAdress;
 
   constructor(json?: any) {
     super()
@@ -36,12 +32,8 @@ export class User extends Model {
     this.image = Attributes.ReturnIfValid(json.image);
   }
 
-  ToAny() {
-    const obj: any = this.toJSON();
-    obj.address = this.address;
-    obj.vehicles = this.vehicles;
-    obj.cards = this.cards;
-    return obj;
+  ToModify() {
+    return this.toJSON();
   }
 }
 

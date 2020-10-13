@@ -37,7 +37,7 @@ class ParkingFinance extends Model{
     this.status = Attributes.ReturnIfValid(json.status);
   }
 
-  ToAny(){
+  ToModify(){
     return this.toJSON();
   }
 }

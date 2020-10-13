@@ -4,8 +4,6 @@ import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
 import { Rule } from './rule.model';
 import { Parking } from './parking.model';
-import { Company } from './company.model';
-import { AccountRecovery } from './account-recovery.model';
 
 const _instance = Context.getInstance();
 
@@ -25,8 +23,6 @@ export class Employee extends Model {
 
   public rule: Rule;
   public parking: Parking;
-  public company: Company;
-  public accountsRecovery: AccountRecovery[];
 
   constructor(json?: any) {
     super()
@@ -42,13 +38,11 @@ export class Employee extends Model {
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
     this.parking = Attributes.ReturnIfValid(json.parking);
     this.companyId = Attributes.ReturnIfValid(json.companyId);
-    this.company = Attributes.ReturnIfValid(json.company);
     this.ruleId = Attributes.ReturnIfValid(json.ruleId);
     this.rule = Attributes.ReturnIfValid(json.rule);
-    this.accountsRecovery = Attributes.ReturnIfValid(json.accountsRecovery);
   }
 
-  ToAny() {
+  ToModify() {
     return this.toJSON();
   }
 }
@@ -95,7 +89,7 @@ Employee.init({
   ruleId: {
     type: new DataTypes.INTEGER()
   },
-  image: {
+  image:{
     type: new DataTypes.BLOB("medium"),
     get() {
       return this.getDataValue('image') ? this.getDataValue('image').toString('base64') : undefined;

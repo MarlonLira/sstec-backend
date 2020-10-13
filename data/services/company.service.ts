@@ -8,23 +8,23 @@ import { HttpCode } from "../../commons/enums/httpCode";
 import { ICompanyService } from "../interfaces/IServices/companyService.interface";
 import { Company } from "../models/company.model";
 import { ICompanyRepository } from "../interfaces/IRepositories/companyRepository.interface";
-import { ICompanyAddressService } from "../interfaces/IServices/company-addressService.interface";
-import { CompanyAddress } from "../models/company-address.model";
+import { ICompanyAdressService } from "../interfaces/IServices/company-adressService.interface";
+import { CompanyAdress } from "../models/company-adress.model";
 
 @injectable()
 export class CompanyService implements ICompanyService {
 
   constructor(
     @inject(TYPES.ICompanyRepository) private repository: ICompanyRepository,
-    @inject(TYPES.ICompanyAddressService) private addressService: ICompanyAddressService,
+    @inject(TYPES.ICompanyAdressService) private adressService: ICompanyAdressService,
     @inject(TYPES.ILogService) private log: ILogService) { }
 
   getById(id: number): Promise<Company> {
     return new Promise((resolve, reject) => {
       this.repository.getById(id)
         .then(async (result: Company) => {
-          const _result: any = result.ToAny();
-          _result.address = await this.addressService.getByCompanyId(result.id);
+          const _result: any = result.ToModify();
+          _result.adress = await this.adressService.getByCompanyId(result.id);
           resolve(_result);
         }).catch(async (error: any) => {
           reject(await this.log.critical('Empresa', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)))
@@ -52,12 +52,12 @@ export class CompanyService implements ICompanyService {
     return new Promise((resolve, reject) => {
       this.repository.update(company)
         .then(async (result: any) => {
-          const address = new CompanyAddress(company.address);
-          if (Attributes.IsValid(address) && address.id > 0) {
-            await this.addressService.update(address);
+          const adress = new CompanyAdress(company.adress);
+          if (Attributes.IsValid(adress) && adress.id > 0) {
+            await this.adressService.update(adress);
           } else {
-            address.companyId = company.id;
-            await this.addressService.save(address);
+            adress.companyId = company.id;
+            await this.adressService.save(adress);
           }
           resolve(result);
         })

@@ -1,14 +1,13 @@
 import { injectable, inject } from "inversify";
-
-import TYPES from "../types";
-import Crypto from '../../commons/core/crypto';
 import { IEmployeeRepository } from "../interfaces/IRepositories/employeeRepository.interface";
+import TYPES from "../types";
 import { InnerException } from "../../commons/core/innerException";
 import { IEmployeeService } from "../interfaces/IServices/employeeService.interface";
 import { Employee } from "../models/employee.model";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
+import Crypto from '../../commons/core/crypto';
 import { CryptoType } from "../../commons/enums/cryptoType";
 
 @injectable()
@@ -25,7 +24,7 @@ export class EmployeeService implements IEmployeeService {
   getByRegistryCode(_registryCode: string): Promise<Employee> {
     return new Promise((resolve, reject) => {
       this.repository.getByEmail(_registryCode)
-        .then((result: Employee) => resolve(result))
+        .then(async (result: Employee) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
@@ -34,7 +33,7 @@ export class EmployeeService implements IEmployeeService {
   getByEmail(_email: string): Promise<Employee> {
     return new Promise((resolve, reject) => {
       this.repository.getByEmail(_email)
-        .then((result: Employee) => resolve(result))
+        .then(async (result: Employee) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
@@ -43,7 +42,9 @@ export class EmployeeService implements IEmployeeService {
   getByCompanyId(_companyId: number): Promise<Employee[]> {
     return new Promise((resolve, reject) => {
       this.repository.getByCompanyId(_companyId)
-        .then((result: Employee[]) => resolve(result))
+        .then(async (result: Employee[]) => {
+          resolve(result);
+        })
         .catch(async (error: any) =>
           reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
@@ -52,19 +53,16 @@ export class EmployeeService implements IEmployeeService {
   getByParkingId(_parkingId: number): Promise<Employee[]> {
     return new Promise((resolve, reject) => {
       this.repository.getByParkingId(_parkingId)
-        .then((result: Employee[]) => resolve(result))
+        .then(async (result: Employee[]) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))))
-    });
+    })
   }
 
   save(employee: Employee): Promise<any> {
     return new Promise((resolve, reject) => {
       this.repository.save(employee)
-        .then((result: any) => {
-          result.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
-          resolve(result);
-        })
+        .then(async (result: any) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
@@ -80,7 +78,7 @@ export class EmployeeService implements IEmployeeService {
         .then(result => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))))
-    });
+    })
   }
 
   delete(id: number): Promise<any> {
@@ -89,13 +87,17 @@ export class EmployeeService implements IEmployeeService {
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))))
-    });
+    })
   }
 
   getById(id: number): Promise<Employee> {
     return new Promise((resolve, reject) => {
       this.repository.getById(id)
-        .then((result: Employee) => resolve(result))
+        .then(async (result: Employee) => {
+          const _result: any = result.ToModify();
+          _result.password = undefined;
+          resolve(_result);
+        })
         .catch(async (error: any) =>
           reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
