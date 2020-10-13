@@ -4,6 +4,9 @@ import { IUserRepository } from '../interfaces/IRepositories/userRepository.inte
 import { User } from '../models/user.model';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
+import { UserAddress } from '../models/user-address.model';
+import { Card } from '../models/card.model';
+import Vehicle from '../models/vehicle.model';
 
 @injectable()
 export class UserRepository implements IUserRepository {
@@ -29,13 +32,18 @@ export class UserRepository implements IUserRepository {
 
   getById(id: number): Promise<User> {
     return new Promise((resolve, reject) => {
-      User.findByPk(id)
-        .then((user: User) => {
-          resolve(user);
+      User.findByPk(id,
+        {
+          include: [
+            { model: Card, as: 'cards' },
+            { model: Vehicle, as: 'vehicles' },
+            { model: UserAddress, as: 'address' },
+          ],
+          raw: true,
+          nest: true
         })
-        .catch(error => {
-          reject(error);
-        });
+        .then((user: User) => resolve(user))
+        .catch(error => reject(error));
     });
   }
 

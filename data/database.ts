@@ -6,22 +6,23 @@ import Context from '../main/context';
 // Entities
 import { User } from './models/user.model';
 import Vehicle from './models/vehicle.model';
-import { UserAdress } from './models/user-adress.model';
+import { UserAddress } from './models/user-address.model';
 import ParkingFinance from './models/parking-finance.model';
 import ParkingPromotion from './models/parking-promotion.model';
 import { Card } from './models/card.model';
 import { Company } from './models/company.model';
-import { CompanyAdress } from './models/company-adress.model';
+import { CompanyAddress } from './models/company-address.model';
 import { Employee } from './models/employee.model';
 import { Parking } from './models/parking.model';
 import { Rule } from './models/rule.model';
 import { ParkingSpace } from './models/parking-space.model';
-import { ParkingAdress } from './models/parking-adress.model';
+import { ParkingAddress } from './models/parking-address.model';
 import { Scheduling } from './models/scheduling.model';
 import { ParkingScore } from './models/parking-score.model';
 import { Log } from './models/log.model';
 import { AccountRecovery } from './models/account-recovery.model';
 import { ParkingFile } from './models/parking-file.model';
+import { RouteSecurity } from './models/route-security.model';
 
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
@@ -48,22 +49,23 @@ class Database {
     const models: PersistenceModel[] = [
       { name: 'User', entity: User.sequelize },
       { name: 'Vehicle', entity: Vehicle.sequelize },
-      { name: 'UserAdress', entity: UserAdress.sequelize },
+      { name: 'UserAddress', entity: UserAddress.sequelize },
       { name: 'Card', entity: Card.sequelize },
       { name: 'Company', entity: Company.sequelize },
-      { name: 'CompanyAdress', entity: CompanyAdress.sequelize },
+      { name: 'CompanyAddress', entity: CompanyAddress.sequelize },
       { name: 'Employee', entity: Employee.sequelize },
       { name: 'Parking', entity: Parking.sequelize },
       { name: 'Rule', entity: Rule.sequelize },
       { name: 'ParkingPromotion', entity: ParkingPromotion.sequelize },
       { name: 'ParkingSpace', entity: ParkingSpace.sequelize },
-      { name: 'ParkingAdress', entity: ParkingAdress.sequelize },
+      { name: 'ParkingAddress', entity: ParkingAddress.sequelize },
       { name: 'Scheduling', entity: Scheduling.sequelize },
       { name: 'ParkingScore', entity: ParkingScore.sequelize },
       { name: 'ParkingFinance', entity: ParkingFinance.sequelize },
       { name: 'Log', entity: Log.sequelize },
       { name: 'AccountRecovery', entity: AccountRecovery.sequelize },
-      { name: 'ParkingFile', entity: ParkingFile.sequelize }
+      { name: 'ParkingFile', entity: ParkingFile.sequelize },
+      { name: 'RouteSecurity', entity: RouteSecurity.sequelize }
     ];
 
     Logger.Info('Database', 'Table verification started!');
@@ -73,23 +75,33 @@ class Database {
     // N:N
 
     // 1:N
-    Company.hasMany(Parking, { foreignKey: 'companyId', as: 'Parking' });
-    User.hasMany(Vehicle, { foreignKey: 'userId', as: 'Vehicle' });
-    User.hasMany(Card, { foreignKey: 'userId', as: 'Card' });
-    User.hasMany(ParkingScore, { foreignKey: 'userId', as: 'ParkingScore' });
-    User.hasMany(Scheduling, { foreignKey: 'userId', as: 'Scheduling' });
-    Rule.hasMany(Employee, { foreignKey: 'ruleId', as: 'Employee' });
-    Parking.hasMany(ParkingPromotion, { foreignKey: 'parkingId', as: 'ParkingPromotion' });
-    Parking.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'ParkingSpace' });
-    Parking.hasMany(ParkingScore, { foreignKey: 'parkingId', as: 'ParkingScore' });
-    Parking.hasMany(ParkingFinance, { foreignKey: 'parkingId', as: 'ParkingFinance' });
-    Parking.hasMany(Employee, { foreignKey: 'parkingId', as: 'Employee' });
-    ParkingSpace.hasMany(Scheduling, { foreignKey: 'parkingSpaceId', as: 'Scheduling' });
+    Company.hasMany(Parking, { foreignKey: 'companyId', as: 'parkings' });
+    Company.hasMany(RouteSecurity, { foreignKey: 'companyId', as: 'routeSecurity' });
+    User.hasMany(Vehicle, { foreignKey: 'userId', as: 'vehicles' });
+    User.hasMany(Card, { foreignKey: 'userId', as: 'cards' });
+    User.hasMany(ParkingScore, { foreignKey: 'userId', as: 'parkingScore' });
+    User.hasMany(Scheduling, { foreignKey: 'userId', as: 'scheduling' });
+    User.hasMany(AccountRecovery, { foreignKey: 'userId', as: 'accountRecovery' });
+    Rule.hasMany(Employee, { foreignKey: 'ruleId', as: 'employees' });
+    Rule.hasMany(RouteSecurity, { foreignKey: 'ruleId', as: 'routeSecurity' });
+    Parking.hasMany(ParkingPromotion, { foreignKey: 'parkingId', as: 'parkingPromotion' });
+    Parking.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'parkingSpace' });
+    Parking.hasMany(ParkingScore, { foreignKey: 'parkingId', as: 'parkingScore' });
+    Parking.hasMany(ParkingFinance, { foreignKey: 'parkingId', as: 'parkingFinance' });
+    Parking.hasMany(Employee, { foreignKey: 'parkingId', as: 'employees' });
+    Parking.hasMany(ParkingFile, { foreignKey: 'parkingId', as: 'files' });
+    ParkingSpace.hasMany(Scheduling, { foreignKey: 'parkingSpaceId', as: 'scheduling' });
+    Employee.hasMany(AccountRecovery, { foreignKey: 'employeeId', as: 'accountsRecovery' });
+
+    // N:1
+    Employee.belongsTo(Parking, { as: 'parking' });
+    Employee.belongsTo(Company, { as: 'company' });
+    Employee.belongsTo(Rule, { as: 'rule' });
 
     // 1:1
-    Company.hasOne(CompanyAdress, { foreignKey: 'companyId', as: 'CompanyAdress' });
-    User.hasOne(UserAdress, { foreignKey: 'userId', as: 'UserAdress' });
-    Parking.hasOne(ParkingAdress, { foreignKey: 'parkingId', as: 'ParkingAdress' });
+    Company.hasOne(CompanyAddress, { foreignKey: 'companyId', as: 'address' });
+    User.hasOne(UserAddress, { foreignKey: 'userId', as: 'address' });
+    Parking.hasOne(ParkingAddress, { foreignKey: 'parkingId', as: 'address' });
 
     /* #endregion */
     this.checkAndBuild(models)
@@ -103,7 +115,7 @@ class Database {
 
   private checkAndBuild(models: PersistenceModel[]): Promise<any> {
     return new Promise((resolve, reject) => {
-      _instance.authenticate()
+      _instance.authenticate({ logging: (IsLogger ? msg => Logger.Info('Authenticate', msg) : IsLogger) })
         .then(() => {
           Logger.Info('Database', 'Connection established successfully!');
           this.CreateTables(models)
@@ -117,63 +129,56 @@ class Database {
           Logger.Error('Database', error);
           reject(error);
         });
-    })
+    });
   }
 
-  private async CreateTables(models: { name: string, entity: Sequelize }[]) {
+  private async CreateTables(models: { name: string, entity: Sequelize }[], count = 0, success = 0, errors = 0, total = 0) {
     return new Promise(async (resolve) => {
-      let count = 0;
-      let sucess = 0;
-      let errors = 0;
-      let total = 0;
       const modelsWithErrors = [];
 
       if (DropAllTable) {
         await this.DropAllTables(models);
       }
 
-      while (count < models.length) {
-        await models[count].entity.sync(
+      if (total < models.length) {
+        models[count].entity.sync(
           {
             force: ForceSync,
             alter: AlterSync,
             logging: (IsLogger ? msg => Logger.Info(models[count].name, msg) : IsLogger)
           })
           .then(() => {
-            Logger.Info(models[count].name, 'verification finished!')
-            sucess++;
+            Logger.Info(models[count].name, 'verification finished!');
+            success++;
+            total = success + errors;
+            count++;
+            this.CreateTables(models, count, success, errors, total);
           })
           .catch(error => {
             Logger.Error(models[count].name, error);
             modelsWithErrors.push(models[count]);
             errors++;
+            total = success + errors;
+            count++;
+            this.CreateTables(models, count, success, errors, total);
           });
-        count++;
-        total = sucess + errors;
-        if (total === models.length) {
-          Logger.Info('Database', `verification result => Sucess: ${sucess} | Errors: ${errors} | Total: ${models.length}`);
+      } else {
+        Logger.Info('Database', `verification result => Sucess: ${success} | Errors: ${errors} | Total: ${models.length}`);
 
-          if (errors > 0) {
-            Logger.Error('Database', `${errors} errors in the models were found!`);
-            Logger.Warn('Database', 'trying to fix the models');
-            await this.TryFixModels(modelsWithErrors, resolve);
-          } else {
-            resolve('finished successfully');
-          }
-          break;
+        if (errors > 0) {
+          Logger.Error('Database', `${errors} errors in the models were found!`);
+          Logger.Warn('Database', 'trying to fix the models');
+          await this.TryFixModels(modelsWithErrors, resolve);
+        } else {
+          resolve('finished successfully');
         }
       }
     });
   }
 
-  private async TryFixModels(modelsWithErrors: any[], resolve: (value?: unknown) => void) {
-    let attempts = 0;
-    let count = 0;
-    let sucess = 0;
-    let errors = 0;
-
-    while (count < modelsWithErrors.length) {
-      await modelsWithErrors[count].entity.sync(
+  private async TryFixModels(modelsWithErrors: any[], resolve: (value?: unknown) => void, count = 0, attempts = 0, sucess = 0, errors = 0) {
+    if (attempts < modelsWithErrors.length) {
+      modelsWithErrors[count].entity.sync(
         {
           alter: AlterSync,
           logging: IsLogger ? msg => Logger.Info(modelsWithErrors[count].name, msg) : IsLogger
@@ -181,21 +186,24 @@ class Database {
         .then(() => {
           Logger.Info(modelsWithErrors[count].name, 'correction completed!');
           sucess++;
+          attempts = sucess + errors;
+          count++;
+          this.TryFixModels(modelsWithErrors, resolve, count, attempts, sucess, errors);
         })
         .catch(error => {
           Logger.Error(modelsWithErrors[count].name, error);
           errors++;
+          attempts = sucess + errors;
+          count++;
+          this.TryFixModels(modelsWithErrors, resolve, count, attempts, sucess, errors);
         });
-      count++;
-      attempts = sucess + errors;
-      if (attempts === modelsWithErrors.length) {
-        Logger.Info('Database', `correction attempts => Sucess: ${sucess} | Errors: ${errors} | Total: ${attempts}`);
-        if (errors > 0) {
-          resolve('finished with errors');
-        }
-        else {
-          resolve('finished successfully and corrected errors');
-        }
+    } else {
+      Logger.Info('Database', `correction attempts => Sucess: ${sucess} | Errors: ${errors} | Total: ${attempts}`);
+      if (errors > 0) {
+        resolve('finished with errors');
+      }
+      else {
+        resolve('finished successfully and corrected errors');
       }
     }
   }

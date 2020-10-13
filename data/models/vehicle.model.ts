@@ -6,12 +6,6 @@ import { TransactionType } from '../../commons/enums/transactionType';
 
 const _instance = Context.getInstance();
 
-/**
- * @description
- * @author Marlon Lira
- * @class Vehicle
- * @extends {Model}
- */
 class Vehicle extends Model {
 
   id!: number;
@@ -22,12 +16,6 @@ class Vehicle extends Model {
   licensePlate!: string;
   userId!: number;
 
-  /**
-   * Creates an instance of Vehicle.
-   * @author Marlon Lira
-   * @param {*} [json]
-   * @memberof Vehicle
-   */
   constructor(json?: any) {
     super()
     this.id = Attributes.ReturnIfValid(json.id);
@@ -39,7 +27,7 @@ class Vehicle extends Model {
     this.userId = Attributes.ReturnIfValid(json.userId);
   }
 
-  ToModify(){
+  ToAny(){
     return this.toJSON();
   }
 }

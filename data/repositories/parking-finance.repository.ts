@@ -61,7 +61,7 @@ class ParkingFinanceRepository implements IParkingFinanceRepository{
   Update(parkingFinance: ParkingFinance): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingFinance.sequelize.transaction();
-      ParkingFinance.update(parkingFinance.ToModify(),
+      ParkingFinance.update(parkingFinance.ToAny(),
       {
         where:{
           id: parkingFinance.id

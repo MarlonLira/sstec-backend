@@ -31,7 +31,7 @@ export class Card extends Model {
     this.userId = Attributes.ReturnIfValid(json.userId);
   }
 
-  ToModify() {
+  ToAny() {
     return this.toJSON();
   }
 }

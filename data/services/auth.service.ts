@@ -4,7 +4,6 @@ import * as jwt from 'jsonwebtoken';
 import { Auth } from '../models/auth.model';
 import TYPES from "../types";
 import { InnerException } from "../../commons/core/innerException";
-import { IUserRepository } from "../interfaces/IRepositories/userRepository.interface";
 import { IEmployeeRepository } from "../interfaces/IRepositories/employeeRepository.interface";
 import { CryptoType } from "../../commons/enums/cryptoType";
 import Attributes from "../../commons/core/attributes";
@@ -20,6 +19,8 @@ import { ILogService } from "../interfaces/IServices/logService.interface";
 import { IParkingService } from "../interfaces/IServices/parkingService.interface";
 import { IRuleService } from "../interfaces/IServices/ruleService.interface";
 import { ICompanyService } from "../interfaces/IServices/companyService.interface";
+import { IUserService } from "../interfaces/IServices/userService.interface";
+import { IRouteSecurityService } from "../interfaces/IServices/route-securityService.interface";
 
 @injectable()
 export class AuthService implements IAuthService {
@@ -29,8 +30,9 @@ export class AuthService implements IAuthService {
     @inject(TYPES.ICompanyService) private _companyService: ICompanyService,
     @inject(TYPES.IParkingService) private _parkingService: IParkingService,
     @inject(TYPES.IRuleService) private _ruleService: IRuleService,
-    @inject(TYPES.IUserRepository) private _userRepository: IUserRepository,
+    @inject(TYPES.IUserService) private _userService: IUserService,
     @inject(TYPES.IEmailService) private _emailService: IEmailService,
+    @inject(TYPES.IRouteSecurityService) private _routeSecurityService: IRouteSecurityService,
     @inject(TYPES.ILogService) private log: ILogService
   ) { }
 
@@ -40,13 +42,12 @@ export class AuthService implements IAuthService {
         if (Attributes.IsValid(auth.employee)) {
           const foundEmployee: Employee = await this._employeeRepository.getByEmail(auth.employee.email);
           if (Attributes.IsValid(foundEmployee) && Crypto.Compare(auth.employee.password, foundEmployee.password)) {
-            auth.company = await this._companyService.getById(foundEmployee.companyId);
-            auth.parking = (await this._parkingService.getByEmployeeId(foundEmployee.id))[0];
+            auth.company = foundEmployee.company;;
+            auth.parking = foundEmployee.parking;
+            auth.routeSecurity = await this._routeSecurityService.getByCompanyId(foundEmployee.companyId);
             auth.employee = foundEmployee;
             auth.employee.password = undefined;
-            auth.authenticationLevel = Attributes.IsValid(foundEmployee.ruleId)
-              ? (await this._ruleService.getById(foundEmployee.ruleId)).level
-              : null;
+            auth.authenticationLevel = foundEmployee.rule?.level;
             auth = await this.createEmployeeToken(auth);
             const result = await Crypto.Encrypt(JSON.stringify(auth), CryptoType.DEFAULT);
             resolve(result);
@@ -66,7 +67,7 @@ export class AuthService implements IAuthService {
     return new Promise(async (resolve, reject) => {
       try {
         if (Attributes.IsValid(auth.user)) {
-          const foundUser: User = await this._userRepository.getByEmail(auth.user.email);
+          const foundUser: User = await this._userService.getByEmail(auth.user.email);
           if (Attributes.IsValid(foundUser) && Crypto.Compare(auth.user.password, foundUser.password)) {
             auth.user = foundUser;
             auth.user.password = undefined;
@@ -122,7 +123,14 @@ export class AuthService implements IAuthService {
   }
 
   signupUser(auth: Auth): Promise<any> {
-    throw new Error("Method not implemented.");
+    return new Promise(async (resolve, reject) => {
+      try {
+        this._userService.save(auth.user)
+          .then(result => resolve(result));
+      } catch (error) {
+        reject(await this.log.critical('Auth', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
+      }
+    });
   }
 
   checkToken(auth: Auth) {

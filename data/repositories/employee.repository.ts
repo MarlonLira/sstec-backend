@@ -3,9 +3,11 @@ import { injectable } from "inversify";
 
 import { IEmployeeRepository } from '../interfaces/IRepositories/employeeRepository.interface';
 import { Employee } from '../models/employee.model';
-import { CryptoType } from '../../commons/enums/cryptoType';
-import Crypto from '../../commons/core/crypto';
 import { TransactionType } from '../../commons/enums/transactionType';
+import { Parking } from '../models/parking.model';
+import { Company } from '../models/company.model';
+import { Rule } from '../models/rule.model';
+import Attributes from '../../commons/core/attributes';
 
 @injectable()
 export class EmployeeRepository implements IEmployeeRepository {
@@ -14,14 +16,13 @@ export class EmployeeRepository implements IEmployeeRepository {
   save(employee: Employee): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Employee.sequelize.transaction();
-      employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
       employee.status = TransactionType.ACTIVE;
       Employee.create(employee, { transaction: _transaction })
         .then(async (result: Employee) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -42,12 +43,8 @@ export class EmployeeRepository implements IEmployeeRepository {
           }
         }
       })
-        .then(result => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((result: Employee[]) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
@@ -63,17 +60,20 @@ export class EmployeeRepository implements IEmployeeRepository {
             [Op.ne]: TransactionType.DELETED
           }
         }
-      }).then((result: Employee) => {
-        resolve(result);
-      }).catch(error => {
-        reject(error);
-      });
+      }).then((result: Employee) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
   getByEmail(_email: string): Promise<Employee> {
     return new Promise((resolve, reject) => {
       Employee.findOne({
+        attributes: { exclude: ['image'] },
+        include: [
+          { model: Parking, as: 'parking' },
+          { model: Company, as: 'company', attributes: { exclude: ['image'] } },
+          { model: Rule, as: 'rule' },
+        ],
         where: {
           email: {
             [Op.eq]: _email
@@ -81,12 +81,11 @@ export class EmployeeRepository implements IEmployeeRepository {
           status: {
             [Op.ne]: TransactionType.DELETED
           }
-        }
-      }).then((result: Employee) => {
-        resolve(result);
-      }).catch(error => {
-        reject(error);
-      });
+        },
+        raw: true,
+        nest: true
+      }).then((result: Employee) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
@@ -103,18 +102,24 @@ export class EmployeeRepository implements IEmployeeRepository {
           }
         }
       }).then((result: Employee[]) => resolve(result)
-      ).catch(error => reject(error));
+      ).catch((error: any) => reject(error));
     });
   }
 
   getById(id: number): Promise<Employee> {
     return new Promise((resolve, reject) => {
-      Employee.findByPk(id, { attributes: this._attributes, })
-        .then((result: Employee) => {
-          resolve(result);
-        }).catch(error => {
-          reject(error);
-        });
+      Employee.findByPk(id,
+        {
+          attributes: { exclude: ['password'] },
+          include: [
+            { model: Rule, as: 'rule' },
+            { model: Company, as: 'company' }
+          ],
+          raw: true,
+          nest: true
+        })
+        .then((result: Employee) => resolve(Attributes.encodeImage(result)))
+        .catch((error: any) => reject(error));
     });
   }
 
@@ -130,18 +135,15 @@ export class EmployeeRepository implements IEmployeeRepository {
             [Op.ne]: TransactionType.DELETED
           }
         }
-      }).then((result: Employee[]) => {
-        resolve(result);
-      }).catch(error => {
-        reject(error);
-      });
+      }).then((result: Employee[]) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
   update(employee: Employee): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Employee.sequelize.transaction();
-      Employee.update(employee.ToModify(),
+      Employee.update(employee.ToAny(),
         {
           where:
           {
@@ -150,11 +152,11 @@ export class EmployeeRepository implements IEmployeeRepository {
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -174,11 +176,11 @@ export class EmployeeRepository implements IEmployeeRepository {
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback()
           reject(error);
         });

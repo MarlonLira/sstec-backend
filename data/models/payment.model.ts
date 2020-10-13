@@ -33,7 +33,7 @@ class Payment extends Model {
     this.parkingSpaceId = Attributes.ReturnIfValid(json.parkingSpaceId);
   }
 
-  ToModify(){
+  ToAny(){
     return this.toJSON();
   }
 }
