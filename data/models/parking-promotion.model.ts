@@ -39,7 +39,7 @@ class ParkingPromotion extends Model {
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
   }
 
-  ToModify(){
+  ToAny(){
     return this.toJSON();
   }
 }

@@ -32,7 +32,7 @@ values('AT', 'Developer', 0, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Assistant', 3, '2020-05-09 21:57:27', '2020-05-09 21:57:27');
 
 
-insert into UserAdress(status, country, state, city, street, number, zipCode, complement, userId, createdAt, updatedAt)
+insert into UserAddress(status, country, state, city, street, number, zipCode, complement, userId, createdAt, updatedAt)
 values ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Principal', 99, '52090168', ' ', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Abaré', 09, '50820710', ' ', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Abdias de Oliveira', 63, '50720550', ' ', 2, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
@@ -86,7 +86,7 @@ values('AT', 'estacionamento Vila Nova1', '323636984889', '81995574552', 'estaci
 ('AT', 'estacionamento Norte centro', '11537788300', '81202305669', 'estacionamentosnorte@gmail.com', 'www.estacionamentosnorte.com', 10, '2020-05-09 21:57:27', '2020-05-09 21:57:27');
 
 
-insert into CompanyAdress (status, country, state, city, street, number, zipCode, complement, companyId, createdAt, updatedAt)
+insert into CompanyAddress (status, country, state, city, street, number, zipCode, complement, companyId, createdAt, updatedAt)
 values('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Principal', 08, '52090168', ' ', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua São José ', 90, '52160231', ' ', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Abadiânia', 00, '52280373', ' ', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
@@ -147,7 +147,7 @@ values('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Principal', 08, '52090168', 
 ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Abdias Cabral de Moura', 2312, '51350390', ' ', 10, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Abdias de Oliveira', 548, '50720550', ' ', 10, '2020-05-09 21:57:27', '2020-05-09 21:57:27');
 
-insert into ParkingAdress(status, country, state, city, street, number, zipCode, latitude, longitude, complement,parkingId, createdAt, updatedAt)
+insert into ParkingAddress(status, country, state, city, street, number, zipCode, latitude, longitude, complement,parkingId, createdAt, updatedAt)
 values ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua Nove', 100, '52190480', '22561','98563', ' ', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Brasil', 'Pernambuco', 'Recife', '3ª Travessa A', 85, '52031216', '22587','98963', ' ', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),
 ('AT', 'Brasil', 'Pernambuco', 'Recife', 'Rua A. Boulitreau Fragoso', 50, '50920675', '22231','33353',  ' ', 1, '2020-05-09 21:57:27', '2020-05-09 21:57:27'),

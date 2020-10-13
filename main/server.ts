@@ -49,9 +49,9 @@ class Server {
    */
   public constructor() {
     this.inversifyExpress = new InversifyExpressServer(container);
-    this.Middlewares()
-      .then(() => this.Status()
-        .then(() => this.Database()));
+    this.middlewares()
+      .then(() => this.status()
+        .then(() => this.database()));
   }
 
   /**
@@ -60,7 +60,7 @@ class Server {
    * @private
    * @memberof Server
    */
-  private Middlewares() {
+  private middlewares() {
     return new Promise((resolve, reject) => {
       try {
         dotenv.config();
@@ -69,7 +69,7 @@ class Server {
 
         this.inversifyExpress.setConfig((server) => {
           server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
-          server.use(bodyParser.json({limit: '50mb'}));
+          server.use(bodyParser.json({ limit: '50mb' }));
           server.use(allowCors);
           server.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
         });
@@ -88,7 +88,7 @@ class Server {
    * @private
    * @memberof Server
    */
-  private Database() {
+  private database() {
     new Database().Build();
   }
 
@@ -98,7 +98,7 @@ class Server {
    * @private
    * @memberof Server
    */
-  public Status() {
+  public status() {
     const port = process.env.PORT || 4001;
 
     return new Promise((resolve) => {

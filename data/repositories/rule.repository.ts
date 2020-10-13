@@ -5,22 +5,9 @@ import { Rule } from '../models/rule.model';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 
-/**
- * @description
- * @author Marlon Lira
- * @class RuleRepository
- * @implements {IRuleRepository}
- */
 @injectable()
 export class RuleRepository implements IRuleRepository {
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Rule} Rule
-   * @returns
-   * @memberof RuleRepository
-   */
   save(rule: Rule): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Rule.sequelize.transaction();
@@ -36,13 +23,6 @@ export class RuleRepository implements IRuleRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {string} _id
-   * @returns {Promise<Rule>}
-   * @memberof RuleRepository
-   */
   getById(_id: number): Promise<Rule> {
     return new Promise((resolve, reject) => {
       Rule.findByPk(_id)
@@ -55,17 +35,10 @@ export class RuleRepository implements IRuleRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Rule} rule
-   * @returns {Promise<any>}
-   * @memberof RuleRepository
-   */
   update(rule: Rule): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Rule.sequelize.transaction();
-      Rule.update(rule.ToModify(),
+      Rule.update(rule.ToAny(),
         {
           where:
           {
@@ -85,12 +58,6 @@ export class RuleRepository implements IRuleRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @returns {Promise<Rule[]>}
-   * @memberof RuleRepository
-   */
   toList(): Promise<Rule[]> {
     return new Promise((resolve, reject) => {
       Rule.findAll({
@@ -100,22 +67,11 @@ export class RuleRepository implements IRuleRepository {
           }
         }
       })
-        .then(result => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then(result => resolve(result))
+        .catch(error => reject(error));
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {string} ruleName
-   * @returns {Promise<Rule[]>}
-   * @memberof RuleRepository
-   */
   getByName(_name: string): Promise<Rule[]> {
     return new Promise((resolve, reject) => {
       Rule.findAll({
@@ -137,13 +93,6 @@ export class RuleRepository implements IRuleRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} ruleId
-   * @returns {Promise<any>}
-   * @memberof RuleRepository
-   */
   delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Rule.sequelize.transaction();
