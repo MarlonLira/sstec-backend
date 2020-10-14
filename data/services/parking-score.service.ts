@@ -1,5 +1,5 @@
 import { injectable, inject } from "inversify";
-import { IParkingRepository } from "../interfaces/IRepositories/parkingRepository.interface";
+
 import TYPES from "../types";
 import { InnerException } from "../../commons/core/innerException";
 import { IParkingScoreService } from "../interfaces/IServices/parking-scoreService.interface";
@@ -14,7 +14,6 @@ export class ParkingScoreService implements IParkingScoreService {
 
   constructor(
     @inject(TYPES.IParkingScoreRepository) private repository: IParkingScoreRepository,
-    @inject(TYPES.IParkingRepository) private parkingRepository: IParkingRepository,
     @inject(TYPES.ILogService) private log: ILogService) { }
 
   getById(id: number): Promise<ParkingScore> {

@@ -41,11 +41,29 @@ class ParkingController {
     });
   }
 
+  @httpGet('/parkings')
+  get(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+    return new Promise((resolve) => {
+      this.service.toList()
+        .then((result: Parking[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
+    });
+  }
+
   @httpGet('/parkings/companyId/:companyId')
   getByCompanyId(@request() req: Request, @response() res: Response): Promise<any> {
     return new Promise((resolve) => {
-      this.service.toList(Number(req.params.companyId))
-        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
+      this.service.getByCompanyId(Number(req.params.companyId))
+        .then((result: Parking[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
+    });
+  }
+
+  @httpGet('/parkings/employeeId/:employeeId')
+  getByEmployeeId(@request() req: Request, @response() res: Response): Promise<any> {
+    return new Promise((resolve) => {
+      this.service.getByEmployeeId(Number(req.params.employeeId))
+        .then((result: Parking) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
@@ -54,7 +72,7 @@ class ParkingController {
   put(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.update(new Parking(req.body))
-        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Estacionamento', result)))
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Estacionamento', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }
@@ -63,7 +81,7 @@ class ParkingController {
   delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.delete(Number(req.params.id))
-        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Estacionamento', result)))
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Estacionamento', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
     });
   }

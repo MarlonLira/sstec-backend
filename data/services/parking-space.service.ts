@@ -101,17 +101,22 @@ export class ParkingSpaceService implements IParkingSpaceService {
         if (Attributes.IsValid(parkingSpace.amount)) {
           const list: ParkingSpace[] = ((await this.repository.getListByParkingId(parkingSpace.parkingId)).filter(x => x.type === parkingSpace.type))
           const listEx: ParkingSpace[] = (await this.repository.getDeletedByParkingId(parkingSpace));
-          const rest = parkingSpace.amount - listEx.length;
-          if (Attributes.IsValid(listEx) && list.length < parkingSpace.amount) {
-            listEx.forEach(async (foundParkingSpace: ParkingSpace) => {
+          if (list.length < parkingSpace.amount) {
+            parkingSpace.amount = parkingSpace.amount - list.length;
+
+            for (const foundParkingSpace of listEx) {
               foundParkingSpace.value = parkingSpace.value;
               foundParkingSpace.status = TransactionType.ACTIVE;
               this.repository.update(foundParkingSpace);
               result.push(foundParkingSpace.id);
-            });
+              parkingSpace.amount--;
+              if (parkingSpace.amount === 0) {
+                break;
+              }
+            }
 
-            if (listEx.length < parkingSpace.amount) {
-              for (let i = 0; i < rest; i++) {
+            if (parkingSpace.amount > 0) {
+              for (let i = 0; i < parkingSpace.amount; i++) {
                 result.push(await this.repository.save(parkingSpace));
               };
             }
