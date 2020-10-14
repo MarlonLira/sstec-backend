@@ -8,8 +8,9 @@ import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { IEmployeeService } from "../interfaces/IServices/employeeService.interface";
+import { safetyMiddleware } from "../../middleware/safety/safety.config";
 
-@controller('')
+@controller('', safetyMiddleware())
 class EmployeeController {
 
   constructor(@inject(TYPES.IEmployeeService) private service: IEmployeeService) { }

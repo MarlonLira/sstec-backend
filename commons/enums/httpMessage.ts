@@ -11,6 +11,8 @@ export enum HttpMessage {
   Found = 'Encontrado(a)!',
   Not_Found = 'Não encontrado(a)!',
   Empty = '',
+  Request_Unauthorized = 'A requisição não foi autorizada!',
+  Request_Forbidden = 'A requisição foi negada!',
   Login_Unauthorized = 'A conta informada é inválida!',
   Login_Authorized = 'Acesso bem sucedido!',
   Account_Created = 'Conta criada com sucesso!',

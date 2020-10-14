@@ -13,24 +13,10 @@ import { Email } from "../models/email.model";
 @controller('')
 class EmailController {
 
-  /**
-   * Creates an instance of EmailController.
-   * @author Marlon Lira
-   * @param {IEmailService} service
-   * @memberof EmailController
-   */
   constructor(
     @inject(TYPES.IEmailService) private service: IEmailService,
   ) { }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Request} req
-   * @param {Response} res
-   * @returns
-   * @memberof EmailController
-   */
   @httpPost('/email')
   post(@request() req: Request, @response() res: Response) {
     return new Promise(async (resolve, reject) => {

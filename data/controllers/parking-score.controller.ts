@@ -7,8 +7,9 @@ import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { IParkingScoreService } from "../interfaces/IServices/parking-scoreService.interface";
+import { safetyMiddleware } from "../../middleware/safety/safety.config";
 
-@controller('')
+@controller('', safetyMiddleware())
 class ParkingScoreController {
 
   constructor(@inject(TYPES.IParkingScoreService) private service: IParkingScoreService) { }

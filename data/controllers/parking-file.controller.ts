@@ -8,8 +8,9 @@ import Http from "../../commons/core/http";
 import { HttpCode } from "../../commons/enums/httpCode";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ParkingFile } from "../models/parking-file.model";
+import { safetyMiddleware } from "../../middleware/safety/safety.config";
 
-@controller('')
+@controller('', safetyMiddleware())
 class ParkingFileController {
 
   constructor(

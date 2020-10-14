@@ -2,14 +2,15 @@ import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import { Parking } from "../models/parking.model";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
+import { Parking } from "../models/parking.model";
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { IParkingService } from "../interfaces/IServices/parkingService.interface";
+import { safetyMiddleware } from "../../middleware/safety/safety.config";
 
-@controller('')
+@controller('', safetyMiddleware())
 class ParkingController {
 
   constructor(@inject(TYPES.IParkingService) private service: IParkingService) { }
@@ -43,7 +44,7 @@ class ParkingController {
 
   @httpGet('/parkings')
   get(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
       this.service.toList()
         .then((result: Parking[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Estacionamento', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));

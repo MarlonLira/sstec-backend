@@ -129,4 +129,4 @@ container.bind<ILogRepository>(TYPES.ILogRepository).to(LogRepository);
 container.bind<IParkingFileRepository>(TYPES.IParkingFileRepository).to(ParkingFileRepository);
 container.bind<IRouteSecurityRepository>(TYPES.IRouteSecurityRepository).to(RouteSecurityRepository);
 
-export default container;
+export { container };

@@ -133,11 +133,15 @@ export class AuthService implements IAuthService {
     });
   }
 
-  checkToken(auth: Auth) {
+  checkToken(token: string) {
     return new Promise((resolve) => {
-      jwt.verify(auth.token, process.env.SECRET, (err) => {
-        resolve(err);
-      });
+      if (Attributes.IsValid(token)) {
+        jwt.verify(token, process.env.SECRET, (err) => {
+          resolve({ "valid": !err });
+        });
+      } else {
+        resolve({ "valid": false })
+      }
     });
   }
 
