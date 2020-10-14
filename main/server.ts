@@ -8,7 +8,6 @@ import { InversifyExpressServer } from 'inversify-express-utils';
 
 import * as swaggerDocument from '../middleware/swagger/swagger.json';
 import { container } from '../middleware/inversify/inversify.config';
-import { safetyMiddleware } from '../middleware/safety/safety.config';
 import * as helmet from 'helmet';
 
 import Logger from '../commons/core/logger';
