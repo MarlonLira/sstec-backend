@@ -50,7 +50,6 @@ class Server {
           server.use(allowCors);
           server.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
           server.use(helmet());
-          server.use(safetyMiddleware())
         });
 
         this.express = this.inversifyExpress.build();
