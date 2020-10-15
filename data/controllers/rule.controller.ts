@@ -8,13 +8,14 @@ import { HttpCode } from '../../commons/enums/httpCode';
 import { Rule } from '../models/rule.model';
 import { HttpMessage } from '../../commons/enums/httpMessage';
 import { IRuleService } from '../interfaces/IServices/ruleService.interface';
+import { safetyMiddleware } from '../../middleware/safety/safety.config';
 
 /**
  * @description
  * @author Marlon Lira
  * @class RuleController
  */
-@controller('')
+@controller('', safetyMiddleware())
 class RuleController {
 
   /**

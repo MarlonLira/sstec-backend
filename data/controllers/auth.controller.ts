@@ -3,55 +3,27 @@ import { controller, httpPost, request, response } from "inversify-express-utils
 import { inject } from "inversify";
 
 import TYPES from '../types';
-
 import { IAuthService } from '../interfaces/IServices/authService.interface';
 import { Auth } from "../models/auth.model";
 import Http from '../../commons/core/http';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { HttpCode } from '../../commons/enums/httpCode';
 
-/**
- * @description
- * @author Marlon Lira
- * @class AuthController
- */
 @controller('/auth')
 class AuthController {
 
-  /**
-   * Creates an instance of AuthController.
-   * @author Marlon Lira
-   * @param {IAuthService} service
-   * @memberof AuthController
-   */
   constructor(
-    @inject(TYPES.IAuthService) private service: IAuthService,
+    @inject(TYPES.IAuthService) private service: IAuthService
   ) { }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Request} req
-   * @param {Response} res
-   * @returns
-   * @memberof AuthController
-   */
   @httpPost('/token-validate')
   tokenValidate(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
-      this.service.checkToken(new Auth(req.body)).
-        then((result: any) => resolve(Http.SendSimpleMessage(res, HttpCode.Ok, { valid: !result })));
+      this.service.checkToken(req.body.authorization).
+        then((result: any) => resolve(Http.SendSimpleMessage(res, HttpCode.Ok, result)));
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Request} req
-   * @param {Response} res
-   * @returns
-   * @memberof AuthController
-   */
   @httpPost('/employee/account-recovery')
   accountRecoveryEmployee(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
@@ -61,14 +33,6 @@ class AuthController {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Request} req
-   * @param {Response} res
-   * @returns
-   * @memberof AuthController
-   */
   @httpPost('/employee/signin')
   signinEmployee(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
@@ -78,14 +42,6 @@ class AuthController {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Request} req
-   * @param {Response} res
-   * @returns
-   * @memberof AuthController
-   */
   @httpPost('/user/signin')
   signinUser(@request() req: Request, @response() res: Response) {
     return new Promise((resolve) => {
@@ -95,14 +51,6 @@ class AuthController {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Request} req
-   * @param {Response} res
-   * @returns
-   * @memberof AuthController
-   */
   @httpPost('/employee/signup')
   signup(@request() req: Request, @response() res: Response<any>) {
     return new Promise((resolve) => {

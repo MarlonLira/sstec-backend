@@ -8,8 +8,9 @@ import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ISchedulingService } from "../interfaces/IServices/schedulingService.interface";
+import { safetyMiddleware } from "../../middleware/safety/safety.config";
 
-@controller('')
+@controller('', safetyMiddleware())
 class SchedulingController {
 
   constructor(@inject(TYPES.ISchedulingService) private service: ISchedulingService) { }

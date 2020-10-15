@@ -3,7 +3,7 @@ import * as Config from '../config.json';
 import Attributes from "../commons/core/attributes";
 
 const _logging = Config.Database.Logging;
-const _dbConfig = Config.Database.MySqlWEB;
+const _dbConfig = Config.Database.MySqlWEB_DEV;
 
 /**
  * @description
