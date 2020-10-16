@@ -64,11 +64,9 @@ export class EmployeeService implements IEmployeeService {
       let _employee = await this.getByRegistryCode(employee.registryCode);
       _employee = Attributes.isNullOrUndefined(_employee) ? await this.getByEmail(employee.email) : _employee;
       if (Attributes.isNullOrUndefined(_employee)) {
+        employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
         this.repository.save(employee)
-          .then((result: any) => {
-            result.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
-            resolve(result);
-          })
+          .then((result: any) => resolve(result))
           .catch(async (error: any) =>
             reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
       } else {
@@ -81,7 +79,7 @@ export class EmployeeService implements IEmployeeService {
     return new Promise(async (resolve, reject) => {
       let _employee = await this.getByRegistryCode(employee.registryCode);
       _employee = Attributes.isNullOrUndefined(_employee) ? await this.getByEmail(employee.email) : _employee;
-      if (Attributes.isNullOrUndefined(_employee)) {
+      if (Attributes.isNullOrUndefined(_employee) || employee.id === _employee.id) {
         if (employee.password) {
           employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
         }
