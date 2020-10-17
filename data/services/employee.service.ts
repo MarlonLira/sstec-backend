@@ -60,9 +60,9 @@ export class EmployeeService implements IEmployeeService {
 
   save(employee: Employee): Promise<any> {
     return new Promise((resolve, reject) => {
+      employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
       this.repository.save(employee)
         .then((result: any) => {
-          result.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
           resolve(result);
         })
         .catch(async (error: any) =>
