@@ -10,6 +10,7 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
 import { CryptoType } from "../../commons/enums/cryptoType";
+import Attributes from "../../commons/core/attributes";
 
 @injectable()
 export class EmployeeService implements IEmployeeService {
@@ -24,7 +25,7 @@ export class EmployeeService implements IEmployeeService {
 
   getByRegistryCode(_registryCode: string): Promise<Employee> {
     return new Promise((resolve, reject) => {
-      this.repository.getByEmail(_registryCode)
+      this.repository.getByRegistryCode(_registryCode)
         .then((result: Employee) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
@@ -59,27 +60,37 @@ export class EmployeeService implements IEmployeeService {
   }
 
   save(employee: Employee): Promise<any> {
-    return new Promise((resolve, reject) => {
-      employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
-      this.repository.save(employee)
-        .then((result: any) => {
-          resolve(result);
-        })
-        .catch(async (error: any) =>
-          reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+    return new Promise(async (resolve, reject) => {
+      let _employee = await this.getByRegistryCode(employee.registryCode);
+      _employee = Attributes.isNullOrUndefined(_employee) ? await this.getByEmail(employee.email) : _employee;
+      if (Attributes.isNullOrUndefined(_employee)) {
+        employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
+        this.repository.save(employee)
+          .then((result: any) => resolve(result))
+          .catch(async (error: any) =>
+            reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+      } else {
+        reject(await this.log.critical('Employee', HttpCode.Bad_Request, HttpMessage.Already_Exists, undefined))
+      }
     });
   }
 
   update(employee: Employee): Promise<any> {
-    return new Promise((resolve, reject) => {
-      if (employee.password) {
-        employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
-      }
+    return new Promise(async (resolve, reject) => {
+      let _employee = await this.getByRegistryCode(employee.registryCode);
+      _employee = Attributes.isNullOrUndefined(_employee) ? await this.getByEmail(employee.email) : _employee;
+      if (Attributes.isNullOrUndefined(_employee) || employee.id === _employee.id) {
+        if (employee.password) {
+          employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
+        }
 
-      this.repository.update(employee)
-        .then(result => resolve(result))
-        .catch(async (error: any) =>
-          reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))))
+        this.repository.update(employee)
+          .then(result => resolve(result))
+          .catch(async (error: any) =>
+            reject(await this.log.critical('Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))))
+      } else {
+        reject(await this.log.critical('Employee', HttpCode.Bad_Request, HttpMessage.Already_Exists, undefined))
+      }
     });
   }
 
