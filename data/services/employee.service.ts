@@ -79,7 +79,7 @@ export class EmployeeService implements IEmployeeService {
     return new Promise(async (resolve, reject) => {
       let _employee = await this.getByRegistryCode(employee.registryCode);
       _employee = Attributes.isNullOrUndefined(_employee) ? await this.getByEmail(employee.email) : _employee;
-      if (Attributes.isNullOrUndefined(_employee) || employee.id === _employee.id) {
+      if (Attributes.isNullOrUndefined(_employee) || Number(employee.id) === _employee.id) {
         if (employee.password) {
           employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
         }
