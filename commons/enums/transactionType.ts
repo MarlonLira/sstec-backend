@@ -5,5 +5,7 @@
 export enum TransactionType {
   ACTIVE = 'AT',
   PENDING = 'PD',
-  DELETED = 'EX'
+  DELETED = 'EX',
+  CANCEL = 'CA',
+  CONCLUDED = 'CO',
 }

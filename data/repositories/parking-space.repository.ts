@@ -9,35 +9,21 @@ import { Scheduling } from '../models/scheduling.model';
 @injectable()
 export class ParkingSpaceRepository implements IParkingSpaceRepository {
 
-  /**
-   * @description
-   * @author Emerson Souza
-   * @param {ParkingSpace} parkingSpace
-   * @returns {Promise<any>}
-   * @memberof ParkingSpaceRepository
-   */
   save(parkingSpace: ParkingSpace): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingSpace.sequelize.transaction();
       parkingSpace.status = TransactionType.ACTIVE;
       ParkingSpace.create(parkingSpace, { transaction: _transaction })
-        .then(async (createParkingSpace: ParkingSpace) => {
+        .then(async (result: ParkingSpace) => {
           await _transaction.commit();
-          resolve({ "parkingSpaceId": createParkingSpace.id });
-        }).catch(async error => {
+          resolve(result);
+        }).catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
     });
   }
 
-  /**
-   * @description
-   * @author Emerson Souza
-   * @param {ParkingSpace} parkingSpace
-   * @returns {Promise<any>}
-   * @memberof ParkingSpaceRepository
-   */
   update(parkingSpace: ParkingSpace): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingSpace.sequelize.transaction();
@@ -50,24 +36,49 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
     });
   }
 
-  /**
-   * @description
-   * @author Emerson Souza
-   * @param {number} id
-   * @returns {Promise<any>}
-   * @memberof ParkingSpaceRepository
-   */
+  updateAll(parkingSpace: ParkingSpace, status: TransactionType): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await ParkingSpace.sequelize.transaction();
+      ParkingSpace.update(parkingSpace.ToAny(),
+        {
+          where:
+          {
+            status: {
+              [Op.eq]: status
+            },
+            type: {
+              [Op.eq]: parkingSpace.type
+            },
+            parkingId: {
+              [Op.eq]: parkingSpace.parkingId
+            }
+          },
+          transaction: _transaction,
+          validate: false,
+          limit: parkingSpace.amount
+        })
+        .then(async (result: any) => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async (error: any) => {
+          await _transaction.rollback();
+          reject(error);
+        });
+    });
+  }
+
   delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingSpace.sequelize.transaction();
@@ -81,24 +92,17 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.commit();
           reject(error);
         });
     });
   }
 
-  /**
-   * @description
-   * @author Felipe Seabra 
-   * @param {ParkingSpace} parkingSpace
-   * @returns {Promise<any>}
-   * @memberof ParkingSpaceRepository
-   */
   deleteGroupType(parkingSpace: ParkingSpace): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingSpace.sequelize.transaction();
@@ -121,24 +125,17 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Scheduling} scheduling
-   * @returns {Promise<ParkingSpace[]>}
-   * @memberof ParkingSpaceRepository
-   */
   getAvailable(scheduling: Scheduling): Promise<ParkingSpace[]> {
     return new Promise(async (resolve, reject) => {
       ParkingSpace.sequelize.query(
@@ -169,22 +166,11 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
           mapToModel: true
         }
       )
-        .then((result: ParkingSpace[]) => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((result: ParkingSpace[]) => resolve(result))
+        .catch((error: any) => reject(error))
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {number} id
-   * @returns {Promise<ParkingSpace[]>}
-   * @memberof ParkingSpaceRepository
-   */
   getByParkingId(id: number): Promise<ParkingSpace[]> {
     return new Promise(async (resolve, reject) => {
       ParkingSpace.findAll({
@@ -195,22 +181,12 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
         group: ['type', 'value'],
         attributes: ['value', 'type', 'parkingId', [Sequelize.fn('COUNT', Sequelize.col('type')), 'amount']],
         raw: true
-      }).then((parkingSpace: ParkingSpace[]) => {
-        resolve(parkingSpace);
       })
-        .catch(error => {
-          reject(error);
-        });
+        .then((parkingSpace: ParkingSpace[]) => resolve(parkingSpace))
+        .catch((error: any) => reject(error));
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {number} id
-   * @returns {Promise<ParkingSpace[]>}
-   * @memberof ParkingSpaceRepository
-   */
   getListByParkingId(id: number): Promise<ParkingSpace[]> {
     return new Promise(async (resolve, reject) => {
       ParkingSpace.findAll({
@@ -218,42 +194,20 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
           parkingId: { [Op.eq]: id },
           status: { [Op.eq]: TransactionType.ACTIVE },
         }
-      }
-      ).then((parkingSpace: ParkingSpace[]) => {
-        resolve(parkingSpace);
       })
-        .catch(error => {
-          reject(error);
-        });
+        .then((parkingSpace: ParkingSpace[]) => resolve(parkingSpace))
+        .catch((error: any) => reject(error));
     });
   }
 
-  /**
-   * @description
-   * @author Emerson Souza
-   * @param {number} id
-   * @returns {Promise<ParkingSpace>}
-   * @memberof ParkingSpaceRepository
-   */
   getById(id: number): Promise<ParkingSpace> {
     return new Promise((resolve, reject) => {
       ParkingSpace.findByPk(id)
-        .then((parkingSpace: ParkingSpace) => {
-          resolve(parkingSpace)
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((parkingSpace: ParkingSpace) => resolve(parkingSpace))
+        .catch((error: any) => reject(error));
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {ParkingSpace} _parkingspace
-   * @returns {Promise<any>}
-   * @memberof ParkingSpaceRepository
-   */
   getDeletedByParkingId(_parkingspace: ParkingSpace): Promise<ParkingSpace[]> {
     return new Promise((resolve, reject) => {
       ParkingSpace.findAll(
@@ -267,18 +221,12 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
             status: {
               [Op.eq]: TransactionType.DELETED
             }
-          },
-          limit: Number(_parkingspace.amount)
+          }
         })
-        .then(result => {
-          resolve(result)
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((result: any) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
-
 
   toList(): Promise<ParkingSpace[]> {
     return new Promise((resolve, reject) => {
@@ -289,12 +237,8 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
           }
         }
       })
-        .then((result: ParkingSpace[]) => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((result: ParkingSpace[]) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 }

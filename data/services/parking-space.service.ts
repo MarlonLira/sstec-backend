@@ -18,13 +18,6 @@ export class ParkingSpaceService implements IParkingSpaceService {
     @inject(TYPES.IParkingSpaceRepository) private repository: IParkingSpaceRepository,
     @inject(TYPES.ILogService) private log: ILogService) { }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Scheduling} scheduling
-   * @returns {Promise<ParkingSpace[]>}
-   * @memberof ParkingSpaceService
-   */
   getAvailable(scheduling: Scheduling): Promise<ParkingSpace[]> {
     return new Promise((resolve, reject) => {
       this.repository.getAvailable(scheduling)
@@ -34,13 +27,6 @@ export class ParkingSpaceService implements IParkingSpaceService {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {ParkingSpace} parkingSpace
-   * @returns {Promise<any>}
-   * @memberof ParkingSpaceService
-   */
   deleteGroupType(parkingSpace: ParkingSpace): Promise<any> {
     return new Promise((resolve, reject) => {
       if (Attributes.IsValid(parkingSpace)) {
@@ -54,13 +40,6 @@ export class ParkingSpaceService implements IParkingSpaceService {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {number} id
-   * @returns {Promise<ParkingSpace>}
-   * @memberof ParkingSpaceService
-   */
   getById(id: number): Promise<ParkingSpace> {
     return new Promise((resolve, reject) => {
       this.repository.getById(id)
@@ -70,13 +49,6 @@ export class ParkingSpaceService implements IParkingSpaceService {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {ParkingSpace} parkingSpace
-   * @returns {Promise<ParkingSpace[]>}
-   * @memberof ParkingSpaceService
-   */
   getByParkinkId(id: number): Promise<ParkingSpace[]> {
     return new Promise((resolve, reject) => {
       this.repository.getByParkingId(id)
@@ -87,114 +59,71 @@ export class ParkingSpaceService implements IParkingSpaceService {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {ParkingSpace} parkingSpace
-   * @returns {Promise<any>}
-   * @memberof ParkingSpaceService
-   */
-  save(parkingSpace: ParkingSpace): Promise<any> {
+  save(parkingSpace: ParkingSpace, action): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      try {
-        const result = [];
-        if (Attributes.IsValid(parkingSpace.amount)) {
-          const list: ParkingSpace[] = ((await this.repository.getListByParkingId(parkingSpace.parkingId)).filter(x => x.type === parkingSpace.type))
-          const listEx: ParkingSpace[] = (await this.repository.getDeletedByParkingId(parkingSpace));
-          if (list.length < parkingSpace.amount) {
-            parkingSpace.amount = parkingSpace.amount - list.length;
+      let total = Number(parkingSpace.amount);
+      let exists = await (await this.repository.getListByParkingId(parkingSpace.parkingId)).filter(x => x.type === parkingSpace.type);
+      let count = parkingSpace.amount - exists.length;
 
-            for (const foundParkingSpace of listEx) {
-              foundParkingSpace.value = parkingSpace.value;
-              foundParkingSpace.status = TransactionType.ACTIVE;
-              this.repository.update(foundParkingSpace);
-              result.push(foundParkingSpace.id);
-              parkingSpace.amount--;
-              if (parkingSpace.amount === 0) {
-                break;
-              }
-            }
+      if (action === 'update') {
+        parkingSpace.status = TransactionType.ACTIVE;
+        await this.updateAll(parkingSpace, TransactionType.ACTIVE);
 
-            if (parkingSpace.amount > 0) {
-              for (let i = 0; i < parkingSpace.amount; i++) {
-                result.push(await this.repository.save(parkingSpace));
-              };
-            }
-          } else {
-            parkingSpace.amount = list.length - parkingSpace.amount;
-            await this.deleteGroupType(parkingSpace)
-          }
-
-          await this.updateAll(parkingSpace);
-          resolve(result);
-        } else {
-          reject(await this.log.critical('Vaga', HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, undefined));
+        if (count > 0) {
+          parkingSpace.amount = count;
+          await this.updateAll(parkingSpace, TransactionType.DELETED);
         }
-      } catch (error) {
-        reject(await this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
-      };
+      }
+
+      exists = await (await this.repository.getListByParkingId(parkingSpace.parkingId)).filter(x => x.type === parkingSpace.type);
+      count = total - exists.length;
+      if (exists.length === 0 || count > 0 && action === 'update') {
+        try {
+          for (let x = 1; x <= count; x++) {
+            await this.repository.save(new ParkingSpace(parkingSpace));
+            if (x === count) { resolve(); }
+          }
+        } catch (error) {
+          reject(this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
+        }
+      } else if (count < 0 && action === 'update') {
+        parkingSpace.status = TransactionType.DELETED;
+        parkingSpace.amount = (count * -1);
+        this.updateAll(parkingSpace, TransactionType.ACTIVE)
+          .then(() => resolve());
+      }
+      else if (exists.length !== 0 && action === 'save') {
+        reject(this.log.error('Vaga', HttpCode.Bad_Request, HttpMessage.Already_Exists, undefined))
+      } else {
+        resolve();
+      }
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {ParkingSpace} parkingSpace
-   * @returns {Promise<any>}
-   * @memberof ParkingSpaceService
-   */
   update(parkingSpace: ParkingSpace): Promise<any> {
     return new Promise((resolve, reject) => {
-      const result = new ParkingSpace(parkingSpace);
-      this.updateAll(result)
-        .then(result => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
-        })
+      this.repository.updateAll(new ParkingSpace(parkingSpace), TransactionType.ACTIVE)
+        .then(result => resolve(result))
+        .catch(error =>
+          reject(this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {number} parkingId
-   * @returns {Promise<ParkingSpace[]>}
-   * @memberof ParkingSpaceService
-   */
+  updateAll(parkingSpace: ParkingSpace, status: TransactionType): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.repository.updateAll(new ParkingSpace(parkingSpace), status)
+        .then(result => resolve(result))
+        .catch(error =>
+          reject(this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+    });
+  }
+
   toList(parkingId: number): Promise<ParkingSpace[]> {
     return new Promise((resolve, reject) => {
       this.repository.toList(parkingId)
         .then((result: ParkingSpace[]) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
-    });
-  }
-
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {ParkingSpace} _parkingSpace
-   * @returns
-   * @memberof ParkingSpaceService
-   */
-  updateAll(_parkingSpace: ParkingSpace) {
-    return new Promise((resolve) => {
-      const result = [];
-      this.repository.getListByParkingId(_parkingSpace.parkingId)
-        .then((parkingSpaces: ParkingSpace[]) => {
-          const foundParkingSpaces = parkingSpaces.filter(ps => ps.type === _parkingSpace.type);
-          if (Attributes.IsValid(foundParkingSpaces)) {
-            foundParkingSpaces.forEach(async (parkingspace: ParkingSpace) => {
-              parkingspace.type = Attributes.ReturnIfValid(_parkingSpace.type);
-              parkingspace.value = Attributes.ReturnIfValid(_parkingSpace.value);
-              await this.repository.update(parkingspace);
-              result.push(parkingspace.id);
-            });
-          }
-          resolve(result);
-        });
     });
   }
 }
