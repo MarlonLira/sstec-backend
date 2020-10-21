@@ -45,7 +45,7 @@ class Database {
    * @memberof Database
    */
   public Build() {
-    // The order influences creation in the database
+    // The order influences creation in the database!
     const models: PersistenceModel[] = [
       { name: 'User', entity: User.sequelize },
       { name: 'Vehicle', entity: Vehicle.sequelize },
