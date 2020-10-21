@@ -72,9 +72,9 @@ class Database {
 
     /* #region  Table Relationships */
 
-    // N:N
+    // N:N - belongs to many
 
-    // 1:N
+    // 1:N - has many
     Company.hasMany(Parking, { foreignKey: 'companyId', as: 'parkings' });
     Company.hasMany(RouteSecurity, { foreignKey: 'companyId', as: 'routeSecurity' });
     User.hasMany(Vehicle, { foreignKey: 'userId', as: 'vehicles' });
@@ -93,12 +93,12 @@ class Database {
     ParkingSpace.hasMany(Scheduling, { foreignKey: 'parkingSpaceId', as: 'scheduling' });
     Employee.hasMany(AccountRecovery, { foreignKey: 'employeeId', as: 'accountsRecovery' });
 
-    // N:1
+    // N:1 - belongs to
     Employee.belongsTo(Parking, { as: 'parking' });
     Employee.belongsTo(Company, { as: 'company' });
     Employee.belongsTo(Rule, { as: 'rule' });
 
-    // 1:1
+    // 1:1 - has one
     Company.hasOne(CompanyAddress, { foreignKey: 'companyId', as: 'address' });
     User.hasOne(UserAddress, { foreignKey: 'userId', as: 'address' });
     Parking.hasOne(ParkingAddress, { foreignKey: 'parkingId', as: 'address' });
