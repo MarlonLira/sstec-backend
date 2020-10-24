@@ -23,6 +23,7 @@ import { Log } from './models/log.model';
 import { AccountRecovery } from './models/account-recovery.model';
 import { ParkingFile } from './models/parking-file.model';
 import { RouteSecurity } from './models/route-security.model';
+import { FavoriteParking } from './models/favorite-parking.model';
 
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
@@ -65,7 +66,8 @@ class Database {
       { name: 'Log', entity: Log.sequelize },
       { name: 'AccountRecovery', entity: AccountRecovery.sequelize },
       { name: 'ParkingFile', entity: ParkingFile.sequelize },
-      { name: 'RouteSecurity', entity: RouteSecurity.sequelize }
+      { name: 'RouteSecurity', entity: RouteSecurity.sequelize },
+      { name: 'FavoriteParking', entity: FavoriteParking.sequelize }
     ];
 
     Logger.Info('Database', 'Table verification started!');
@@ -82,6 +84,7 @@ class Database {
     User.hasMany(ParkingScore, { foreignKey: 'userId', as: 'parkingScore' });
     User.hasMany(Scheduling, { foreignKey: 'userId', as: 'scheduling' });
     User.hasMany(AccountRecovery, { foreignKey: 'userId', as: 'accountRecovery' });
+    User.hasMany(FavoriteParking, { foreignKey: 'userId', as: 'favoriteParkings' });
     Rule.hasMany(Employee, { foreignKey: 'ruleId', as: 'employees' });
     Rule.hasMany(RouteSecurity, { foreignKey: 'ruleId', as: 'routeSecurity' });
     Parking.hasMany(ParkingPromotion, { foreignKey: 'parkingId', as: 'parkingPromotion' });
@@ -90,6 +93,7 @@ class Database {
     Parking.hasMany(ParkingFinance, { foreignKey: 'parkingId', as: 'parkingFinance' });
     Parking.hasMany(Employee, { foreignKey: 'parkingId', as: 'employees' });
     Parking.hasMany(ParkingFile, { foreignKey: 'parkingId', as: 'files' });
+    Parking.hasMany(FavoriteParking, { foreignKey: 'parkingId', as: 'FavoriteParkings' });
     ParkingSpace.hasMany(Scheduling, { foreignKey: 'parkingSpaceId', as: 'scheduling' });
     Employee.hasMany(AccountRecovery, { foreignKey: 'employeeId', as: 'accountsRecovery' });
 
