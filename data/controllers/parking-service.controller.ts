@@ -53,7 +53,7 @@ class ParkingServiceController {
   @httpDelete('/parkingService/:id')
   delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
-      this.service.delete(new ParkingService(req.params))
+      this.service.delete(Number(req.params.id))
         .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Serviço', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Serviço')));
     });

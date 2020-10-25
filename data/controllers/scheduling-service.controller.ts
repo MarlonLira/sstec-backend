@@ -33,6 +33,24 @@ class SchedulingServiceController {
     });
   }
 
+  @httpGet('/scheduling-service/schedulingId/:schedulingId')
+  getBySchedulingId(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+    return new Promise((resolve) => {
+      this.service.getBySchedulingId(Number(req.params.schedulingId))
+        .then((result: SchedulingService[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Agendamento de serviço', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Agendamento de serviço')));
+    });
+  }
+
+  @httpGet('/scheduling-service/parkingServiceId/:parkingServiceId')
+  getByParkingServiceId(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+    return new Promise((resolve) => {
+      this.service.getByParkingServiceId(Number(req.params.parkingServiceId))
+        .then((result: SchedulingService[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Agendamento de serviço', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Agendamento de serviço')));
+    });
+  }
+
   @httpPut('/scheduling-service')
   put(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {

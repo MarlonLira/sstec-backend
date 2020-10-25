@@ -32,12 +32,12 @@ export class CardRepository implements ICardRepository {
     });
   }
 
-  getByUserId(userId: number): Promise<Card[]> {
+  getByUserId(_userId: number): Promise<Card[]> {
     return new Promise(async (resolve, reject) => {
       Card.findAll(
         {
           where: {
-            userId: userId,
+            userId: _userId,
             status: {
               [Op.ne]: TransactionType.DELETED
             }
