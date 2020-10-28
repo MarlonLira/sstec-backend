@@ -1,5 +1,5 @@
-import { ISchedulingServiceRepository } from '../interfaces/IRepositories/scheduling-serviceRepository.interface';
-import { SchedulingService } from '../models/scheduling-service.model';
+import { ISchedulingProductRepository } from '../interfaces/IRepositories/scheduling-productRepository.interface';
+import { SchedulingProduct } from '../models/scheduling-product.model';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 import { Op } from 'sequelize';
@@ -7,18 +7,18 @@ import { Op } from 'sequelize';
 /**
  * @description
  * @author Gustavo Gusmão
- * @class SchedulingServiceRepository
- * @implements {ISchedulingServiceRepository}
+ * @class SchedulingProductRepository
+ * @implements {ISchedulingProductRepository}
  */
 @injectable()
-export class SchedulingServiceRepository implements ISchedulingServiceRepository {
+export class SchedulingProductRepository implements ISchedulingProductRepository {
 
-  save(schedulingService: SchedulingService): Promise<any> {
+  save(schedulingProduct: SchedulingProduct): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await schedulingService.sequelize.transaction();
-      schedulingService.status = TransactionType.ACTIVE;
-      SchedulingService.create(schedulingService, { transaction: _transaction })
-        .then(async (result: SchedulingService) => {
+      const _transaction = await schedulingProduct.sequelize.transaction();
+      schedulingProduct.status = TransactionType.ACTIVE;
+      SchedulingProduct.create(schedulingProduct, { transaction: _transaction })
+        .then(async (result: SchedulingProduct) => {
           await _transaction.commit();
           resolve(result);
         })
@@ -29,17 +29,17 @@ export class SchedulingServiceRepository implements ISchedulingServiceRepository
     });
   }
 
-  getById(id: number): Promise<SchedulingService> {
+  getById(id: number): Promise<SchedulingProduct> {
     return new Promise(async (resolve, reject) => {
-      SchedulingService.findByPk(id)
-        .then((result: SchedulingService) => resolve(result))
+      SchedulingProduct.findByPk(id)
+        .then((result: SchedulingProduct) => resolve(result))
         .catch(error => reject(error));
     });
   }
 
-  getBySchedulingId(_schedulingId: number): Promise<SchedulingService[]> {
+  getBySchedulingId(_schedulingId: number): Promise<SchedulingProduct[]> {
     return new Promise(async (resolve, reject) => {
-      SchedulingService.findAll(
+      SchedulingProduct.findAll(
         {
           where: {
             schedulingId: _schedulingId,
@@ -49,32 +49,32 @@ export class SchedulingServiceRepository implements ISchedulingServiceRepository
           }
         }
       )
-        .then((schedulingServices: SchedulingService[]) => resolve(schedulingServices))
+        .then((schedulingProducts: SchedulingProduct[]) => resolve(schedulingProducts))
         .catch(error => reject(error));
     });
   }
 
-  getByParkingServiceId(_parkingServiceId: number): Promise<SchedulingService[]> {
+  getByParkingProductId(_parkingProductId: number): Promise<SchedulingProduct[]> {
     return new Promise(async (resolve, reject) => {
-      SchedulingService.findAll(
+      SchedulingProduct.findAll(
         {
           where: {
-            parkingServiceId: _parkingServiceId,
+            parkingProductId: _parkingProductId,
             status: {
               [Op.ne]: TransactionType.DELETED
             }
           }
         }
       )
-        .then((parkingServices: SchedulingService[]) => resolve(parkingServices))
+        .then((parkingProducts: SchedulingProduct[]) => resolve(parkingProducts))
         .catch(error => reject(error));
     });
   }
 
   delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await SchedulingService.sequelize.transaction();
-      SchedulingService.update({
+      const _transaction = await SchedulingProduct.sequelize.transaction();
+      SchedulingProduct.update({
         status: TransactionType.DELETED
       },
         {
@@ -95,14 +95,14 @@ export class SchedulingServiceRepository implements ISchedulingServiceRepository
     });
   }
 
-  update(schedulingService: SchedulingService): Promise<any> {
+  update(schedulingProduct: SchedulingProduct): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await SchedulingService.sequelize.transaction();
-      SchedulingService.update(schedulingService.ToAny(),
+      const _transaction = await SchedulingProduct.sequelize.transaction();
+      SchedulingProduct.update(schedulingProduct.ToAny(),
         {
           where:
           {
-            id: schedulingService.id
+            id: schedulingProduct.id
           },
           transaction: _transaction,
           validate: false

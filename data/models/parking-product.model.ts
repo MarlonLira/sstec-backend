@@ -1,4 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
+
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
@@ -9,38 +10,38 @@ const _instance = Context.getInstance();
  * @description
  * @author Gustavo Gusmão
  * @export
- * @class SchedulingService
+ * @class ParkingProduct
  * @extends {Model}
  */
-export class SchedulingService extends Model {
-
+export class ParkingProduct extends Model {
   id!: number;
   status!: TransactionType;
-  value!: number;
-  parkingServiceId!: number;
-  schedulingId!: number;
+  name!: string;
+  description!: string;
+  value: number;
+  parkingId!: number;
 
   /**
-   * Creates an instance of SchedulingService.
+   * Creates an instance of ParkingProduct.
    * @author Gustavo Gusmão
    * @param {*} [json]
-   * @memberof SchedulingService
+   * @memberof ParkingProduct
    */
   constructor(json?: any) {
     super()
     this.id = Attributes.ReturnIfValid(json.id);
     this.status = Attributes.ReturnIfValid(json.status);
+    this.name = Attributes.ReturnIfValid(json.name);
+    this.description = Attributes.ReturnIfValid(json.description);
     this.value = Attributes.ReturnIfValid(json.value);
-    this.parkingServiceId = Attributes.ReturnIfValid(json.parkingServiceId);
-    this.schedulingId = Attributes.ReturnIfValid(json.schedulingId);
+    this.parkingId = Attributes.ReturnIfValid(json.parkingId);
   }
-
   ToAny() {
     return this.toJSON();
   }
 }
 
-SchedulingService.init({
+ParkingProduct.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,
@@ -50,16 +51,23 @@ SchedulingService.init({
     type: new DataTypes.STRING(2),
     allowNull: false
   },
+  name: {
+    type: new DataTypes.STRING(10),
+    allowNull: false
+  },
+  description: {
+    type: new DataTypes.STRING(60),
+    allowNull: false
+  },
   value: {
-    type: new DataTypes.INTEGER()
+    type: new DataTypes.DOUBLE(),
+    allowNull: false
   },
-  parkingServiceId: {
-    type: new DataTypes.INTEGER()
-  },
-  schedulingId: {
-    type: new DataTypes.INTEGER()
+  parkingId: {
+    type: new DataTypes.INTEGER(),
+    allowNull: false
   }
 }, {
   sequelize: _instance,
-  tableName: 'SchedulingService'
+  tableName: 'ParkingProduct'
 });
