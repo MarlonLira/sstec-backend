@@ -86,8 +86,8 @@ class ParkingFinanceController {
   put(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.update(new ParkingFinance(req.body))
-        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Agendamento', result)))
-        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Agendamento')));
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Finança', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Finança')));
     });
   }
 
