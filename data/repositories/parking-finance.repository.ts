@@ -13,7 +13,7 @@ class ParkingFinanceRepository implements IParkingFinanceRepository{
    * @param {ParkingFinance} parkingFinance
    * @memberof ParkingFinanceRepository
    */
-  Save(parkingFinance: ParkingFinance):Promise<any> {
+  save(parkingFinance: ParkingFinance):Promise<any> {
     return new Promise(async (resolve, reject) =>{
       const _transaction = await ParkingFinance.sequelize.transaction();
       parkingFinance.status = TransactionType.ACTIVE;
@@ -28,7 +28,7 @@ class ParkingFinanceRepository implements IParkingFinanceRepository{
     });
   }
 
-  Delete(_id: number): Promise<any>{
+  delete(_id: number): Promise<any>{
     return new Promise (async (resolve, reject) =>{
       const _transaction = await ParkingFinance.sequelize.transaction();
       ParkingFinance.update({
@@ -58,7 +58,7 @@ class ParkingFinanceRepository implements IParkingFinanceRepository{
    * @param {ParkingFinance} parkingFinance
    * @memberof ParkingFinanceRepository
    */
-  Update(parkingFinance: ParkingFinance): Promise<any> {
+  update(parkingFinance: ParkingFinance): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingFinance.sequelize.transaction();
       ParkingFinance.update(parkingFinance.ToAny(),
@@ -86,7 +86,7 @@ class ParkingFinanceRepository implements IParkingFinanceRepository{
    * @param {number} parkingFinanceId
    * @memberof ParkingFinanceRepository
    */
-  GetById(parkingFinanceId: number): Promise<ParkingFinance> {
+  getById(parkingFinanceId: number): Promise<ParkingFinance> {
     return new Promise((resolve, reject) => {
       ParkingFinance.findOne({
         where: {
@@ -112,7 +112,7 @@ class ParkingFinanceRepository implements IParkingFinanceRepository{
    * @author Felipe Seabra
    * @memberof ParkingFinanceRepository
    */
-  ToList(_parkingId): Promise <ParkingFinance[]> {
+  toList(_parkingId): Promise <ParkingFinance[]> {
     return new Promise ((resolve, reject) => {
       ParkingFinance.findAll({
         where: {
