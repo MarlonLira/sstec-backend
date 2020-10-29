@@ -24,8 +24,8 @@ import { AccountRecovery } from './models/account-recovery.model';
 import { ParkingFile } from './models/parking-file.model';
 import { RouteSecurity } from './models/route-security.model';
 import { FavoriteParking } from './models/favorite-parking.model';
-import { SchedulingService } from './models/scheduling-service.model';
-import { ParkingService } from './models/parking-service.model';
+import { SchedulingProduct } from './models/scheduling-product.model';
+import { ParkingProduct } from './models/parking-product.model';
 
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
@@ -70,8 +70,8 @@ class Database {
       { name: 'ParkingFile', entity: ParkingFile.sequelize },
       { name: 'RouteSecurity', entity: RouteSecurity.sequelize },
       { name: 'FavoriteParking', entity: FavoriteParking.sequelize },
-      { name: 'SchedulingService', entity: SchedulingService.sequelize },
-      { name: 'ParkingService', entity: ParkingService.sequelize }
+      { name: 'SchedulingProduct', entity: SchedulingProduct.sequelize },
+      { name: 'ParkingProduct', entity: ParkingProduct.sequelize }
     ];
 
     Logger.Info('Database', 'Table verification started!');
@@ -98,11 +98,11 @@ class Database {
     Parking.hasMany(Employee, { foreignKey: 'parkingId', as: 'employees' });
     Parking.hasMany(ParkingFile, { foreignKey: 'parkingId', as: 'files' });
     Parking.hasMany(FavoriteParking, { foreignKey: 'parkingId', as: 'favoriteParkings' });
-    Parking.hasMany(ParkingService, { foreignKey: 'parkingId', as: 'parkingServices' });
+    Parking.hasMany(ParkingProduct, { foreignKey: 'parkingId', as: 'parkingProducts' });
     ParkingSpace.hasMany(Scheduling, { foreignKey: 'parkingSpaceId', as: 'scheduling' });
-    ParkingService.hasMany(SchedulingService, { foreignKey: 'parkingServiceId', as: 'schedulingServices' });
+    ParkingProduct.hasMany(SchedulingProduct, { foreignKey: 'parkingProductId', as: 'schedulingProducts' });
     Employee.hasMany(AccountRecovery, { foreignKey: 'employeeId', as: 'accountsRecovery' });
-    Scheduling.hasMany(SchedulingService,{ foreignKey: 'schedulingId', as: 'schedulingServices' });
+    Scheduling.hasMany(SchedulingProduct,{ foreignKey: 'schedulingId', as: 'schedulingProducts' });
 
     // N:1 - belongs to
     Employee.belongsTo(Parking, { as: 'parking' });
