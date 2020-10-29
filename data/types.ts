@@ -13,6 +13,7 @@ const TYPES = {
   IParkingFileService: Symbol('IParkingFileService'),
   IEmployeeService: Symbol('IEmployeeService'),
   IParkingSpaceService: Symbol('IParkingSpaceService'),
+  IParkingFinanceService: Symbol('IParkingFinanceService'),
   IParkingServiceService: Symbol('IParkingServiceService'),
   ISchedulingService: Symbol('ISchedulingService'),
   ISchedulingServiceService: Symbol('ISchedulingServiceService'),
