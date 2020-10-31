@@ -3,6 +3,7 @@ import { Model, DataTypes } from 'sequelize';
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
+import { Parking } from './parking.model';
 
 const _instance = Context.getInstance();
 
@@ -21,6 +22,8 @@ export class ParkingProduct extends Model {
   value: number;
   parkingId!: number;
 
+  parking: Parking;
+
   /**
    * Creates an instance of ParkingProduct.
    * @author Gustavo Gusmão
@@ -35,6 +38,7 @@ export class ParkingProduct extends Model {
     this.description = Attributes.ReturnIfValid(json.description);
     this.value = Attributes.ReturnIfValid(json.value);
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
+    this.parking = Attributes.ReturnIfValid(json.parking);
   }
   ToAny() {
     return this.toJSON();

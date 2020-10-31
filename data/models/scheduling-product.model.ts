@@ -2,6 +2,8 @@ import { Model, DataTypes } from 'sequelize';
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
+import { Scheduling } from './scheduling.model';
+import { ParkingProduct } from './parking-product.model';
 
 const _instance = Context.getInstance();
 
@@ -20,6 +22,9 @@ export class SchedulingProduct extends Model {
   parkingProductId!: number;
   schedulingId!: number;
 
+  scheduling: Scheduling;
+  parkingProduct: ParkingProduct;
+
   /**
    * Creates an instance of SchedulingProduct.
    * @author Gustavo Gusmão
@@ -33,6 +38,8 @@ export class SchedulingProduct extends Model {
     this.value = Attributes.ReturnIfValid(json.value);
     this.parkingProductId = Attributes.ReturnIfValid(json.parkingProductId);
     this.schedulingId = Attributes.ReturnIfValid(json.schedulingId);
+    this.parkingProduct = Attributes.ReturnIfValid(json.parkingProduct);
+    this.scheduling = Attributes.ReturnIfValid(json.sheduling);
   }
 
   ToAny() {

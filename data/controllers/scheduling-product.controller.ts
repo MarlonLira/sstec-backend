@@ -15,7 +15,7 @@ class SchedulingProductController {
 
   constructor(@inject(TYPES.ISchedulingProductService) private service: ISchedulingProductService) { }
 
-  @httpPost('/scheduling-product')
+  @httpPost('/schedulingProducts')
   post(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.save(new SchedulingProduct(req.body))
@@ -24,7 +24,7 @@ class SchedulingProductController {
     });
   }
 
-  @httpGet('/scheduling-product/:id')
+  @httpGet('/schedulingProducts/:id')
   getById(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.getById(Number(req.params.id))
@@ -33,7 +33,7 @@ class SchedulingProductController {
     });
   }
 
-  @httpGet('/scheduling-product/schedulingId/:schedulingId')
+  @httpGet('/schedulingProducts/schedulingId/:schedulingId')
   getBySchedulingId(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.getBySchedulingId(Number(req.params.schedulingId))
@@ -42,7 +42,7 @@ class SchedulingProductController {
     });
   }
 
-  @httpGet('/scheduling-product/parkingProductId/:parkingProductId')
+  @httpGet('/schedulingProducts/parkingProductId/:parkingProductId')
   getByParkingProductId(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.getByParkingProductId(Number(req.params.parkingProductId))
@@ -51,7 +51,7 @@ class SchedulingProductController {
     });
   }
 
-  @httpPut('/scheduling-product')
+  @httpPut('/schedulingProducts')
   put(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.update(new SchedulingProduct(req.body))
@@ -60,7 +60,7 @@ class SchedulingProductController {
     });
   }
 
-  @httpDelete('/scheduling-product/:id')
+  @httpDelete('/schedulingProducts/:id')
   delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.delete(Number(req.params.id))

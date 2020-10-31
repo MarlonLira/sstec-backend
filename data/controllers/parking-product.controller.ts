@@ -23,7 +23,7 @@ class ParkingProductController {
     });
   }
 
-  @httpGet('/parkingProduct/id/:id')
+  @httpGet('/parkingProduct/:id')
   getById(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.getById(Number(req.params.id))
