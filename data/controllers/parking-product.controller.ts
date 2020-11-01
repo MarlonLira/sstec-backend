@@ -17,9 +17,9 @@ class ParkingProductController {
   @httpPost('/parkingProduct')
   post(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
-      this.service.update(new ParkingProduct(req.body))
-        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Produto', result)))
-        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Produto')));
+      this.service.save(new ParkingProduct(req.body))
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Produto/Serviço', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Produto/Serviço')));
     });
   }
 
@@ -27,8 +27,8 @@ class ParkingProductController {
   getById(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.getById(Number(req.params.id))
-        .then((result: ParkingProduct) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Produto', result)))
-        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Produto')));
+        .then((result: ParkingProduct) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Produto/Serviço', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Produto/Serviço')));
     });
   }
 
@@ -36,8 +36,8 @@ class ParkingProductController {
   getByParkingId(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.getByParkinkId(Number(req.params.parkingId))
-        .then((result: ParkingProduct[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Produto', result)))
-        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Produto')));
+        .then((result: ParkingProduct[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Produto/Serviço', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Produto/Serviço')));
     });
   }
 
@@ -45,8 +45,8 @@ class ParkingProductController {
   put(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.update(new ParkingProduct(req.body))
-        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Produto', result)))
-        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Produto')));
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Produto/Serviço', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Produto/Serviço')));
     });
   }
 
@@ -54,8 +54,8 @@ class ParkingProductController {
   delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.delete(Number(req.params.id))
-        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Produto', result)))
-        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Produto')));
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Produto/Serviço', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Produto/Serviço')));
     });
   }
 }

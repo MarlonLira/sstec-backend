@@ -19,6 +19,7 @@ export class ParkingProductRepository implements IParkingProductRepository {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingProduct.sequelize.transaction();
       parkingProduct.status = TransactionType.ACTIVE;
+      console.log(parkingProduct)
       ParkingProduct.create(parkingProduct, { transaction: _transaction })
         .then(async (result: ParkingProduct) => {
           await _transaction.commit();

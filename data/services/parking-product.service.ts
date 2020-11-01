@@ -32,10 +32,11 @@ export class ParkingProductService implements IParkingProductService {
    */
   save(parkingProduct: ParkingProduct): Promise<any> {
     return new Promise((resolve, reject) => {
+      console.log(parkingProduct)
       this.repository.save(parkingProduct)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Agendamento de serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+          reject(await this.log.critical('Produto/Serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -51,7 +52,7 @@ export class ParkingProductService implements IParkingProductService {
       this.repository.delete(id)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Agendamento de serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))))
+          reject(await this.log.critical('Produto/Serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))))
     });
   }
 
@@ -67,7 +68,7 @@ export class ParkingProductService implements IParkingProductService {
       this.repository.getById(id)
         .then(async (result: ParkingProduct) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Agendamento de serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+          reject(await this.log.critical('Produto/Serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -83,7 +84,7 @@ export class ParkingProductService implements IParkingProductService {
       this.repository.getByParkingId(id)
         .then((result: ParkingProduct[]) => resolve(result))
         .catch(error => {
-          reject(this.log.critical('Agendamento de serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
+          reject(this.log.critical('Produto/Serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
         });
     });
   }
@@ -100,7 +101,7 @@ export class ParkingProductService implements IParkingProductService {
       this.repository.update(new ParkingProduct(parkingProduct))
         .then(result => resolve(result))
         .catch(error =>
-          reject(this.log.critical('Agendamento de serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+          reject(this.log.critical('Produto/Serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -116,7 +117,7 @@ export class ParkingProductService implements IParkingProductService {
       this.repository.toList(parkingId)
         .then((result: ParkingProduct[]) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Agendamento de serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+          reject(await this.log.critical('Produto/Serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 }

@@ -19,8 +19,8 @@ class SchedulingProductController {
   post(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.save(new SchedulingProduct(req.body))
-        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Agendamento de serviço', result)))
-        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Agendamento de serviço')));
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Reserva de Produto/Serviço', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Reserva de Produto/Serviço')));
     });
   }
 
@@ -28,8 +28,8 @@ class SchedulingProductController {
   getById(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.getById(Number(req.params.id))
-        .then((result: SchedulingProduct) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Agendamento de serviço', result)))
-        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Agendamento de serviço')));
+        .then((result: SchedulingProduct) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Reserva de Produto/Serviço', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Reserva de Produto/Serviço')));
     });
   }
 
@@ -37,8 +37,8 @@ class SchedulingProductController {
   getBySchedulingId(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.getBySchedulingId(Number(req.params.schedulingId))
-        .then((result: SchedulingProduct[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Agendamento de serviço', result)))
-        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Agendamento de serviço')));
+        .then((result: SchedulingProduct[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Reserva de Produto/Serviço', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Reserva de Produto/Serviço')));
     });
   }
 
@@ -46,8 +46,8 @@ class SchedulingProductController {
   getByParkingProductId(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.getByParkingProductId(Number(req.params.parkingProductId))
-        .then((result: SchedulingProduct[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Agendamento de serviço', result)))
-        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Agendamento de serviço')));
+        .then((result: SchedulingProduct[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Reserva de Produto/Serviço', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Reserva de Produto/Serviço')));
     });
   }
 
@@ -55,8 +55,8 @@ class SchedulingProductController {
   put(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.update(new SchedulingProduct(req.body))
-        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Agendamento de serviço', result)))
-        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Agendamento de serviço')));
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Reserva de Produto/Serviço', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Reserva de Produto/Serviço')));
     });
   }
 
@@ -64,8 +64,8 @@ class SchedulingProductController {
   delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.delete(Number(req.params.id))
-        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Agendamento de serviço', result)))
-        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Agendamento de serviço')));
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Reserva de Produto/Serviço', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Reserva de Produto/Serviço')));
     });
   }
 }

@@ -28,7 +28,7 @@ export class SchedulingProductService implements ISchedulingProductService {
       this.repository.save(schedulingProduct)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Agendamento de serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+          reject(await this.log.critical('Reserva de Produto/Serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -37,7 +37,7 @@ export class SchedulingProductService implements ISchedulingProductService {
       this.repository.update(schedulingProduct)
         .then(result => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Agendamento de serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+          reject(await this.log.critical('Reserva de Produto/Serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -46,7 +46,7 @@ export class SchedulingProductService implements ISchedulingProductService {
       this.repository.delete(id)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Agendamento de serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+          reject(await this.log.critical('Reserva de Produto/Serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -55,7 +55,7 @@ export class SchedulingProductService implements ISchedulingProductService {
       this.repository.getById(id)
         .then((result: SchedulingProduct) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Agendamento de serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+          reject(await this.log.critical('Reserva de Produto/Serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -64,7 +64,7 @@ export class SchedulingProductService implements ISchedulingProductService {
       this.repository.getBySchedulingId(schedulingId)
         .then(async (result: SchedulingProduct[]) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Agendamento de serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+          reject(await this.log.critical('Reserva de Produto/Serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
@@ -73,7 +73,7 @@ export class SchedulingProductService implements ISchedulingProductService {
       this.repository.getByParkingProductId(parkingProductId)
         .then(async (result: SchedulingProduct[]) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Agendamento de serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+          reject(await this.log.critical('Reserva de Produto/Serviço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 }
