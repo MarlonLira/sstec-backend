@@ -4,6 +4,7 @@ import { Op } from 'sequelize';
 import { IParkingProductRepository } from '../interfaces/IRepositories/parking-productRepository.interface';
 import { ParkingProduct } from '../models/parking-product.model';
 import { TransactionType } from "../../commons/enums/transactionType";
+import { Parking } from "../models/parking.model";
 
 /**
  * @description
@@ -19,7 +20,6 @@ export class ParkingProductRepository implements IParkingProductRepository {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingProduct.sequelize.transaction();
       parkingProduct.status = TransactionType.ACTIVE;
-      console.log(parkingProduct)
       ParkingProduct.create(parkingProduct, { transaction: _transaction })
         .then(async (result: ParkingProduct) => {
           await _transaction.commit();
@@ -93,7 +93,11 @@ export class ParkingProductRepository implements IParkingProductRepository {
 
   getById(id: number): Promise<ParkingProduct> {
     return new Promise((resolve, reject) => {
-      ParkingProduct.findByPk(id)
+      ParkingProduct.findByPk(id, {
+        include: [{ model: Parking, as: 'parking' }],
+        raw: true,
+        nest: true
+      })
         .then((parkingProduct: ParkingProduct) => resolve(parkingProduct))
         .catch((error: any) => reject(error));
     });

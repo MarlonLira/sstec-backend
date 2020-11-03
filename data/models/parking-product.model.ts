@@ -56,7 +56,7 @@ ParkingProduct.init({
     allowNull: false
   },
   name: {
-    type: new DataTypes.STRING(10),
+    type: new DataTypes.STRING(20),
     allowNull: false
   },
   description: {

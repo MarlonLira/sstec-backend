@@ -102,12 +102,13 @@ class Database {
     ParkingSpace.hasMany(Scheduling, { foreignKey: 'parkingSpaceId', as: 'scheduling' });
     ParkingProduct.hasMany(SchedulingProduct, { foreignKey: 'parkingProductId', as: 'schedulingProducts' });
     Employee.hasMany(AccountRecovery, { foreignKey: 'employeeId', as: 'accountsRecovery' });
-    Scheduling.hasMany(SchedulingProduct,{ foreignKey: 'schedulingId', as: 'schedulingProducts' });
+    Scheduling.hasMany(SchedulingProduct, { foreignKey: 'schedulingId', as: 'schedulingProducts' });
 
     // N:1 - belongs to
     Employee.belongsTo(Parking, { as: 'parking' });
     Employee.belongsTo(Company, { as: 'company' });
     Employee.belongsTo(Rule, { as: 'rule' });
+    ParkingProduct.belongsTo(Parking, { as: 'parking' });
 
     // 1:1 - has one
     Company.hasOne(CompanyAddress, { foreignKey: 'companyId', as: 'address' });
