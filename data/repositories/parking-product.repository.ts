@@ -1,26 +1,27 @@
 import { injectable } from "inversify";
 import { Op } from 'sequelize';
 
-import { IParkingServiceRepository } from '../interfaces/IRepositories/parking-serviceRepository.interface';
-import { ParkingService } from '../models/parking-service.model';
+import { IParkingProductRepository } from '../interfaces/IRepositories/parking-productRepository.interface';
+import { ParkingProduct } from '../models/parking-product.model';
 import { TransactionType } from "../../commons/enums/transactionType";
+import { Parking } from "../models/parking.model";
 
 /**
  * @description
  * @author Gustavo Gusmão
  * @export
- * @class ParkingServiceRepository
- * @implements {IParkingServiceRepository}
+ * @class ParkingProductRepository
+ * @implements {IParkingProductRepository}
  */
 @injectable()
-export class ParkingServiceRepository implements IParkingServiceRepository {
+export class ParkingProductRepository implements IParkingProductRepository {
 
-  save(parkingService: ParkingService): Promise<any> {
+  save(parkingProduct: ParkingProduct): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingService.sequelize.transaction();
-      parkingService.status = TransactionType.ACTIVE;
-      ParkingService.create(parkingService, { transaction: _transaction })
-        .then(async (result: ParkingService) => {
+      const _transaction = await ParkingProduct.sequelize.transaction();
+      parkingProduct.status = TransactionType.ACTIVE;
+      ParkingProduct.create(parkingProduct, { transaction: _transaction })
+        .then(async (result: ParkingProduct) => {
           await _transaction.commit();
           resolve(result);
         }).catch(async (error: any) => {
@@ -30,14 +31,14 @@ export class ParkingServiceRepository implements IParkingServiceRepository {
     });
   }
 
-  update(parkingService: ParkingService): Promise<any> {
+  update(parkingProduct: ParkingProduct): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingService.sequelize.transaction();
-      ParkingService.update(parkingService.ToAny(),
+      const _transaction = await ParkingProduct.sequelize.transaction();
+      ParkingProduct.update(parkingProduct.ToAny(),
         {
           where:
           {
-            id: parkingService.id
+            id: parkingProduct.id
           },
           transaction: _transaction,
           validate: false
@@ -55,8 +56,8 @@ export class ParkingServiceRepository implements IParkingServiceRepository {
 
   delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingService.sequelize.transaction();
-      ParkingService.update({
+      const _transaction = await ParkingProduct.sequelize.transaction();
+      ParkingProduct.update({
         status: TransactionType.DELETED
       },
         {
@@ -77,37 +78,41 @@ export class ParkingServiceRepository implements IParkingServiceRepository {
     });
   }
 
-  getByParkingId(id: number): Promise<ParkingService[]> {
+  getByParkingId(id: number): Promise<ParkingProduct[]> {
     return new Promise(async (resolve, reject) => {
-      ParkingService.findAll({
+      ParkingProduct.findAll({
         where: {
           parkingId: { [Op.eq]: id },
           status: { [Op.eq]: TransactionType.ACTIVE },
         },
       })
-        .then((parkingService: ParkingService[]) => resolve(parkingService))
+        .then((parkingProduct: ParkingProduct[]) => resolve(parkingProduct))
         .catch((error: any) => reject(error));
     });
   }
 
-  getById(id: number): Promise<ParkingService> {
+  getById(id: number): Promise<ParkingProduct> {
     return new Promise((resolve, reject) => {
-      ParkingService.findByPk(id)
-        .then((parkingService: ParkingService) => resolve(parkingService))
+      ParkingProduct.findByPk(id, {
+        include: [{ model: Parking, as: 'parking' }],
+        raw: true,
+        nest: true
+      })
+        .then((parkingProduct: ParkingProduct) => resolve(parkingProduct))
         .catch((error: any) => reject(error));
     });
   }
 
-  toList(): Promise<ParkingService[]> {
+  toList(): Promise<ParkingProduct[]> {
     return new Promise((resolve, reject) => {
-      ParkingService.findAll({
+      ParkingProduct.findAll({
         where: {
           status: {
             [Op.ne]: TransactionType.DELETED
           }
         }
       })
-        .then((result: ParkingService[]) => resolve(result))
+        .then((result: ParkingProduct[]) => resolve(result))
         .catch((error: any) => reject(error));
     });
   }

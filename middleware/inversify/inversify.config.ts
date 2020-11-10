@@ -24,8 +24,8 @@ import { LogRepository } from '../../data/repositories/log.repository';
 import { ParkingFileRepository } from '../../data/repositories/parkingFile.repository';
 import { RouteSecurityRepository } from '../../data/repositories/route-security.repository';
 import { FavoriteParkingRepository } from '../../data/repositories/favorite-parking.repository';
-import { ParkingServiceRepository } from '../../data/repositories/parking-service.repository';
-import { SchedulingServiceRepository } from '../../data/repositories/scheduling-service.repository';
+import { ParkingProductRepository } from '../../data/repositories/parking-product.repository';
+import { SchedulingProductRepository } from '../../data/repositories/scheduling-product.repository';
 
 // Repositories interfaces
 import { IUserRepository } from '../../data/interfaces/IRepositories/userRepository.interface';
@@ -48,8 +48,8 @@ import { ILogRepository } from '../../data/interfaces/IRepositories/logRepositor
 import { IParkingFileRepository } from '../../data/interfaces/IRepositories/parkingFileRepository.interface';
 import { IRouteSecurityRepository } from '../../data/interfaces/IRepositories/route-securityRepository.interface';
 import { IFavoriteParkingRepository } from '../../data/interfaces/IRepositories/favorite-parkingRepository.interface';
-import { IParkingServiceRepository } from '../../data/interfaces/IRepositories/parking-serviceRepository.interface';
-import { ISchedulingServiceRepository } from '../../data/interfaces/IRepositories/scheduling-serviceRepository.interface';
+import { IParkingProductRepository } from '../../data/interfaces/IRepositories/parking-productRepository.interface';
+import { ISchedulingProductRepository } from '../../data/interfaces/IRepositories/scheduling-productRepository.interface';
 
 // Services
 import { AuthService } from '../../data/services/auth.service';
@@ -72,8 +72,8 @@ import { UserService } from '../../data/services/user.service';
 import { VehicleService } from '../../data/services/vehicle.service';
 import { RouteSecurityService } from '../../data/services/route-security.service';
 import { FavoriteParkingService } from '../../data/services/favorite-parking.service';
-import { ParkingServiceService } from '../../data/services/parking-service.service';
-import { SchedulingServiceService } from '../../data/services/scheduling-service.service';
+import { ParkingProductService } from '../../data/services/parking-product.service';
+import { SchedulingProductService } from '../../data/services/scheduling-product.service';
 
 // Services interfaces
 import { IAuthService } from '../../data/interfaces/IServices/authService.interface';
@@ -96,8 +96,8 @@ import { IUserService } from '../../data/interfaces/IServices/userService.interf
 import { IVehicleService } from '../../data/interfaces/IServices/vehicleService.interface';
 import { IRouteSecurityService } from '../../data/interfaces/IServices/route-securityService.interface';
 import { IFavoriteParkingService } from '../../data/interfaces/IServices/favorite-parkingService.interface';
-import { IParkingServiceService } from '../../data/interfaces/IServices/parking-serviceService.interface';
-import { ISchedulingServiceService } from '../../data/interfaces/IServices/scheduling-serviceService.interface';
+import { IParkingProductService } from '../../data/interfaces/IServices/parking-productService.interface';
+import { ISchedulingProductService } from '../../data/interfaces/IServices/scheduling-productService.interface';
 
 // Binds
 const container = new Container();
@@ -123,8 +123,8 @@ container.bind<IUserService>(TYPES.IUserService).to(UserService);
 container.bind<IVehicleService>(TYPES.IVehicleService).to(VehicleService);
 container.bind<IRouteSecurityService>(TYPES.IRouteSecurityService).to(RouteSecurityService);
 container.bind<IFavoriteParkingService>(TYPES.IFavoriteParkingService).to(FavoriteParkingService);
-container.bind<IParkingServiceService>(TYPES.IParkingServiceService).to(ParkingServiceService);
-container.bind<ISchedulingServiceService>(TYPES.ISchedulingServiceService).to(SchedulingServiceService);
+container.bind<IParkingProductService>(TYPES.IParkingProductService).to(ParkingProductService);
+container.bind<ISchedulingProductService>(TYPES.ISchedulingProductService).to(SchedulingProductService);
 
 // Repositories Binds
 container.bind<IUserRepository>(TYPES.IUserRepository).to(UserRepository);
@@ -147,7 +147,7 @@ container.bind<ILogRepository>(TYPES.ILogRepository).to(LogRepository);
 container.bind<IParkingFileRepository>(TYPES.IParkingFileRepository).to(ParkingFileRepository);
 container.bind<IRouteSecurityRepository>(TYPES.IRouteSecurityRepository).to(RouteSecurityRepository);
 container.bind<IFavoriteParkingRepository>(TYPES.IFavoriteParkingRepository).to(FavoriteParkingRepository);
-container.bind<IParkingServiceRepository>(TYPES.IParkingServiceRepository).to(ParkingServiceRepository);
-container.bind<ISchedulingServiceRepository>(TYPES.ISchedulingServiceRepository).to(SchedulingServiceRepository);
+container.bind<IParkingProductRepository>(TYPES.IParkingProductRepository).to(ParkingProductRepository);
+container.bind<ISchedulingProductRepository>(TYPES.ISchedulingProductRepository).to(SchedulingProductRepository);
 
 export { container };

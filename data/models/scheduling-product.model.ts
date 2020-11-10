@@ -2,6 +2,8 @@ import { Model, DataTypes } from 'sequelize';
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
+import { Scheduling } from './scheduling.model';
+import { ParkingProduct } from './parking-product.model';
 
 const _instance = Context.getInstance();
 
@@ -9,30 +11,35 @@ const _instance = Context.getInstance();
  * @description
  * @author Gustavo Gusmão
  * @export
- * @class SchedulingService
+ * @class SchedulingProduct
  * @extends {Model}
  */
-export class SchedulingService extends Model {
+export class SchedulingProduct extends Model {
 
   id!: number;
   status!: TransactionType;
   value!: number;
-  parkingServiceId!: number;
+  parkingProductId!: number;
   schedulingId!: number;
 
+  scheduling: Scheduling;
+  parkingProduct: ParkingProduct;
+
   /**
-   * Creates an instance of SchedulingService.
+   * Creates an instance of SchedulingProduct.
    * @author Gustavo Gusmão
    * @param {*} [json]
-   * @memberof SchedulingService
+   * @memberof SchedulingProduct
    */
   constructor(json?: any) {
     super()
     this.id = Attributes.ReturnIfValid(json.id);
     this.status = Attributes.ReturnIfValid(json.status);
     this.value = Attributes.ReturnIfValid(json.value);
-    this.parkingServiceId = Attributes.ReturnIfValid(json.parkingServiceId);
+    this.parkingProductId = Attributes.ReturnIfValid(json.parkingProductId);
     this.schedulingId = Attributes.ReturnIfValid(json.schedulingId);
+    this.parkingProduct = Attributes.ReturnIfValid(json.parkingProduct);
+    this.scheduling = Attributes.ReturnIfValid(json.sheduling);
   }
 
   ToAny() {
@@ -40,7 +47,7 @@ export class SchedulingService extends Model {
   }
 }
 
-SchedulingService.init({
+SchedulingProduct.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,
@@ -53,7 +60,7 @@ SchedulingService.init({
   value: {
     type: new DataTypes.INTEGER()
   },
-  parkingServiceId: {
+  parkingProductId: {
     type: new DataTypes.INTEGER()
   },
   schedulingId: {
@@ -61,5 +68,5 @@ SchedulingService.init({
   }
 }, {
   sequelize: _instance,
-  tableName: 'SchedulingService'
+  tableName: 'SchedulingProduct'
 });

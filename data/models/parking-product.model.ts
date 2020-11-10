@@ -3,6 +3,7 @@ import { Model, DataTypes } from 'sequelize';
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
+import { Parking } from './parking.model';
 
 const _instance = Context.getInstance();
 
@@ -10,10 +11,10 @@ const _instance = Context.getInstance();
  * @description
  * @author Gustavo Gusmão
  * @export
- * @class ParkingService
+ * @class ParkingProduct
  * @extends {Model}
  */
-export class ParkingService extends Model {
+export class ParkingProduct extends Model {
   id!: number;
   status!: TransactionType;
   name!: string;
@@ -21,11 +22,13 @@ export class ParkingService extends Model {
   value: number;
   parkingId!: number;
 
+  parking: Parking;
+
   /**
-   * Creates an instance of ParkingService.
+   * Creates an instance of ParkingProduct.
    * @author Gustavo Gusmão
    * @param {*} [json]
-   * @memberof ParkingService
+   * @memberof ParkingProduct
    */
   constructor(json?: any) {
     super()
@@ -35,13 +38,14 @@ export class ParkingService extends Model {
     this.description = Attributes.ReturnIfValid(json.description);
     this.value = Attributes.ReturnIfValid(json.value);
     this.parkingId = Attributes.ReturnIfValid(json.parkingId);
+    this.parking = Attributes.ReturnIfValid(json.parking);
   }
   ToAny() {
     return this.toJSON();
   }
 }
 
-ParkingService.init({
+ParkingProduct.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,
@@ -52,7 +56,7 @@ ParkingService.init({
     allowNull: false
   },
   name: {
-    type: new DataTypes.STRING(10),
+    type: new DataTypes.STRING(20),
     allowNull: false
   },
   description: {
@@ -69,5 +73,5 @@ ParkingService.init({
   }
 }, {
   sequelize: _instance,
-  tableName: 'ParkingService'
+  tableName: 'ParkingProduct'
 });
