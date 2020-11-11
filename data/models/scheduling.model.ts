@@ -1,4 +1,4 @@
-import { Model, DataTypes, INTEGER } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 import Context from '../../main/context';
 import Attributes from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';

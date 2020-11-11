@@ -23,6 +23,9 @@ import { Log } from './models/log.model';
 import { AccountRecovery } from './models/account-recovery.model';
 import { ParkingFile } from './models/parking-file.model';
 import { RouteSecurity } from './models/route-security.model';
+import { FavoriteParking } from './models/favorite-parking.model';
+import { SchedulingProduct } from './models/scheduling-product.model';
+import { ParkingProduct } from './models/parking-product.model';
 
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
@@ -65,7 +68,10 @@ class Database {
       { name: 'Log', entity: Log.sequelize },
       { name: 'AccountRecovery', entity: AccountRecovery.sequelize },
       { name: 'ParkingFile', entity: ParkingFile.sequelize },
-      { name: 'RouteSecurity', entity: RouteSecurity.sequelize }
+      { name: 'RouteSecurity', entity: RouteSecurity.sequelize },
+      { name: 'FavoriteParking', entity: FavoriteParking.sequelize },
+      { name: 'SchedulingProduct', entity: SchedulingProduct.sequelize },
+      { name: 'ParkingProduct', entity: ParkingProduct.sequelize }
     ];
 
     Logger.Info('Database', 'Table verification started!');
@@ -82,6 +88,7 @@ class Database {
     User.hasMany(ParkingScore, { foreignKey: 'userId', as: 'parkingScore' });
     User.hasMany(Scheduling, { foreignKey: 'userId', as: 'scheduling' });
     User.hasMany(AccountRecovery, { foreignKey: 'userId', as: 'accountRecovery' });
+    User.hasMany(FavoriteParking, { foreignKey: 'userId', as: 'favoriteParkings' });
     Rule.hasMany(Employee, { foreignKey: 'ruleId', as: 'employees' });
     Rule.hasMany(RouteSecurity, { foreignKey: 'ruleId', as: 'routeSecurity' });
     Parking.hasMany(ParkingPromotion, { foreignKey: 'parkingId', as: 'parkingPromotion' });
@@ -90,13 +97,18 @@ class Database {
     Parking.hasMany(ParkingFinance, { foreignKey: 'parkingId', as: 'parkingFinance' });
     Parking.hasMany(Employee, { foreignKey: 'parkingId', as: 'employees' });
     Parking.hasMany(ParkingFile, { foreignKey: 'parkingId', as: 'files' });
+    Parking.hasMany(FavoriteParking, { foreignKey: 'parkingId', as: 'favoriteParkings' });
+    Parking.hasMany(ParkingProduct, { foreignKey: 'parkingId', as: 'parkingProducts' });
     ParkingSpace.hasMany(Scheduling, { foreignKey: 'parkingSpaceId', as: 'scheduling' });
+    ParkingProduct.hasMany(SchedulingProduct, { foreignKey: 'parkingProductId', as: 'schedulingProducts' });
     Employee.hasMany(AccountRecovery, { foreignKey: 'employeeId', as: 'accountsRecovery' });
+    Scheduling.hasMany(SchedulingProduct, { foreignKey: 'schedulingId', as: 'schedulingProducts' });
 
     // N:1 - belongs to
     Employee.belongsTo(Parking, { as: 'parking' });
     Employee.belongsTo(Company, { as: 'company' });
     Employee.belongsTo(Rule, { as: 'rule' });
+    ParkingProduct.belongsTo(Parking, { as: 'parking' });
 
     // 1:1 - has one
     Company.hasOne(CompanyAddress, { foreignKey: 'companyId', as: 'address' });

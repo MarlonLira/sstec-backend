@@ -13,6 +13,7 @@ import { Scheduling } from "../models/scheduling.model";
 import { IParkingSpaceService } from "../interfaces/IServices/parking-spaceService.interface";
 import { IUserService } from "../interfaces/IServices/userService.interface";
 import { IVehicleService } from "../interfaces/IServices/vehicleService.interface";
+import { TransactionType } from "../../commons/enums/transactionType";
 
 @injectable()
 export class SchedulingService implements ISchedulingService {
@@ -50,6 +51,7 @@ export class SchedulingService implements ISchedulingService {
                 reject(await this.log.info('Scheduling', HttpCode.Bad_Request, HttpMessage.Already_Exists, undefined));
 
               } else {
+                scheduling.status = TransactionType.PENDING;
                 this.repository.save(scheduling)
                   .then(result => {
                     global.SocketServer.emit('get.schedulings', result);
@@ -57,6 +59,7 @@ export class SchedulingService implements ISchedulingService {
                   });
               }
             } else {
+              scheduling.status = TransactionType.PENDING;
               this.repository.save(scheduling)
                 .then(result => {
                   global.SocketServer.emit('get.schedulings', result);

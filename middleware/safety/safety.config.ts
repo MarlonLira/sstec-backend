@@ -16,7 +16,7 @@ function safetyMiddlewareFactory(container: Container) {
         const token = req.headers["authorization"];
         if (Attributes.IsValid(token)) {
           let access: any = await authService.checkToken(token);
-
+ 
           if (access?.valid) {
             next();
           } else {

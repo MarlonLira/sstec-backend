@@ -59,5 +59,8 @@
     "IsCrit": true,
     "IsUnkn": true,
     "IsError": true
+  },
+  "QrCode": {
+    "url": "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=",
   }
 }
