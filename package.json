@@ -39,6 +39,7 @@
     "@types/nodemailer": "^6.4.0",
     "@types/sequelize": "^4.28.8",
     "@types/socket.io": "^2.1.8",
+    "bcrypt": "^5.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cli-color": "^2.0.0",
