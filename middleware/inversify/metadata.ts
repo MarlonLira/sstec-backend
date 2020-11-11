@@ -17,6 +17,9 @@ import '../../data/controllers/email.controller';
 import '../../data/controllers/log.controller';
 import '../../data/controllers/parking-file.controller';
 import '../../data/controllers/route-security.controller';
+import '../../data/controllers/favorite-parking.controller';
+import '../../data/controllers/parking-product.controller';
+import '../../data/controllers/scheduling-product.controller';
 
 // Others
 

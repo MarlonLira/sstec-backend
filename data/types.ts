@@ -13,11 +13,15 @@ const TYPES = {
   IParkingFileService: Symbol('IParkingFileService'),
   IEmployeeService: Symbol('IEmployeeService'),
   IParkingSpaceService: Symbol('IParkingSpaceService'),
+  IParkingProductService: Symbol('IParkingProductService'),
+  IParkingFinanceService: Symbol('IParkingFinanceService'),
   ISchedulingService: Symbol('ISchedulingService'),
+  ISchedulingProductService: Symbol('ISchedulingProductService'),
   IParkingScoreService: Symbol('IParkingScoreService'),
   ICardService: Symbol('ICardService'),
   IUserService: Symbol('IUserService'),
   IVehicleService: Symbol('IVehicleService'),
+  IFavoriteParkingService: Symbol('IFavoriteParkingService'),
 
   // Repositories Types
   IUserRepository: Symbol('IUserRepository'),
@@ -32,13 +36,16 @@ const TYPES = {
   IRouteSecurityRepository: Symbol('IRouteSecurityRepository'),
   IParkingPromotionRepository: Symbol('IParkingPromotionRepository'),
   IParkingSpaceRepository: Symbol('IParkingSpaceRepository'),
+  IParkingProductRepository: Symbol('IParkingProductRepository'),
   IParkingScoreRepository: Symbol('IParkingScoreRepository'),
   IParkingAddressRepository: Symbol('IParkingAddressRepository'),
   IUserAddressRepository: Symbol('IUserAddressRepository'),
   ISchedulingRepository: Symbol('ISchedulingRepository'),
+  ISchedulingProductRepository: Symbol('ISchedulingProductRepository'),
   IParkingFinanceRepository: Symbol('IParkingFinanceRepository'),
   ILogRepository: Symbol('ILogRepository'),
   IParkingFileRepository: Symbol('IParkingFileRepository'),
+  IFavoriteParkingRepository: Symbol('IFavoriteParkingRepository'),
 };
 
 export default TYPES;

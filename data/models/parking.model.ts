@@ -24,6 +24,7 @@ export class Parking extends Model {
   company: Company;
   employees: Employee[];
   files: ParkingFile[];
+  qrcode: string;
 
   constructor(json?: any) {
     super()
@@ -37,6 +38,7 @@ export class Parking extends Model {
     this.address = Attributes.ReturnIfValid(json.address);
     this.company = Attributes.ReturnIfValid(json.company);
     this.files = Attributes.ReturnIfValid(json.files);
+    this.qrcode = Attributes.ReturnIfValid(json.qrcode);
   }
 
   ToAny() {
@@ -75,6 +77,9 @@ Parking.init({
   companyId: {
     type: new DataTypes.INTEGER(),
     allowNull: false
+  },
+  qrcode: {
+    type: new DataTypes.STRING(255),
   }
 }, {
   sequelize: _instance,

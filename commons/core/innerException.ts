@@ -1,4 +1,5 @@
 import Attributes from "./attributes";
+import Logger from "./logger";
 
 export class InnerException {
 

@@ -12,6 +12,12 @@ import { HttpCode } from "../../commons/enums/httpCode";
 import { IParkingAddressService } from "../interfaces/IServices/parking-addressService.interface";
 import { ParkingAddress } from "../models/parking-address.model";
 
+
+import * as Config from '../../config.json';
+import Crypto from "../../commons/core/crypto";
+import { CryptoType } from "../../commons/enums/cryptoType";
+const _qrCode = Config.QrCode;
+
 @injectable()
 export class ParkingService implements IParkingService {
 
@@ -42,9 +48,11 @@ export class ParkingService implements IParkingService {
     return new Promise((resolve, reject) => {
       this.repository.save(parking)
         .then(async (result: Parking) => {
+          result.qrcode = _qrCode.url + Crypto.Encrypt(String(result.id), CryptoType.ANYTHING);
           parking.address.parkingId = result.id;
           const address: ParkingAddress = new ParkingAddress(parking.address);
           await this.addressService.save(address);
+          await this.update(result);
           resolve(result);
         }).catch(async (error: any) =>
           reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
@@ -53,6 +61,9 @@ export class ParkingService implements IParkingService {
 
   update(parking: Parking): Promise<any> {
     return new Promise((resolve, reject) => {
+      if (Attributes.isNullOrUndefined(parking.qrcode)) {
+        parking.qrcode = _qrCode.url + Crypto.Encrypt(String(parking.id), CryptoType.ANYTHING);
+      }
       this.repository.update(parking)
         .then(async (result: any) => {
           const address: ParkingAddress = new ParkingAddress(parking.address);
