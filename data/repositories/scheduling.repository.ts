@@ -17,7 +17,6 @@ export class SchedulingRepository implements ISchedulingRepository {
   save(scheduling: Scheduling): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Scheduling.sequelize.transaction();
-      scheduling.status = TransactionType.ACTIVE;
       Scheduling.create(scheduling, { transaction: _transaction })
         .then(async (createdScheduling: Scheduling) => {
           await _transaction.commit();
