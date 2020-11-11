@@ -7,37 +7,22 @@ import Http from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { IParkingSpaceService } from "../interfaces/IServices/parking-spaceService.interface";
+import { safetyMiddleware } from "../../middleware/safety/safety.config";
 
-@controller('')
+@controller('', safetyMiddleware())
 class ParkingSpaceController {
 
   constructor(@inject(TYPES.IParkingSpaceService) private service: IParkingSpaceService) { }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @returns {Promise<any>}
-   * @memberof ParkingSpaceController
-   */
   @httpPost('/parkingSpace')
   post(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
-      this.service.save(new ParkingSpace(req.body))
+      this.service.save(new ParkingSpace(req.body), 'save')
         .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Vaga', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Vaga')));
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @returns {Promise<any>}
-   * @memberof ParkingSpaceController
-   */
   @httpGet('/parkingSpace/id/:id')
   getById(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
@@ -47,14 +32,6 @@ class ParkingSpaceController {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @returns {Promise<any>}
-   * @memberof ParkingSpaceController
-   */
   @httpGet('/parkingSpace/parkingId/:parkingId')
   getByParkingId(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
@@ -64,31 +41,15 @@ class ParkingSpaceController {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @returns {Promise<any>}
-   * @memberof ParkingSpaceController
-   */
   @httpPut('/parkingSpace')
   put(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
-      this.service.save(new ParkingSpace(req.body))
+      this.service.save(new ParkingSpace(req.body), 'update')
         .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Vaga', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Vaga')));
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @returns {Promise<any>}
-   * @memberof ParkingSpaceController
-   */
   @httpDelete('/parkingSpace/parkingId/:parkingId/type/:type/amount/:amount')
   delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {

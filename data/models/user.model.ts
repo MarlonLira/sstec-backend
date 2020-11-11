@@ -6,6 +6,7 @@ import { TransactionType } from '../../commons/enums/transactionType';
 import { UserAddress } from './user-address.model';
 import Vehicle from './vehicle.model';
 import { Card } from './card.model';
+import { FavoriteParking } from './favorite-parking.model';
 
 const _instance = Context.getInstance();
 
@@ -23,6 +24,7 @@ export class User extends Model {
   address: UserAddress;
   vehicles: Vehicle[];
   cards: Card[];
+  favoriteParkings: FavoriteParking[];
 
   constructor(json?: any) {
     super()
@@ -41,7 +43,8 @@ export class User extends Model {
     obj.address = this.address;
     obj.vehicles = this.vehicles;
     obj.cards = this.cards;
-    return obj;
+    obj.favoriteParkings = this.favoriteParkings;
+    return;
   }
 }
 

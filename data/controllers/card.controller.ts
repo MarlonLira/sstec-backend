@@ -2,14 +2,15 @@ import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import { Card } from "../models/card.model";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
+import { Card } from "../models/card.model";
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ICardService } from "../interfaces/IServices/cardService.interface";
+import { safetyMiddleware } from "../../middleware/safety/safety.config";
 
-@controller('')
+@controller('', safetyMiddleware())
 class CardController {
 
   constructor(

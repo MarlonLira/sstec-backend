@@ -4,7 +4,6 @@ import * as jwt from 'jsonwebtoken';
 import { Auth } from '../models/auth.model';
 import TYPES from "../types";
 import { InnerException } from "../../commons/core/innerException";
-import { IEmployeeRepository } from "../interfaces/IRepositories/employeeRepository.interface";
 import { CryptoType } from "../../commons/enums/cryptoType";
 import Attributes from "../../commons/core/attributes";
 import Crypto from '../../commons/core/crypto';
@@ -21,12 +20,13 @@ import { IRuleService } from "../interfaces/IServices/ruleService.interface";
 import { ICompanyService } from "../interfaces/IServices/companyService.interface";
 import { IUserService } from "../interfaces/IServices/userService.interface";
 import { IRouteSecurityService } from "../interfaces/IServices/route-securityService.interface";
+import { IEmployeeService } from "../interfaces/IServices/employeeService.interface";
 
 @injectable()
 export class AuthService implements IAuthService {
 
   constructor(
-    @inject(TYPES.IEmployeeRepository) private _employeeRepository: IEmployeeRepository,
+    @inject(TYPES.IEmployeeService) private _employeeService: IEmployeeService,
     @inject(TYPES.ICompanyService) private _companyService: ICompanyService,
     @inject(TYPES.IParkingService) private _parkingService: IParkingService,
     @inject(TYPES.IRuleService) private _ruleService: IRuleService,
@@ -40,7 +40,7 @@ export class AuthService implements IAuthService {
     return new Promise(async (resolve, reject) => {
       try {
         if (Attributes.IsValid(auth.employee)) {
-          const foundEmployee: Employee = await this._employeeRepository.getByEmail(auth.employee.email);
+          const foundEmployee: Employee = await this._employeeService.getByEmail(auth.employee.email);
           if (Attributes.IsValid(foundEmployee) && Crypto.Compare(auth.employee.password, foundEmployee.password)) {
             auth.company = foundEmployee.company;;
             auth.parking = foundEmployee.parking;
@@ -90,8 +90,8 @@ export class AuthService implements IAuthService {
     return new Promise(async (resolve, reject) => {
       try {
         const foundEmployee = Attributes.ReturnIfValid(
-          await this._employeeRepository.getByEmail(auth.employee.email),
-          await this._employeeRepository.getByRegistryCode(auth.employee.registryCode)
+          await this._employeeService.getByEmail(auth.employee.email),
+          await this._employeeService.getByRegistryCode(auth.employee.registryCode)
         );
         if (!Attributes.IsValid(foundEmployee)) {
           const company: Company = await this._companyService.getByRegistryCode(auth.company.registryCode);
@@ -100,7 +100,7 @@ export class AuthService implements IAuthService {
             auth.employee.companyId = createdCompany.id;
             auth.employee.ruleId = 2;
 
-            this._employeeRepository.save(auth.employee)
+            this._employeeService.save(auth.employee)
               .then((result: Employee) => {
                 result.password = undefined;
                 resolve(result);
@@ -133,11 +133,15 @@ export class AuthService implements IAuthService {
     });
   }
 
-  checkToken(auth: Auth) {
+  checkToken(token: string) {
     return new Promise((resolve) => {
-      jwt.verify(auth.token, process.env.SECRET, (err) => {
-        resolve(err);
-      });
+      if (Attributes.IsValid(token)) {
+        jwt.verify(token, process.env.SECRET, (err) => {
+          resolve({ "valid": !err });
+        });
+      } else {
+        resolve({ "valid": false })
+      }
     });
   }
 
@@ -145,8 +149,8 @@ export class AuthService implements IAuthService {
     return new Promise(async (resolve, reject) => {
       try {
         const foundEmployee: Employee = await Attributes.ReturnIfValid(
-          await this._employeeRepository.getByRegistryCode(auth.employee.registryCode),
-          await this._employeeRepository.getByEmail(auth.employee.email)
+          await this._employeeService.getByRegistryCode(auth.employee.registryCode),
+          await this._employeeService.getByEmail(auth.employee.email)
         );
         if (Attributes.IsValid(foundEmployee)) {
           if (Attributes.IsValid(foundEmployee.email)) {
@@ -157,7 +161,7 @@ export class AuthService implements IAuthService {
             _email.text = `Sua nova senha: ${_newPassword}`;
             _email.to = foundEmployee.email;
             foundEmployee.password = Crypto.Encrypt(_newPassword, CryptoType.PASSWORD);
-            this._employeeRepository.update(foundEmployee)
+            this._employeeService.update(foundEmployee)
               .then(async () => {
                 await this._emailService.send(_email);
                 resolve(this.protectedEmail(foundEmployee.email));

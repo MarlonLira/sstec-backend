@@ -75,7 +75,7 @@ ParkingAddress.init({
     type: new DataTypes.STRING(30)
   },
   street: {
-    type: new DataTypes.STRING(30),
+    type: new DataTypes.STRING(50),
     allowNull: false
   },
   number: {

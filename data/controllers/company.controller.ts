@@ -2,14 +2,15 @@ import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
 
-import { Company } from "../models/company.model";
 import TYPES from '../types';
 import Http from '../../commons/core/http';
+import { Company } from "../models/company.model";
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ICompanyService } from "../interfaces/IServices/companyService.interface";
+import { safetyMiddleware } from "../../middleware/safety/safety.config";
 
-@controller('')
+@controller('', safetyMiddleware())
 class CompanyController {
 
   constructor(@inject(TYPES.ICompanyService) private service: ICompanyService) { }

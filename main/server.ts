@@ -7,7 +7,8 @@ import * as bodyParser from 'body-parser';
 import { InversifyExpressServer } from 'inversify-express-utils';
 
 import * as swaggerDocument from '../middleware/swagger/swagger.json';
-import container from '../middleware/inversify/inversify.config';
+import { container } from '../middleware/inversify/inversify.config';
+import * as helmet from 'helmet';
 
 import Logger from '../commons/core/logger';
 import Database from '../data/database';
@@ -22,31 +23,12 @@ declare global {
   }
 }
 
-/**
- * @description
- * @author Marlon Lira
- * @class Server
- */
 class Server {
 
-  /**
-   * @description
-   * @type {InversifyExpressServer}
-   * @memberof Server
-   */
   public inversifyExpress: InversifyExpressServer;
 
-  /**
-   * @description
-   * @type {express.Application}
-   * @memberof Server
-   */
   public express: express.Application;
-  /**
-   * Creates an instance of Server.
-   * @author Marlon Lira
-   * @memberof Server
-   */
+
   public constructor() {
     this.inversifyExpress = new InversifyExpressServer(container);
     this.middlewares()
@@ -54,12 +36,6 @@ class Server {
         .then(() => this.database()));
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @private
-   * @memberof Server
-   */
   private middlewares() {
     return new Promise((resolve, reject) => {
       try {
@@ -72,6 +48,7 @@ class Server {
           server.use(bodyParser.json({ limit: '50mb' }));
           server.use(allowCors);
           server.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+          server.use(helmet());
         });
 
         this.express = this.inversifyExpress.build();
@@ -82,22 +59,10 @@ class Server {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @private
-   * @memberof Server
-   */
   private database() {
     new Database().Build();
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @private
-   * @memberof Server
-   */
   public status() {
     const port = process.env.PORT || 4001;
 

@@ -8,8 +8,9 @@ import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from '../../commons/enums/httpMessage';
 import { IRouteSecurityService } from '../interfaces/IServices/route-securityService.interface';
 import { RouteSecurity } from '../models/route-security.model';
+import { safetyMiddleware } from '../../middleware/safety/safety.config';
 
-@controller('')
+@controller('', safetyMiddleware())
 class RouteSecurityController {
 
   constructor(@inject(TYPES.IRouteSecurityService) private service: IRouteSecurityService) { }
