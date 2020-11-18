@@ -6,8 +6,8 @@ import { IParkingFinanceService } from "../interfaces/IServices/parking-financeS
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
-import IParkingFinanceRepository from "../interfaces/IRepositories/parking-financeRepository.interface";
-import  ParkingFinance from "../models/parking-finance.model";
+import { IParkingFinanceRepository } from "../interfaces/IRepositories/parking-financeRepository.interface";
+import { ParkingFinance } from "../models/parking-finance.model";
 
 @injectable()
 export class ParkingFinanceService implements IParkingFinanceService {

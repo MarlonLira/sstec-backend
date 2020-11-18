@@ -5,8 +5,8 @@ import { Auth } from '../models/auth.model';
 import TYPES from "../types";
 import { InnerException } from "../../commons/core/innerException";
 import { CryptoType } from "../../commons/enums/cryptoType";
-import Attributes from "../../commons/core/attributes";
-import Crypto from '../../commons/core/crypto';
+import { Attributes } from "../../commons/core/attributes";
+import { Crypto } from '../../commons/core/crypto';
 import { Employee } from "../models/employee.model";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { User } from "../models/user.model";
@@ -39,9 +39,9 @@ export class AuthService implements IAuthService {
   signinEmployee(auth: Auth): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        if (Attributes.IsValid(auth.employee)) {
+        if (Attributes.isValid(auth.employee)) {
           const foundEmployee: Employee = await this._employeeService.getByEmail(auth.employee.email);
-          if (Attributes.IsValid(foundEmployee) && Crypto.Compare(auth.employee.password, foundEmployee.password)) {
+          if (Attributes.isValid(foundEmployee) && Crypto.compare(auth.employee.password, foundEmployee.password)) {
             auth.company = foundEmployee.company;;
             auth.parking = foundEmployee.parking;
             auth.routeSecurity = await this._routeSecurityService.getByCompanyId(foundEmployee.companyId);
@@ -49,7 +49,7 @@ export class AuthService implements IAuthService {
             auth.employee.password = undefined;
             auth.authenticationLevel = foundEmployee.rule?.level;
             auth = await this.createEmployeeToken(auth);
-            const result = await Crypto.Encrypt(JSON.stringify(auth), CryptoType.DEFAULT);
+            const result = await Crypto.encrypt(JSON.stringify(auth), CryptoType.DEFAULT);
             resolve(result);
           } else {
             reject(await this.log.error('Auth', HttpCode.Bad_Request, HttpMessage.Login_Unauthorized, undefined));
@@ -66,13 +66,13 @@ export class AuthService implements IAuthService {
   signinUser(auth: Auth): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        if (Attributes.IsValid(auth.user)) {
+        if (Attributes.isValid(auth.user)) {
           const foundUser: User = await this._userService.getByEmail(auth.user.email);
-          if (Attributes.IsValid(foundUser) && Crypto.Compare(auth.user.password, foundUser.password)) {
+          if (Attributes.isValid(foundUser) && Crypto.compare(auth.user.password, foundUser.password)) {
             auth.user = foundUser;
             auth.user.password = undefined;
             auth = await this.createUserToken(auth);
-            const result = await Crypto.Encrypt(JSON.stringify(auth), CryptoType.DEFAULT);
+            const result = await Crypto.encrypt(JSON.stringify(auth), CryptoType.DEFAULT);
             resolve(result);
           } else {
             reject(await this.log.error('Auth', HttpCode.Bad_Request, HttpMessage.Login_Unauthorized, undefined));
@@ -89,13 +89,13 @@ export class AuthService implements IAuthService {
   signupCompany(auth: Auth): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        const foundEmployee = Attributes.ReturnIfValid(
+        const foundEmployee = Attributes.returnIfValid(
           await this._employeeService.getByEmail(auth.employee.email),
           await this._employeeService.getByRegistryCode(auth.employee.registryCode)
         );
-        if (!Attributes.IsValid(foundEmployee)) {
+        if (!Attributes.isValid(foundEmployee)) {
           const company: Company = await this._companyService.getByRegistryCode(auth.company.registryCode);
-          if (!Attributes.IsValid(company)) {
+          if (!Attributes.isValid(company)) {
             const createdCompany = await this._companyService.save(auth.company);
             auth.employee.companyId = createdCompany.id;
             auth.employee.ruleId = 2;
@@ -135,7 +135,7 @@ export class AuthService implements IAuthService {
 
   checkToken(token: string) {
     return new Promise((resolve) => {
-      if (Attributes.IsValid(token)) {
+      if (Attributes.isValid(token)) {
         jwt.verify(token, process.env.SECRET, (err) => {
           resolve({ "valid": !err });
         });
@@ -148,19 +148,19 @@ export class AuthService implements IAuthService {
   accountRecoveryEmployee(auth: Auth): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        const foundEmployee: Employee = await Attributes.ReturnIfValid(
+        const foundEmployee: Employee = await Attributes.returnIfValid(
           await this._employeeService.getByRegistryCode(auth.employee.registryCode),
           await this._employeeService.getByEmail(auth.employee.email)
         );
-        if (Attributes.IsValid(foundEmployee)) {
-          if (Attributes.IsValid(foundEmployee.email)) {
+        if (Attributes.isValid(foundEmployee)) {
+          if (Attributes.isValid(foundEmployee.email)) {
             const _email = new Email();
             const _newPassword = Crypto.randomPassword();
             _email.from = 'help.simpleparking@gmail.com';
             _email.subject = 'Recuperação de Conta';
             _email.text = `Sua nova senha: ${_newPassword}`;
             _email.to = foundEmployee.email;
-            foundEmployee.password = Crypto.Encrypt(_newPassword, CryptoType.PASSWORD);
+            foundEmployee.password = Crypto.encrypt(_newPassword, CryptoType.PASSWORD);
             this._employeeService.update(foundEmployee)
               .then(async () => {
                 await this._emailService.send(_email);

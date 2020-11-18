@@ -1,7 +1,3 @@
-/**
- * @description
- * @enum {number}
- */
 export enum HttpCode {
   Continue = 100,
   Processing = 102,

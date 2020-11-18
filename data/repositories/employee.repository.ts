@@ -7,7 +7,7 @@ import { TransactionType } from '../../commons/enums/transactionType';
 import { Parking } from '../models/parking.model';
 import { Company } from '../models/company.model';
 import { Rule } from '../models/rule.model';
-import Attributes from '../../commons/core/attributes';
+import { Attributes } from '../../commons/core/attributes';
 
 @injectable()
 export class EmployeeRepository implements IEmployeeRepository {

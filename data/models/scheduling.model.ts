@@ -1,16 +1,9 @@
-import { Model, DataTypes } from 'sequelize';
-import Context from '../../main/context';
-import Attributes from '../../commons/core/attributes';
+import { DataTypes } from 'sequelize';
+import { Attributes } from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
+import { BaseModel, _instance } from './base.model';
 
-const _instance = Context.getInstance();
-
-/**
- * @description
- * @author Gustavo Gusmão
- * @class Scheduling
- */
-export class Scheduling extends Model {
+export class Scheduling extends BaseModel {
 
   id!: number;
   status!: TransactionType;
@@ -28,29 +21,25 @@ export class Scheduling extends Model {
   parkingId!: number;
   parkingSpaceId!: number;
 
-  /**
-   * Creates an instance of Scheduling.
-   * @author Gustavo Gusmão
-   * @param {*} [json]
-   * @memberof Scheduling
-   */
   constructor(json?: any) {
-    super()
-    this.id = Attributes.ReturnIfValid(json.id);
-    this.status = Attributes.ReturnIfValid(json.status);
-    this.userName = Attributes.ReturnIfValid(json.userName);
-    this.cardNumber = Attributes.ReturnIfValid(json.cardNumber);
-    this.vehiclePlate = Attributes.ReturnIfValid(json.vehiclePlate);
-    this.vehicleType = Attributes.ReturnIfValid(json.vehicleType);
-    this.value = Attributes.ReturnIfValid(json.value);
-    this.date = Attributes.ReturnIfValid(json.date);
-    this.avaliableTime = Attributes.ReturnIfValid(json.avaliableTime);
-    this.unavailableTime = Attributes.ReturnIfValid(json.unavailableTime);
-    this.userId = Attributes.ReturnIfValid(json.userId);
-    this.vehicleId = Attributes.ReturnIfValid(json.vehicleId);
-    this.cardId = Attributes.ReturnIfValid(json.cardId);
-    this.parkingId = Attributes.ReturnIfValid(json.parkingId);
-    this.parkingSpaceId = Attributes.ReturnIfValid(json.parkingSpaceId);
+    super(json);
+    if (json) {
+      this.id = Attributes.returnIfValid(json.id);
+      this.status = Attributes.returnIfValid(json.status);
+      this.userName = Attributes.returnIfValid(json.userName);
+      this.cardNumber = Attributes.returnIfValid(json.cardNumber);
+      this.vehiclePlate = Attributes.returnIfValid(json.vehiclePlate);
+      this.vehicleType = Attributes.returnIfValid(json.vehicleType);
+      this.value = Attributes.returnIfValid(json.value);
+      this.date = Attributes.returnIfValid(json.date);
+      this.avaliableTime = Attributes.returnIfValid(json.avaliableTime);
+      this.unavailableTime = Attributes.returnIfValid(json.unavailableTime);
+      this.userId = Attributes.returnIfValid(json.userId);
+      this.vehicleId = Attributes.returnIfValid(json.vehicleId);
+      this.cardId = Attributes.returnIfValid(json.cardId);
+      this.parkingId = Attributes.returnIfValid(json.parkingId);
+      this.parkingSpaceId = Attributes.returnIfValid(json.parkingSpaceId);
+    }
   }
 
   ToAny() {

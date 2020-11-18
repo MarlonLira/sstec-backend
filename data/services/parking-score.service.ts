@@ -6,7 +6,7 @@ import { IParkingScoreService } from "../interfaces/IServices/parking-scoreServi
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
-import IParkingScoreRepository from "../interfaces/IRepositories/parking-scoreRepository.interface";
+import { IParkingScoreRepository } from "../interfaces/IRepositories/parking-scoreRepository.interface";
 import { ParkingScore } from "../models/parking-score.model";
 
 @injectable()

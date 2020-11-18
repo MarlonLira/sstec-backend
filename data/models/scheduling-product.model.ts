@@ -1,20 +1,11 @@
-import { Model, DataTypes } from 'sequelize';
-import Context from '../../main/context';
-import Attributes from '../../commons/core/attributes';
+import { DataTypes } from 'sequelize';
+import { Attributes } from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
 import { Scheduling } from './scheduling.model';
 import { ParkingProduct } from './parking-product.model';
+import { BaseModel, _instance } from './base.model';
 
-const _instance = Context.getInstance();
-
-/**
- * @description
- * @author Gustavo Gusmão
- * @export
- * @class SchedulingProduct
- * @extends {Model}
- */
-export class SchedulingProduct extends Model {
+export class SchedulingProduct extends BaseModel {
 
   id!: number;
   status!: TransactionType;
@@ -25,21 +16,17 @@ export class SchedulingProduct extends Model {
   scheduling: Scheduling;
   parkingProduct: ParkingProduct;
 
-  /**
-   * Creates an instance of SchedulingProduct.
-   * @author Gustavo Gusmão
-   * @param {*} [json]
-   * @memberof SchedulingProduct
-   */
   constructor(json?: any) {
-    super()
-    this.id = Attributes.ReturnIfValid(json.id);
-    this.status = Attributes.ReturnIfValid(json.status);
-    this.value = Attributes.ReturnIfValid(json.value);
-    this.parkingProductId = Attributes.ReturnIfValid(json.parkingProductId);
-    this.schedulingId = Attributes.ReturnIfValid(json.schedulingId);
-    this.parkingProduct = Attributes.ReturnIfValid(json.parkingProduct);
-    this.scheduling = Attributes.ReturnIfValid(json.sheduling);
+    super(json);
+    if (json) {
+      this.id = Attributes.returnIfValid(json.id);
+      this.status = Attributes.returnIfValid(json.status);
+      this.value = Attributes.returnIfValid(json.value);
+      this.parkingProductId = Attributes.returnIfValid(json.parkingProductId);
+      this.schedulingId = Attributes.returnIfValid(json.schedulingId);
+      this.parkingProduct = Attributes.returnIfValid(json.parkingProduct);
+      this.scheduling = Attributes.returnIfValid(json.sheduling);
+    }
   }
 
   ToAny() {

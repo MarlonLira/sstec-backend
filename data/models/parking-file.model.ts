@@ -1,10 +1,8 @@
-import { Model, DataTypes } from 'sequelize';
-import Context from '../../main/context';
-import Attributes from '../../commons/core/attributes';
+import { DataTypes } from 'sequelize';
+import { Attributes } from '../../commons/core/attributes';
+import { BaseModel, _instance } from './base.model';
 
-const _instance = Context.getInstance();
-
-export class ParkingFile extends Model {
+export class ParkingFile extends BaseModel {
   id: number;
   name: string;
   encoded: any;
@@ -12,13 +10,13 @@ export class ParkingFile extends Model {
   parkingId: number;
 
   constructor(json?: any) {
-    super();
+    super(json);
     if (json) {
-      this.id = Attributes.ReturnIfValid(json.id);
-      this.name = Attributes.ReturnIfValid(json.name);
-      this.encoded = Attributes.ReturnIfValid(json.encoded);
-      this.type = Attributes.ReturnIfValid(json.type);
-      this.parkingId = Attributes.ReturnIfValid(json.parkingId);
+      this.id = Attributes.returnIfValid(json.id);
+      this.name = Attributes.returnIfValid(json.name);
+      this.encoded = Attributes.returnIfValid(json.encoded);
+      this.type = Attributes.returnIfValid(json.type);
+      this.parkingId = Attributes.returnIfValid(json.parkingId);
     }
   }
 

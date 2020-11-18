@@ -1,16 +1,14 @@
-import { Model, DataTypes } from 'sequelize';
+import { DataTypes } from 'sequelize';
 
-import Context from '../../main/context';
-import Attributes from '../../commons/core/attributes';
+import { Attributes } from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
 import { ParkingAddress } from './parking-address.model';
 import { Company } from './company.model';
 import { ParkingFile } from './parking-file.model';
 import { Employee } from './employee.model';
+import { BaseModel, _instance } from './base.model';
 
-const _instance = Context.getInstance();
-
-export class Parking extends Model {
+export class Parking extends BaseModel {
   id!: number;
   status!: TransactionType;
   name: string;
@@ -27,18 +25,20 @@ export class Parking extends Model {
   qrcode: string;
 
   constructor(json?: any) {
-    super()
-    this.id = Attributes.ReturnIfValid(json.id);
-    this.status = Attributes.ReturnIfValid(json.status);
-    this.name = Attributes.ReturnIfValid(json.name);
-    this.registryCode = Attributes.ReturnIfValid(json.registryCode);
-    this.phone = Attributes.ReturnIfValid(json.phone);
-    this.email = Attributes.ReturnIfValid(json.email);
-    this.companyId = Attributes.ReturnIfValid(json.companyId);
-    this.address = Attributes.ReturnIfValid(json.address);
-    this.company = Attributes.ReturnIfValid(json.company);
-    this.files = Attributes.ReturnIfValid(json.files);
-    this.qrcode = Attributes.ReturnIfValid(json.qrcode);
+    super(json);
+    if (json) {
+      this.id = Attributes.returnIfValid(json.id);
+      this.status = Attributes.returnIfValid(json.status);
+      this.name = Attributes.returnIfValid(json.name);
+      this.registryCode = Attributes.returnIfValid(json.registryCode);
+      this.phone = Attributes.returnIfValid(json.phone);
+      this.email = Attributes.returnIfValid(json.email);
+      this.companyId = Attributes.returnIfValid(json.companyId);
+      this.address = Attributes.returnIfValid(json.address);
+      this.company = Attributes.returnIfValid(json.company);
+      this.files = Attributes.returnIfValid(json.files);
+      this.qrcode = Attributes.returnIfValid(json.qrcode);
+    }
   }
 
   ToAny() {

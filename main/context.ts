@@ -1,26 +1,14 @@
 import { Sequelize } from 'sequelize';
 import * as Config from '../config.json';
-import Attributes from "../commons/core/attributes";
+import { Attributes } from "../commons/core/attributes";
 
 const _logging = Config.Database.Logging;
 const _dbConfig = Config.Database.MySqlWEB_DEV;
 
-/**
- * @description
- * @author Marlon Lira
- * @class Context
- */
-class Context {
+export class Context {
 
   private static _instance: Sequelize;
 
-  /**
-   * @description Creates the database instance.
-   * @author Marlon Lira
-   * @static
-   * @returns {Sequelize}
-   * @memberof Context
-   */
   private static createInstance(): Sequelize {
     const sequelize = new Sequelize(_dbConfig.schema, _dbConfig.username, _dbConfig.password,
       {
@@ -41,17 +29,8 @@ class Context {
     return sequelize;
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @static
-   * @returns {Sequelize}
-   * @memberof Context
-   */
   public static getInstance(): Sequelize {
-    this._instance = Attributes.ReturnIfValid(this._instance, this.createInstance());
+    this._instance = Attributes.returnIfValid(this._instance, this.createInstance());
     return this._instance;
   }
 }
-
-export default Context;

@@ -3,8 +3,8 @@ import { controller, httpPost, request, response, httpGet, httpDelete, httpPut }
 import { inject } from "inversify";
 
 import TYPES from '../types';
-import Vehicle from "../models/vehicle.model";
-import Http from '../../commons/core/http';
+import { Vehicle } from "../models/vehicle.model";
+import { Http } from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { IVehicleService } from "../interfaces/IServices/vehicleService.interface";

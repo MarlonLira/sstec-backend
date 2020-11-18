@@ -1,16 +1,13 @@
-import { Model, DataTypes } from 'sequelize';
-
-import Context from '../../main/context';
-import Attributes from '../../commons/core/attributes';
+import { DataTypes } from 'sequelize';
+import { Attributes } from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
 import { UserAddress } from './user-address.model';
-import Vehicle from './vehicle.model';
+import { Vehicle } from './vehicle.model';
 import { Card } from './card.model';
 import { FavoriteParking } from './favorite-parking.model';
+import { BaseModel, _instance } from './base.model';
 
-const _instance = Context.getInstance();
-
-export class User extends Model {
+export class User extends BaseModel {
 
   id!: number;
   status!: TransactionType;
@@ -27,15 +24,17 @@ export class User extends Model {
   favoriteParkings: FavoriteParking[];
 
   constructor(json?: any) {
-    super()
-    this.id = Attributes.ReturnIfValid(json.id);
-    this.name = Attributes.ReturnIfValid(json.name);
-    this.status = Attributes.ReturnIfValid(json.status);
-    this.registryCode = Attributes.ReturnIfValid(json.registryCode);
-    this.phone = Attributes.ReturnIfValid(json.phone);
-    this.email = Attributes.ReturnIfValid(json.email);
-    this.password = Attributes.ReturnIfValid(json.password);
-    this.image = Attributes.ReturnIfValid(json.image);
+    super(json);
+    if (json) {
+      this.id = Attributes.returnIfValid(json.id);
+      this.name = Attributes.returnIfValid(json.name);
+      this.status = Attributes.returnIfValid(json.status);
+      this.registryCode = Attributes.returnIfValid(json.registryCode);
+      this.phone = Attributes.returnIfValid(json.phone);
+      this.email = Attributes.returnIfValid(json.email);
+      this.password = Attributes.returnIfValid(json.password);
+      this.image = Attributes.returnIfValid(json.image);
+    }
   }
 
   ToAny() {

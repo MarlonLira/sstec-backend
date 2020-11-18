@@ -3,7 +3,7 @@ import { controller, httpGet, httpPost, httpDelete, request, response, httpPut }
 import { inject } from "inversify";
 
 import TYPES from '../types';
-import Http from '../../commons/core/http';
+import { Http } from '../../commons/core/http';
 import { Card } from "../models/card.model";
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";

@@ -1,15 +1,13 @@
-import { Model, DataTypes } from 'sequelize';
-import Context from '../../main/context';
-import Attributes from '../../commons/core/attributes';
+import { DataTypes } from 'sequelize';
+import { Attributes } from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
 import { Rule } from './rule.model';
 import { Parking } from './parking.model';
 import { Company } from './company.model';
 import { AccountRecovery } from './account-recovery.model';
+import { BaseModel, _instance } from './base.model';
 
-const _instance = Context.getInstance();
-
-export class Employee extends Model {
+export class Employee extends BaseModel {
   public id!: number;
   public status!: TransactionType;
   public name!: string;
@@ -29,23 +27,25 @@ export class Employee extends Model {
   public accountsRecovery: AccountRecovery[];
 
   constructor(json?: any) {
-    super()
-    this.id = Attributes.ReturnIfValid(json.id);
-    this.name = Attributes.ReturnIfValid(json.name);
-    this.status = Attributes.ReturnIfValid(json.status);
-    this.registryCode = Attributes.ReturnIfValid(json.registryCode);
-    this.password = Attributes.ReturnIfValid(json.password);
-    this.phone = Attributes.ReturnIfValid(json.phone);
-    this.email = Attributes.ReturnIfValid(json.email);
-    this.about = Attributes.ReturnIfValid(json.about);
-    this.image = Attributes.ReturnIfValid(json.image);
-    this.parkingId = Attributes.ReturnIfValid(json.parkingId);
-    this.parking = Attributes.ReturnIfValid(json.parking);
-    this.companyId = Attributes.ReturnIfValid(json.companyId);
-    this.company = Attributes.ReturnIfValid(json.company);
-    this.ruleId = Attributes.ReturnIfValid(json.ruleId);
-    this.rule = Attributes.ReturnIfValid(json.rule);
-    this.accountsRecovery = Attributes.ReturnIfValid(json.accountsRecovery);
+    super(json);
+    if (json) {
+      this.id = Attributes.returnIfValid(json.id);
+      this.name = Attributes.returnIfValid(json.name);
+      this.status = Attributes.returnIfValid(json.status);
+      this.registryCode = Attributes.returnIfValid(json.registryCode);
+      this.password = Attributes.returnIfValid(json.password);
+      this.phone = Attributes.returnIfValid(json.phone);
+      this.email = Attributes.returnIfValid(json.email);
+      this.about = Attributes.returnIfValid(json.about);
+      this.image = Attributes.returnIfValid(json.image);
+      this.parkingId = Attributes.returnIfValid(json.parkingId);
+      this.parking = Attributes.returnIfValid(json.parking);
+      this.companyId = Attributes.returnIfValid(json.companyId);
+      this.company = Attributes.returnIfValid(json.company);
+      this.ruleId = Attributes.returnIfValid(json.ruleId);
+      this.rule = Attributes.returnIfValid(json.rule);
+      this.accountsRecovery = Attributes.returnIfValid(json.accountsRecovery);
+    }
   }
 
   ToAny() {

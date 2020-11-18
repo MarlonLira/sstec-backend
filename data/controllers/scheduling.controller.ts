@@ -4,7 +4,7 @@ import { inject } from "inversify";
 
 import { Scheduling } from "../models/scheduling.model";
 import TYPES from '../types';
-import Http from '../../commons/core/http';
+import { Http } from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ISchedulingService } from "../interfaces/IServices/schedulingService.interface";

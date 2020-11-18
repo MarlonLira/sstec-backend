@@ -1,12 +1,12 @@
 import { Op } from 'sequelize';
 
-import IVehicleRepository from '../interfaces/IRepositories/vehicleRepository.interface';
-import Vehicle from '../models/vehicle.model';
+import { IVehicleRepository } from '../interfaces/IRepositories/vehicleRepository.interface';
+import { Vehicle } from '../models/vehicle.model';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 
 @injectable()
-class VehicleRepository implements IVehicleRepository {
+export class VehicleRepository implements IVehicleRepository {
 
   getById(id: number): Promise<Vehicle> {
     return new Promise((resolve, reject) => {
@@ -119,5 +119,3 @@ class VehicleRepository implements IVehicleRepository {
     });
   }
 }
-
-export default VehicleRepository;

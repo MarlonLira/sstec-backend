@@ -1,4 +1,4 @@
-import Attributes from '../../commons/core/attributes';
+import { Attributes } from '../../commons/core/attributes';
 
 export class Email {
 
@@ -9,10 +9,10 @@ export class Email {
 
   constructor(json?: any) {
     if (json) {
-      this.subject = Attributes.ReturnIfValid(json.subject);
-      this.text = Attributes.ReturnIfValid(json.text);
-      this.from = Attributes.ReturnIfValid(json.from);
-      this.to = Attributes.ReturnIfValid(json.to);
+      this.subject = Attributes.returnIfValid(json.subject);
+      this.text = Attributes.returnIfValid(json.text);
+      this.from = Attributes.returnIfValid(json.from);
+      this.to = Attributes.returnIfValid(json.to);
     }
   }
 }
