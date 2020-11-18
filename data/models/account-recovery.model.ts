@@ -1,19 +1,9 @@
-import { Model, DataTypes } from 'sequelize';
-
-import Context from '../../main/context';
-import Attributes from '../../commons/core/attributes';
+import { DataTypes } from 'sequelize';
+import { Attributes } from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
+import { BaseModel, _instance } from './base.model';
 
-const _instance = Context.getInstance();
-
-/**
- * @description
- * @author Marlon Lira
- * @export
- * @class AccountRecovery
- * @extends {Model}
- */
-export class AccountRecovery extends Model {
+export class AccountRecovery extends BaseModel {
 
   status: TransactionType;
   token: string;
@@ -21,20 +11,14 @@ export class AccountRecovery extends Model {
   userId: number;
   expirationDate: Date;
 
-  /**
-   * Creates an instance of AccountRecovery.
-   * @author Marlon Lira
-   * @param {*} [json]
-   * @memberof AccountRecovery
-   */
   constructor(json?: any) {
-    super()
+    super(json);
     if (json) {
-      this.status = Attributes.ReturnIfValid(json.status);
-      this.token = Attributes.ReturnIfValid(json.token);
-      this.employeeId = Attributes.ReturnIfValid(json.employeeId);
-      this.userId = Attributes.ReturnIfValid(json.userId);
-      this.expirationDate = Attributes.ReturnIfValid(json.expirationDate);
+      this.status = Attributes.returnIfValid(json.status);
+      this.token = Attributes.returnIfValid(json.token);
+      this.employeeId = Attributes.returnIfValid(json.employeeId);
+      this.userId = Attributes.returnIfValid(json.userId);
+      this.expirationDate = Attributes.returnIfValid(json.expirationDate);
     }
   }
 

@@ -1,4 +1,4 @@
-import Attributes from './attributes';
+import { Attributes } from './attributes';
 
 /**
  * @description
@@ -24,9 +24,9 @@ class InnerDate {
    */
   ConvertToString(fullDate?: string) {
     this._isValidDate = true;
-    const datePart = Attributes.IsValid(fullDate) ? fullDate.split('-') : undefined;
+    const datePart = Attributes.isValid(fullDate) ? fullDate.split('-') : undefined;
 
-    if (Attributes.IsValid(datePart)) {
+    if (Attributes.isValid(datePart)) {
       this.year = LeftZero(datePart[0]);
       this.month = LeftZero(datePart[1]);
       this.day = LeftZero(datePart[2]);

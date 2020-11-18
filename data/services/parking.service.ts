@@ -1,7 +1,7 @@
 import { injectable, inject } from "inversify";
 
 import TYPES from "../types";
-import Attributes from "../../commons/core/attributes";
+import { Attributes } from "../../commons/core/attributes";
 import { IParkingRepository } from "../interfaces/IRepositories/parkingRepository.interface";
 import { InnerException } from "../../commons/core/innerException";
 import { IParkingService } from "../interfaces/IServices/parkingService.interface";
@@ -14,7 +14,7 @@ import { ParkingAddress } from "../models/parking-address.model";
 
 
 import * as Config from '../../config.json';
-import Crypto from "../../commons/core/crypto";
+import { Crypto } from "../../commons/core/crypto";
 import { CryptoType } from "../../commons/enums/cryptoType";
 const _qrCode = Config.QrCode;
 
@@ -48,7 +48,7 @@ export class ParkingService implements IParkingService {
     return new Promise((resolve, reject) => {
       this.repository.save(parking)
         .then(async (result: Parking) => {
-          result.qrcode = _qrCode.url + Crypto.Encrypt(String(result.id), CryptoType.ANYTHING);
+          result.qrcode = _qrCode.url + Crypto.encrypt(String(result.id), CryptoType.ANYTHING);
           parking.address.parkingId = result.id;
           const address: ParkingAddress = new ParkingAddress(parking.address);
           await this.addressService.save(address);
@@ -62,12 +62,12 @@ export class ParkingService implements IParkingService {
   update(parking: Parking): Promise<any> {
     return new Promise((resolve, reject) => {
       if (Attributes.isNullOrUndefined(parking.qrcode)) {
-        parking.qrcode = _qrCode.url + Crypto.Encrypt(String(parking.id), CryptoType.ANYTHING);
+        parking.qrcode = _qrCode.url + Crypto.encrypt(String(parking.id), CryptoType.ANYTHING);
       }
       this.repository.update(parking)
         .then(async (result: any) => {
           const address: ParkingAddress = new ParkingAddress(parking.address);
-          if (Attributes.IsValid(address) && address.id > 0) {
+          if (Attributes.isValid(address) && address.id > 0) {
             await this.addressService.update(address);
           } else {
             address.parkingId = parking.id;
@@ -91,7 +91,7 @@ export class ParkingService implements IParkingService {
 
   getByRegistryCode(parking: Parking): Promise<Parking[]> {
     return new Promise(async (resolve, reject) => {
-      if (Attributes.IsValid(parking.companyId) && Attributes.IsValid(parking.registryCode)) {
+      if (Attributes.isValid(parking.companyId) && Attributes.isValid(parking.registryCode)) {
         this.repository.getByRegistryCode(parking.companyId, parking.registryCode)
           .then((result: Parking[]) => resolve(result))
           .catch(async (error: any) =>

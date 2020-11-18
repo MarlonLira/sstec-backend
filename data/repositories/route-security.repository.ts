@@ -3,8 +3,6 @@ import { Op } from 'sequelize';
 import { injectable } from "inversify";
 import { IRouteSecurityRepository } from '../interfaces/IRepositories/route-securityRepository.interface';
 import { RouteSecurity } from '../models/route-security.model';
-import { Rule } from '../models/rule.model';
-
 
 @injectable()
 export class RouteSecurityRepository implements IRouteSecurityRepository {

@@ -1,12 +1,9 @@
-import { Model, DataTypes } from 'sequelize';
-
-import Context from '../../main/context';
-import Attributes from '../../commons/core/attributes';
+import { DataTypes } from 'sequelize';
+import { Attributes } from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
+import { BaseModel, _instance } from './base.model';
 
-const _instance = Context.getInstance();
-
-export class Card extends Model {
+export class Card extends BaseModel {
 
   id!: number;
   status!: TransactionType;
@@ -19,16 +16,18 @@ export class Card extends Model {
   userId: number;
 
   constructor(json?: any) {
-    super()
-    this.id = Attributes.ReturnIfValid(json.id);
-    this.status = Attributes.ReturnIfValid(json.status);
-    this.holder = Attributes.ReturnIfValid(json.holder);
-    this.flag = Attributes.ReturnIfValid(json.flag);
-    this.number = Attributes.ReturnIfValid(json.number);
-    this.expirationDate = Attributes.ReturnIfValid(json.expirationDate);
-    this.secureCode = Attributes.ReturnIfValid(json.secureCode);
-    this.type = Attributes.ReturnIfValid(json.type);
-    this.userId = Attributes.ReturnIfValid(json.userId);
+    super(json);
+    if (json) {
+      this.id = Attributes.returnIfValid(json.id);
+      this.status = Attributes.returnIfValid(json.status);
+      this.holder = Attributes.returnIfValid(json.holder);
+      this.flag = Attributes.returnIfValid(json.flag);
+      this.number = Attributes.returnIfValid(json.number);
+      this.expirationDate = Attributes.returnIfValid(json.expirationDate);
+      this.secureCode = Attributes.returnIfValid(json.secureCode);
+      this.type = Attributes.returnIfValid(json.type);
+      this.userId = Attributes.returnIfValid(json.userId);
+    }
   }
 
   ToAny() {

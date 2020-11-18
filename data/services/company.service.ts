@@ -1,7 +1,7 @@
 import { injectable, inject } from "inversify";
 import TYPES from "../types";
 import { InnerException } from "../../commons/core/innerException";
-import Attributes from "../../commons/core/attributes";
+import { Attributes } from "../../commons/core/attributes";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
@@ -36,7 +36,7 @@ export class CompanyService implements ICompanyService {
     return new Promise((resolve, reject) => {
       this.repository.getByRegistryCode(company.registryCode)
         .then(async (found: Company) => {
-          if (!Attributes.IsValid(found)) {
+          if (!Attributes.isValid(found)) {
             this.repository.save(company)
               .then(result => resolve(result))
               .catch(async (error: any) =>
@@ -53,7 +53,7 @@ export class CompanyService implements ICompanyService {
       this.repository.update(company)
         .then(async (result: any) => {
           const address = new CompanyAddress(company.address);
-          if (Attributes.IsValid(address) && address.id > 0) {
+          if (Attributes.isValid(address) && address.id > 0) {
             await this.addressService.update(address);
           } else {
             address.companyId = company.id;
@@ -77,7 +77,7 @@ export class CompanyService implements ICompanyService {
 
   getByRegistryCode(registryCode: string): Promise<Company> {
     return new Promise(async (resolve, reject) => {
-      if (Attributes.IsValid(registryCode)) {
+      if (Attributes.isValid(registryCode)) {
         this.repository.getByRegistryCode(registryCode)
           .then((result: Company) => resolve(result))
           .catch(async (error: any) =>

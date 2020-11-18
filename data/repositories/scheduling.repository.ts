@@ -5,12 +5,6 @@ import { Scheduling } from '../models/scheduling.model';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 
-/**
- * @description
- * @author Gustavo Gusmão
- * @class SchedulingRepository
- * @implements {ISchedulingRepository}
- */
 @injectable()
 export class SchedulingRepository implements ISchedulingRepository {
 

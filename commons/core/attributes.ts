@@ -1,6 +1,6 @@
-class Attributes {
+export class Attributes {
 
-  public static IsValid(value) {
+  public static isValid(value) {
     if (typeof (value) === 'string') {
       return value !== '' ? true : false;
     } else if (Array.isArray(value)) {
@@ -9,7 +9,7 @@ class Attributes {
     return !Attributes.isNullOrUndefined(value) ? true : false;
   }
 
-  static ReturnIfValid = (value, defaultValue = undefined) => Attributes.IsValid(value) ? value : defaultValue;
+  static returnIfValid = (value, defaultValue = undefined) => Attributes.isValid(value) ? value : defaultValue;
   static isNullOrUndefined = (value: any) => (value === null || value === undefined);
 
   static encodeImage(value: any) {
@@ -19,5 +19,3 @@ class Attributes {
     return value;
   }
 }
-
-export default Attributes;

@@ -3,7 +3,7 @@ import { controller, httpGet, httpPost, httpDelete, request, response, httpPut }
 import { inject } from "inversify";
 import { ParkingSpace } from "../models/parking-space.model";
 import TYPES from '../types';
-import Http from '../../commons/core/http';
+import { Http } from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { IParkingSpaceService } from "../interfaces/IServices/parking-spaceService.interface";

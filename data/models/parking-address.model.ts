@@ -1,12 +1,10 @@
-import { Model, DataTypes } from 'sequelize';
+import { DataTypes } from 'sequelize';
 
-import Context from '../../main/context';
-import Attributes from '../../commons/core/attributes';
+import { Attributes } from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
+import { BaseModel, _instance } from './base.model';
 
-const _instance = Context.getInstance();
-
-export class ParkingAddress extends Model {
+export class ParkingAddress extends BaseModel {
   id!: number;
   status!: TransactionType;
   country!: string;
@@ -21,27 +19,23 @@ export class ParkingAddress extends Model {
   complement: string;
   parkingId!: number;
 
-  /**
-   * Creates an instance of ParkingAddress.
-   * @author Felipe Seabra
-   * @param {*} [json]
-   * @memberof ParkingAddress
-   */
   constructor(json?: any) {
-    super();
-    this.id = Attributes.ReturnIfValid(json.id);
-    this.status = Attributes.ReturnIfValid(json.status);
-    this.country = Attributes.ReturnIfValid(json.country);
-    this.state = Attributes.ReturnIfValid(json.state);
-    this.city = Attributes.ReturnIfValid(json.city);
-    this.district = Attributes.ReturnIfValid(json.district);
-    this.street = Attributes.ReturnIfValid(json.street);
-    this.number = Attributes.ReturnIfValid(json.number);
-    this.zipCode = Attributes.ReturnIfValid(json.zipCode);
-    this.latitude = Attributes.ReturnIfValid(json.latitude);
-    this.longitude = Attributes.ReturnIfValid(json.longitude);
-    this.complement = Attributes.ReturnIfValid(json.complement);
-    this.parkingId = Attributes.ReturnIfValid(json.parkingId);
+    super(json);
+    if (json) {
+      this.id = Attributes.returnIfValid(json.id);
+      this.status = Attributes.returnIfValid(json.status);
+      this.country = Attributes.returnIfValid(json.country);
+      this.state = Attributes.returnIfValid(json.state);
+      this.city = Attributes.returnIfValid(json.city);
+      this.district = Attributes.returnIfValid(json.district);
+      this.street = Attributes.returnIfValid(json.street);
+      this.number = Attributes.returnIfValid(json.number);
+      this.zipCode = Attributes.returnIfValid(json.zipCode);
+      this.latitude = Attributes.returnIfValid(json.latitude);
+      this.longitude = Attributes.returnIfValid(json.longitude);
+      this.complement = Attributes.returnIfValid(json.complement);
+      this.parkingId = Attributes.returnIfValid(json.parkingId);
+    }
   }
 
   ToAny() {

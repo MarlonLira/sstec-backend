@@ -6,10 +6,10 @@ import { HttpCode } from "../../commons/enums/httpCode";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ICardService } from "../interfaces/IServices/cardService.interface";
 import { Card } from "../models/card.model";
-import ICardRepository from "../interfaces/IRepositories/cardRepository.interface";
-import Attributes from "../../commons/core/attributes";
+import { ICardRepository } from "../interfaces/IRepositories/cardRepository.interface";
+import { Attributes } from "../../commons/core/attributes";
 import { CryptoType } from "../../commons/enums/cryptoType";
-import Crypto from '../../commons/core/crypto';
+import { Crypto } from '../../commons/core/crypto';
 
 @injectable()
 export class CardService implements ICardService {
@@ -23,20 +23,20 @@ export class CardService implements ICardService {
       try {
         const cards = await this.repository.getByUserId(card.userId);
 
-        if (!Attributes.IsValid(cards)) {
-          card.number = Crypto.Encrypt(card.number, CryptoType.CARD);
-          card.expirationDate = Crypto.Encrypt(card.expirationDate, CryptoType.CARD);
-          card.secureCode = Crypto.Encrypt(card.secureCode, CryptoType.CARD);
+        if (!Attributes.isValid(cards)) {
+          card.number = Crypto.encrypt(card.number, CryptoType.CARD);
+          card.expirationDate = Crypto.encrypt(card.expirationDate, CryptoType.CARD);
+          card.secureCode = Crypto.encrypt(card.secureCode, CryptoType.CARD);
 
           this.repository.save(card)
             .then(result => resolve(result));
 
         } else {
-          const findCard = cards.find(c => Crypto.Decrypt(c.number, CryptoType.CARD) === card.number);
-          if (!Attributes.IsValid(findCard)) {
-            card.number = Crypto.Encrypt(card.number, CryptoType.CARD);
-            card.expirationDate = Crypto.Encrypt(card.expirationDate, CryptoType.CARD);
-            card.secureCode = Crypto.Encrypt(card.secureCode, CryptoType.CARD);
+          const findCard = cards.find(c => Crypto.decrypt(c.number, CryptoType.CARD) === card.number);
+          if (!Attributes.isValid(findCard)) {
+            card.number = Crypto.encrypt(card.number, CryptoType.CARD);
+            card.expirationDate = Crypto.encrypt(card.expirationDate, CryptoType.CARD);
+            card.secureCode = Crypto.encrypt(card.secureCode, CryptoType.CARD);
 
             this.repository.save(card)
               .then(result => resolve(result));
@@ -53,9 +53,9 @@ export class CardService implements ICardService {
 
   update(card: Card): Promise<any> {
     return new Promise((resolve, reject) => {
-      card.number = Crypto.Encrypt(card.number, CryptoType.CARD);
-      card.expirationDate = Crypto.Encrypt(card.expirationDate, CryptoType.CARD);
-      card.secureCode = Crypto.Encrypt(card.secureCode, CryptoType.CARD);
+      card.number = Crypto.encrypt(card.number, CryptoType.CARD);
+      card.expirationDate = Crypto.encrypt(card.expirationDate, CryptoType.CARD);
+      card.secureCode = Crypto.encrypt(card.secureCode, CryptoType.CARD);
 
       this.repository.update(card)
         .then(result => resolve(result))

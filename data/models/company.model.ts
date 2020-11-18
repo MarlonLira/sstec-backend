@@ -1,14 +1,12 @@
-import { Model, DataTypes } from 'sequelize';
-import Context from '../../main/context';
-import Attributes from '../../commons/core/attributes';
+import { DataTypes } from 'sequelize';
+import { Attributes } from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
 import { CompanyAddress } from './company-address.model';
 import { Parking } from './parking.model';
 import { RouteSecurity } from './route-security.model';
+import { BaseModel, _instance } from './base.model';
 
-const _instance = Context.getInstance();
-
-export class Company extends Model {
+export class Company extends BaseModel {
 
   id!: number;
   status!: TransactionType;
@@ -24,16 +22,18 @@ export class Company extends Model {
   routeSecurity: RouteSecurity[];
 
   constructor(json?: any) {
-    super()
-    this.id = Attributes.ReturnIfValid(json.id);
-    this.name = Attributes.ReturnIfValid(json.name);
-    this.status = Attributes.ReturnIfValid(json.status);
-    this.registryCode = Attributes.ReturnIfValid(json.registryCode);
-    this.phone = Attributes.ReturnIfValid(json.phone);
-    this.email = Attributes.ReturnIfValid(json.email);
-    this.about = Attributes.ReturnIfValid(json.about);
-    this.image = Attributes.ReturnIfValid(json.image);
-    this.address = Attributes.ReturnIfValid(json.address);
+    super(json);
+    if (json) {
+      this.id = Attributes.returnIfValid(json.id);
+      this.name = Attributes.returnIfValid(json.name);
+      this.status = Attributes.returnIfValid(json.status);
+      this.registryCode = Attributes.returnIfValid(json.registryCode);
+      this.phone = Attributes.returnIfValid(json.phone);
+      this.email = Attributes.returnIfValid(json.email);
+      this.about = Attributes.returnIfValid(json.about);
+      this.image = Attributes.returnIfValid(json.image);
+      this.address = Attributes.returnIfValid(json.address);
+    }
   }
 
   ToAny() {

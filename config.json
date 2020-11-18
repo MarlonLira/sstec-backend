@@ -1,26 +1,5 @@
 {
   "Database": {
-    "MySql": {
-      "host": "localhost",
-      "port": 3306,
-      "username": "root",
-      "password": "123456",
-      "schema": "sstec"
-    },
-    "MSSQL": {
-      "host": "DESKTOP-5BLVFSA",
-      "port": 1433,
-      "username": "sa",
-      "password": "Root1526",
-      "schema": "sstec"
-    },
-    "PostgreSQL": {
-      "host": "ec2-35-174-127-63.compute-1.amazonaws.com",
-      "port": 5432,
-      "username": "zgygdkrrohhyvx",
-      "password": "7d2c2e289c09bc57cb1ceed8347a9c703d4ad43e62f1b8e6c729cfe73847f45f",
-      "schema": "d5gj1g2unumoig"
-    },
     "MySqlWEB": {
       "host": "remotemysql.com",
       "port": 3306,
@@ -61,6 +40,6 @@
     "IsError": true
   },
   "QrCode": {
-    "url": "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=",
+    "url": "https://chart.googleapis.com/chart?chs=150x150&cht=qr&choe=UTF-8&chl="
   }
 }

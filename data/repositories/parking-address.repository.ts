@@ -6,7 +6,7 @@ import { ParkingAddress } from '../models/parking-address.model';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 @injectable()
-class ParkingAddressRepository implements IParkingAddressRepository {
+export class ParkingAddressRepository implements IParkingAddressRepository {
 
   getByParkingId(parkingId: number): Promise<ParkingAddress> {
     return new Promise((resolve, reject) => {
@@ -115,5 +115,3 @@ class ParkingAddressRepository implements IParkingAddressRepository {
     });
   }
 }
-
-export default ParkingAddressRepository;

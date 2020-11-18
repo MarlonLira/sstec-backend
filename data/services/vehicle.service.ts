@@ -1,11 +1,11 @@
 import { injectable, inject } from "inversify";
 import TYPES from "../types";
 import { IVehicleService } from "../interfaces/IServices/vehicleService.interface";
-import Vehicle from "../models/vehicle.model";
+import { Vehicle } from "../models/vehicle.model";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
-import IVehicleRepository from "../interfaces/IRepositories/vehicleRepository.interface";
+import { IVehicleRepository } from "../interfaces/IRepositories/vehicleRepository.interface";
 
 @injectable()
 export class VehicleService implements IVehicleService {

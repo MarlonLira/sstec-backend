@@ -4,23 +4,9 @@ import { ILogRepository } from "../interfaces/IRepositories/logRepository.interf
 import { Log } from "../models/log.model";
 import { Op } from 'sequelize';
 
-/**
- * @description
- * @author Marlon Lira
- * @export
- * @class LogRepository
- * @implements {ILogRepository}
- */
 @injectable()
 export class LogRepository implements ILogRepository {
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {Log} log
-   * @returns {Promise<any>}
-   * @memberof LogRepository
-   */
   save(log: Log): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Log.sequelize.transaction();
@@ -36,13 +22,6 @@ export class LogRepository implements ILogRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} companyId
-   * @returns {Promise<Log[]>}
-   * @memberof LogRepository
-   */
   toList(companyId: number): Promise<Log[]> {
     return new Promise((resolve, reject) => {
       Log.findAll({

@@ -1,12 +1,10 @@
-import { Model, DataTypes } from 'sequelize';
-import Attributes from '../../commons/core/attributes';
-import Context from '../../main/context';
+import { DataTypes } from 'sequelize';
+import { Attributes } from '../../commons/core/attributes';
+import { BaseModel, _instance } from './base.model';
 import { Company } from './company.model';
 import { Rule } from './rule.model';
 
-const _instance = Context.getInstance();
-
-export class RouteSecurity extends Model {
+export class RouteSecurity extends BaseModel {
   id: number;
   route: string;
   ruleId!: number;
@@ -16,13 +14,15 @@ export class RouteSecurity extends Model {
   company: Company;
 
   constructor(json?: any) {
-    super()
-    this.id = Attributes.ReturnIfValid(json.id);
-    this.route = Attributes.ReturnIfValid(json.route);
-    this.ruleId = Attributes.ReturnIfValid(json.ruleId);
-    this.companyId = Attributes.ReturnIfValid(json.companyId);
-    this.rule = Attributes.ReturnIfValid(json.rule);
-    this.company = Attributes.ReturnIfValid(json.company);
+    super(json);
+    if (json) {
+      this.id = Attributes.returnIfValid(json.id);
+      this.route = Attributes.returnIfValid(json.route);
+      this.ruleId = Attributes.returnIfValid(json.ruleId);
+      this.companyId = Attributes.returnIfValid(json.companyId);
+      this.rule = Attributes.returnIfValid(json.rule);
+      this.company = Attributes.returnIfValid(json.company);
+    }
   }
 
   ToAny() {

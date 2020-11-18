@@ -6,13 +6,6 @@ import { ParkingProduct } from '../models/parking-product.model';
 import { TransactionType } from "../../commons/enums/transactionType";
 import { Parking } from "../models/parking.model";
 
-/**
- * @description
- * @author Gustavo Gusmão
- * @export
- * @class ParkingProductRepository
- * @implements {IParkingProductRepository}
- */
 @injectable()
 export class ParkingProductRepository implements IParkingProductRepository {
 

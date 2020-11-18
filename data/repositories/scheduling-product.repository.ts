@@ -4,12 +4,6 @@ import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 import { Op } from 'sequelize';
 
-/**
- * @description
- * @author Gustavo Gusmão
- * @class SchedulingProductRepository
- * @implements {ISchedulingProductRepository}
- */
 @injectable()
 export class SchedulingProductRepository implements ISchedulingProductRepository {
 

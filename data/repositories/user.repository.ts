@@ -6,7 +6,7 @@ import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 import { UserAddress } from '../models/user-address.model';
 import { Card } from '../models/card.model';
-import Vehicle from '../models/vehicle.model';
+import { Vehicle } from '../models/vehicle.model';
 
 @injectable()
 export class UserRepository implements IUserRepository {

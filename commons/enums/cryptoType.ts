@@ -1,7 +1,3 @@
-/**
- * @description
- * @enum {number}
- */
 export enum CryptoType {
   PASSWORD = 0,
   CARD = 1,

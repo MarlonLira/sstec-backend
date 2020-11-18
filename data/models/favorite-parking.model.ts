@@ -1,43 +1,42 @@
-import { Model, DataTypes } from 'sequelize';
+import { DataTypes } from 'sequelize';
+import { Attributes } from '../../commons/core/attributes';
+import { BaseModel, _instance } from './base.model';
 
-import Context from '../../main/context';
-import Attributes from '../../commons/core/attributes';
+export class FavoriteParking extends BaseModel {
 
-const _instance = Context.getInstance();
+  id!: number;
+  userId: number;
+  parkingId: number;
 
-export class FavoriteParking extends Model {
-
-    id!: number;
-    userId: number;
-    parkingId: number;
-
-    constructor(json?: any) {
-        super()
-        this.id = Attributes.ReturnIfValid(json.id);
-        this.userId = Attributes.ReturnIfValid(json.userId);
-        this.parkingId = Attributes.ReturnIfValid(json.parkingId);
+  constructor(json?: any) {
+    super(json);
+    if (json) {
+      this.id = Attributes.returnIfValid(json.id);
+      this.userId = Attributes.returnIfValid(json.userId);
+      this.parkingId = Attributes.returnIfValid(json.parkingId);
     }
+  }
 
-    ToAny() {
-        return this.toJSON();
-    }
+  ToAny() {
+    return this.toJSON();
+  }
 }
 
 FavoriteParking.init({
-    id: {
-        type: new DataTypes.INTEGER(),
-        autoIncrement: true,
-        primaryKey: true
-    },
-    userId: {
-        type: new DataTypes.INTEGER(),
-        allowNull: false
-    },
-    parkingId: {
-        type: new DataTypes.INTEGER(),
-        allowNull: false
-    }
+  id: {
+    type: new DataTypes.INTEGER(),
+    autoIncrement: true,
+    primaryKey: true
+  },
+  userId: {
+    type: new DataTypes.INTEGER(),
+    allowNull: false
+  },
+  parkingId: {
+    type: new DataTypes.INTEGER(),
+    allowNull: false
+  }
 }, {
-    sequelize: _instance,
-    tableName: 'FavoriteParking'
+  sequelize: _instance,
+  tableName: 'FavoriteParking'
 });
