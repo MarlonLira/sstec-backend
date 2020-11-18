@@ -4,7 +4,7 @@ import { inject } from "inversify";
 
 import TYPES from '../types';
 import { IParkingFileService } from "../interfaces/IServices/parking-fileService.interface";
-import Http from "../../commons/core/http";
+import { Http } from "../../commons/core/http";
 import { HttpCode } from "../../commons/enums/httpCode";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ParkingFile } from "../models/parking-file.model";

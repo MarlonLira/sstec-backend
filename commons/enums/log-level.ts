@@ -1,9 +1,3 @@
-
-/**
- * @description
- * @export
- * @enum {number}
- */
 export enum LogLevel {
   ERROR = 'ERROR',
   CRITICAL = 'CRITICAL',

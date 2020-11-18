@@ -1,11 +1,5 @@
 import { SchedulingProduct } from "../../models/scheduling-product.model";
 
-/**
- * @description
- * @author Gustavo Gusmão
- * @export
- * @interface ISchedulingProductService
- */
 export interface ISchedulingProductService {
   save(schedulingProduct: SchedulingProduct): Promise<any>;
   update(schedulingProduct: SchedulingProduct): Promise<any>;

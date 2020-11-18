@@ -4,7 +4,7 @@ import { inject } from "inversify";
 
 import TYPES from '../types';
 
-import Http from '../../commons/core/http';
+import { Http } from '../../commons/core/http';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { HttpCode } from '../../commons/enums/httpCode';
 import { IEmailService } from "../interfaces/IServices/emailService.interface";

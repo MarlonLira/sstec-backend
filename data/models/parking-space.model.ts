@@ -1,18 +1,10 @@
-import { Model, DataTypes } from 'sequelize';
+import { DataTypes } from 'sequelize';
 
-import Context from '../../main/context';
-import Attributes from '../../commons/core/attributes';
+import { Attributes } from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
+import { BaseModel, _instance } from './base.model';
 
-const _instance = Context.getInstance();
-
-/**
- * @description
- * @author Emerson Souza
- * @class ParkingSpace
- * @extends {Model}
- */
-export class ParkingSpace extends Model {
+export class ParkingSpace extends BaseModel {
   id!: number;
   status!: TransactionType;
   amount!: number;
@@ -20,21 +12,18 @@ export class ParkingSpace extends Model {
   type: 'CAR' | 'MOTORCYCLE' | 'BOTH'
   parkingId!: number;
 
-  /**
-   * Creates an instance of ParkingSpace.
-   * @author Emerson Souza
-   * @param {*} [json]
-   * @memberof ParkingSpace
-   */
   constructor(json?: any) {
-    super()
-    this.id = Attributes.ReturnIfValid(json.id);
-    this.status = Attributes.ReturnIfValid(json.status);
-    this.value = Attributes.ReturnIfValid(json.value);
-    this.type = Attributes.ReturnIfValid(json.type);
-    this.parkingId = Attributes.ReturnIfValid(json.parkingId);
-    this.amount = Attributes.ReturnIfValid(json.amount);
+    super(json)
+    if (json) {
+      this.id = Attributes.returnIfValid(json.id);
+      this.status = Attributes.returnIfValid(json.status);
+      this.value = Attributes.returnIfValid(json.value);
+      this.type = Attributes.returnIfValid(json.type);
+      this.parkingId = Attributes.returnIfValid(json.parkingId);
+      this.amount = Attributes.returnIfValid(json.amount);
+    }
   }
+
   ToAny() {
     return this.toJSON();
   }

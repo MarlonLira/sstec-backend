@@ -1,9 +1,9 @@
 import { Response, Request } from "express";
 import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
 import { inject } from "inversify";
-import ParkingFinance from "../models/parking-finance.model";
+import { ParkingFinance } from "../models/parking-finance.model";
 import TYPES from '../types';
-import Http from '../../commons/core/http';
+import { Http } from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { safetyMiddleware } from "../../middleware/safety/safety.config";

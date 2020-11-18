@@ -1,7 +1,3 @@
-/**
- * @description
- * @enum {number}
- */
 export enum TransactionType {
   ACTIVE = 'AT',
   APROVED = 'AP',

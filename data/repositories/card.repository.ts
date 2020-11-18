@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
 import { injectable } from "inversify";
 
-import ICardRepository from '../interfaces/IRepositories/cardRepository.interface';
+import { ICardRepository } from '../interfaces/IRepositories/cardRepository.interface';
 import { Card } from '../models/card.model';
 import { TransactionType } from '../../commons/enums/transactionType';
 

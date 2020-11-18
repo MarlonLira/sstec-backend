@@ -1,19 +1,11 @@
-import { Model, DataTypes } from 'sequelize';
+import { DataTypes } from 'sequelize';
 
-import Context from '../../main/context';
-import Attributes from '../../commons/core/attributes';
+import { Attributes } from '../../commons/core/attributes';
 import { LogLevel } from '../../commons/enums/log-level';
 import { HttpCode } from '../../commons/enums/httpCode';
+import { BaseModel, _instance } from './base.model';
 
-const _instance = Context.getInstance();
-
-/**
- * @description
- * @author Marlon Lira
- * @class Logger
- * @extends {Model}
- */
-export class Log extends Model {
+export class Log extends BaseModel {
 
   id!: number;
   level: LogLevel;
@@ -23,22 +15,16 @@ export class Log extends Model {
   obj: string;
   isRecord: boolean;
 
-  /**
-   * Creates an instance of Logger.
-   * @author Marlon Lira
-   * @param {*} [json]
-   * @memberof Logger
-   */
   constructor(json?: any) {
-    super()
+    super(json);
     if (json) {
-      this.id = Attributes.ReturnIfValid(json.id);
-      this.level = Attributes.ReturnIfValid(json.level);
-      this.message = Attributes.ReturnIfValid(json.message);
-      this.source = Attributes.ReturnIfValid(json.source);
-      this.code = Attributes.ReturnIfValid(json.code);
-      this.obj = Attributes.ReturnIfValid(json.obj);
-      this.isRecord = Attributes.ReturnIfValid(json.isRecord);
+      this.id = Attributes.returnIfValid(json.id);
+      this.level = Attributes.returnIfValid(json.level);
+      this.message = Attributes.returnIfValid(json.message);
+      this.source = Attributes.returnIfValid(json.source);
+      this.code = Attributes.returnIfValid(json.code);
+      this.obj = Attributes.returnIfValid(json.obj);
+      this.isRecord = Attributes.returnIfValid(json.isRecord);
     }
   }
 

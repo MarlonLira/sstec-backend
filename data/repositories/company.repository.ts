@@ -5,22 +5,9 @@ import { Company } from '../models/company.model';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 
-/**
- * @description
- * @author Gustavo Gusmão
- * @class CompanyRepository
- * @implements {ICompanyRepository}
- */
 @injectable()
 export class CompanyRepository implements ICompanyRepository {
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Company} company
-   * @returns
-   * @memberof CompanyRepository
-   */
   save(company: Company) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Company.sequelize.transaction();
@@ -36,12 +23,6 @@ export class CompanyRepository implements ICompanyRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Company} company
-   * @memberof CompanyRepository
-   */
   update(company: Company) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Company.sequelize.transaction();
@@ -64,12 +45,6 @@ export class CompanyRepository implements ICompanyRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {number} id
-   * @memberof CompanyRepository
-   */
   delete(_id: number) {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Company.sequelize.transaction();
@@ -90,13 +65,6 @@ export class CompanyRepository implements ICompanyRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {string} registryCode
-   * @returns
-   * @memberof CompanyRepository
-   */
   getByRegistryCode(registryCode: string): Promise<Company[]> {
     return new Promise((resolve, reject) => {
       Company.findAll({
@@ -118,13 +86,6 @@ export class CompanyRepository implements ICompanyRepository {
     });
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @param {number} id
-   * @returns
-   * @memberof CompanyRepository
-   */
   getById(id: number) {
     return new Promise((resolve, reject) => {
       Company.findByPk(id)

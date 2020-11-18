@@ -1,18 +1,8 @@
-import { Model, DataTypes } from 'sequelize';
+import { DataTypes } from 'sequelize';
+import { Attributes } from '../../commons/core/attributes';
+import { BaseModel, _instance } from './base.model';
 
-import Context from '../../main/context';
-import Attributes from '../../commons/core/attributes';
-import { TransactionType } from '../../commons/enums/transactionType';
-
-const _instance = Context.getInstance();
-
-/**
- * @description
- * @author Emerson Souza
- * @class ParkingScore
- * @extends {Model}
- */
-export class ParkingScore extends Model {
+export class ParkingScore extends BaseModel {
   id!: number;
   attendanceScore: number;
   securityScore: number;
@@ -20,21 +10,18 @@ export class ParkingScore extends Model {
   userId: number;
   parkingId!: number;
 
-  /**
-   * Creates an instance of ParkingScore.
-   * @author Emerson Souza
-   * @param {*} [json]
-   * @memberof ParkingScore
-   */
   constructor(json?: any) {
-    super()
-    this.id = Attributes.ReturnIfValid(json.id);
-    this.attendanceScore = Attributes.ReturnIfValid(json.attendanceScore);
-    this.securityScore = Attributes.ReturnIfValid(json.securityScore);
-    this.locationScore = Attributes.ReturnIfValid(json.locationScore);
-    this.userId = Attributes.ReturnIfValid(json.userId);
-    this.parkingId = Attributes.ReturnIfValid(json.parkingId);
+    super(json)
+    if (json) {
+      this.id = Attributes.returnIfValid(json.id);
+      this.attendanceScore = Attributes.returnIfValid(json.attendanceScore);
+      this.securityScore = Attributes.returnIfValid(json.securityScore);
+      this.locationScore = Attributes.returnIfValid(json.locationScore);
+      this.userId = Attributes.returnIfValid(json.userId);
+      this.parkingId = Attributes.returnIfValid(json.parkingId);
+    }
   }
+
   ToAny() {
     return this.toJSON();
   }

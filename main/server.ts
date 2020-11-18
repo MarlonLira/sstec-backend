@@ -6,12 +6,11 @@ import * as dotenv from 'dotenv';
 import * as bodyParser from 'body-parser';
 import { InversifyExpressServer } from 'inversify-express-utils';
 
-import * as swaggerDocument from '../middleware/swagger/swagger.json';
 import { container } from '../middleware/inversify/inversify.config';
 import * as helmet from 'helmet';
 
-import Logger from '../commons/core/logger';
-import Database from '../data/database';
+import { Logger } from '../commons/core/logger';
+import { Database } from '../data/database';
 
 import * as io from "socket.io";
 
@@ -41,13 +40,11 @@ class Server {
       try {
         dotenv.config();
         const allowCors = require('./cors');
-        const swaggerUi = require('swagger-ui-express');
 
         this.inversifyExpress.setConfig((server) => {
           server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
           server.use(bodyParser.json({ limit: '50mb' }));
           server.use(allowCors);
-          server.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
           server.use(helmet());
         });
 

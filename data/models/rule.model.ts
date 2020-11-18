@@ -1,36 +1,25 @@
-import { Model, DataTypes } from 'sequelize';
+import { DataTypes } from 'sequelize';
 
-import Context from '../../main/context';
-import Attributes from '../../commons/core/attributes';
+import { Attributes } from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
+import { BaseModel, _instance } from './base.model';
 
-const _instance = Context.getInstance();
-
-/**
- * @description
- * @author Marlon Lira
- * @class Rule
- * @extends {Model}
- */
-export class Rule extends Model {
+export class Rule extends BaseModel {
   id!: number
   status!: TransactionType
   name!: string
   level!: number
 
-  /**
-   * Creates an instance of Rule.
-   * @author Marlon Lira
-   * @param {*} [json]
-   * @memberof Rule
-   */
   constructor(json?: any) {
-    super()
-    this.id = Attributes.ReturnIfValid(json.id);
-    this.name = Attributes.ReturnIfValid(json.name);
-    this.status = Attributes.ReturnIfValid(json.status);
-    this.level = Attributes.ReturnIfValid(json.level);
+    super(json)
+    if (json) {
+      this.id = Attributes.returnIfValid(json.id);
+      this.name = Attributes.returnIfValid(json.name);
+      this.status = Attributes.returnIfValid(json.status);
+      this.level = Attributes.returnIfValid(json.level);
+    }
   }
+
   ToAny() {
     return this.toJSON();
   }
