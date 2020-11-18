@@ -1,6 +1,6 @@
 import { injectable, inject } from "inversify";
 import TYPES from "../types";
-import Attributes from "../../commons/core/attributes";
+import { Attributes } from "../../commons/core/attributes";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { IParkingPriceService } from "../interfaces/IServices/parking-priceService.interface";
 import { IParkingPriceRepository } from "../interfaces/IRepositories/parking-priceRepository.interface";
