@@ -3,7 +3,7 @@ import { controller, httpGet, httpPost, request, response } from "inversify-expr
 import { inject } from "inversify";
 
 import TYPES from '../types';
-import Http from '../../commons/core/http';
+import { Http } from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from '../../commons/enums/httpMessage';
 import { ILogService } from '../interfaces/IServices/logService.interface';

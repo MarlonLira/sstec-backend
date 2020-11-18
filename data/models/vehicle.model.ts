@@ -1,12 +1,9 @@
-import { Model, DataTypes } from 'sequelize';
-
-import Context from '../../main/context';
-import Attributes from '../../commons/core/attributes';
+import { DataTypes } from 'sequelize';
+import { Attributes } from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
+import { BaseModel, _instance } from './base.model';
 
-const _instance = Context.getInstance();
-
-class Vehicle extends Model {
+export class Vehicle extends BaseModel {
 
   id!: number;
   status!: TransactionType;
@@ -18,16 +15,16 @@ class Vehicle extends Model {
 
   constructor(json?: any) {
     super()
-    this.id = Attributes.ReturnIfValid(json.id);
-    this.status = Attributes.ReturnIfValid(json.status);
-    this.model = Attributes.ReturnIfValid(json.model);
-    this.color = Attributes.ReturnIfValid(json.color);
-    this.type = Attributes.ReturnIfValid(json.type);
-    this.licensePlate = Attributes.ReturnIfValid(json.licensePlate);
-    this.userId = Attributes.ReturnIfValid(json.userId);
+    this.id = Attributes.returnIfValid(json.id);
+    this.status = Attributes.returnIfValid(json.status);
+    this.model = Attributes.returnIfValid(json.model);
+    this.color = Attributes.returnIfValid(json.color);
+    this.type = Attributes.returnIfValid(json.type);
+    this.licensePlate = Attributes.returnIfValid(json.licensePlate);
+    this.userId = Attributes.returnIfValid(json.userId);
   }
 
-  ToAny(){
+  ToAny() {
     return this.toJSON();
   }
 }
@@ -58,7 +55,7 @@ Vehicle.init({
     type: new DataTypes.STRING(10),
     allowNull: false
   },
-  userId :{
+  userId: {
     type: new DataTypes.INTEGER(),
     allowNull: false
   }
@@ -66,5 +63,3 @@ Vehicle.init({
   sequelize: _instance,
   tableName: 'Vehicle'
 });
-
-export default Vehicle;

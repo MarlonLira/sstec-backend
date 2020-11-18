@@ -1,8 +1,8 @@
 import * as express from "express";
 
 import { Container } from "inversify";
-import Attributes from "../../commons/core/attributes";
-import Http from "../../commons/core/http";
+import { Attributes } from "../../commons/core/attributes";
+import { Http } from "../../commons/core/http";
 import TYPES from '../../data/types';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { AuthService } from "../../data/services/auth.service";
@@ -14,9 +14,9 @@ function safetyMiddlewareFactory(container: Container) {
       const authService = container.get<AuthService>(TYPES.IAuthService);
       (async () => {
         const token = req.headers["authorization"];
-        if (Attributes.IsValid(token)) {
+        if (Attributes.isValid(token)) {
           let access: any = await authService.checkToken(token);
- 
+
           if (access?.valid) {
             next();
           } else {

@@ -1,7 +1,3 @@
-/**
- * @description
- * @enum {number}
- */
 export enum HttpMessage {
   Saved_Successfully = 'Cadastrado(a) com sucesso!',
   Updated_Successfully = 'Atualizado(a) com sucesso!',

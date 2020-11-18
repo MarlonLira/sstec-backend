@@ -1,28 +1,15 @@
-import Attributes from './attributes';
-
-/**
- * @description
- * @author Marlon Lira
- * @class ApiResponse
- */
-class ApiResponse {
-
+export class ApiResponse {
   code: number;
   codeMessage: string;
   message: string;
   result: any;
 
-  /**
-   * Creates an instance of ApiResponse.
-   * @author Marlon Lira
-   * @param {*} [json]
-   * @memberof ApiResponse
-   */
   constructor(json?: any) {
-    this.code = Attributes.ReturnIfValid(json.code);
-    this.message = Attributes.ReturnIfValid(json.message);
-    this.result = Attributes.ReturnIfValid(json.result);
+    if (json) {
+      this.code = json.code;
+      this.codeMessage = json.codeMessage;
+      this.message = json.message;
+      this.result = json.result;
+    }
   }
 }
-
-export default ApiResponse;

@@ -1,12 +1,11 @@
 import { injectable, inject } from "inversify";
 import TYPES from "../types";
-import { InnerException } from "../../commons/core/innerException";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { Log } from "../models/log.model";
 import { ILogRepository } from "../interfaces/IRepositories/logRepository.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
 import { LogLevel } from "../../commons/enums/log-level";
-import Logger from "../../commons/core/logger";
+import { Logger } from "../../commons/core/logger";
 import * as Config from '../../config.json';
 const { IsError, IsWarn, IsCrit, IsUnkn, IsInfo } = Config.LogRecord;
 
@@ -45,13 +44,13 @@ export class LogService implements ILogService {
       _log.isRecord = IsInfo;
 
       this.save(_log)
-        .then(() => resolve(_log.message))
+        .then(() => resolve(_log.obj))
         .catch((error: any) => resolve(error));
     });
   }
 
   warn(source: string, code: HttpCode, msg: string, obj: string): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const _log = new Log();
       _log.source = source;
       _log.code = code;
@@ -61,13 +60,13 @@ export class LogService implements ILogService {
       _log.isRecord = IsWarn;
 
       this.save(_log)
-        .then(() => resolve(_log.message))
+        .then(() => resolve(_log.obj))
         .catch((error: any) => resolve(error));
     });
   }
 
   error(source: string, code: HttpCode, msg: string, obj: string): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const _log = new Log();
       _log.source = source;
       _log.code = code;
@@ -77,13 +76,13 @@ export class LogService implements ILogService {
       _log.isRecord = IsError;
 
       this.save(_log)
-        .then(() => resolve(_log.message))
+        .then(() => resolve(_log.obj))
         .catch((error: any) => resolve(error));
     });
   }
 
   critical(source: string, code: HttpCode, msg: string, obj: any): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const _log = new Log();
       _log.source = source;
       _log.code = code;
@@ -93,13 +92,13 @@ export class LogService implements ILogService {
       _log.isRecord = IsCrit;
 
       this.save(_log)
-        .then(() => resolve(_log.message))
+        .then(() => resolve(_log.obj))
         .catch((error: any) => resolve(error));
     });
   }
 
   default(source: string, code: HttpCode, level: LogLevel, msg: string): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const _log = new Log();
       _log.source = source;
       _log.code = code;
@@ -108,7 +107,7 @@ export class LogService implements ILogService {
       _log.isRecord = IsUnkn;
 
       this.save(_log)
-        .then(() => resolve(_log.message))
+        .then(() => resolve(_log.obj))
         .catch((error: any) => resolve(error));
     });
   }

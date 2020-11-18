@@ -1,12 +1,9 @@
-import { Model, DataTypes } from 'sequelize';
-
-import Context from '../../main/context';
-import Attributes from '../../commons/core/attributes';
+import { DataTypes } from 'sequelize';
+import { Attributes } from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
+import { BaseModel, _instance } from './base.model';
 
-const _instance = Context.getInstance();
-
-export class UserAddress extends Model {
+export class UserAddress extends BaseModel {
 
   id!: number;
   status!: TransactionType;
@@ -21,21 +18,23 @@ export class UserAddress extends Model {
   userId!: number;
 
   constructor(json?: any) {
-    super()
-    this.id = Attributes.ReturnIfValid(json.id);
-    this.status = Attributes.ReturnIfValid(json.status);
-    this.country = Attributes.ReturnIfValid(json.country);
-    this.state = Attributes.ReturnIfValid(json.state);
-    this.city = Attributes.ReturnIfValid(json.city);
-    this.district = Attributes.ReturnIfValid(json.district);
-    this.street = Attributes.ReturnIfValid(json.street);
-    this.number = Attributes.ReturnIfValid(json.number);
-    this.zipCode = Attributes.ReturnIfValid(json.zipCode);
-    this.complement = Attributes.ReturnIfValid(json.complement);
-    this.userId = Attributes.ReturnIfValid(json.userId);
+    super(json);
+    if (json) {
+      this.id = Attributes.returnIfValid(json.id);
+      this.status = Attributes.returnIfValid(json.status);
+      this.country = Attributes.returnIfValid(json.country);
+      this.state = Attributes.returnIfValid(json.state);
+      this.city = Attributes.returnIfValid(json.city);
+      this.district = Attributes.returnIfValid(json.district);
+      this.street = Attributes.returnIfValid(json.street);
+      this.number = Attributes.returnIfValid(json.number);
+      this.zipCode = Attributes.returnIfValid(json.zipCode);
+      this.complement = Attributes.returnIfValid(json.complement);
+      this.userId = Attributes.returnIfValid(json.userId);
+    }
   }
-  
-  ToAny(){
+
+  ToAny() {
     return this.toJSON();
   }
 }

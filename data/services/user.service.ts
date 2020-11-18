@@ -1,7 +1,7 @@
 import { injectable, inject } from "inversify";
 import TYPES from "../types";
 import { InnerException } from "../../commons/core/innerException";
-import Attributes from "../../commons/core/attributes";
+import { Attributes } from "../../commons/core/attributes";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
@@ -9,7 +9,7 @@ import { IUserRepository } from "../interfaces/IRepositories/userRepository.inte
 import { IUserService } from "../interfaces/IServices/userService.interface";
 import { User } from "../models/user.model";
 import { IUserAddressService } from "../interfaces/IServices/user-addressService.interface";
-import Crypto from '../../commons/core/crypto';
+import { Crypto } from '../../commons/core/crypto';
 import { CryptoType } from "../../commons/enums/cryptoType";
 import { UserAddress } from "../models/user-address.model";
 
@@ -64,8 +64,8 @@ export class UserService implements IUserService {
     return new Promise((resolve, reject) => {
       this.repository.getByRegistryCode(user.registryCode)
         .then(async found => {
-          if (!Attributes.IsValid(found)) {
-            user.password = Attributes.IsValid(user.password) ? Crypto.Encrypt(user.password, CryptoType.PASSWORD) : undefined;
+          if (!Attributes.isValid(found)) {
+            user.password = Attributes.isValid(user.password) ? Crypto.encrypt(user.password, CryptoType.PASSWORD) : undefined;
             this.repository.save(user)
               .then(async (result: User) => {
                 if (user.address) {

@@ -1,7 +1,7 @@
 import { injectable, inject } from "inversify";
 import TYPES from "../types";
 import { InnerException } from "../../commons/core/innerException";
-import Attributes from "../../commons/core/attributes";
+import { Attributes } from "../../commons/core/attributes";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
@@ -29,7 +29,7 @@ export class ParkingSpaceService implements IParkingSpaceService {
 
   deleteGroupType(parkingSpace: ParkingSpace): Promise<any> {
     return new Promise((resolve, reject) => {
-      if (Attributes.IsValid(parkingSpace)) {
+      if (Attributes.isValid(parkingSpace)) {
         this.repository.deleteGroupType(parkingSpace)
           .then(result => resolve(result))
           .catch(error =>

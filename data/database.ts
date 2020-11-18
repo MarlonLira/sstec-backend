@@ -1,14 +1,12 @@
 import { Sequelize } from 'sequelize';
 import * as Config from '../config.json';
-import Logger from '../commons/core/logger';
-import Context from '../main/context';
+import { Logger } from '../commons/core/logger';
+import { Context } from '../main/context';
 
 // Entities
 import { User } from './models/user.model';
-import Vehicle from './models/vehicle.model';
+import { Vehicle } from './models/vehicle.model';
 import { UserAddress } from './models/user-address.model';
-import ParkingFinance from './models/parking-finance.model';
-import ParkingPromotion from './models/parking-promotion.model';
 import { Card } from './models/card.model';
 import { Company } from './models/company.model';
 import { CompanyAddress } from './models/company-address.model';
@@ -35,18 +33,8 @@ interface PersistenceModel {
   entity: Sequelize
 }
 
-/**
- * @description
- * @author Marlon Lira
- * @class Database
- */
-class Database {
+export class Database {
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @memberof Database
-   */
   public Build() {
     // The order influences creation in the database!
     const models: PersistenceModel[] = [
@@ -59,12 +47,10 @@ class Database {
       { name: 'Employee', entity: Employee.sequelize },
       { name: 'Parking', entity: Parking.sequelize },
       { name: 'Rule', entity: Rule.sequelize },
-      { name: 'ParkingPromotion', entity: ParkingPromotion.sequelize },
       { name: 'ParkingSpace', entity: ParkingSpace.sequelize },
       { name: 'ParkingAddress', entity: ParkingAddress.sequelize },
       { name: 'Scheduling', entity: Scheduling.sequelize },
       { name: 'ParkingScore', entity: ParkingScore.sequelize },
-      { name: 'ParkingFinance', entity: ParkingFinance.sequelize },
       { name: 'Log', entity: Log.sequelize },
       { name: 'AccountRecovery', entity: AccountRecovery.sequelize },
       { name: 'ParkingFile', entity: ParkingFile.sequelize },
@@ -91,10 +77,8 @@ class Database {
     User.hasMany(FavoriteParking, { foreignKey: 'userId', as: 'favoriteParkings' });
     Rule.hasMany(Employee, { foreignKey: 'ruleId', as: 'employees' });
     Rule.hasMany(RouteSecurity, { foreignKey: 'ruleId', as: 'routeSecurity' });
-    Parking.hasMany(ParkingPromotion, { foreignKey: 'parkingId', as: 'parkingPromotion' });
     Parking.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'parkingSpace' });
     Parking.hasMany(ParkingScore, { foreignKey: 'parkingId', as: 'parkingScore' });
-    Parking.hasMany(ParkingFinance, { foreignKey: 'parkingId', as: 'parkingFinance' });
     Parking.hasMany(Employee, { foreignKey: 'parkingId', as: 'employees' });
     Parking.hasMany(ParkingFile, { foreignKey: 'parkingId', as: 'files' });
     Parking.hasMany(FavoriteParking, { foreignKey: 'parkingId', as: 'favoriteParkings' });
@@ -230,5 +214,3 @@ class Database {
       });
   }
 }
-
-export default Database;

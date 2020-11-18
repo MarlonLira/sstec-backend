@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { Op } from 'sequelize';
 
-import IParkingScoreRepository from '../interfaces/IRepositories/parking-scoreRepository.interface';
+import { IParkingScoreRepository } from '../interfaces/IRepositories/parking-scoreRepository.interface';
 import { ParkingScore } from '../models/parking-score.model';
 
 @injectable()

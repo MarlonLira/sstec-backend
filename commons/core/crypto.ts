@@ -2,18 +2,8 @@ import { CryptoType } from '../enums/cryptoType';
 import * as CryptoJS from 'crypto-js'
 import * as bcrypt from 'bcryptjs';
 
-/**
- * @description
- * @author Marlon Lira
- * @class Crypto
- */
-class Crypto {
+export class Crypto {
 
-  /**
-   * @description
-   * @static
-   * @memberof Crypto
-   */
   static readonly cryptographyData = {
     algorithm: "aes256",
     coding: "utf8",
@@ -21,41 +11,25 @@ class Crypto {
     type: "hex"
   };
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @static
-   * @param {string} value
-   * @param {CryptoType} cryptoType
-   * @memberof Crypto
-   */
-  static Encrypt(value: string, cryptoType: CryptoType): string {
+  static encrypt(value: string, cryptoType: CryptoType): string {
     switch (cryptoType) {
       case CryptoType.PASSWORD:
-        return this.EncryptPassword(value);
+        return this.encryptPassword(value);
       case CryptoType.CARD: {
-        return this.EncryptDefault(value);
+        return this.encryptDefault(value);
       }
       default: {
-        return this.EncryptDefault(value);
+        return this.encryptDefault(value);
       }
     }
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @static
-   * @param {string} value
-   * @param {CryptoType} cryptoType
-   * @memberof Crypto
-   */
-  static Decrypt(value: string, cryptoType: CryptoType): string {
+  static decrypt(value: string, cryptoType: CryptoType): string {
     switch (cryptoType) {
       case CryptoType.PASSWORD:
         throw new Error("Method not implemented.");
       case CryptoType.CARD: {
-        return this.DecryptCard(value);
+        return this.decryptCard(value);
       }
       default: {
         break;
@@ -63,51 +37,15 @@ class Crypto {
     }
   }
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @private
-   * @static
-   * @param {string} card
-   * @returns
-   * @memberof Crypto
-   */
-  private static EncryptDefault = (card: string) => CryptoJS.AES.encrypt(card, Crypto.cryptographyData.secret).toString();
+  private static encryptDefault = (card: string) => CryptoJS.AES.encrypt(card, Crypto.cryptographyData.secret).toString();
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @private
-   * @static
-   * @param {string} value
-   * @returns
-   * @memberof Crypto
-   */
-  private static DecryptCard = (hash: string): string => CryptoJS.AES.decrypt(hash, Crypto.cryptographyData.secret).toString(CryptoJS.enc.Utf8);
+  private static decryptCard = (hash: string): string => CryptoJS.AES.decrypt(hash, Crypto.cryptographyData.secret).toString(CryptoJS.enc.Utf8);
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @private
-   * @static
-   * @param {string} password
-   * @returns
-   * @memberof Crypto
-   */
-  private static EncryptPassword = (password: string) => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+  private static encryptPassword = (password: string) => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
-  /**
-   * @description
-   * @author Marlon Lira
-   * @static
-   * @param {string} password
-   * @param {string} hash
-   * @returns
-   * @memberof Crypto
-   */
-  static Compare = (password: string, hash: string): boolean => bcrypt.compareSync(password, hash);
+  static compare = (password: string, hash: string): boolean => bcrypt.compareSync(password, hash);
 
-  static GenerateRandomPassword = (): string => CryptoJS.randomBytes(5).toString('hex');
+  static generateRandomPassword = (): string => CryptoJS.randomBytes(5).toString('hex');
 
   static randomPassword(): string {
     let text = "";
@@ -119,5 +57,3 @@ class Crypto {
     return text;
   }
 }
-
-export default Crypto;

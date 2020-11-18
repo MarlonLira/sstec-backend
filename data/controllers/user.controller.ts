@@ -4,7 +4,7 @@ import { inject } from "inversify";
 
 import TYPES from '../types';
 import { User } from "../models/user.model";
-import Http from '../../commons/core/http';
+import { Http } from '../../commons/core/http';
 import { HttpCode } from '../../commons/enums/httpCode';
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { IUserService } from "../interfaces/IServices/userService.interface";

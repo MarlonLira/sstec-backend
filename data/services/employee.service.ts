@@ -1,7 +1,7 @@
 import { injectable, inject } from "inversify";
 
 import TYPES from "../types";
-import Crypto from '../../commons/core/crypto';
+import { Crypto } from '../../commons/core/crypto';
 import { IEmployeeRepository } from "../interfaces/IRepositories/employeeRepository.interface";
 import { InnerException } from "../../commons/core/innerException";
 import { IEmployeeService } from "../interfaces/IServices/employeeService.interface";
@@ -10,7 +10,7 @@ import { HttpMessage } from "../../commons/enums/httpMessage";
 import { ILogService } from "../interfaces/IServices/logService.interface";
 import { HttpCode } from "../../commons/enums/httpCode";
 import { CryptoType } from "../../commons/enums/cryptoType";
-import Attributes from "../../commons/core/attributes";
+import { Attributes } from "../../commons/core/attributes";
 
 @injectable()
 export class EmployeeService implements IEmployeeService {
@@ -64,7 +64,7 @@ export class EmployeeService implements IEmployeeService {
       let _employee = await this.getByRegistryCode(employee.registryCode);
       _employee = Attributes.isNullOrUndefined(_employee) ? await this.getByEmail(employee.email) : _employee;
       if (Attributes.isNullOrUndefined(_employee)) {
-        employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
+        employee.password = Crypto.encrypt(employee.password, CryptoType.PASSWORD);
         this.repository.save(employee)
           .then((result: any) => resolve(result))
           .catch(async (error: any) =>
@@ -81,7 +81,7 @@ export class EmployeeService implements IEmployeeService {
       _employee = Attributes.isNullOrUndefined(_employee) ? await this.getByEmail(employee.email) : _employee;
       if (Attributes.isNullOrUndefined(_employee) || Number(employee.id) === _employee.id) {
         if (employee.password) {
-          employee.password = Crypto.Encrypt(employee.password, CryptoType.PASSWORD);
+          employee.password = Crypto.encrypt(employee.password, CryptoType.PASSWORD);
         }
 
         this.repository.update(employee)
