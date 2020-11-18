@@ -1,11 +1,8 @@
-import { Model, DataTypes } from 'sequelize';
-import Context from '../../main/context';
-import Attributes from '../../commons/core/attributes';
+import { DataTypes } from 'sequelize';
+import { Attributes } from '../../commons/core/attributes';
+import { BaseModel, _instance } from './base.model';
 
-
-const _instance = Context.getInstance();
-
-export class ParkingPrice extends Model {
+export class ParkingPrice extends BaseModel {
 
   public id!: number;
   public status!: string;
@@ -16,15 +13,18 @@ export class ParkingPrice extends Model {
   public parkingId!: number;
 
   constructor(json?: any) {
-    super()
-    this.id = Attributes.ReturnIfValid(json.id);
-    this.status = Attributes.ReturnIfValid(json.status);
-    this.period = Attributes.ReturnIfValid(json.period);
-    this.value = Attributes.ReturnIfValid(json.value);
-    this.vehicleType = Attributes.ReturnIfValid(json.vehicleType);
-    this.unit = Attributes.ReturnIfValid(json.unit);
-    this.parkingId = Attributes.ReturnIfValid(json.parkingId);
+    super(json)
+    if (json) {
+      this.id = Attributes.returnIfValid(json.id);
+      this.status = Attributes.returnIfValid(json.status);
+      this.period = Attributes.returnIfValid(json.period);
+      this.value = Attributes.returnIfValid(json.value);
+      this.vehicleType = Attributes.returnIfValid(json.vehicleType);
+      this.unit = Attributes.returnIfValid(json.unit);
+      this.parkingId = Attributes.returnIfValid(json.parkingId);
+    }
   }
+
   ToAny() {
     return this.toJSON();
   }
