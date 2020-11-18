@@ -1,0 +1,45 @@
+{
+  "Database": {
+    "MySqlWEB": {
+      "host": "remotemysql.com",
+      "port": 3306,
+      "username": "zMgq639h8l",
+      "password": "9Fg8x4cdCo",
+      "schema": "zMgq639h8l"
+    },
+    "MySqlWEB_DEV": {
+      "host": "remotemysql.com",
+      "port": 3306,
+      "username": "BdtJSgUu2L",
+      "password": "LWwGRBp3zh",
+      "schema": "BdtJSgUu2L"
+    },
+    "ForceSync": false,
+    "AlterSync": false,
+    "DropAllTable": false,
+    "Logging": false,
+    "IsLogger": false
+  },
+  "SMTP": {
+    "host": "smtp.gmail.com",
+    "port": 587,
+    "secure": false,
+    "auth": {
+      "user": "help.simpleparking@gmail.com",
+      "pass": "hikpucfalhaqxkhd"
+    },
+    "tls": {
+      "rejectUnauthorized": false
+    }
+  },
+  "LogRecord": {
+    "IsInfo": true,
+    "IsWarn": true,
+    "IsCrit": true,
+    "IsUnkn": true,
+    "IsError": true
+  },
+  "QrCode": {
+    "url": "https://chart.googleapis.com/chart?chs=150x150&cht=qr&choe=UTF-8&chl="
+  }
+}
