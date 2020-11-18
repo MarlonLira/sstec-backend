@@ -18,6 +18,7 @@ import '../../data/controllers/route-security.controller';
 import '../../data/controllers/favorite-parking.controller';
 import '../../data/controllers/parking-product.controller';
 import '../../data/controllers/scheduling-product.controller';
+import '../../data/controllers/parking-price.controller';
 
 // Others
 

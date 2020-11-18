@@ -24,6 +24,7 @@ import { RouteSecurityRepository } from '../../data/repositories/route-security.
 import { FavoriteParkingRepository } from '../../data/repositories/favorite-parking.repository';
 import { ParkingProductRepository } from '../../data/repositories/parking-product.repository';
 import { SchedulingProductRepository } from '../../data/repositories/scheduling-product.repository';
+import { ParkingPriceRepository } from '../../data/repositories/parking-price.repository';
 
 // Repositories interfaces
 import { IUserRepository } from '../../data/interfaces/IRepositories/userRepository.interface';
@@ -46,6 +47,7 @@ import { IRouteSecurityRepository } from '../../data/interfaces/IRepositories/ro
 import { IFavoriteParkingRepository } from '../../data/interfaces/IRepositories/favorite-parkingRepository.interface';
 import { IParkingProductRepository } from '../../data/interfaces/IRepositories/parking-productRepository.interface';
 import { ISchedulingProductRepository } from '../../data/interfaces/IRepositories/scheduling-productRepository.interface';
+import { IParkingPriceRepository } from '../../data/interfaces/IRepositories/parking-priceRepository.interface';
 
 // Services
 import { AuthService } from '../../data/services/auth.service';
@@ -70,6 +72,7 @@ import { RouteSecurityService } from '../../data/services/route-security.service
 import { FavoriteParkingService } from '../../data/services/favorite-parking.service';
 import { ParkingProductService } from '../../data/services/parking-product.service';
 import { SchedulingProductService } from '../../data/services/scheduling-product.service';
+import { ParkingPriceService } from '../../data/services/parking-price.service';
 
 // Services interfaces
 import { IAuthService } from '../../data/interfaces/IServices/authService.interface';
@@ -94,6 +97,7 @@ import { IRouteSecurityService } from '../../data/interfaces/IServices/route-sec
 import { IFavoriteParkingService } from '../../data/interfaces/IServices/favorite-parkingService.interface';
 import { IParkingProductService } from '../../data/interfaces/IServices/parking-productService.interface';
 import { ISchedulingProductService } from '../../data/interfaces/IServices/scheduling-productService.interface';
+import { IParkingPriceService } from '../../data/interfaces/IServices/parking-priceService.interface';
 
 // Binds
 const container = new Container();
@@ -120,6 +124,7 @@ container.bind<IRouteSecurityService>(TYPES.IRouteSecurityService).to(RouteSecur
 container.bind<IFavoriteParkingService>(TYPES.IFavoriteParkingService).to(FavoriteParkingService);
 container.bind<IParkingProductService>(TYPES.IParkingProductService).to(ParkingProductService);
 container.bind<ISchedulingProductService>(TYPES.ISchedulingProductService).to(SchedulingProductService);
+container.bind<IParkingPriceService>(TYPES.IParkingPriceService).to(ParkingPriceService);
 container.bind<IParkingFinanceService>(TYPES.IParkingFinanceService).to(ParkingFinanceService);
 
 // Repositories Binds
@@ -143,5 +148,6 @@ container.bind<IRouteSecurityRepository>(TYPES.IRouteSecurityRepository).to(Rout
 container.bind<IFavoriteParkingRepository>(TYPES.IFavoriteParkingRepository).to(FavoriteParkingRepository);
 container.bind<IParkingProductRepository>(TYPES.IParkingProductRepository).to(ParkingProductRepository);
 container.bind<ISchedulingProductRepository>(TYPES.ISchedulingProductRepository).to(SchedulingProductRepository);
+container.bind<IParkingPriceRepository>(TYPES.IParkingPriceService).to(ParkingPriceRepository);
 
 export { container };
