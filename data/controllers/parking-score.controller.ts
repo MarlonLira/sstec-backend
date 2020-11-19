@@ -14,14 +14,6 @@ class ParkingScoreController {
 
   constructor(@inject(TYPES.IParkingScoreService) private service: IParkingScoreService) { }
 
-  /**
-   * @description
-   * @author Emerson Souza
-   * @param {Request<any, any, any, import("express-serve-static-core").Query>} req
-   * @param {Response<any>} res
-   * @returns {Promise<any>}
-   * @memberof ParkingScoreController
-   */
   @httpPost('/parkingScore')
   post(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
@@ -31,15 +23,7 @@ class ParkingScoreController {
     });
   }
 
-  /**
-   * @description
-   * @author Emerson Souza
-   * @param {Request<any, any, any, import("express-serve-static-core").Query>} req
-   * @param {Response<any>} res
-   * @returns {Promise<any>}
-   * @memberof ParkingScoreController
-   */
-  @httpGet('/parkingScore/:id')
+  @httpGet('parkingScore/:id')
   getById(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.getById(Number(req.params.id))
@@ -48,14 +32,6 @@ class ParkingScoreController {
     });
   }
 
-  /**
-   * @description
-   * @author Emerson Souza
-   * @param {Request} req
-   * @param {Response} res
-   * @returns {Promise<any>}
-   * @memberof ParkingScoreController
-   */
   @httpGet('/parkingsScores/:parkingId')
   getByParkingId(@request() req: Request, @response() res: Response): Promise<any> {
     return new Promise((resolve) => {
@@ -74,14 +50,6 @@ class ParkingScoreController {
     });
   }
 
-  /**
-   * @description
-   * @author Emerson Souza
-   * @param {Request<any, any, any, import("express-serve-static-core").Query>} req
-   * @param {Response<any>} res
-   * @returns {Promise<any>}
-   * @memberof ParkingScoreController
-   */
   @httpDelete('/parkingScore/:id')
   delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
