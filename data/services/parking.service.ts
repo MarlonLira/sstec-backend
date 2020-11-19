@@ -12,7 +12,6 @@ import { HttpCode } from "../../commons/enums/httpCode";
 import { IParkingAddressService } from "../interfaces/IServices/parking-addressService.interface";
 import { ParkingAddress } from "../models/parking-address.model";
 
-
 import * as Config from '../../config.json';
 import { Crypto } from "../../commons/core/crypto";
 import { CryptoType } from "../../commons/enums/cryptoType";

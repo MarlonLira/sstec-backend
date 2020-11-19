@@ -4,6 +4,7 @@ import { ISchedulingRepository } from '../interfaces/IRepositories/schedulingRep
 import { Scheduling } from '../models/scheduling.model';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
+import { SchedulingProduct } from '../models/scheduling-product.model';
 
 @injectable()
 export class SchedulingRepository implements ISchedulingRepository {
@@ -25,8 +26,14 @@ export class SchedulingRepository implements ISchedulingRepository {
 
   getById(id: number): Promise<Scheduling> {
     return new Promise(async (resolve, reject) => {
-      Scheduling.findByPk(id)
-        .then((result: Scheduling) => resolve(result))
+      Scheduling.findByPk(id, {
+        include: [{ model: SchedulingProduct, as: 'schedulingProducts' }],
+        raw: true,
+        nest: true,
+      })
+        .then((result: Scheduling) => {
+          console.log(result)
+          resolve(result)})
         .catch(error => reject(error));
     });
   }

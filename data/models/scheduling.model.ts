@@ -1,7 +1,9 @@
 import { DataTypes } from 'sequelize';
 import { Attributes } from '../../commons/core/attributes';
+import { Json } from '../../commons/core/json';
 import { TransactionType } from '../../commons/enums/transactionType';
 import { BaseModel, _instance } from './base.model';
+import { SchedulingProduct } from './scheduling-product.model';
 
 export class Scheduling extends BaseModel {
 
@@ -20,8 +22,10 @@ export class Scheduling extends BaseModel {
   vehicleId!: number;
   parkingId!: number;
   parkingSpaceId!: number;
+  schedulingProducts: SchedulingProduct[];
 
   constructor(json?: any) {
+    json = Json.parse(json);
     super(json);
     if (json) {
       this.id = Attributes.returnIfValid(json.id);
@@ -39,6 +43,7 @@ export class Scheduling extends BaseModel {
       this.cardId = Attributes.returnIfValid(json.cardId);
       this.parkingId = Attributes.returnIfValid(json.parkingId);
       this.parkingSpaceId = Attributes.returnIfValid(json.parkingSpaceId);
+      this.schedulingProducts = Attributes.returnIfValid(json.schedulingProducts);
     }
   }
 
