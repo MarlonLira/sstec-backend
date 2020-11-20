@@ -11,9 +11,9 @@ export class LogRepository implements ILogRepository {
     return new Promise(async (resolve, reject) => {
       const _transaction = await Log.sequelize.transaction();
       Log.create(log, { transaction: _transaction })
-        .then(async (createdLog: Log) => {
+        .then(async (result: Log) => {
           await _transaction.commit();
-          resolve({ "logId": createdLog.id })
+          resolve(result);
         })
         .catch(async error => {
           await _transaction.rollback();

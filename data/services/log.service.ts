@@ -7,6 +7,7 @@ import { HttpCode } from "../../commons/enums/httpCode";
 import { LogLevel } from "../../commons/enums/log-level";
 import { Logger } from "../../commons/core/logger";
 import * as Config from '../../config.json';
+import { Attributes } from "../../commons/core/attributes";
 const { IsError, IsWarn, IsCrit, IsUnkn, IsInfo } = Config.LogRecord;
 
 @injectable()
@@ -27,19 +28,19 @@ export class LogService implements ILogService {
       Logger.Default(log);
       if (log.isRecord) {
         this.repository.save(log)
-          .then((result: any) => resolve(result))
+          .then((result: Log) => resolve(result))
           .catch((error: any) => reject(error));
       }
     });
   }
 
   info(source: string, code: HttpCode, msg: string, obj: string): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const _log = new Log();
       _log.source = source;
       _log.code = code;
       _log.message = msg;
-      _log.obj = obj;
+      _log.obj = Attributes.returnIfValid(obj, msg);
       _log.level = LogLevel.INFO;
       _log.isRecord = IsInfo;
 
@@ -55,7 +56,7 @@ export class LogService implements ILogService {
       _log.source = source;
       _log.code = code;
       _log.message = msg;
-      _log.obj = obj;
+      _log.obj = Attributes.returnIfValid(obj, msg);
       _log.level = LogLevel.WARNING;
       _log.isRecord = IsWarn;
 
@@ -71,7 +72,7 @@ export class LogService implements ILogService {
       _log.source = source;
       _log.code = code;
       _log.message = msg;
-      _log.obj = obj;
+      _log.obj = Attributes.returnIfValid(obj, msg);
       _log.level = LogLevel.ERROR;
       _log.isRecord = IsError;
 
@@ -87,7 +88,7 @@ export class LogService implements ILogService {
       _log.source = source;
       _log.code = code;
       _log.message = msg;
-      _log.obj = obj;
+      _log.obj = Attributes.returnIfValid(obj, msg);
       _log.level = LogLevel.CRITICAL;
       _log.isRecord = IsCrit;
 
