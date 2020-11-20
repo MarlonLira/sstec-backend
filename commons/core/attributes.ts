@@ -1,12 +1,15 @@
 export class Attributes {
 
   public static isValid(value) {
-    if (typeof (value) === 'string') {
-      return value !== '' ? true : false;
-    } else if (Array.isArray(value)) {
-      return value.length > 0 ? true : false;
+    const _isNullOrUndefined = Attributes.isNullOrUndefined(value);
+    if (!_isNullOrUndefined) {
+      if (typeof (value) === 'string') {
+        return value !== '' ? true : false;
+      } else if (Array.isArray(value)) {
+        return value.length > 0 ? true : false;
+      }
     }
-    return !Attributes.isNullOrUndefined(value) ? true : false;
+    return !_isNullOrUndefined;
   }
 
   static returnIfValid = (value, defaultValue = undefined) => Attributes.isValid(value) ? value : defaultValue;
