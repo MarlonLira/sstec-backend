@@ -21,7 +21,7 @@ export class ParkingScoreService implements IParkingScoreService {
       this.repository.getById(id)
         .then(async (result: ParkingScore) => resolve(result))
         .catch(async (error: any) =>
-          reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+          reject(await this.log.critical('Parking Score', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
 
