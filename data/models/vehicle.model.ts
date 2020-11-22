@@ -1,7 +1,8 @@
 import { DataTypes } from 'sequelize';
 import { Attributes } from '../../commons/core/attributes';
+import { InnerJson } from '../../commons/core/innerJson';
 import { TransactionType } from '../../commons/enums/transactionType';
-import { BaseModel, _instance } from './base.model';
+import { BaseModel, BaseModelDAO, _instance } from './base.model';
 
 export class Vehicle extends BaseModel {
 
@@ -14,22 +15,23 @@ export class Vehicle extends BaseModel {
   userId!: number;
 
   constructor(json?: any) {
-    super()
-    this.id = Attributes.returnIfValid(json.id);
-    this.status = Attributes.returnIfValid(json.status);
-    this.model = Attributes.returnIfValid(json.model);
-    this.color = Attributes.returnIfValid(json.color);
-    this.type = Attributes.returnIfValid(json.type);
-    this.licensePlate = Attributes.returnIfValid(json.licensePlate);
-    this.userId = Attributes.returnIfValid(json.userId);
-  }
-
-  ToAny() {
-    return this.toJSON();
+    json = InnerJson.parse(json);
+    super(json);
+    if (json) {
+      this.id = Attributes.returnIfValid(json.id);
+      this.status = Attributes.returnIfValid(json.status);
+      this.model = Attributes.returnIfValid(json.model);
+      this.color = Attributes.returnIfValid(json.color);
+      this.type = Attributes.returnIfValid(json.type);
+      this.licensePlate = Attributes.returnIfValid(json.licensePlate);
+      this.userId = Attributes.returnIfValid(json.userId);
+    }
   }
 }
 
-Vehicle.init({
+export class VehicleDAO extends BaseModelDAO { }
+
+VehicleDAO.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,

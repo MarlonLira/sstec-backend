@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { Attributes } from '../../commons/core/attributes';
-import { BaseModel, _instance } from './base.model';
+import { InnerJson } from '../../commons/core/innerJson';
+import { BaseModel, BaseModelDAO, _instance } from './base.model';
 import { Company } from './company.model';
 import { Rule } from './rule.model';
 
@@ -14,6 +15,7 @@ export class RouteSecurity extends BaseModel {
   company: Company;
 
   constructor(json?: any) {
+    json = InnerJson.parse(json);
     super(json);
     if (json) {
       this.id = Attributes.returnIfValid(json.id);
@@ -24,12 +26,11 @@ export class RouteSecurity extends BaseModel {
       this.company = Attributes.returnIfValid(json.company);
     }
   }
-
-  ToAny() {
-    return this.toJSON();
-  }
 }
-RouteSecurity.init({
+
+export class RouteSecurityDAO extends BaseModelDAO { }
+
+RouteSecurityDAO.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,

@@ -1,8 +1,8 @@
 import { DataTypes } from 'sequelize';
 import { Attributes } from '../../commons/core/attributes';
-import { Json } from '../../commons/core/json';
+import { InnerJson } from '../../commons/core/innerJson';
 import { TransactionType } from '../../commons/enums/transactionType';
-import { BaseModel, _instance } from './base.model';
+import { BaseModel, BaseModelDAO, _instance } from './base.model';
 import { SchedulingProduct } from './scheduling-product.model';
 
 export class Scheduling extends BaseModel {
@@ -25,7 +25,7 @@ export class Scheduling extends BaseModel {
   schedulingProducts: SchedulingProduct[];
 
   constructor(json?: any) {
-    json = Json.parse(json);
+    json = InnerJson.parse(json);
     super(json);
     if (json) {
       this.id = Attributes.returnIfValid(json.id);
@@ -46,13 +46,11 @@ export class Scheduling extends BaseModel {
       this.schedulingProducts = Attributes.returnIfValid(json.schedulingProducts);
     }
   }
-
-  ToAny() {
-    return this.toJSON();
-  }
 }
 
-Scheduling.init({
+export class SchedulingDAO extends BaseModelDAO { }
+
+SchedulingDAO.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,

@@ -4,16 +4,16 @@ import { Logger } from '../commons/core/logger';
 import { Context } from '../main/context';
 
 // Entities
-import { User } from './models/user.model';
-import { Vehicle } from './models/vehicle.model';
-import { UserAddress } from './models/user-address.model';
+import { User, UserDAO } from './models/user.model';
+import { Vehicle, VehicleDAO } from './models/vehicle.model';
+import { UserAddress, UserAddressDAO } from './models/user-address.model';
 import { Card } from './models/card.model';
 import { Company } from './models/company.model';
 import { CompanyAddress } from './models/company-address.model';
 import { Employee } from './models/employee.model';
 import { Parking } from './models/parking.model';
 import { Rule } from './models/rule.model';
-import { ParkingSpace } from './models/parking-space.model';
+import { ParkingSpace, ParkingSpaceDAO } from './models/parking-space.model';
 import { ParkingAddress } from './models/parking-address.model';
 import { Scheduling } from './models/scheduling.model';
 import { ParkingScore } from './models/parking-score.model';
@@ -22,8 +22,8 @@ import { AccountRecovery } from './models/account-recovery.model';
 import { ParkingFile } from './models/parking-file.model';
 import { RouteSecurity } from './models/route-security.model';
 import { FavoriteParking } from './models/favorite-parking.model';
-import { SchedulingProduct } from './models/scheduling-product.model';
-import { ParkingProduct } from './models/parking-product.model';
+import { SchedulingProduct, SchedulingProductDAO } from './models/scheduling-product.model';
+import { ParkingProduct, ParkingProductDAO } from './models/parking-product.model';
 
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
@@ -38,16 +38,16 @@ export class Database {
   public Build() {
     // The order influences creation in the database!
     const models: PersistenceModel[] = [
-      { name: 'User', entity: User.sequelize },
-      { name: 'Vehicle', entity: Vehicle.sequelize },
-      { name: 'UserAddress', entity: UserAddress.sequelize },
+      { name: 'User', entity: UserDAO.sequelize },
+      { name: 'Vehicle', entity: VehicleDAO.sequelize },
+      { name: 'UserAddress', entity: UserAddressDAO.sequelize },
       { name: 'Card', entity: Card.sequelize },
       { name: 'Company', entity: Company.sequelize },
       { name: 'CompanyAddress', entity: CompanyAddress.sequelize },
       { name: 'Employee', entity: Employee.sequelize },
       { name: 'Parking', entity: Parking.sequelize },
       { name: 'Rule', entity: Rule.sequelize },
-      { name: 'ParkingSpace', entity: ParkingSpace.sequelize },
+      { name: 'ParkingSpace', entity: ParkingSpaceDAO.sequelize },
       { name: 'ParkingAddress', entity: ParkingAddress.sequelize },
       { name: 'Scheduling', entity: Scheduling.sequelize },
       { name: 'ParkingScore', entity: ParkingScore.sequelize },
@@ -56,8 +56,8 @@ export class Database {
       { name: 'ParkingFile', entity: ParkingFile.sequelize },
       { name: 'RouteSecurity', entity: RouteSecurity.sequelize },
       { name: 'FavoriteParking', entity: FavoriteParking.sequelize },
-      { name: 'SchedulingProduct', entity: SchedulingProduct.sequelize },
-      { name: 'ParkingProduct', entity: ParkingProduct.sequelize }
+      { name: 'SchedulingProduct', entity: SchedulingProductDAO.sequelize },
+      { name: 'ParkingProduct', entity: ParkingProductDAO.sequelize }
     ];
 
     Logger.Info('Database', 'Table verification started!');

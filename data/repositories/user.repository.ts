@@ -35,14 +35,15 @@ export class UserRepository implements IUserRepository {
       User.findByPk(id,
         {
           include: [
-            { model: Card, as: 'cards' },
-            { model: Vehicle, as: 'vehicles' },
-            { model: UserAddress, as: 'address' },
-          ],
-          raw: true,
-          nest: true
+            { model: Card, as: 'cards', where: { status: { [Op.ne]: TransactionType.DELETED } } },
+            { model: Vehicle, as: 'vehicles', where: { status: { [Op.ne]: TransactionType.DELETED } } },
+            // { model: UserAddress, as: 'address', where: { status: { [Op.ne]: TransactionType.DELETED } } }
+          ]
         })
-        .then((user: User) => resolve(user))
+        .then((result: User) => {
+          // console.log(new User(result))
+          resolve(result);
+        })
         .catch(error => reject(error));
     });
   }

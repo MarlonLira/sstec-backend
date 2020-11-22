@@ -50,7 +50,10 @@ export class UserService implements IUserService {
   getById(id: number): Promise<User> {
     return new Promise((resolve, reject) => {
       this.repository.getById(id)
-        .then((result: User) => resolve(result))
+        .then((result: User) => {
+          result.image = undefined;
+          resolve(result)
+        })
         .catch(async (error: any) =>
           reject(await this.log.critical('User', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
