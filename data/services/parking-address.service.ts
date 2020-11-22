@@ -46,7 +46,7 @@ export class ParkingAddressService implements IParkingAddressService {
 
   save(parkingAddress: ParkingAddress): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.repository.save(parkingAddress)
+      this.repository.save(new ParkingAddress(parkingAddress))
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
