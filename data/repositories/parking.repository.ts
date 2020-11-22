@@ -5,7 +5,7 @@ import { IParkingRepository } from '../interfaces/IRepositories/parkingRepositor
 import { Parking, ParkingDAO } from '../models/parking.model';
 import { TransactionType } from '../../commons/enums/transactionType';
 import { ParkingAddress, ParkingAddressDAO } from '../models/parking-address.model';
-import { Employee } from '../models/employee.model';
+import { Employee, EmployeeDAO } from '../models/employee.model';
 
 @injectable()
 export class ParkingRepository implements IParkingRepository {

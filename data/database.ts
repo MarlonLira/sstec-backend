@@ -4,26 +4,26 @@ import { Logger } from '../commons/core/logger';
 import { Context } from '../main/context';
 
 // Entities
-import { User, UserDAO } from './models/user.model';
-import { Vehicle, VehicleDAO } from './models/vehicle.model';
-import { UserAddress, UserAddressDAO } from './models/user-address.model';
-import { Card } from './models/card.model';
-import { Company } from './models/company.model';
-import { CompanyAddress } from './models/company-address.model';
-import { Employee } from './models/employee.model';
-import { Parking, ParkingDAO } from './models/parking.model';
-import { Rule, RuleDAO } from './models/rule.model';
-import { ParkingSpace, ParkingSpaceDAO } from './models/parking-space.model';
-import { ParkingAddress, ParkingAddressDAO } from './models/parking-address.model';
-import { Scheduling, SchedulingDAO } from './models/scheduling.model';
-import { ParkingScore, ParkingScoreDAO } from './models/parking-score.model';
-import { Log } from './models/log.model';
-import { AccountRecovery } from './models/account-recovery.model';
-import { ParkingFile, ParkingFileDAO } from './models/parking-file.model';
-import { RouteSecurity, RouteSecurityDAO } from './models/route-security.model';
-import { FavoriteParking } from './models/favorite-parking.model';
-import { SchedulingProduct, SchedulingProductDAO } from './models/scheduling-product.model';
-import { ParkingProduct, ParkingProductDAO } from './models/parking-product.model';
+import { UserDAO } from './models/user.model';
+import { VehicleDAO } from './models/vehicle.model';
+import { UserAddressDAO } from './models/user-address.model';
+import { CardDAO } from './models/card.model';
+import { CompanyDAO } from './models/company.model';
+import { CompanyAddressDAO } from './models/company-address.model';
+import { EmployeeDAO } from './models/employee.model';
+import { ParkingDAO } from './models/parking.model';
+import { RuleDAO } from './models/rule.model';
+import { ParkingSpaceDAO } from './models/parking-space.model';
+import { ParkingAddressDAO } from './models/parking-address.model';
+import { SchedulingDAO } from './models/scheduling.model';
+import { ParkingScoreDAO } from './models/parking-score.model';
+import { LogDAO } from './models/log.model';
+import { AccountRecoveryDAO } from './models/account-recovery.model';
+import { ParkingFileDAO } from './models/parking-file.model';
+import { RouteSecurityDAO } from './models/route-security.model';
+import { FavoriteParkingDAO } from './models/favorite-parking.model';
+import { SchedulingProductDAO } from './models/scheduling-product.model';
+import { ParkingProductDAO } from './models/parking-product.model';
 
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
@@ -41,21 +41,21 @@ export class Database {
       { name: 'User', entity: UserDAO.sequelize },
       { name: 'Vehicle', entity: VehicleDAO.sequelize },
       { name: 'UserAddress', entity: UserAddressDAO.sequelize },
-      { name: 'Card', entity: Card.sequelize },
-      { name: 'Company', entity: Company.sequelize },
-      { name: 'CompanyAddress', entity: CompanyAddress.sequelize },
-      { name: 'Employee', entity: Employee.sequelize },
+      { name: 'Card', entity: CardDAO.sequelize },
+      { name: 'Company', entity: CompanyDAO.sequelize },
+      { name: 'CompanyAddress', entity: CompanyAddressDAO.sequelize },
+      { name: 'Employee', entity: EmployeeDAO.sequelize },
       { name: 'Parking', entity: ParkingDAO.sequelize },
       { name: 'Rule', entity: RuleDAO.sequelize },
       { name: 'ParkingSpace', entity: ParkingSpaceDAO.sequelize },
       { name: 'ParkingAddress', entity: ParkingAddressDAO.sequelize },
       { name: 'Scheduling', entity: SchedulingDAO.sequelize },
       { name: 'ParkingScore', entity: ParkingScoreDAO.sequelize },
-      { name: 'Log', entity: Log.sequelize },
-      { name: 'AccountRecovery', entity: AccountRecovery.sequelize },
+      { name: 'Log', entity: LogDAO.sequelize },
+      { name: 'AccountRecovery', entity: AccountRecoveryDAO.sequelize },
       { name: 'ParkingFile', entity: ParkingFileDAO.sequelize },
       { name: 'RouteSecurity', entity: RouteSecurityDAO.sequelize },
-      { name: 'FavoriteParking', entity: FavoriteParking.sequelize },
+      { name: 'FavoriteParking', entity: FavoriteParkingDAO.sequelize },
       { name: 'SchedulingProduct', entity: SchedulingProductDAO.sequelize },
       { name: 'ParkingProduct', entity: ParkingProductDAO.sequelize }
     ];
@@ -92,10 +92,10 @@ export class Database {
     EmployeeDAO.belongsTo(ParkingDAO, { as: 'parking' });
     EmployeeDAO.belongsTo(CompanyDAO, { as: 'company' });
     EmployeeDAO.belongsTo(RuleDAO, { as: 'rule' });
-    ParkingProduct.belongsTo(ParkingDAO, { as: 'parking' });
+    ParkingProductDAO.belongsTo(ParkingDAO, { as: 'parking' });
 
     // 1:1 - has one
-    Company.hasOne(CompanyAddress, { foreignKey: 'companyId', as: 'address' });
+    CompanyDAO.hasOne(CompanyAddressDAO, { foreignKey: 'companyId', as: 'address' });
     UserDAO.hasOne(UserAddressDAO, { foreignKey: 'userId', as: 'address' });
     ParkingDAO.hasOne(ParkingAddressDAO, { foreignKey: 'parkingId', as: 'address' });
 

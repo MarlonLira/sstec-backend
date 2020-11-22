@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
 
 import { ICompanyRepository } from '../interfaces/IRepositories/companyRepository.interface';
-import { Company } from '../models/company.model';
+import { Company, CompanyDAO } from '../models/company.model';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 
@@ -10,13 +10,13 @@ export class CompanyRepository implements ICompanyRepository {
 
   save(company: Company) {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await Company.sequelize.transaction();
+      const _transaction = await CompanyDAO.sequelize.transaction();
       company.status = TransactionType.ACTIVE;
-      Company.create(company, { transaction: _transaction })
-        .then(async (result: Company) => {
+      CompanyDAO.create(company, { transaction: _transaction })
+        .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result);
-        }).catch(async error => {
+          resolve(new Company(result));
+        }).catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -25,8 +25,8 @@ export class CompanyRepository implements ICompanyRepository {
 
   update(company: Company) {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await Company.sequelize.transaction();
-      Company.update(company.toJSON(),
+      const _transaction = await CompanyDAO.sequelize.transaction();
+      CompanyDAO.update(company,
         {
           where: {
             id: company.id
@@ -34,11 +34,11 @@ export class CompanyRepository implements ICompanyRepository {
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result);
+          resolve(new Company(result));
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -47,18 +47,18 @@ export class CompanyRepository implements ICompanyRepository {
 
   delete(_id: number) {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await Company.sequelize.transaction();
-      Company.update({ status: TransactionType.DELETED },
+      const _transaction = await CompanyDAO.sequelize.transaction();
+      CompanyDAO.update({ status: TransactionType.DELETED },
         {
           where: { id: _id },
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result);
+          resolve(new Company(result));
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -67,7 +67,7 @@ export class CompanyRepository implements ICompanyRepository {
 
   getByRegistryCode(registryCode: string): Promise<Company[]> {
     return new Promise((resolve, reject) => {
-      Company.findAll({
+      CompanyDAO.findAll({
         where: {
           registryCode: {
             [Op.like]: `${registryCode}%`
@@ -77,10 +77,10 @@ export class CompanyRepository implements ICompanyRepository {
           }
         }
       })
-        .then((foundCompany: Company[]) => {
+        .then((foundCompany: any) => {
           resolve(foundCompany);
         })
-        .catch(error => {
+        .catch((error: any) => {
           reject(error);
         });
     });
@@ -88,9 +88,9 @@ export class CompanyRepository implements ICompanyRepository {
 
   getById(id: number) {
     return new Promise((resolve, reject) => {
-      Company.findByPk(id)
-        .then((result: Company) => resolve(result))
-        .catch(error => reject(error));
+      CompanyDAO.findByPk(id)
+        .then((result: any) => resolve(new Company(result)))
+        .catch((error : any) => reject(error));
     });
   }
 }

@@ -6,6 +6,7 @@ import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 import { UserAddressDAO } from '../models/user-address.model';
 import { VehicleDAO } from '../models/vehicle.model';
+import { CardDAO } from '../models/card.model';
 
 @injectable()
 export class UserRepository implements IUserRepository {
