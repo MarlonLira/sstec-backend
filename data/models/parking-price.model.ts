@@ -7,9 +7,9 @@ export class ParkingPrice extends BaseModel {
 
   public id!: number;
   public status!: string;
-  public period!: string;
+  public period!: 'OVERTIME' | 'HOUR' | 'DAY' | 'WEEK' | 'MONTH' | 'YEAR';
   public value!: number;
-  public vehicleType!: string;
+  public vehicleType!: 'CAR' | 'MOTORCYCLE' | 'BOTH';
   public unit!: number;
   public parkingId!: number;
 
@@ -45,7 +45,7 @@ ParkingPriceDAO.init({
     allowNull: false
   },
   value: {
-    type: new DataTypes.INTEGER(),
+    type: new DataTypes.DOUBLE(),
     allowNull: false
   },
   vehicleType: {

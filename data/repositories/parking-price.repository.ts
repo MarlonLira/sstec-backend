@@ -8,6 +8,65 @@ import { ParkingScore, ParkingScoreDAO } from "../models/parking-score.model";
 @injectable()
 export class ParkingPriceRepository implements IParkingPriceRepository {
 
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {number} id
+   * @returns {Promise<ParkingPrice[]>}
+   * @memberof ParkingPriceRepository
+   */
+  getByParkingId(id: number): Promise<ParkingPrice[]> {
+    return new Promise(async (resolve, reject) => {
+      ParkingPrice.findAll({
+        where: {
+          parkingId: { [Op.eq]: id },
+          status: { [Op.eq]: TransactionType.ACTIVE },
+        },
+      })
+        .then((parkingPrice: ParkingPrice[]) => resolve(parkingPrice))
+        .catch((error: any) => reject(error));
+    });
+  }
+
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {ParkingPrice} parkingPrice
+   * @returns {Promise<any>}
+   * @memberof ParkingPriceRepository
+   */
+  deleteGroupType(parkingPrice: ParkingPrice): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      const _transaction = await ParkingPrice.sequelize.transaction();
+      ParkingPrice.update({
+        status: TransactionType.DELETED,
+      },
+        {
+          where: {
+            vehicleType: {
+              [Op.eq]: parkingPrice.vehicleType
+            },
+            parkingId: {
+              [Op.eq]: parkingPrice.parkingId,
+            },
+            status: {
+              [Op.eq]: TransactionType.ACTIVE
+            }
+          },
+          transaction: _transaction,
+          validate: false
+        })
+        .then(async (result: any) => {
+          await _transaction.commit();
+          resolve(result);
+        })
+        .catch(async (error: any) => {
+          await _transaction.rollback();
+          reject(error);
+        });
+    });
+  }
+
   save(parkingPrice: ParkingPrice): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await ParkingScoreDAO.sequelize.transaction();
