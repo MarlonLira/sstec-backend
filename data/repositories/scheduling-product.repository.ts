@@ -1,5 +1,5 @@
 import { ISchedulingProductRepository } from '../interfaces/IRepositories/scheduling-productRepository.interface';
-import { SchedulingProduct } from '../models/scheduling-product.model';
+import { SchedulingProduct, SchedulingProductDAO } from '../models/scheduling-product.model';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 import { Op } from 'sequelize';
@@ -9,80 +9,74 @@ export class SchedulingProductRepository implements ISchedulingProductRepository
 
   save(schedulingProduct: SchedulingProduct): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await schedulingProduct.sequelize.transaction();
+      const _transaction = await SchedulingProductDAO.sequelize.transaction();
       schedulingProduct.status = TransactionType.ACTIVE;
-      SchedulingProduct.create(schedulingProduct, { transaction: _transaction })
-        .then(async (result: SchedulingProduct) => {
+      SchedulingProductDAO.create(schedulingProduct, { transaction: _transaction })
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
-          reject(error)
+          reject(error);
         });
     });
   }
 
   getById(id: number): Promise<SchedulingProduct> {
     return new Promise(async (resolve, reject) => {
-      SchedulingProduct.findByPk(id)
-        .then((result: SchedulingProduct) => resolve(result))
+      SchedulingProductDAO.findByPk(id)
+        .then((result: any) => resolve(new SchedulingProduct(result)))
         .catch(error => reject(error));
     });
   }
 
   getBySchedulingId(_schedulingId: number): Promise<SchedulingProduct[]> {
     return new Promise(async (resolve, reject) => {
-      SchedulingProduct.findAll(
+      SchedulingProductDAO.findAll(
         {
           where: {
-            schedulingId: _schedulingId,
-            status: {
-              [Op.ne]: TransactionType.DELETED
-            }
+            schedulingId: { [Op.eq]: _schedulingId },
+            status: { [Op.ne]: TransactionType.DELETED }
           }
         }
       )
-        .then((schedulingProducts: SchedulingProduct[]) => resolve(schedulingProducts))
-        .catch(error => reject(error));
+        .then((result: any) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
   getByParkingProductId(_parkingProductId: number): Promise<SchedulingProduct[]> {
     return new Promise(async (resolve, reject) => {
-      SchedulingProduct.findAll(
+      SchedulingProductDAO.findAll(
         {
           where: {
-            parkingProductId: _parkingProductId,
-            status: {
-              [Op.ne]: TransactionType.DELETED
-            }
+            parkingProductId: { [Op.eq]: _parkingProductId },
+            status: { [Op.ne]: TransactionType.DELETED }
           }
         }
       )
-        .then((parkingProducts: SchedulingProduct[]) => resolve(parkingProducts))
-        .catch(error => reject(error));
+        .then((result: any) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
   delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await SchedulingProduct.sequelize.transaction();
-      SchedulingProduct.update({
+      const _transaction = await SchedulingProductDAO.sequelize.transaction();
+      SchedulingProductDAO.update({
         status: TransactionType.DELETED
       },
         {
-          where: {
-            id: _id
-          },
+          where: { id: { [Op.eq]: _id } },
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -91,21 +85,18 @@ export class SchedulingProductRepository implements ISchedulingProductRepository
 
   update(schedulingProduct: SchedulingProduct): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await SchedulingProduct.sequelize.transaction();
-      SchedulingProduct.update(schedulingProduct.ToAny(),
+      const _transaction = await SchedulingProductDAO.sequelize.transaction();
+      SchedulingProductDAO.update(schedulingProduct,
         {
-          where:
-          {
-            id: schedulingProduct.id
-          },
+          where: { id: { [Op.eq]: schedulingProduct.id } },
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });

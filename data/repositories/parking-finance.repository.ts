@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
 import { injectable } from "inversify";
 import { IParkingFinanceRepository } from '../interfaces/IRepositories/parking-financeRepository.interface';
-import { ParkingFinance } from '../models/parking-finance.model';
+import { ParkingFinance, ParkingFinanceDAO } from '../models/parking-finance.model';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 @injectable()
@@ -9,13 +9,13 @@ export class ParkingFinanceRepository implements IParkingFinanceRepository {
 
   save(parkingFinance: ParkingFinance): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingFinance.sequelize.transaction();
+      const _transaction = await ParkingFinanceDAO.sequelize.transaction();
       parkingFinance.status = TransactionType.ACTIVE;
-      ParkingFinance.create(parkingFinance, { transaction: _transaction })
-        .then(async (createParkingFinance: ParkingFinance) => {
+      ParkingFinanceDAO.create(parkingFinance, { transaction: _transaction })
+        .then(async (result: any) => {
           await _transaction.commit();
-          resolve({ "id": createParkingFinance.id })
-        }).catch(async error => {
+          resolve(new ParkingFinance(result))
+        }).catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -24,22 +24,20 @@ export class ParkingFinanceRepository implements IParkingFinanceRepository {
 
   delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingFinance.sequelize.transaction();
-      ParkingFinance.update({
-        status: TransactionType.DELETED,
-      },
+      const _transaction = await ParkingFinanceDAO.sequelize.transaction();
+      ParkingFinanceDAO.update({ status: TransactionType.DELETED, },
         {
           where: {
-            id: _id
+            id: { [Op.eq]: _id }
           },
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error)
         })
@@ -48,20 +46,20 @@ export class ParkingFinanceRepository implements IParkingFinanceRepository {
 
   update(parkingFinance: ParkingFinance): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingFinance.sequelize.transaction();
-      ParkingFinance.update(parkingFinance.ToAny(),
+      const _transaction = await ParkingFinanceDAO.sequelize.transaction();
+      ParkingFinanceDAO.update(parkingFinance,
         {
           where: {
-            id: parkingFinance.id
+            id: { [Op.eq]: parkingFinance.id }
           },
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -70,43 +68,27 @@ export class ParkingFinanceRepository implements IParkingFinanceRepository {
 
   getById(parkingFinanceId: number): Promise<ParkingFinance> {
     return new Promise((resolve, reject) => {
-      ParkingFinance.findOne({
+      ParkingFinanceDAO.findOne({
         where: {
-          id: {
-            [Op.eq]: parkingFinanceId
-          },
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          id: { [Op.eq]: parkingFinanceId },
+          status: { [Op.ne]: TransactionType.DELETED }
         }
       })
-        .then((result: ParkingFinance) => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((result: any) => resolve(new ParkingFinance(result)))
+        .catch((error: any) => reject(error));
     });
   }
 
   toList(_parkingId): Promise<ParkingFinance[]> {
     return new Promise((resolve, reject) => {
-      ParkingFinance.findAll({
+      ParkingFinanceDAO.findAll({
         where: {
-          parkingId: {
-            [Op.eq]: _parkingId
-          },
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          parkingId: { [Op.eq]: _parkingId },
+          status: { [Op.ne]: TransactionType.DELETED }
         }
       })
-        .then(result => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((result: any) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 }

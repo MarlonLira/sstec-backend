@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
 
 import { IVehicleRepository } from '../interfaces/IRepositories/vehicleRepository.interface';
-import { Vehicle } from '../models/vehicle.model';
+import { Vehicle, VehicleDAO } from '../models/vehicle.model';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
 
@@ -10,45 +10,35 @@ export class VehicleRepository implements IVehicleRepository {
 
   getById(id: number): Promise<Vehicle> {
     return new Promise((resolve, reject) => {
-      Vehicle.findByPk(id)
-        .then((foundVehicle: Vehicle) => {
-          resolve(foundVehicle);
-        })
-        .catch(error => {
-          reject(error);
-        });
+      VehicleDAO.findByPk(id)
+        .then((result: any) => resolve(new Vehicle(result)))
+        .catch((error: any) => reject(error));
     });
   }
 
   getByUserId(_userId: number): Promise<Vehicle[]> {
     return new Promise((resolve, reject) => {
-      Vehicle.findAll({
+      VehicleDAO.findAll({
         where: {
-          userId: _userId,
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          userId: { [Op.eq]: _userId },
+          status: { [Op.ne]: TransactionType.DELETED }
         }
       })
-        .then((foundVehicles: Vehicle[]) => {
-          resolve(foundVehicles);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((result: any[]) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
   save(vehicle: Vehicle): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await Vehicle.sequelize.transaction();
+      const _transaction = await VehicleDAO.sequelize.transaction();
       vehicle.status = TransactionType.ACTIVE;
-      Vehicle.create(vehicle, { transaction: _transaction })
-        .then(async (_vehicle: Vehicle) => {
+      VehicleDAO.create(vehicle, { transaction: _transaction })
+        .then(async (result: any) => {
           await _transaction.commit();
-          resolve({ "vehicleId": _vehicle.id })
+          resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -57,38 +47,31 @@ export class VehicleRepository implements IVehicleRepository {
 
   getByLicensePlate(_licensePlate: string): Promise<Vehicle> {
     return new Promise((resolve, reject) => {
-      Vehicle.findOne({
+      VehicleDAO.findOne({
         where: {
-          licensePlate: _licensePlate,
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          licensePlate: { [Op.eq]: _licensePlate },
+          status: { [Op.ne]: TransactionType.DELETED }
         }
       })
-        .then((foundVehicle: Vehicle) => {
-          resolve(foundVehicle);
-        }).catch(error => {
-          reject(error);
-        });
+        .then((result: any) => resolve(new Vehicle(result)))
+        .catch((error: any) => reject(error));
     });
   }
 
   update(vehicle: Vehicle): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await Vehicle.sequelize.transaction();
-      Vehicle.update(vehicle.ToAny(),
+      const _transaction = await VehicleDAO.sequelize.transaction();
+      VehicleDAO.update(vehicle,
         {
-          where: {
-            id: vehicle.id
-          },
+          where: { id: { [Op.eq]: vehicle.id } },
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -97,22 +80,18 @@ export class VehicleRepository implements IVehicleRepository {
 
   delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await Vehicle.sequelize.transaction();
-      Vehicle.update({
-        status: TransactionType.DELETED
-      },
+      const _transaction = await VehicleDAO.sequelize.transaction();
+      VehicleDAO.update({ status: TransactionType.DELETED },
         {
-          where: {
-            id: _id
-          },
+          where: { id: { [Op.eq]: _id } },
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback()
           reject(error);;
         });

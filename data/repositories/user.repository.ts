@@ -1,67 +1,58 @@
 import { Op } from 'sequelize';
 
 import { IUserRepository } from '../interfaces/IRepositories/userRepository.interface';
-import { User } from '../models/user.model';
+import { User, UserDAO } from '../models/user.model';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
-import { UserAddress } from '../models/user-address.model';
-import { Card } from '../models/card.model';
-import { Vehicle } from '../models/vehicle.model';
+import { UserAddressDAO } from '../models/user-address.model';
+import { VehicleDAO } from '../models/vehicle.model';
+import { CardDAO } from '../models/card.model';
 
 @injectable()
 export class UserRepository implements IUserRepository {
 
   getByEmail(_email: string): Promise<User> {
     return new Promise((resolve, reject) => {
-      User.findOne({
+      UserDAO.findOne({
         where: {
-          email: {
-            [Op.eq]: _email
-          },
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          email: { [Op.eq]: _email },
+          status: { [Op.ne]: TransactionType.DELETED }
         }
-      }).then((result: User) => {
-        resolve(result);
-      }).catch(error => {
-        reject(error);
-      });
+      }).then((result: any) => resolve(new User(result)))
+        .catch((error: any) => reject(error));
     });
   }
 
   getById(id: number): Promise<User> {
     return new Promise((resolve, reject) => {
-      User.findByPk(id,
+      UserDAO.findByPk(id,
         {
           include: [
-            { model: Card, as: 'cards' },
-            { model: Vehicle, as: 'vehicles' },
-            { model: UserAddress, as: 'address' },
-          ],
-          raw: true,
-          nest: true
+            { model: CardDAO, as: 'cards', where: { status: { [Op.ne]: TransactionType.DELETED } }, required: false },
+            { model: VehicleDAO, as: 'vehicles', where: { status: { [Op.ne]: TransactionType.DELETED } }, required: false },
+            { model: UserAddressDAO, as: 'address', where: { status: { [Op.ne]: TransactionType.DELETED } }, required: false }
+          ]
         })
-        .then((user: User) => resolve(user))
-        .catch(error => reject(error));
+        .then((result: any) => resolve(new User(result)))
+        .catch((error: any) => reject(error));
     });
   }
 
   update(user: User): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await User.sequelize.transaction();
-      User.update(user.toJSON(), {
+      const _transaction = await UserDAO.sequelize.transaction();
+      UserDAO.update(user, {
         where: {
           id: user.id
         },
         transaction: _transaction,
         validate: false
       })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -70,13 +61,13 @@ export class UserRepository implements IUserRepository {
 
   save(user: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await User.sequelize.transaction();
+      const _transaction = await UserDAO.sequelize.transaction();
       user.status = TransactionType.ACTIVE;
-      User.create(user, { transaction: _transaction })
-        .then(async result => {
+      UserDAO.create(user, { transaction: _transaction })
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
-        }).catch(async error => {
+        }).catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -85,83 +76,58 @@ export class UserRepository implements IUserRepository {
 
   toList(): Promise<User[]> {
     return new Promise((resolve, reject) => {
-      User.findAll({
+      UserDAO.findAll({
         where: {
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          status: { [Op.ne]: TransactionType.DELETED }
         }
       })
-        .then((result: User[]) => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((result: any) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
   getByName(name: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      User.findAll({
+      UserDAO.findAll({
         where: {
-          name: {
-            [Op.like]: `${name}%`
-          },
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          name: { [Op.like]: `${name}%` },
+          status: { [Op.ne]: TransactionType.DELETED }
         }
       })
-        .then(result => {
-          resolve(result);
-        }
-        )
-        .catch(error => {
-          reject(error);
-        });
+        .then((result: any) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
   getByRegistryCode(registryCode: string): Promise<User[]> {
     return new Promise((resolve, reject) => {
-      User.findAll({
+      UserDAO.findAll({
         where: {
-          registryCode: {
-            [Op.like]: `${registryCode}%`
-          },
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          registryCode: { [Op.like]: `${registryCode}%` },
+          status: { [Op.ne]: TransactionType.DELETED }
         }
       })
-        .then((result: User[]) => {
-          resolve(result);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then((result: any) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
   delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await User.sequelize.transaction();
-      User.update({
+      const _transaction = await UserDAO.sequelize.transaction();
+      UserDAO.update({
         status: TransactionType.DELETED
       },
         {
-          where: {
-            id: _id
-          },
+          where: { id: { [Op.eq]: _id } },
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback()
           reject(error);
         });

@@ -60,7 +60,7 @@ export class RouteSecurityService implements IRouteSecurityService {
           const routeSecurity = [];
 
           result.forEach((items: RouteSecurity) => {
-            const _result: any = items.ToAny();
+            const _result: any = items;
             _result.rule = rules.find(x => x.id === items.ruleId);
             routeSecurity.push(_result);
           })
@@ -79,7 +79,7 @@ export class RouteSecurityService implements IRouteSecurityService {
           const routeSecurity = [];
 
           result.forEach((items: RouteSecurity) => {
-            const _result: any = items.ToAny();
+            const _result: any = items;
             _result.rule = rules.find(x => x.id === items.ruleId);
             routeSecurity.push(_result);
           })

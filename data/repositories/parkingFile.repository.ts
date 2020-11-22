@@ -1,28 +1,25 @@
 import { injectable } from "inversify";
 import { IParkingFileRepository } from "../interfaces/IRepositories/parkingFileRepository.interface";
-import { ParkingFile } from "../models/parking-file.model";
+import { ParkingFile, ParkingFileDAO } from "../models/parking-file.model";
 import { Op } from 'sequelize';
-import { Parking } from "../models/parking.model";
 
 @injectable()
 export class ParkingFileRepository implements IParkingFileRepository {
 
   delete(id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await Parking.sequelize.transaction();
-      ParkingFile.destroy({
+      const _transaction = await ParkingFileDAO.sequelize.transaction();
+      ParkingFileDAO.destroy({
         where: {
-          id: {
-            [Op.eq]: id
-          }
+          id: { [Op.eq]: id }
         },
         transaction: _transaction
       })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -35,28 +32,26 @@ export class ParkingFileRepository implements IParkingFileRepository {
 
   toList(parkingId: number): Promise<ParkingFile[]> {
     return new Promise((resolve, reject) => {
-      ParkingFile.findAll({
+      ParkingFileDAO.findAll({
         where: {
-          parkingId: {
-            [Op.eq]: parkingId
-          }
+          parkingId: { [Op.eq]: parkingId }
         }
       })
-        .then((result: ParkingFile[]) => resolve(result))
-        .catch(error => reject(error));
+        .then((result: any) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
   save(file: ParkingFile): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingFile.sequelize.transaction();
-      ParkingFile.create(file, { transaction: _transaction })
-        .then(async (result: ParkingFile) => {
+      const _transaction = await ParkingFileDAO.sequelize.transaction();
+      ParkingFileDAO.create(file, { transaction: _transaction })
+        .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result.id);
-        }).catch(async error => {
+          resolve(result);
+        }).catch(async (error: any) => {
           await _transaction.rollback();
-          reject(error.message);
+          reject(error);
         });
     });
   }
