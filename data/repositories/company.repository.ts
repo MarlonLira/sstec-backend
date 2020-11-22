@@ -8,7 +8,7 @@ import { TransactionType } from '../../commons/enums/transactionType';
 @injectable()
 export class CompanyRepository implements ICompanyRepository {
 
-  save(company: Company) {
+  save(company: Company): Promise<Company> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await CompanyDAO.sequelize.transaction();
       company.status = TransactionType.ACTIVE;
@@ -23,13 +23,13 @@ export class CompanyRepository implements ICompanyRepository {
     });
   }
 
-  update(company: Company) {
+  update(company: Company): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await CompanyDAO.sequelize.transaction();
       CompanyDAO.update(company,
         {
           where: {
-            id: company.id
+            id: { [Op.eq]: company.id }
           },
           transaction: _transaction,
           validate: false
@@ -45,12 +45,14 @@ export class CompanyRepository implements ICompanyRepository {
     });
   }
 
-  delete(_id: number) {
+  delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const _transaction = await CompanyDAO.sequelize.transaction();
       CompanyDAO.update({ status: TransactionType.DELETED },
         {
-          where: { id: _id },
+          where: {
+            id: { [Op.eq]: _id }
+          },
           transaction: _transaction,
           validate: false
         })
@@ -69,28 +71,20 @@ export class CompanyRepository implements ICompanyRepository {
     return new Promise((resolve, reject) => {
       CompanyDAO.findAll({
         where: {
-          registryCode: {
-            [Op.like]: `${registryCode}%`
-          },
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          registryCode: { [Op.like]: `${registryCode}%` },
+          status: { [Op.ne]: TransactionType.DELETED }
         }
       })
-        .then((foundCompany: any) => {
-          resolve(foundCompany);
-        })
-        .catch((error: any) => {
-          reject(error);
-        });
+        .then((result: any) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
-  getById(id: number) {
+  getById(id: number): Promise<Company> {
     return new Promise((resolve, reject) => {
       CompanyDAO.findByPk(id)
         .then((result: any) => resolve(new Company(result)))
-        .catch((error : any) => reject(error));
+        .catch((error: any) => reject(error));
     });
   }
 }

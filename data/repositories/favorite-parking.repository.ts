@@ -25,7 +25,7 @@ export class FavoriteParkingRepository implements IFavoriteParkingRepository {
   getById(id: number): Promise<FavoriteParking> {
     return new Promise(async (resolve, reject) => {
       FavoriteParkingDAO.findByPk(id)
-        .then((favoriteParking: any) => resolve(new FavoriteParking(favoriteParking)))
+        .then((result: any) => resolve(new FavoriteParking(result)))
         .catch((error: any) => reject(error));
     });
   }
@@ -35,11 +35,11 @@ export class FavoriteParkingRepository implements IFavoriteParkingRepository {
       FavoriteParkingDAO.findAll(
         {
           where: {
-            userId: userId,
+            userId: { [Op.eq]: userId },
           }
         }
       )
-        .then((favoriteParkingS: any) => resolve(favoriteParkingS))
+        .then((result: any) => resolve(result))
         .catch((error: any) => reject(error));
     });
   }

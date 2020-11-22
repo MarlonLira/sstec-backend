@@ -4,9 +4,9 @@ import { injectable } from "inversify";
 import { IEmployeeRepository } from '../interfaces/IRepositories/employeeRepository.interface';
 import { Employee, EmployeeDAO } from '../models/employee.model';
 import { TransactionType } from '../../commons/enums/transactionType';
-import { Parking, ParkingDAO } from '../models/parking.model';
-import { Company, CompanyDAO } from '../models/company.model';
-import { Rule, RuleDAO } from '../models/rule.model';
+import { ParkingDAO } from '../models/parking.model';
+import { CompanyDAO } from '../models/company.model';
+import { RuleDAO } from '../models/rule.model';
 import { Attributes } from '../../commons/core/attributes';
 
 @injectable()
@@ -34,13 +34,8 @@ export class EmployeeRepository implements IEmployeeRepository {
       EmployeeDAO.findAll({
         attributes: this._attributes,
         where: {
-          name: {
-            [Op.like]: `%${name}%`
-          },
-          [Op.or]: [{ parkingId: _parkingId }, { companyId: _companyId }],
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          name: { [Op.like]: `%${name}%` }, [Op.or]: [{ parkingId: _parkingId }, { companyId: _companyId }],
+          status: { [Op.ne]: TransactionType.DELETED }
         }
       })
         .then((result: any) => resolve(result))
@@ -53,12 +48,8 @@ export class EmployeeRepository implements IEmployeeRepository {
       EmployeeDAO.findOne({
         attributes: this._attributes,
         where: {
-          registryCode: {
-            [Op.eq]: _registryCode
-          },
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          registryCode: { [Op.eq]: _registryCode },
+          status: { [Op.ne]: TransactionType.DELETED }
         }
       }).then((result: any) => resolve(new Employee(result)))
         .catch((error: any) => reject(error));
@@ -70,20 +61,14 @@ export class EmployeeRepository implements IEmployeeRepository {
       EmployeeDAO.findOne({
         attributes: { exclude: ['image'] },
         include: [
-          { model: ParkingDAO, as: 'parking' },
-          { model: CompanyDAO, as: 'company', attributes: { exclude: ['image'] } },
-          { model: RuleDAO, as: 'rule' },
+          { model: ParkingDAO, as: 'parking', where: { status: { [Op.ne]: TransactionType.DELETED } }, required: false },
+          { model: CompanyDAO, as: 'company', where: { status: { [Op.ne]: TransactionType.DELETED } }, required: false, attributes: { exclude: ['image'] } },
+          { model: RuleDAO, as: 'rule', where: { status: { [Op.ne]: TransactionType.DELETED } }, required: false },
         ],
         where: {
-          email: {
-            [Op.eq]: _email
-          },
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
-        },
-        raw: true,
-        nest: true
+          email: { [Op.eq]: _email },
+          status: { [Op.ne]: TransactionType.DELETED }
+        }
       }).then((result: any) => resolve(new Employee(result)))
         .catch((error: any) => reject(error));
     });
@@ -94,12 +79,8 @@ export class EmployeeRepository implements IEmployeeRepository {
       EmployeeDAO.findAll({
         attributes: this._attributes,
         where: {
-          companyId: {
-            [Op.eq]: _companyId
-          },
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          companyId: { [Op.eq]: _companyId },
+          status: { [Op.ne]: TransactionType.DELETED }
         }
       }).then((result: any) => resolve(result)
       ).catch((error: any) => reject(error));
@@ -112,11 +93,9 @@ export class EmployeeRepository implements IEmployeeRepository {
         {
           attributes: { exclude: ['password'] },
           include: [
-            { model: RuleDAO, as: 'rule' },
-            { model: CompanyDAO, as: 'company' }
-          ],
-          raw: true,
-          nest: true
+            { model: RuleDAO, as: 'rule', where: { status: { [Op.ne]: TransactionType.DELETED } }, required: false },
+            { model: CompanyDAO, as: 'company', where: { status: { [Op.ne]: TransactionType.DELETED } }, required: false }
+          ]
         })
         .then((result: any) => resolve(Attributes.encodeImage(new Employee(result))))
         .catch((error: any) => reject(error));
@@ -128,12 +107,8 @@ export class EmployeeRepository implements IEmployeeRepository {
       EmployeeDAO.findAll({
         attributes: this._attributes,
         where: {
-          parkingId: {
-            [Op.eq]: _parkingId
-          },
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          parkingId: { [Op.eq]: _parkingId },
+          status: { [Op.ne]: TransactionType.DELETED }
         }
       }).then((result: any) => resolve(result))
         .catch((error: any) => reject(error));
@@ -145,9 +120,8 @@ export class EmployeeRepository implements IEmployeeRepository {
       const _transaction = await EmployeeDAO.sequelize.transaction();
       EmployeeDAO.update(employee,
         {
-          where:
-          {
-            id: employee.id
+          where: {
+            id: { [Op.eq]: employee.id }
           },
           transaction: _transaction,
           validate: false
@@ -171,7 +145,7 @@ export class EmployeeRepository implements IEmployeeRepository {
       },
         {
           where: {
-            id: _id
+            id: { [Op.eq]: _id }
           },
           transaction: _transaction,
           validate: false

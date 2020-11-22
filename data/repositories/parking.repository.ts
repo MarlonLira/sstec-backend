@@ -1,11 +1,11 @@
-import { Op, QueryTypes } from 'sequelize';
+import { Op } from 'sequelize';
 import { injectable } from "inversify";
 
 import { IParkingRepository } from '../interfaces/IRepositories/parkingRepository.interface';
 import { Parking, ParkingDAO } from '../models/parking.model';
 import { TransactionType } from '../../commons/enums/transactionType';
-import { ParkingAddress, ParkingAddressDAO } from '../models/parking-address.model';
-import { Employee, EmployeeDAO } from '../models/employee.model';
+import { ParkingAddressDAO } from '../models/parking-address.model';
+import { EmployeeDAO } from '../models/employee.model';
 
 @injectable()
 export class ParkingRepository implements IParkingRepository {
@@ -13,7 +13,7 @@ export class ParkingRepository implements IParkingRepository {
   toList(): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       ParkingDAO.findAll({
-        include: [{ model: ParkingAddressDAO, as: 'address' }]
+        include: [{ model: ParkingAddressDAO, as: 'address', where: { status: { [Op.ne]: TransactionType.DELETED } }, required: false }]
       })
         .then((parking: any) => resolve(parking))
         .catch((error: any) => reject(error));
@@ -24,7 +24,7 @@ export class ParkingRepository implements IParkingRepository {
     return new Promise((resolve, reject) => {
       ParkingDAO.findByPk(id,
         {
-          include: [{ model: ParkingAddressDAO, as: 'address' }]
+          include: [{ model: ParkingAddressDAO, as: 'address', where: { status: { [Op.ne]: TransactionType.DELETED } }, required: false }]
         })
         .then((parking: any) => resolve(new Parking(parking)))
         .catch((error: any) => reject(error));
@@ -38,7 +38,7 @@ export class ParkingRepository implements IParkingRepository {
       ParkingDAO.create(parking, { transaction: _transaction })
         .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result);
+          resolve(new Parking(result));
         })
         .catch(async (error: any) => {
           await _transaction.rollback();
@@ -96,15 +96,9 @@ export class ParkingRepository implements IParkingRepository {
     return new Promise((resolve, reject) => {
       ParkingDAO.findAll({
         where: {
-          registryCode: {
-            [Op.eq]: registryCode
-          },
-          companyId: {
-            [Op.eq]: companyId
-          },
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          registryCode: { [Op.eq]: registryCode },
+          companyId: { [Op.eq]: companyId },
+          status: { [Op.ne]: TransactionType.DELETED }
         }
       }).then((result: any) => resolve(result))
         .catch((error: any) => reject(error));
@@ -136,7 +130,7 @@ export class ParkingRepository implements IParkingRepository {
   getByCompanyId(_companyId: number): Promise<Parking[]> {
     return new Promise((resolve, reject) => {
       ParkingDAO.findAll({
-        include: [{ model: ParkingAddressDAO, as: 'address' }],
+        include: [{ model: ParkingAddressDAO, as: 'address', where: { status: { [Op.ne]: TransactionType.DELETED } }, required: false }],
         where: {
           companyId: { [Op.eq]: _companyId },
           status: { [Op.ne]: TransactionType.DELETED }

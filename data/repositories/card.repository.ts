@@ -37,10 +37,8 @@ export class CardRepository implements ICardRepository {
       CardDAO.findAll(
         {
           where: {
-            userId: _userId,
-            status: {
-              [Op.ne]: TransactionType.DELETED
-            }
+            userId: { [Op.eq]: _userId },
+            status: { [Op.ne]: TransactionType.DELETED }
           }
         }
       )
@@ -57,7 +55,7 @@ export class CardRepository implements ICardRepository {
       },
         {
           where: {
-            id: _id
+            id: { [Op.eq]: _id }
           },
           transaction: _transaction,
           validate: false
@@ -80,7 +78,7 @@ export class CardRepository implements ICardRepository {
         {
           where:
           {
-            id: card.id
+            id: { [Op.eq]: card.id }
           },
           transaction: _transaction,
           validate: false

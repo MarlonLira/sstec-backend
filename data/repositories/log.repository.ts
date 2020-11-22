@@ -26,17 +26,11 @@ export class LogRepository implements ILogRepository {
     return new Promise((resolve, reject) => {
       LogDAO.findAll({
         where: {
-          companyId: {
-            [Op.eq]: companyId
-          },
+          companyId: { [Op.eq]: companyId },
         }
       })
-        .then((foundLogs: any) => {
-          resolve(foundLogs);
-        })
-        .catch((error: any) => {
-          reject(error);
-        });
+        .then((result: any) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 

@@ -1,20 +1,21 @@
 import { injectable } from "inversify";
-import { Op, QueryTypes, Sequelize } from 'sequelize';
+import { Op } from 'sequelize';
 import { TransactionType } from '../../commons/enums/transactionType';
 import { ParkingPrice } from '../models/parking-price.model';
 import { IParkingPriceRepository } from '../interfaces/IRepositories/parking-priceRepository.interface';
+import { ParkingScore, ParkingScoreDAO } from "../models/parking-score.model";
 
 @injectable()
 export class ParkingPriceRepository implements IParkingPriceRepository {
 
   save(parkingPrice: ParkingPrice): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingPrice.sequelize.transaction();
+      const _transaction = await ParkingScoreDAO.sequelize.transaction();
       parkingPrice.status = TransactionType.ACTIVE;
-      ParkingPrice.create(parkingPrice, { transaction: _transaction })
-        .then(async (result: ParkingPrice) => {
+      ParkingScoreDAO.create(parkingPrice, { transaction: _transaction })
+        .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result);
+          resolve(new ParkingScore(result));
         })
         .catch(async (error: any) => {
           await _transaction.rollback();
@@ -22,19 +23,20 @@ export class ParkingPriceRepository implements IParkingPriceRepository {
         });
     });
   }
+
   update(parkingPrice: ParkingPrice): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingPrice.sequelize.transaction();
-      ParkingPrice.update(parkingPrice.ToAny(),
+      const _transaction = await ParkingScoreDAO.sequelize.transaction();
+      ParkingScoreDAO.update(parkingPrice,
         {
           where:
           {
-            id: parkingPrice.id
+            id: { [Op.eq]: parkingPrice.id }
           },
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
@@ -44,35 +46,36 @@ export class ParkingPriceRepository implements IParkingPriceRepository {
         });
     });
   }
+
   toList(parkingId: number): Promise<ParkingPrice[]> {
     return new Promise((resolve, reject) => {
-      ParkingPrice.findAll({
+      ParkingScoreDAO.findAll({
         where: {
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          status: { [Op.ne]: TransactionType.DELETED }
         }
       })
-        .then((result: ParkingPrice[]) => resolve(result))
+        .then((result: any) => resolve(result))
         .catch((error: any) => reject(error));
     })
   }
+
   getById(id: number): Promise<ParkingPrice> {
     return new Promise((resolve, reject) => {
-      ParkingPrice.findByPk(id)
-        .then((parkingPrice: ParkingPrice) => resolve(parkingPrice))
+      ParkingScoreDAO.findByPk(id)
+        .then((result: any) => resolve(new ParkingPrice(result)))
         .catch((error: any) => reject(error));
     });
   }
+
   delete(parkingPriceId: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingPrice.sequelize.transaction();
-      ParkingPrice.update({
+      const _transaction = await ParkingScoreDAO.sequelize.transaction();
+      ParkingScoreDAO.update({
         status: TransactionType.DELETED
       },
         {
           where: {
-            id: parkingPriceId
+            id: { [Op.eq]: parkingPriceId }
           },
           transaction: _transaction,
           validate: false

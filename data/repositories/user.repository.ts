@@ -28,9 +28,9 @@ export class UserRepository implements IUserRepository {
       UserDAO.findByPk(id,
         {
           include: [
-            { model: CardDAO, as: 'cards', where: { status: { [Op.ne]: TransactionType.DELETED } } },
-            { model: VehicleDAO, as: 'vehicles', where: { status: { [Op.ne]: TransactionType.DELETED } } },
-            { model: UserAddressDAO, as: 'address', where: { status: { [Op.ne]: TransactionType.DELETED } } }
+            { model: CardDAO, as: 'cards', where: { status: { [Op.ne]: TransactionType.DELETED } }, required: false },
+            { model: VehicleDAO, as: 'vehicles', where: { status: { [Op.ne]: TransactionType.DELETED } }, required: false },
+            { model: UserAddressDAO, as: 'address', where: { status: { [Op.ne]: TransactionType.DELETED } }, required: false }
           ]
         })
         .then((result: any) => resolve(new User(result)))

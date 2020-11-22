@@ -39,7 +39,7 @@ export class UserService implements IUserService {
     return new Promise((resolve, reject) => {
       this.repository.getByEmail(email)
         .then(async (result: User) => {
-          const _result: any = result.ToAny();
+          const _result: any = result;
           _result.address = await this.addressService.getByUserId(result.id);
           resolve(_result);
         }).catch(async (error: any) =>

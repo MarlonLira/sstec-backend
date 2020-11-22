@@ -4,7 +4,7 @@ import { ISchedulingRepository } from '../interfaces/IRepositories/schedulingRep
 import { Scheduling, SchedulingDAO } from '../models/scheduling.model';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
-import { SchedulingProduct, SchedulingProductDAO } from '../models/scheduling-product.model';
+import { SchedulingProductDAO } from '../models/scheduling-product.model';
 
 @injectable()
 export class SchedulingRepository implements ISchedulingRepository {
@@ -27,7 +27,7 @@ export class SchedulingRepository implements ISchedulingRepository {
   getById(id: number): Promise<Scheduling> {
     return new Promise(async (resolve, reject) => {
       SchedulingDAO.findByPk(id, {
-        include: [{ model: SchedulingProductDAO, as: 'schedulingProducts' }],
+        include: [{ model: SchedulingProductDAO, as: 'schedulingProducts', where: { status: { [Op.ne]: TransactionType.DELETED } }, required: false }],
       })
         .then((result: any) => resolve(new Scheduling(result)))
         .catch((error: any) => reject(error));
@@ -122,7 +122,9 @@ export class SchedulingRepository implements ISchedulingRepository {
       const _transaction = await SchedulingDAO.sequelize.transaction();
       SchedulingDAO.update({ status: TransactionType.DELETED },
         {
-          where: { id: { [Op.eq]: _id } },
+          where: {
+            id: { [Op.eq]: _id }
+          },
           transaction: _transaction,
           validate: false
         })
@@ -142,7 +144,9 @@ export class SchedulingRepository implements ISchedulingRepository {
       const _transaction = await SchedulingDAO.sequelize.transaction();
       SchedulingDAO.update(scheduling,
         {
-          where: { id: { [Op.eq]: scheduling.id } },
+          where: {
+            id: { [Op.eq]: scheduling.id }
+          },
           transaction: _transaction,
           validate: false
         })
