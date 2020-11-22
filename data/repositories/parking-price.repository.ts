@@ -1,44 +1,30 @@
 import { injectable } from "inversify";
 import { Op } from 'sequelize';
 import { TransactionType } from '../../commons/enums/transactionType';
-import { ParkingPrice } from '../models/parking-price.model';
+import { ParkingPrice, ParkingPriceDAO } from '../models/parking-price.model';
 import { IParkingPriceRepository } from '../interfaces/IRepositories/parking-priceRepository.interface';
 import { ParkingScore, ParkingScoreDAO } from "../models/parking-score.model";
 
 @injectable()
 export class ParkingPriceRepository implements IParkingPriceRepository {
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {number} id
-   * @returns {Promise<ParkingPrice[]>}
-   * @memberof ParkingPriceRepository
-   */
   getByParkingId(id: number): Promise<ParkingPrice[]> {
     return new Promise(async (resolve, reject) => {
-      ParkingPrice.findAll({
+      ParkingPriceDAO.findAll({
         where: {
           parkingId: { [Op.eq]: id },
           status: { [Op.eq]: TransactionType.ACTIVE },
         },
       })
-        .then((parkingPrice: ParkingPrice[]) => resolve(parkingPrice))
+        .then((parkingPrice: any) => resolve(parkingPrice))
         .catch((error: any) => reject(error));
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {ParkingPrice} parkingPrice
-   * @returns {Promise<any>}
-   * @memberof ParkingPriceRepository
-   */
   deleteGroupType(parkingPrice: ParkingPrice): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingPrice.sequelize.transaction();
-      ParkingPrice.update({
+      const _transaction = await ParkingPriceDAO.sequelize.transaction();
+      ParkingPriceDAO.update({
         status: TransactionType.DELETED,
       },
         {
