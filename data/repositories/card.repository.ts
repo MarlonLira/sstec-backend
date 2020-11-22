@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 import { injectable } from "inversify";
 
 import { ICardRepository } from '../interfaces/IRepositories/cardRepository.interface';
-import { Card } from '../models/card.model';
+import { Card, CardDAO } from '../models/card.model';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 @injectable()
@@ -10,14 +10,14 @@ export class CardRepository implements ICardRepository {
 
   save(card: Card): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await Card.sequelize.transaction();
+      const _transaction = await CardDAO.sequelize.transaction();
       card.status = TransactionType.ACTIVE;
-      Card.create(card, { transaction: _transaction })
-        .then(async (result: Card) => {
+      CardDAO.create(card, { transaction: _transaction })
+        .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result);
+          resolve(new Card(result));
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error)
         });
@@ -26,15 +26,15 @@ export class CardRepository implements ICardRepository {
 
   getById(id: number): Promise<Card> {
     return new Promise(async (resolve, reject) => {
-      Card.findByPk(id)
-        .then((card: Card) => resolve(card))
-        .catch(error => reject(error));
+      CardDAO.findByPk(id)
+        .then((card: any) => resolve(new Card(card)))
+        .catch((error: any) => reject(error));
     });
   }
 
   getByUserId(_userId: number): Promise<Card[]> {
     return new Promise(async (resolve, reject) => {
-      Card.findAll(
+      CardDAO.findAll(
         {
           where: {
             userId: _userId,
@@ -44,15 +44,15 @@ export class CardRepository implements ICardRepository {
           }
         }
       )
-        .then((cards: Card[]) => resolve(cards))
-        .catch(error => reject(error));
+        .then((cards: any) => resolve(cards))
+        .catch((error: any) => reject(error));
     });
   }
 
   delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await Card.sequelize.transaction();
-      Card.update({
+      const _transaction = await CardDAO.sequelize.transaction();
+      CardDAO.update({
         status: TransactionType.DELETED
       },
         {
@@ -62,11 +62,11 @@ export class CardRepository implements ICardRepository {
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result);
+          resolve(new Card(result));
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -75,8 +75,8 @@ export class CardRepository implements ICardRepository {
 
   update(card: Card): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await Card.sequelize.transaction();
-      Card.update(card.ToAny(),
+      const _transaction = await CardDAO.sequelize.transaction();
+      CardDAO.update(card,
         {
           where:
           {
@@ -85,11 +85,11 @@ export class CardRepository implements ICardRepository {
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result);
+          resolve(new Card(result));
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });

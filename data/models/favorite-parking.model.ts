@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { Attributes } from '../../commons/core/attributes';
-import { BaseModel, _instance } from './base.model';
+import { InnerJson } from '../../commons/core/innerJson';
+import { BaseModel, BaseModelDAO, _instance } from './base.model';
 
 export class FavoriteParking extends BaseModel {
 
@@ -9,6 +10,7 @@ export class FavoriteParking extends BaseModel {
   parkingId: number;
 
   constructor(json?: any) {
+    json = InnerJson.parse(json);
     super(json);
     if (json) {
       this.id = Attributes.returnIfValid(json.id);
@@ -16,13 +18,11 @@ export class FavoriteParking extends BaseModel {
       this.parkingId = Attributes.returnIfValid(json.parkingId);
     }
   }
-
-  ToAny() {
-    return this.toJSON();
-  }
 }
 
-FavoriteParking.init({
+export class FavoriteParkingDAO extends BaseModelDAO { }
+
+FavoriteParkingDAO.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,

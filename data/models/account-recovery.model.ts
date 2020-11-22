@@ -1,7 +1,8 @@
 import { DataTypes } from 'sequelize';
 import { Attributes } from '../../commons/core/attributes';
+import { InnerJson } from '../../commons/core/innerJson';
 import { TransactionType } from '../../commons/enums/transactionType';
-import { BaseModel, _instance } from './base.model';
+import { BaseModel, BaseModelDAO, _instance } from './base.model';
 
 export class AccountRecovery extends BaseModel {
 
@@ -12,6 +13,7 @@ export class AccountRecovery extends BaseModel {
   expirationDate: Date;
 
   constructor(json?: any) {
+    json = InnerJson.parse(json);
     super(json);
     if (json) {
       this.status = Attributes.returnIfValid(json.status);
@@ -21,13 +23,11 @@ export class AccountRecovery extends BaseModel {
       this.expirationDate = Attributes.returnIfValid(json.expirationDate);
     }
   }
-
-  ToAny() {
-    return this.toJSON();
-  }
 }
 
-AccountRecovery.init({
+export class AccountRecoveryDAO extends BaseModelDAO { }
+
+AccountRecoveryDAO.init({
   token: {
     type: new DataTypes.STRING(20),
     primaryKey: true

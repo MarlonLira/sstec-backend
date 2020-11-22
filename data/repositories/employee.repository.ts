@@ -2,11 +2,11 @@ import { Op } from 'sequelize';
 import { injectable } from "inversify";
 
 import { IEmployeeRepository } from '../interfaces/IRepositories/employeeRepository.interface';
-import { Employee } from '../models/employee.model';
+import { Employee, EmployeeDAO } from '../models/employee.model';
 import { TransactionType } from '../../commons/enums/transactionType';
-import { Parking } from '../models/parking.model';
-import { Company } from '../models/company.model';
-import { Rule } from '../models/rule.model';
+import { Parking, ParkingDAO } from '../models/parking.model';
+import { Company, CompanyDAO } from '../models/company.model';
+import { Rule, RuleDAO } from '../models/rule.model';
 import { Attributes } from '../../commons/core/attributes';
 
 @injectable()
@@ -15,12 +15,12 @@ export class EmployeeRepository implements IEmployeeRepository {
 
   save(employee: Employee): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await Employee.sequelize.transaction();
+      const _transaction = await EmployeeDAO.sequelize.transaction();
       employee.status = TransactionType.ACTIVE;
-      Employee.create(employee, { transaction: _transaction })
-        .then(async (result: Employee) => {
+      EmployeeDAO.create(employee, { transaction: _transaction })
+        .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result);
+          resolve(new Employee(result));
         })
         .catch(async (error: any) => {
           await _transaction.rollback();
@@ -31,7 +31,7 @@ export class EmployeeRepository implements IEmployeeRepository {
 
   getByName(name: string, _parkingId: number = 0, _companyId: number = 0): Promise<Employee[]> {
     return new Promise((resolve, reject) => {
-      Employee.findAll({
+      EmployeeDAO.findAll({
         attributes: this._attributes,
         where: {
           name: {
@@ -43,14 +43,14 @@ export class EmployeeRepository implements IEmployeeRepository {
           }
         }
       })
-        .then((result: Employee[]) => resolve(result))
+        .then((result: any) => resolve(result))
         .catch((error: any) => reject(error));
     });
   }
 
   getByRegistryCode(_registryCode: string): Promise<Employee> {
     return new Promise((resolve, reject) => {
-      Employee.findOne({
+      EmployeeDAO.findOne({
         attributes: this._attributes,
         where: {
           registryCode: {
@@ -60,19 +60,19 @@ export class EmployeeRepository implements IEmployeeRepository {
             [Op.ne]: TransactionType.DELETED
           }
         }
-      }).then((result: Employee) => resolve(result))
+      }).then((result: any) => resolve(new Employee(result)))
         .catch((error: any) => reject(error));
     });
   }
 
   getByEmail(_email: string): Promise<Employee> {
     return new Promise((resolve, reject) => {
-      Employee.findOne({
+      EmployeeDAO.findOne({
         attributes: { exclude: ['image'] },
         include: [
-          { model: Parking, as: 'parking' },
-          { model: Company, as: 'company', attributes: { exclude: ['image'] } },
-          { model: Rule, as: 'rule' },
+          { model: ParkingDAO, as: 'parking' },
+          { model: CompanyDAO, as: 'company', attributes: { exclude: ['image'] } },
+          { model: RuleDAO, as: 'rule' },
         ],
         where: {
           email: {
@@ -84,14 +84,14 @@ export class EmployeeRepository implements IEmployeeRepository {
         },
         raw: true,
         nest: true
-      }).then((result: Employee) => resolve(result))
+      }).then((result: any) => resolve(new Employee(result)))
         .catch((error: any) => reject(error));
     });
   }
 
   getByCompanyId(_companyId: number): Promise<Employee[]> {
     return new Promise((resolve, reject) => {
-      Employee.findAll({
+      EmployeeDAO.findAll({
         attributes: this._attributes,
         where: {
           companyId: {
@@ -101,31 +101,31 @@ export class EmployeeRepository implements IEmployeeRepository {
             [Op.ne]: TransactionType.DELETED
           }
         }
-      }).then((result: Employee[]) => resolve(result)
+      }).then((result: any) => resolve(result)
       ).catch((error: any) => reject(error));
     });
   }
 
   getById(id: number): Promise<Employee> {
     return new Promise((resolve, reject) => {
-      Employee.findByPk(id,
+      EmployeeDAO.findByPk(id,
         {
           attributes: { exclude: ['password'] },
           include: [
-            { model: Rule, as: 'rule' },
-            { model: Company, as: 'company' }
+            { model: RuleDAO, as: 'rule' },
+            { model: CompanyDAO, as: 'company' }
           ],
           raw: true,
           nest: true
         })
-        .then((result: Employee) => resolve(Attributes.encodeImage(result)))
+        .then((result: any) => resolve(Attributes.encodeImage(new Employee(result))))
         .catch((error: any) => reject(error));
     });
   }
 
   getByParkingId(_parkingId: number): Promise<Employee[]> {
     return new Promise((resolve, reject) => {
-      Employee.findAll({
+      EmployeeDAO.findAll({
         attributes: this._attributes,
         where: {
           parkingId: {
@@ -135,15 +135,15 @@ export class EmployeeRepository implements IEmployeeRepository {
             [Op.ne]: TransactionType.DELETED
           }
         }
-      }).then((result: Employee[]) => resolve(result))
+      }).then((result: any) => resolve(result))
         .catch((error: any) => reject(error));
     });
   }
 
   update(employee: Employee): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await Employee.sequelize.transaction();
-      Employee.update(employee.ToAny(),
+      const _transaction = await EmployeeDAO.sequelize.transaction();
+      EmployeeDAO.update(employee,
         {
           where:
           {
@@ -154,7 +154,7 @@ export class EmployeeRepository implements IEmployeeRepository {
         })
         .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result);
+          resolve(new Employee(result));
         })
         .catch(async (error: any) => {
           await _transaction.rollback();
@@ -165,8 +165,8 @@ export class EmployeeRepository implements IEmployeeRepository {
 
   delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await Employee.sequelize.transaction();
-      Employee.update({
+      const _transaction = await EmployeeDAO.sequelize.transaction();
+      EmployeeDAO.update({
         status: TransactionType.DELETED
       },
         {
@@ -178,7 +178,7 @@ export class EmployeeRepository implements IEmployeeRepository {
         })
         .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result);
+          resolve(new Employee(result));
         })
         .catch(async (error: any) => {
           await _transaction.rollback()

@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 
 import { ILogRepository } from "../interfaces/IRepositories/logRepository.interface";
-import { Log } from "../models/log.model";
+import { Log, LogDAO } from "../models/log.model";
 import { Op } from 'sequelize';
 
 @injectable()
@@ -9,13 +9,13 @@ export class LogRepository implements ILogRepository {
 
   save(log: Log): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await Log.sequelize.transaction();
-      Log.create(log, { transaction: _transaction })
-        .then(async (result: Log) => {
+      const _transaction = await LogDAO.sequelize.transaction();
+      LogDAO.create(log, { transaction: _transaction })
+        .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result);
+          resolve(new Log(result));
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error)
         });
@@ -24,17 +24,17 @@ export class LogRepository implements ILogRepository {
 
   toList(companyId: number): Promise<Log[]> {
     return new Promise((resolve, reject) => {
-      Log.findAll({
+      LogDAO.findAll({
         where: {
           companyId: {
             [Op.eq]: companyId
           },
         }
       })
-        .then((foundLogs: Log[]) => {
+        .then((foundLogs: any) => {
           resolve(foundLogs);
         })
-        .catch(error => {
+        .catch((error: any) => {
           reject(error);
         });
     });
