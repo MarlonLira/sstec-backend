@@ -16,6 +16,43 @@ export class ParkingPriceService implements IParkingPriceService {
     @inject(TYPES.IParkingSpaceRepository) private repository: IParkingPriceRepository,
     @inject(TYPES.ILogService) private log: ILogService) { }
 
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {number} id
+   * @returns {Promise<ParkingPrice[]>}
+   * @memberof ParkingPriceService
+   */
+  getByParkinkId(id: number): Promise<ParkingPrice[]> {
+    return new Promise((resolve, reject) => {
+      this.repository.getByParkingId(id)
+        .then((result: ParkingPrice[]) => resolve(result))
+        .catch(error => {
+          reject(this.log.critical('Preço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
+        });
+    });
+  }
+
+  /**
+   * @description
+   * @author Gustavo Gusmão
+   * @param {ParkingPrice} parkingPrice
+   * @returns {Promise<any>}
+   * @memberof ParkingPriceService
+   */
+  deleteGroupType(parkingPrice: ParkingPrice): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (Attributes.isValid(parkingPrice)) {
+        this.repository.deleteGroupType(parkingPrice)
+          .then(result => resolve(result))
+          .catch(error =>
+            reject(this.log.critical('Preço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+      } else {
+        reject(this.log.critical('Preço', HttpCode.Bad_Request, HttpMessage.Not_Found, undefined));
+      }
+    });
+  }
+
   getById(id: number): Promise<ParkingPrice> {
     return new Promise((resolve, reject) => {
       this.repository.getById(id)
