@@ -45,11 +45,11 @@ export class ParkingService implements IParkingService {
 
   save(parking: Parking): Promise<any> {
     return new Promise((resolve, reject) => {
+      const address = parking.address;
+      delete parking.address;
       this.repository.save(parking)
         .then(async (result: Parking) => {
-          result.qrcode = _qrCode.url + Crypto.encrypt(String(result.id), CryptoType.ANYTHING);
-          parking.address.parkingId = result.id;
-          const address: ParkingAddress = new ParkingAddress(parking.address);
+          address.parkingId = result.id;
           await this.addressService.save(address);
           await this.update(result);
           resolve(result);
@@ -65,12 +65,14 @@ export class ParkingService implements IParkingService {
       }
       this.repository.update(parking)
         .then(async (result: any) => {
-          const address: ParkingAddress = new ParkingAddress(parking.address);
-          if (Attributes.isValid(address) && address.id > 0) {
-            await this.addressService.update(address);
-          } else {
-            address.parkingId = parking.id;
-            await this.addressService.save(address);
+          const address = parking.address;
+          if (Attributes.isValid(address)) {
+            if (address.id > 0) {
+              await this.addressService.update(address);
+            } else {
+              address.parkingId = parking.id;
+              await this.addressService.save(address);
+            }
           }
           resolve(result);
         })
