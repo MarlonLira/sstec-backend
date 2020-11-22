@@ -23,7 +23,7 @@ export class CompanyService implements ICompanyService {
     return new Promise((resolve, reject) => {
       this.repository.getById(id)
         .then(async (result: Company) => {
-          const _result: any = result.ToAny();
+          const _result: any = result;
           _result.address = await this.addressService.getByCompanyId(result.id);
           resolve(_result);
         }).catch(async (error: any) => {

@@ -3,7 +3,8 @@ import { Attributes } from '../../commons/core/attributes';
 import { TransactionType } from '../../commons/enums/transactionType';
 import { Scheduling } from './scheduling.model';
 import { ParkingProduct } from './parking-product.model';
-import { BaseModel, _instance } from './base.model';
+import { BaseModel, BaseModelDAO, _instance } from './base.model';
+import { InnerJson } from '../../commons/core/innerJson';
 
 export class SchedulingProduct extends BaseModel {
 
@@ -17,6 +18,7 @@ export class SchedulingProduct extends BaseModel {
   parkingProduct: ParkingProduct;
 
   constructor(json?: any) {
+    json = InnerJson.parse(json);
     super(json);
     if (json) {
       this.id = Attributes.returnIfValid(json.id);
@@ -28,13 +30,11 @@ export class SchedulingProduct extends BaseModel {
       this.scheduling = Attributes.returnIfValid(json.sheduling);
     }
   }
-
-  ToAny() {
-    return this.toJSON();
-  }
 }
 
-SchedulingProduct.init({
+export class SchedulingProductDAO extends BaseModelDAO { }
+
+SchedulingProductDAO.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,

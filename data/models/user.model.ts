@@ -5,7 +5,8 @@ import { UserAddress } from './user-address.model';
 import { Vehicle } from './vehicle.model';
 import { Card } from './card.model';
 import { FavoriteParking } from './favorite-parking.model';
-import { BaseModel, _instance } from './base.model';
+import { BaseModel, BaseModelDAO, _instance } from './base.model';
+import { InnerJson } from '../../commons/core/innerJson';
 
 export class User extends BaseModel {
 
@@ -24,6 +25,7 @@ export class User extends BaseModel {
   favoriteParkings: FavoriteParking[];
 
   constructor(json?: any) {
+    json = InnerJson.parse(json);
     super(json);
     if (json) {
       this.id = Attributes.returnIfValid(json.id);
@@ -34,20 +36,17 @@ export class User extends BaseModel {
       this.email = Attributes.returnIfValid(json.email);
       this.password = Attributes.returnIfValid(json.password);
       this.image = Attributes.returnIfValid(json.image);
+      this.address = Attributes.returnIfValid(json.address);
+      this.vehicles = Attributes.returnIfValid(json.vehicles);
+      this.cards = Attributes.returnIfValid(json.cards);
+      this.favoriteParkings = Attributes.returnIfValid(json.favoriteParkings);
     }
-  }
-
-  ToAny() {
-    const obj: any = this.toJSON();
-    obj.address = this.address;
-    obj.vehicles = this.vehicles;
-    obj.cards = this.cards;
-    obj.favoriteParkings = this.favoriteParkings;
-    return;
   }
 }
 
-User.init({
+export class UserDAO extends BaseModelDAO { }
+
+UserDAO.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,

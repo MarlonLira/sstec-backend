@@ -2,19 +2,19 @@ import { Op } from 'sequelize';
 
 import { injectable } from "inversify";
 import { IRouteSecurityRepository } from '../interfaces/IRepositories/route-securityRepository.interface';
-import { RouteSecurity } from '../models/route-security.model';
+import { RouteSecurity, RouteSecurityDAO } from '../models/route-security.model';
 
 @injectable()
 export class RouteSecurityRepository implements IRouteSecurityRepository {
 
   save(routeSecurity: RouteSecurity): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await RouteSecurity.sequelize.transaction();
-      RouteSecurity.create(routeSecurity, { transaction: _transaction })
-        .then(async (result: RouteSecurity) => {
+      const _transaction = await RouteSecurityDAO.sequelize.transaction();
+      RouteSecurityDAO.create(routeSecurity, { transaction: _transaction })
+        .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result.id);
-        }).catch(async error => {
+          resolve(result);
+        }).catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -23,21 +23,20 @@ export class RouteSecurityRepository implements IRouteSecurityRepository {
 
   update(routeSecurity: RouteSecurity): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await RouteSecurity.sequelize.transaction();
-      RouteSecurity.update(routeSecurity.ToAny(),
+      const _transaction = await RouteSecurityDAO.sequelize.transaction();
+      RouteSecurityDAO.update(routeSecurity,
         {
-          where:
-          {
-            id: routeSecurity.id
+          where: {
+            id: { [Op.eq]: routeSecurity.id }
           },
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -46,22 +45,20 @@ export class RouteSecurityRepository implements IRouteSecurityRepository {
 
   delete(id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await RouteSecurity.sequelize.transaction();
-      RouteSecurity.destroy(
+      const _transaction = await RouteSecurityDAO.sequelize.transaction();
+      RouteSecurityDAO.destroy(
         {
           where: {
-            id: {
-              [Op.eq]: id
-            }
+            id: { [Op.eq]: id }
           },
           transaction: _transaction
         }
       )
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback()
           reject(error);;
         });
@@ -78,23 +75,21 @@ export class RouteSecurityRepository implements IRouteSecurityRepository {
 
   toList(): Promise<RouteSecurity[]> {
     return new Promise((resolve, reject) => {
-      RouteSecurity.findAll()
-        .then(result => resolve(result))
-        .catch(error => reject(error));
+      RouteSecurityDAO.findAll()
+        .then((result: any) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
   getByCompanyId(id: number): Promise<RouteSecurity[]> {
     return new Promise((resolve, reject) => {
-      RouteSecurity.findAll({
+      RouteSecurityDAO.findAll({
         where: {
-          companyId: {
-            [Op.eq]: id
-          }
+          companyId: { [Op.eq]: id }
         }
       })
-        .then(result => resolve(result))
-        .catch(error => reject(error));
+        .then((result: any) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 

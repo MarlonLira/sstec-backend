@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 import { injectable } from "inversify";
 
 import { IUserAddressRepository } from '../interfaces/IRepositories/user-addressRepository.interface';
-import { UserAddress } from '../models/user-address.model';
+import { UserAddress, UserAddressDAO } from '../models/user-address.model';
 import { TransactionType } from '../../commons/enums/transactionType';
 
 @injectable()
@@ -10,46 +10,44 @@ export class UserAddressRepository implements IUserAddressRepository {
 
   getById(id: number): Promise<UserAddress> {
     return new Promise((resolve, reject) => {
-      UserAddress.findByPk(id)
-        .then((parking: UserAddress) => resolve(parking))
-        .catch(error => reject(error));
+      UserAddressDAO.findByPk(id)
+        .then((result: any) => resolve(new UserAddress(result)))
+        .catch((error: any) => reject(error));
     });
   }
 
   getByUserId(_userId: number): Promise<UserAddress> {
     return new Promise(async (resolve, reject) => {
-      UserAddress.findOne(
+      UserAddressDAO.findOne(
         {
           where: {
-            userId: _userId,
-            status: {
-              [Op.ne]: TransactionType.DELETED
-            }
+            userId: { [Op.ne]: _userId },
+            status: { [Op.ne]: TransactionType.DELETED }
           }
         }
       )
-        .then((userAddress: UserAddress) => resolve(userAddress))
-        .catch(error => reject(error));
+        .then((result: any) => resolve(new UserAddress(result)))
+        .catch((error: any) => reject(error));
     });
   }
 
   update(userAddress: UserAddress): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await UserAddress.sequelize.transaction();
-      UserAddress.update(userAddress.ToAny(),
+      const _transaction = await UserAddressDAO.sequelize.transaction();
+      UserAddressDAO.update(userAddress,
         {
           where:
           {
-            id: userAddress.userId
+            id: { [Op.eq]: userAddress.userId }
           },
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -58,18 +56,18 @@ export class UserAddressRepository implements IUserAddressRepository {
 
   delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await UserAddress.sequelize.transaction();
-      UserAddress.destroy({
+      const _transaction = await UserAddressDAO.sequelize.transaction();
+      UserAddressDAO.destroy({
         where: {
-          id: _id
+          id: { [Op.eq]: _id }
         },
         transaction: _transaction
       })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -78,13 +76,13 @@ export class UserAddressRepository implements IUserAddressRepository {
 
   save(userAddress: UserAddress) {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await UserAddress.sequelize.transaction();
+      const _transaction = await UserAddressDAO.sequelize.transaction();
       userAddress.status = TransactionType.ACTIVE;
-      UserAddress.create(userAddress, { transaction: _transaction })
-        .then(async result => {
+      UserAddressDAO.create(userAddress, { transaction: _transaction })
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
-        }).catch(async error => {
+        }).catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });

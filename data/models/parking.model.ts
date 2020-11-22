@@ -6,7 +6,8 @@ import { ParkingAddress } from './parking-address.model';
 import { Company } from './company.model';
 import { ParkingFile } from './parking-file.model';
 import { Employee } from './employee.model';
-import { BaseModel, _instance } from './base.model';
+import { BaseModel, BaseModelDAO, _instance } from './base.model';
+import { InnerJson } from '../../commons/core/innerJson';
 
 export class Parking extends BaseModel {
   id!: number;
@@ -25,6 +26,7 @@ export class Parking extends BaseModel {
   qrcode: string;
 
   constructor(json?: any) {
+    json = InnerJson.parse(json);
     super(json);
     if (json) {
       this.id = Attributes.returnIfValid(json.id);
@@ -40,15 +42,11 @@ export class Parking extends BaseModel {
       this.qrcode = Attributes.returnIfValid(json.qrcode);
     }
   }
-
-  ToAny() {
-    const obj: any = this.toJSON();
-    obj.address = this.address;
-    return obj;
-  }
 }
 
-Parking.init({
+export class ParkingDAO extends BaseModelDAO { }
+
+ParkingDAO.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,

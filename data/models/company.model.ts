@@ -4,7 +4,8 @@ import { TransactionType } from '../../commons/enums/transactionType';
 import { CompanyAddress } from './company-address.model';
 import { Parking } from './parking.model';
 import { RouteSecurity } from './route-security.model';
-import { BaseModel, _instance } from './base.model';
+import { BaseModel, BaseModelDAO, _instance } from './base.model';
+import { InnerJson } from '../../commons/core/innerJson';
 
 export class Company extends BaseModel {
 
@@ -22,6 +23,7 @@ export class Company extends BaseModel {
   routeSecurity: RouteSecurity[];
 
   constructor(json?: any) {
+    json = InnerJson.parse(json);
     super(json);
     if (json) {
       this.id = Attributes.returnIfValid(json.id);
@@ -35,17 +37,11 @@ export class Company extends BaseModel {
       this.address = Attributes.returnIfValid(json.address);
     }
   }
-
-  ToAny() {
-    const obj: any = this.toJSON();
-    obj.address = this.address;
-    obj.parkings = this.parkings;
-    obj.routeSecurity = this.routeSecurity;
-    return obj;
-  }
 }
 
-Company.init({
+export class CompanyDAO extends BaseModelDAO { }
+
+CompanyDAO.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,

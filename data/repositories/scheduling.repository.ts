@@ -1,46 +1,42 @@
 import { Op, QueryTypes } from 'sequelize';
 
 import { ISchedulingRepository } from '../interfaces/IRepositories/schedulingRepository.interface';
-import { Scheduling } from '../models/scheduling.model';
+import { Scheduling, SchedulingDAO } from '../models/scheduling.model';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
-import { SchedulingProduct } from '../models/scheduling-product.model';
+import { SchedulingProductDAO } from '../models/scheduling-product.model';
 
 @injectable()
 export class SchedulingRepository implements ISchedulingRepository {
 
   save(scheduling: Scheduling): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await Scheduling.sequelize.transaction();
-      Scheduling.create(scheduling, { transaction: _transaction })
-        .then(async (createdScheduling: Scheduling) => {
+      const _transaction = await SchedulingDAO.sequelize.transaction();
+      SchedulingDAO.create(scheduling, { transaction: _transaction })
+        .then(async (result: any) => {
           await _transaction.commit();
-          resolve({ "schedulingId": createdScheduling.id })
+          resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
-          reject(error)
+          reject(error);
         });
     });
   }
 
   getById(id: number): Promise<Scheduling> {
     return new Promise(async (resolve, reject) => {
-      Scheduling.findByPk(id, {
-        include: [{ model: SchedulingProduct, as: 'schedulingProducts' }],
-        raw: true,
-        nest: true,
+      SchedulingDAO.findByPk(id, {
+        include: [{ model: SchedulingProductDAO, as: 'schedulingProducts', where: { status: { [Op.ne]: TransactionType.DELETED } }, required: false }],
       })
-        .then((result: Scheduling) => {
-          console.log(result)
-          resolve(result)})
-        .catch(error => reject(error));
+        .then((result: any) => resolve(new Scheduling(result)))
+        .catch((error: any) => reject(error));
     });
   }
 
   returnIfExists(scheduling: Scheduling): Promise<Scheduling[]> {
     return new Promise(async (resolve, reject) => {
-      Scheduling.sequelize.query(
+      SchedulingDAO.sequelize.query(
         "   SELECT S.* FROM Scheduling AS S" +
         "   WHERE EXISTS ( SELECT S1.* FROM ParkingSpace AS PS1" +
         "                  INNER JOIN Scheduling AS S1" +
@@ -64,31 +60,27 @@ export class SchedulingRepository implements ISchedulingRepository {
           mapToModel: true
         }
       )
-        .then((result: Scheduling[]) => resolve(result))
-        .catch(error => reject(error));
+        .then((result: any) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
   getByParkingId(_parkingId: number): Promise<Scheduling[]> {
     return new Promise((resolve, reject) => {
-      Scheduling.findAll({
+      SchedulingDAO.findAll({
         where: {
-          parkingId: {
-            [Op.eq]: _parkingId
-          },
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          parkingId: { [Op.eq]: _parkingId },
+          status: { [Op.ne]: TransactionType.DELETED }
         }
       })
-        .then((result: Scheduling[]) => resolve(result))
-        .catch(error => reject(error));
+        .then((result: any) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
   getByCompanyId(_companyId: number): Promise<Scheduling[]> {
     return new Promise(async (resolve, reject) => {
-      Scheduling.sequelize.query(
+      SchedulingDAO.sequelize.query(
         "   SELECT S.* FROM Scheduling AS S" +
         "   INNER JOIN Parking AS P" +
         "     ON S.PARKINGID = P.ID" +
@@ -105,46 +97,42 @@ export class SchedulingRepository implements ISchedulingRepository {
           mapToModel: true
         }
       )
-        .then((result: Scheduling[]) => resolve(result))
-        .catch(error => reject(error));
+        .then((result: any) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
   getByUserId(_userId: number): Promise<Scheduling[]> {
     return new Promise(async (resolve, reject) => {
-      Scheduling.findAll(
+      SchedulingDAO.findAll(
         {
           where: {
-            userId: _userId,
-            status: {
-              [Op.ne]: TransactionType.DELETED
-            }
+            userId: { [Op.eq]: _userId },
+            status: { [Op.ne]: TransactionType.DELETED }
           }
         }
       )
-        .then((result: Scheduling[]) => resolve(result))
-        .catch(error => reject(error));
+        .then((result: any) => resolve(result))
+        .catch((error: any) => reject(error));
     });
   }
 
   delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await Scheduling.sequelize.transaction();
-      Scheduling.update({
-        status: TransactionType.DELETED
-      },
+      const _transaction = await SchedulingDAO.sequelize.transaction();
+      SchedulingDAO.update({ status: TransactionType.DELETED },
         {
           where: {
-            id: _id
+            id: { [Op.eq]: _id }
           },
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });
@@ -153,21 +141,20 @@ export class SchedulingRepository implements ISchedulingRepository {
 
   update(scheduling: Scheduling): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await Scheduling.sequelize.transaction();
-      Scheduling.update(scheduling.ToAny(),
+      const _transaction = await SchedulingDAO.sequelize.transaction();
+      SchedulingDAO.update(scheduling,
         {
-          where:
-          {
-            id: scheduling.id
+          where: {
+            id: { [Op.eq]: scheduling.id }
           },
           transaction: _transaction,
           validate: false
         })
-        .then(async result => {
+        .then(async (result: any) => {
           await _transaction.commit();
           resolve(result);
         })
-        .catch(async error => {
+        .catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
         });

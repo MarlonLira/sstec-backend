@@ -1,7 +1,8 @@
 import { DataTypes } from 'sequelize';
 import { Attributes } from '../../commons/core/attributes';
+import { InnerJson } from '../../commons/core/innerJson';
 import { TransactionType } from '../../commons/enums/transactionType';
-import { BaseModel, _instance } from './base.model';
+import { BaseModel, BaseModelDAO, _instance } from './base.model';
 
 export class CompanyAddress extends BaseModel {
 
@@ -18,6 +19,7 @@ export class CompanyAddress extends BaseModel {
   companyId!: number;
 
   constructor(json?: any) {
+    json = InnerJson.parse(json);
     super()
     this.id = Attributes.returnIfValid(json.id);
     this.status = Attributes.returnIfValid(json.status);
@@ -31,12 +33,11 @@ export class CompanyAddress extends BaseModel {
     this.complement = Attributes.returnIfValid(json.complement);
     this.companyId = Attributes.returnIfValid(json.companyId);
   }
-  ToAny() {
-    return this.toJSON();
-  }
 }
 
-CompanyAddress.init({
+export class CompanyAddressDAO extends BaseModelDAO { }
+
+CompanyAddressDAO.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,
