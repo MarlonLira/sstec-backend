@@ -32,7 +32,6 @@ export class ParkingProductService implements IParkingProductService {
    */
   save(parkingProduct: ParkingProduct): Promise<any> {
     return new Promise((resolve, reject) => {
-      console.log(parkingProduct)
       this.repository.save(parkingProduct)
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>

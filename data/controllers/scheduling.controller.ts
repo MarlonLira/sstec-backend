@@ -64,8 +64,8 @@ class SchedulingController {
   put(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.update(new Scheduling(req.body))
-        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Estacionamento', result)))
-        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Scheduling', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Scheduling')));
     });
   }
 
@@ -73,8 +73,8 @@ class SchedulingController {
   delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.delete(Number(req.params.id))
-        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Estacionamento', result)))
-        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Scheduling', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Scheduling')));
     });
   }
 }

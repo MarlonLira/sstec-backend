@@ -61,7 +61,7 @@ export class ParkingSpaceService implements IParkingSpaceService {
 
   save(parkingSpace: ParkingSpace, action): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      let total = Number(parkingSpace.amount);
+      const total = Number(parkingSpace.amount);
       let exists = await (await this.repository.getListByParkingId(parkingSpace.parkingId)).filter(x => x.type === parkingSpace.type);
       let count = parkingSpace.amount - exists.length;
 

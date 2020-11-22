@@ -36,7 +36,6 @@ export class ParkingRepository implements IParkingRepository {
   }
 
   save(parking: Parking): Promise<any> {
-    
     return new Promise(async (resolve, reject) => {
       const _transaction = await Parking.sequelize.transaction();
       parking.status = TransactionType.ACTIVE;
