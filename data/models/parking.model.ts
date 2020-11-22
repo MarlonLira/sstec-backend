@@ -7,6 +7,7 @@ import { Company } from './company.model';
 import { ParkingFile } from './parking-file.model';
 import { Employee } from './employee.model';
 import { BaseModel, BaseModelDAO, _instance } from './base.model';
+import { InnerJson } from '../../commons/core/innerJson';
 
 export class Parking extends BaseModel {
   id!: number;
@@ -25,6 +26,7 @@ export class Parking extends BaseModel {
   qrcode: string;
 
   constructor(json?: any) {
+    json = InnerJson.parse(json);
     super(json);
     if (json) {
       this.id = Attributes.returnIfValid(json.id);

@@ -1,7 +1,8 @@
 import { DataTypes } from 'sequelize';
 import { Attributes } from '../../commons/core/attributes';
+import { InnerJson } from '../../commons/core/innerJson';
 import { TransactionType } from '../../commons/enums/transactionType';
-import { BaseModel, _instance } from './base.model';
+import { BaseModel, BaseModelDAO, _instance } from './base.model';
 
 export class ParkingFinance extends BaseModel {
   id!: number;
@@ -13,6 +14,7 @@ export class ParkingFinance extends BaseModel {
   status!: TransactionType;
 
   constructor(json?: any) {
+    json = InnerJson.parse(json);
     super(json);
     if (json) {
       this.id = Attributes.returnIfValid(json.id);
@@ -24,12 +26,11 @@ export class ParkingFinance extends BaseModel {
       this.status = Attributes.returnIfValid(json.status);
     }
   }
-
-  ToAny() {
-    return this.toJSON();
-  }
 }
-ParkingFinance.init({
+
+export class ParkingFinanceDAO extends BaseModelDAO { }
+
+ParkingFinanceDAO.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,

@@ -24,7 +24,6 @@ export class ParkingSpace extends BaseModel {
       this.amount = Attributes.returnIfValid(json.amount);
     }
   }
-
 }
 
 export class ParkingSpaceDAO extends BaseModelDAO { }
