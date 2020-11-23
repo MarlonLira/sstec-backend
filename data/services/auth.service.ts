@@ -28,8 +28,6 @@ export class AuthService implements IAuthService {
   constructor(
     @inject(TYPES.IEmployeeService) private _employeeService: IEmployeeService,
     @inject(TYPES.ICompanyService) private _companyService: ICompanyService,
-    @inject(TYPES.IParkingService) private _parkingService: IParkingService,
-    @inject(TYPES.IRuleService) private _ruleService: IRuleService,
     @inject(TYPES.IUserService) private _userService: IUserService,
     @inject(TYPES.IEmailService) private _emailService: IEmailService,
     @inject(TYPES.IRouteSecurityService) private _routeSecurityService: IRouteSecurityService,
@@ -48,8 +46,7 @@ export class AuthService implements IAuthService {
             auth.employee = foundEmployee;
             auth.employee.password = undefined;
             auth.authenticationLevel = foundEmployee.rule?.level;
-            auth = await this.createEmployeeToken(auth);
-            const result = await Crypto.encrypt(JSON.stringify(auth), CryptoType.DEFAULT);
+            const result = await this.authEncrypt(auth, 'Employee');
             resolve(result);
           } else {
             reject(await this.log.error('Auth', HttpCode.Bad_Request, HttpMessage.Login_Unauthorized, undefined));
@@ -71,8 +68,7 @@ export class AuthService implements IAuthService {
           if (Attributes.isValid(foundUser) && Crypto.compare(auth.user.password, foundUser.password)) {
             auth.user = foundUser;
             auth.user.password = undefined;
-            auth = await this.createUserToken(auth);
-            const result = await Crypto.encrypt(JSON.stringify(auth), CryptoType.DEFAULT);
+            const result = await this.authEncrypt(auth, 'User');
             resolve(result);
           } else {
             reject(await this.log.error('Auth', HttpCode.Bad_Request, HttpMessage.Login_Unauthorized, undefined));
@@ -85,6 +81,7 @@ export class AuthService implements IAuthService {
       }
     });
   }
+
 
   signupCompany(auth: Auth): Promise<any> {
     return new Promise(async (resolve, reject) => {
@@ -179,7 +176,16 @@ export class AuthService implements IAuthService {
     });
   }
 
-  createEmployeeToken(auth: Auth): Promise<Auth> {
+  private async authEncrypt(auth: Auth, object: 'Employee' | 'User'): Promise<string> {
+    switch (object) {
+      case 'Employee':
+        return await this.createEmployeeToken(auth);
+      case 'User':
+        return await this.createUserToken(auth);
+    }
+  }
+
+  private createEmployeeToken(auth: Auth): Promise<string> {
     return new Promise((resolve) => {
       const id = auth.employee.id;
       const name = auth.employee.name;
@@ -189,11 +195,12 @@ export class AuthService implements IAuthService {
       });
       auth.validated = true;
 
-      resolve(auth);
+      const result = Crypto.encrypt(JSON.stringify(auth), CryptoType.DEFAULT);
+      resolve(result);
     });
   }
 
-  createUserToken(auth: Auth): Promise<Auth> {
+  private createUserToken(auth: Auth): Promise<string> {
     return new Promise((resolve) => {
       const id = auth.user.id;
       const name = auth.user.name;
@@ -203,11 +210,12 @@ export class AuthService implements IAuthService {
       });
       auth.validated = true;
 
-      resolve(auth);
+      const result = Crypto.encrypt(JSON.stringify(auth), CryptoType.DEFAULT);
+      resolve(result);
     });
   }
 
-  protectedEmail = (email: string) => {
+  private protectedEmail = (email: string) => {
     const result =
       `
     ${email.substring(4, 0)}****
