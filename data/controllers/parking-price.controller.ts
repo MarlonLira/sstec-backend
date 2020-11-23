@@ -22,7 +22,7 @@ class ParkingPriceController {
    * @returns {Promise<any>}
    * @memberof ParkingPriceController
    */
-  @httpPost('/parkingSpace')
+  @httpPost('/parkingPrice')
   post(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.save(new ParkingPrice(req.body))
@@ -39,7 +39,7 @@ class ParkingPriceController {
    * @returns {Promise<any>}
    * @memberof ParkingPriceController
    */
-  @httpGet('/parkingSpace/id/:id')
+  @httpGet('/parkingPrice/id/:id')
   getById(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.getById(Number(req.params.id))
@@ -56,7 +56,7 @@ class ParkingPriceController {
    * @returns {Promise<any>}
    * @memberof ParkingPriceController
    */
-  @httpGet('/parkingSpace/parkingId/:parkingId')
+  @httpGet('/parkingPrice/parkingId/:parkingId')
   getByParkingId(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.getByParkinkId(Number(req.params.parkingId))
@@ -73,7 +73,7 @@ class ParkingPriceController {
    * @returns {Promise<any>}
    * @memberof ParkingPriceController
    */
-  @httpPut('/parkingSpace')
+  @httpPut('/parkingPrice')
   put(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.save(new ParkingPrice(req.body))
@@ -90,7 +90,7 @@ class ParkingPriceController {
    * @returns {Promise<any>}
    * @memberof ParkingPriceController
    */
-  @httpDelete('/parkingSpace/parkingId/:parkingId/type/:type/amount/:amount')
+  @httpDelete('/parkingPrice/parkingId/:parkingId/type/:type/amount/:amount')
   delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.deleteGroupType(new ParkingPrice(req.params))

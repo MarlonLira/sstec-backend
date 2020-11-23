@@ -6,7 +6,6 @@ export interface IParkingPriceService{
   save(parkingPrice: ParkingPrice): Promise<any>;
   update(parkingPrice: ParkingPrice): Promise<any>;
   delete(id: number): Promise<any>;
-  toList(parkingId: number): Promise<ParkingPrice[]>;
   /**
    * @description
    * @author Gustavo Gusmão

@@ -24,6 +24,7 @@ import { RouteSecurityDAO } from './models/route-security.model';
 import { FavoriteParkingDAO } from './models/favorite-parking.model';
 import { SchedulingProductDAO } from './models/scheduling-product.model';
 import { ParkingProductDAO } from './models/parking-product.model';
+import { ParkingPriceDAO } from './models/parking-price.model';
 
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
@@ -57,7 +58,8 @@ export class Database {
       { name: 'RouteSecurity', entity: RouteSecurityDAO.sequelize },
       { name: 'FavoriteParking', entity: FavoriteParkingDAO.sequelize },
       { name: 'SchedulingProduct', entity: SchedulingProductDAO.sequelize },
-      { name: 'ParkingProduct', entity: ParkingProductDAO.sequelize }
+      { name: 'ParkingProduct', entity: ParkingProductDAO.sequelize },
+      { name: 'ParkingPrice', entity: ParkingPriceDAO.sequelize }
     ];
 
     Logger.Info('Database', 'Table verification started!');
@@ -83,6 +85,7 @@ export class Database {
     ParkingDAO.hasMany(ParkingFileDAO, { foreignKey: 'parkingId', as: 'files' });
     ParkingDAO.hasMany(FavoriteParkingDAO, { foreignKey: 'parkingId', as: 'favoriteParkings' });
     ParkingDAO.hasMany(ParkingProductDAO, { foreignKey: 'parkingId', as: 'parkingProducts' });
+    ParkingDAO.hasMany(ParkingPriceDAO, {foreignKey: 'parkingId', as: 'parkingPrices'});
     ParkingSpaceDAO.hasMany(SchedulingDAO, { foreignKey: 'parkingSpaceId', as: 'scheduling' });
     ParkingProductDAO.hasMany(SchedulingProductDAO, { foreignKey: 'parkingProductId', as: 'schedulingProducts' });
     EmployeeDAO.hasMany(AccountRecoveryDAO, { foreignKey: 'employeeId', as: 'accountsRecovery' });
