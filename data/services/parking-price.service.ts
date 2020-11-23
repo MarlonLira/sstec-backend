@@ -1,6 +1,5 @@
 import { injectable, inject } from "inversify";
 import TYPES from "../types";
-import { Attributes } from "../../commons/core/attributes";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 import { IParkingPriceService } from "../interfaces/IServices/parking-priceService.interface";
 import { IParkingPriceRepository } from "../interfaces/IRepositories/parking-priceRepository.interface";
@@ -14,17 +13,10 @@ import { TransactionType } from "../../commons/enums/transactionType";
 export class ParkingPriceService implements IParkingPriceService {
 
   constructor(
-    @inject(TYPES.IParkingSpaceRepository) private repository: IParkingPriceRepository,
+    @inject(TYPES.IParkingPriceService) private repository: IParkingPriceRepository,
     @inject(TYPES.ILogService) private log: ILogService) { }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {number} id
-   * @returns {Promise<ParkingPrice[]>}
-   * @memberof ParkingPriceService
-   */
-  getByParkinkId(id: number): Promise<ParkingPrice[]> {
+  getByParkingId(id: number): Promise<ParkingPrice[]> {
     return new Promise((resolve, reject) => {
       this.repository.getByParkingId(id)
         .then((result: ParkingPrice[]) => resolve(result))
@@ -34,51 +26,32 @@ export class ParkingPriceService implements IParkingPriceService {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {ParkingPrice} parkingPrice
-   * @returns {Promise<any>}
-   * @memberof ParkingPriceService
-   */
-  deleteGroupType(parkingPrice: ParkingPrice): Promise<any> {
-    return new Promise((resolve, reject) => {
-      if (Attributes.isValid(parkingPrice)) {
-        this.repository.deleteGroupType(parkingPrice)
-          .then(result => resolve(result))
-          .catch(error =>
-            reject(this.log.critical('Preço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
-      } else {
-        reject(this.log.critical('Preço', HttpCode.Bad_Request, HttpMessage.Not_Found, undefined));
-      }
-    });
-  }
-
   getById(id: number): Promise<ParkingPrice> {
     return new Promise((resolve, reject) => {
       this.repository.getById(id)
-        .then(async (result: ParkingPrice) => resolve(result))
+        .then((result: ParkingPrice) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Preço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
   }
-  save(parkingPrice: ParkingPrice): Promise<any> {
+
+  save(model: ParkingPrice): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      parkingPrice.status = TransactionType.ACTIVE;
-      this.repository.save(parkingPrice)
-        .then(async (result: any) => resolve(result))
+      model.status = TransactionType.ACTIVE;
+      this.repository.save(model)
+        .then((result: any) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Preço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))));
     });
   }
 
-  update(parkingPrice: ParkingPrice): Promise<any> {
+  update(model: ParkingPrice): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.repository.update(parkingPrice)
+      this.repository.update(model)
         .then(result => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Preço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))))
-    })
+    });
   }
 
   delete(id: number): Promise<any> {
@@ -87,6 +60,6 @@ export class ParkingPriceService implements IParkingPriceService {
         .then((result: any) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('Preço', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, JSON.stringify(error))))
-    })
+    });
   }
 }

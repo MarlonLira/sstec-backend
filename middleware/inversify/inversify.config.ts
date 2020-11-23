@@ -148,6 +148,6 @@ container.bind<IRouteSecurityRepository>(TYPES.IRouteSecurityRepository).to(Rout
 container.bind<IFavoriteParkingRepository>(TYPES.IFavoriteParkingRepository).to(FavoriteParkingRepository);
 container.bind<IParkingProductRepository>(TYPES.IParkingProductRepository).to(ParkingProductRepository);
 container.bind<ISchedulingProductRepository>(TYPES.ISchedulingProductRepository).to(SchedulingProductRepository);
-container.bind<IParkingPriceRepository>(TYPES.IparkingPriceRepository).to(ParkingPriceRepository);
+container.bind<IParkingPriceRepository>(TYPES.IParkingPriceRepository).to(ParkingPriceRepository);
 
 export { container };
