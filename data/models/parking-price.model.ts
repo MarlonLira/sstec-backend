@@ -63,5 +63,5 @@ ParkingPriceDAO.init({
 },
   {
     sequelize: _instance,
-    tableName: 'PakingPrice'
+    tableName: 'ParkingPrice'
   });
