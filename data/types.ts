@@ -45,7 +45,7 @@ const TYPES = {
   ILogRepository: Symbol('ILogRepository'),
   IParkingFileRepository: Symbol('IParkingFileRepository'),
   IFavoriteParkingRepository: Symbol('IFavoriteParkingRepository'),
-  IparkingPriceRepository: Symbol('IParkingPriceRepository'),
+  IParkingPriceRepository: Symbol('IParkingPriceRepository'),
 };
 
 export default TYPES;

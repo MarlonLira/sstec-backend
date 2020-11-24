@@ -27,6 +27,7 @@ export class LogService implements ILogService {
     return new Promise((resolve, reject) => {
       Logger.Default(log);
       if (log.isRecord) {
+        log.obj = log.obj.length <= 255 ? log.obj : log.obj.replace('  ', ' ').trim().substring(0, 254);
         this.repository.save(log)
           .then((result: Log) => resolve(result))
           .catch((error: any) => reject(error));

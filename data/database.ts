@@ -1,6 +1,5 @@
 import { Sequelize } from 'sequelize';
 import * as Config from '../config.json';
-import { Logger } from '../commons/core/logger';
 import { Context } from '../main/context';
 
 // Entities
@@ -24,6 +23,11 @@ import { RouteSecurityDAO } from './models/route-security.model';
 import { FavoriteParkingDAO } from './models/favorite-parking.model';
 import { SchedulingProductDAO } from './models/scheduling-product.model';
 import { ParkingProductDAO } from './models/parking-product.model';
+import { ParkingPriceDAO } from './models/parking-price.model';
+import { LogService } from './services/log.service';
+import { LogRepository } from './repositories/log.repository';
+import { HttpCode } from '../commons/enums/httpCode';
+
 
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
@@ -34,6 +38,12 @@ interface PersistenceModel {
 }
 
 export class Database {
+
+  private readonly _log: LogService;
+
+  constructor() {
+    this._log = new LogService(new LogRepository());
+  }
 
   public Build() {
     // The order influences creation in the database!
@@ -57,10 +67,11 @@ export class Database {
       { name: 'RouteSecurity', entity: RouteSecurityDAO.sequelize },
       { name: 'FavoriteParking', entity: FavoriteParkingDAO.sequelize },
       { name: 'SchedulingProduct', entity: SchedulingProductDAO.sequelize },
-      { name: 'ParkingProduct', entity: ParkingProductDAO.sequelize }
+      { name: 'ParkingProduct', entity: ParkingProductDAO.sequelize },
+      { name: 'ParkingPrice', entity: ParkingPriceDAO.sequelize }
     ];
 
-    Logger.Info('Database', 'Table verification started!');
+    this._log.info('Database', HttpCode.Not_Applicable, 'Table verification started!', undefined);
 
     /* #region  Table Relationships */
 
@@ -83,6 +94,7 @@ export class Database {
     ParkingDAO.hasMany(ParkingFileDAO, { foreignKey: 'parkingId', as: 'files' });
     ParkingDAO.hasMany(FavoriteParkingDAO, { foreignKey: 'parkingId', as: 'favoriteParkings' });
     ParkingDAO.hasMany(ParkingProductDAO, { foreignKey: 'parkingId', as: 'parkingProducts' });
+    ParkingDAO.hasMany(ParkingPriceDAO, { foreignKey: 'parkingId', as: 'parkingPrices' });
     ParkingSpaceDAO.hasMany(SchedulingDAO, { foreignKey: 'parkingSpaceId', as: 'scheduling' });
     ParkingProductDAO.hasMany(SchedulingProductDAO, { foreignKey: 'parkingProductId', as: 'schedulingProducts' });
     EmployeeDAO.hasMany(AccountRecoveryDAO, { foreignKey: 'employeeId', as: 'accountsRecovery' });
@@ -103,7 +115,7 @@ export class Database {
     this.checkAndBuild(models)
       .catch((error: any) => {
         if (error.toString().indexOf('ETIMEDOUT') != -1) {
-          Logger.Info('Database', 'trying to connect to the database again!');
+          this._log.warn('Database', HttpCode.Not_Applicable, 'trying to connect to the database again!', error);
           this.checkAndBuild(models);
         }
       });
@@ -111,18 +123,18 @@ export class Database {
 
   private checkAndBuild(models: PersistenceModel[]): Promise<any> {
     return new Promise((resolve, reject) => {
-      _instance.authenticate({ logging: (IsLogger ? msg => Logger.Info('Authenticate', msg) : IsLogger) })
+      _instance.authenticate({ logging: (IsLogger ? msg => this._log.info('Authenticate', HttpCode.Not_Applicable, msg, undefined) : IsLogger) })
         .then(() => {
-          Logger.Info('Database', 'Connection established successfully!');
+          this._log.info('Database', HttpCode.Not_Applicable, 'Connection established successfully!', undefined);
           this.CreateTables(models)
             .then(result => {
-              Logger.Info('Database', `Table verification ${result}!`);
+              this._log.info('Database', HttpCode.Not_Applicable, `Table verification ${result}!`, undefined);
               resolve(true);
             });
         })
         .catch(error => {
-          Logger.Error('Database', 'Error when trying to connect to the database!');
-          Logger.Error('Database', error);
+          this._log.error('Database', HttpCode.Not_Applicable, 'Error when trying to connect to the database!', undefined);
+          this._log.error('Database', HttpCode.Not_Applicable, '', error);
           reject(error);
         });
     });
@@ -141,17 +153,17 @@ export class Database {
           {
             force: ForceSync,
             alter: AlterSync,
-            logging: (IsLogger ? msg => Logger.Info(models[count].name, msg) : IsLogger)
+            logging: (IsLogger ? msg => this._log.info(models[count].name, HttpCode.Not_Applicable, msg, undefined) : IsLogger)
           })
           .then(() => {
-            Logger.Info(models[count].name, 'verification finished!');
+            this._log.info(models[count].name, HttpCode.Not_Applicable, 'verification finished!', undefined);
             success++;
             total = success + errors;
             count++;
             this.CreateTables(models, count, success, errors, total);
           })
           .catch(error => {
-            Logger.Error(models[count].name, error);
+            this._log.error(models[count].name, HttpCode.Not_Applicable, '', error);
             modelsWithErrors.push(models[count]);
             errors++;
             total = success + errors;
@@ -159,11 +171,11 @@ export class Database {
             this.CreateTables(models, count, success, errors, total);
           });
       } else {
-        Logger.Info('Database', `verification result => Sucess: ${success} | Errors: ${errors} | Total: ${models.length}`);
+        this._log.info('Database', HttpCode.Not_Applicable, `verification result => Sucess: ${success} | Errors: ${errors} | Total: ${models.length}`, undefined);
 
         if (errors > 0) {
-          Logger.Error('Database', `${errors} errors in the models were found!`);
-          Logger.Warn('Database', 'trying to fix the models');
+          this._log.error('Database', HttpCode.Not_Applicable, `${errors} errors in the models were found!`, undefined);
+          this._log.warn('Database', HttpCode.Not_Applicable, 'trying to fix the models', undefined);
           await this.TryFixModels(modelsWithErrors, resolve);
         } else {
           resolve('finished successfully');
@@ -177,29 +189,29 @@ export class Database {
       modelsWithErrors[count].entity.sync(
         {
           alter: AlterSync,
-          logging: IsLogger ? msg => Logger.Info(modelsWithErrors[count].name, msg) : IsLogger
+          logging: IsLogger ? msg => this._log.info(modelsWithErrors[count].name, HttpCode.Not_Applicable, msg, undefined) : IsLogger
         })
         .then(() => {
-          Logger.Info(modelsWithErrors[count].name, 'correction completed!');
+          this._log.info(modelsWithErrors[count].name, HttpCode.Not_Applicable, 'correction completed!', undefined);
           sucess++;
           attempts = sucess + errors;
           count++;
           this.TryFixModels(modelsWithErrors, resolve, count, attempts, sucess, errors);
         })
         .catch(error => {
-          Logger.Error(modelsWithErrors[count].name, error);
+          this._log.error(modelsWithErrors[count].name, HttpCode.Not_Applicable, '', error);
           errors++;
           attempts = sucess + errors;
           count++;
           this.TryFixModels(modelsWithErrors, resolve, count, attempts, sucess, errors);
         });
     } else {
-      Logger.Info('Database', `correction attempts => Sucess: ${sucess} | Errors: ${errors} | Total: ${attempts}`);
+      this._log.info('Database', HttpCode.Not_Applicable, `correction attempts => Sucess: ${sucess} | Errors: ${errors} | Total: ${attempts}`, undefined);
       if (errors > 0) {
         resolve('finished with errors');
       }
       else {
-        resolve('finished successfully and corrected errors');
+        resolve('finished successfully and corrected the errors');
       }
     }
   }
@@ -208,9 +220,9 @@ export class Database {
     const queryInterface = models[0].entity.getQueryInterface();
     await queryInterface.dropAllTables()
       .then(() => {
-        Logger.Warn('Database', 'drop all the table finished!');
+        this._log.warn('Database', HttpCode.Not_Applicable, 'drop all the table finished!', undefined);
       }).catch(error => {
-        Logger.Error('Database', error);
+        this._log.error('Database', HttpCode.Not_Applicable, '', error);
       });
   }
 }

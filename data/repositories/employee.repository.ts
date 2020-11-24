@@ -78,6 +78,7 @@ export class EmployeeRepository implements IEmployeeRepository {
     return new Promise((resolve, reject) => {
       EmployeeDAO.findAll({
         attributes: this._attributes,
+        include: [{ all: true, required: false, where: { status: { [Op.ne]: TransactionType.DELETED } } }],
         where: {
           companyId: { [Op.eq]: _companyId },
           status: { [Op.ne]: TransactionType.DELETED }
