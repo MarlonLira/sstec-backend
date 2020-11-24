@@ -123,7 +123,13 @@ export class AuthService implements IAuthService {
     return new Promise(async (resolve, reject) => {
       try {
         this._userService.save(auth.user)
-          .then(result => resolve(result));
+          .then(async (result: any) => {
+            const _auth = new Auth();
+            _auth.user = result;
+            _auth.user.password = undefined;
+            const _result = await this.authEncrypt(auth, 'User');
+            resolve(_result);
+          });
       } catch (error) {
         reject(await this.log.critical('Auth', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
       }
@@ -162,7 +168,7 @@ export class AuthService implements IAuthService {
               .then(async () => {
                 await this._emailService.send(_email);
                 resolve(this.protectedEmail(foundEmployee.email));
-              })
+              });
 
           } else {
             reject(await this.log.error('Auth', HttpCode.Expectation_Failed, HttpMessage.Parameters_Not_Provided, undefined));
