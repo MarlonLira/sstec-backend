@@ -44,7 +44,7 @@ class ParkingPriceController {
   @httpPut('/parkingPrice')
   put(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
-      this.service.save(new ParkingPrice(req.body))
+      this.service.update(new ParkingPrice(req.body))
         .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Preço', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Preço')));
     });
