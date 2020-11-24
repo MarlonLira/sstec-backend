@@ -17,7 +17,7 @@
     "ForceSync": false,
     "AlterSync": false,
     "DropAllTable": false,
-    "Logging": false,
+    "Logging": true,
     "IsLogger": false
   },
   "SMTP": {
@@ -33,7 +33,7 @@
     }
   },
   "LogRecord": {
-    "IsInfo": true,
+    "IsInfo": false,
     "IsWarn": true,
     "IsCrit": true,
     "IsUnkn": true,
