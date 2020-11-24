@@ -1,4 +1,5 @@
 export enum HttpCode {
+  Not_Applicable = 0,
   Continue = 100,
   Processing = 102,
   Ok = 200,

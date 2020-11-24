@@ -33,7 +33,7 @@
     }
   },
   "LogRecord": {
-    "IsInfo": true,
+    "IsInfo": false,
     "IsWarn": true,
     "IsCrit": true,
     "IsUnkn": true,
