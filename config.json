@@ -17,7 +17,7 @@
     "ForceSync": false,
     "AlterSync": false,
     "DropAllTable": false,
-    "Logging": true,
+    "Logging": false,
     "IsLogger": false
   },
   "SMTP": {
