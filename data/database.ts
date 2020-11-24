@@ -28,6 +28,7 @@ import { LogService } from './services/log.service';
 import { LogRepository } from './repositories/log.repository';
 import { HttpCode } from '../commons/enums/httpCode';
 
+
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
 
