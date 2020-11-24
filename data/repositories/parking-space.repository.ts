@@ -2,7 +2,7 @@ import { injectable } from "inversify";
 import { Op, QueryTypes, Sequelize } from 'sequelize';
 
 import { IParkingSpaceRepository } from '../interfaces/IRepositories/parking-spaceRepository.interface';
-import { ParkingSpace } from '../models/parking-space.model';
+import { ParkingSpace, ParkingSpaceDAO } from '../models/parking-space.model';
 import { TransactionType } from "../../commons/enums/transactionType";
 import { Scheduling } from '../models/scheduling.model';
 
@@ -11,12 +11,12 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
 
   save(parkingSpace: ParkingSpace): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingSpace.sequelize.transaction();
+      const _transaction = await ParkingSpaceDAO.sequelize.transaction();
       parkingSpace.status = TransactionType.ACTIVE;
-      ParkingSpace.create(parkingSpace, { transaction: _transaction })
-        .then(async (result: ParkingSpace) => {
+      ParkingSpaceDAO.create(parkingSpace, { transaction: _transaction })
+        .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result);
+          resolve(new ParkingSpace(result));
         }).catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
@@ -26,12 +26,12 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
 
   update(parkingSpace: ParkingSpace): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingSpace.sequelize.transaction();
-      ParkingSpace.update(parkingSpace.ToAny(),
+      const _transaction = await ParkingSpaceDAO.sequelize.transaction();
+      ParkingSpaceDAO.update(parkingSpace,
         {
           where:
           {
-            id: parkingSpace.id
+            id: { [Op.eq]: parkingSpace.id }
           },
           transaction: _transaction,
           validate: false
@@ -49,20 +49,14 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
 
   updateAll(parkingSpace: ParkingSpace, status: TransactionType): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingSpace.sequelize.transaction();
-      ParkingSpace.update(parkingSpace.ToAny(),
+      const _transaction = await ParkingSpaceDAO.sequelize.transaction();
+      ParkingSpaceDAO.update(parkingSpace,
         {
           where:
           {
-            status: {
-              [Op.eq]: status
-            },
-            type: {
-              [Op.eq]: parkingSpace.type
-            },
-            parkingId: {
-              [Op.eq]: parkingSpace.parkingId
-            }
+            status: { [Op.eq]: status },
+            type: { [Op.eq]: parkingSpace.type },
+            parkingId: { [Op.eq]: parkingSpace.parkingId }
           },
           transaction: _transaction,
           validate: false,
@@ -81,13 +75,11 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
 
   delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingSpace.sequelize.transaction();
-      ParkingSpace.update({
-        status: TransactionType.DELETED
-      },
+      const _transaction = await ParkingSpaceDAO.sequelize.transaction();
+      ParkingSpaceDAO.update({ status: TransactionType.DELETED },
         {
           where: {
-            id: _id
+            id: { [Op.eq]: _id }
           },
           transaction: _transaction,
           validate: false
@@ -105,21 +97,13 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
 
   deleteGroupType(parkingSpace: ParkingSpace): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingSpace.sequelize.transaction();
-      ParkingSpace.update({
-        status: TransactionType.DELETED,
-      },
+      const _transaction = await ParkingSpaceDAO.sequelize.transaction();
+      ParkingSpaceDAO.update({ status: TransactionType.DELETED, },
         {
           where: {
-            type: {
-              [Op.eq]: parkingSpace.type
-            },
-            parkingId: {
-              [Op.eq]: parkingSpace.parkingId,
-            },
-            status: {
-              [Op.eq]: TransactionType.ACTIVE
-            }
+            type: { [Op.eq]: parkingSpace.type },
+            parkingId: { [Op.eq]: parkingSpace.parkingId, },
+            status: { [Op.eq]: TransactionType.ACTIVE }
           },
           limit: Number(parkingSpace.amount),
           transaction: _transaction,
@@ -138,7 +122,7 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
 
   getAvailable(scheduling: Scheduling): Promise<ParkingSpace[]> {
     return new Promise(async (resolve, reject) => {
-      ParkingSpace.sequelize.query(
+      ParkingSpaceDAO.sequelize.query(
         "   SELECT PS.* FROM ParkingSpace AS PS" +
         "   WHERE NOT EXISTS ( SELECT PS1.* FROM ParkingSpace AS PS1" +
         "                      INNER JOIN Scheduling AS S1" +
@@ -166,14 +150,14 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
           mapToModel: true
         }
       )
-        .then((result: ParkingSpace[]) => resolve(result))
+        .then((result: any) => resolve(result))
         .catch((error: any) => reject(error))
     });
   }
 
   getByParkingId(id: number): Promise<ParkingSpace[]> {
     return new Promise(async (resolve, reject) => {
-      ParkingSpace.findAll({
+      ParkingSpaceDAO.findAll({
         where: {
           parkingId: { [Op.eq]: id },
           status: { [Op.eq]: TransactionType.ACTIVE },
@@ -182,45 +166,41 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
         attributes: ['value', 'type', 'parkingId', [Sequelize.fn('COUNT', Sequelize.col('type')), 'amount']],
         raw: true
       })
-        .then((parkingSpace: ParkingSpace[]) => resolve(parkingSpace))
+        .then((result: any) => resolve(result))
         .catch((error: any) => reject(error));
     });
   }
 
   getListByParkingId(id: number): Promise<ParkingSpace[]> {
     return new Promise(async (resolve, reject) => {
-      ParkingSpace.findAll({
+      ParkingSpaceDAO.findAll({
         where: {
           parkingId: { [Op.eq]: id },
           status: { [Op.eq]: TransactionType.ACTIVE },
         }
       })
-        .then((parkingSpace: ParkingSpace[]) => resolve(parkingSpace))
+        .then((result: any) => resolve(result))
         .catch((error: any) => reject(error));
     });
   }
 
   getById(id: number): Promise<ParkingSpace> {
     return new Promise((resolve, reject) => {
-      ParkingSpace.findByPk(id)
-        .then((parkingSpace: ParkingSpace) => resolve(parkingSpace))
+      ParkingSpaceDAO.findByPk(id)
+        .then((result: any) => resolve(new ParkingSpace(result)))
         .catch((error: any) => reject(error));
     });
   }
 
   getDeletedByParkingId(_parkingspace: ParkingSpace): Promise<ParkingSpace[]> {
     return new Promise((resolve, reject) => {
-      ParkingSpace.findAll(
+      ParkingSpaceDAO.findAll(
         {
           where:
           {
-            parkingId: _parkingspace.parkingId,
-            type: {
-              [Op.eq]: _parkingspace.type,
-            },
-            status: {
-              [Op.eq]: TransactionType.DELETED
-            }
+            parkingId: { [Op.eq]: _parkingspace.parkingId },
+            type: { [Op.eq]: _parkingspace.type, },
+            status: { [Op.eq]: TransactionType.DELETED }
           }
         })
         .then((result: any) => resolve(result))
@@ -230,14 +210,12 @@ export class ParkingSpaceRepository implements IParkingSpaceRepository {
 
   toList(): Promise<ParkingSpace[]> {
     return new Promise((resolve, reject) => {
-      ParkingSpace.findAll({
+      ParkingSpaceDAO.findAll({
         where: {
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          status: { [Op.ne]: TransactionType.DELETED }
         }
       })
-        .then((result: ParkingSpace[]) => resolve(result))
+        .then((result: any) => resolve(result))
         .catch((error: any) => reject(error));
     });
   }

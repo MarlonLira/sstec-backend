@@ -1,29 +1,33 @@
 import { Sequelize } from 'sequelize';
 import * as Config from '../config.json';
-import { Logger } from '../commons/core/logger';
 import { Context } from '../main/context';
 
 // Entities
-import { User } from './models/user.model';
-import { Vehicle } from './models/vehicle.model';
-import { UserAddress } from './models/user-address.model';
-import { Card } from './models/card.model';
-import { Company } from './models/company.model';
-import { CompanyAddress } from './models/company-address.model';
-import { Employee } from './models/employee.model';
-import { Parking } from './models/parking.model';
-import { Rule } from './models/rule.model';
-import { ParkingSpace } from './models/parking-space.model';
-import { ParkingAddress } from './models/parking-address.model';
-import { Scheduling } from './models/scheduling.model';
-import { ParkingScore } from './models/parking-score.model';
-import { Log } from './models/log.model';
-import { AccountRecovery } from './models/account-recovery.model';
-import { ParkingFile } from './models/parking-file.model';
-import { RouteSecurity } from './models/route-security.model';
-import { FavoriteParking } from './models/favorite-parking.model';
-import { SchedulingProduct } from './models/scheduling-product.model';
-import { ParkingProduct } from './models/parking-product.model';
+import { UserDAO } from './models/user.model';
+import { VehicleDAO } from './models/vehicle.model';
+import { UserAddressDAO } from './models/user-address.model';
+import { CardDAO } from './models/card.model';
+import { CompanyDAO } from './models/company.model';
+import { CompanyAddressDAO } from './models/company-address.model';
+import { EmployeeDAO } from './models/employee.model';
+import { ParkingDAO } from './models/parking.model';
+import { RuleDAO } from './models/rule.model';
+import { ParkingSpaceDAO } from './models/parking-space.model';
+import { ParkingAddressDAO } from './models/parking-address.model';
+import { SchedulingDAO } from './models/scheduling.model';
+import { ParkingScoreDAO } from './models/parking-score.model';
+import { LogDAO } from './models/log.model';
+import { AccountRecoveryDAO } from './models/account-recovery.model';
+import { ParkingFileDAO } from './models/parking-file.model';
+import { RouteSecurityDAO } from './models/route-security.model';
+import { FavoriteParkingDAO } from './models/favorite-parking.model';
+import { SchedulingProductDAO } from './models/scheduling-product.model';
+import { ParkingProductDAO } from './models/parking-product.model';
+import { ParkingPriceDAO } from './models/parking-price.model';
+import { LogService } from './services/log.service';
+import { LogRepository } from './repositories/log.repository';
+import { HttpCode } from '../commons/enums/httpCode';
+
 
 const _instance = Context.getInstance();
 const { ForceSync, AlterSync, DropAllTable, IsLogger } = Config.Database;
@@ -35,75 +39,83 @@ interface PersistenceModel {
 
 export class Database {
 
+  private readonly _log: LogService;
+
+  constructor() {
+    this._log = new LogService(new LogRepository());
+  }
+
   public Build() {
     // The order influences creation in the database!
     const models: PersistenceModel[] = [
-      { name: 'User', entity: User.sequelize },
-      { name: 'Vehicle', entity: Vehicle.sequelize },
-      { name: 'UserAddress', entity: UserAddress.sequelize },
-      { name: 'Card', entity: Card.sequelize },
-      { name: 'Company', entity: Company.sequelize },
-      { name: 'CompanyAddress', entity: CompanyAddress.sequelize },
-      { name: 'Employee', entity: Employee.sequelize },
-      { name: 'Parking', entity: Parking.sequelize },
-      { name: 'Rule', entity: Rule.sequelize },
-      { name: 'ParkingSpace', entity: ParkingSpace.sequelize },
-      { name: 'ParkingAddress', entity: ParkingAddress.sequelize },
-      { name: 'Scheduling', entity: Scheduling.sequelize },
-      { name: 'ParkingScore', entity: ParkingScore.sequelize },
-      { name: 'Log', entity: Log.sequelize },
-      { name: 'AccountRecovery', entity: AccountRecovery.sequelize },
-      { name: 'ParkingFile', entity: ParkingFile.sequelize },
-      { name: 'RouteSecurity', entity: RouteSecurity.sequelize },
-      { name: 'FavoriteParking', entity: FavoriteParking.sequelize },
-      { name: 'SchedulingProduct', entity: SchedulingProduct.sequelize },
-      { name: 'ParkingProduct', entity: ParkingProduct.sequelize }
+      { name: 'User', entity: UserDAO.sequelize },
+      { name: 'Vehicle', entity: VehicleDAO.sequelize },
+      { name: 'UserAddress', entity: UserAddressDAO.sequelize },
+      { name: 'Card', entity: CardDAO.sequelize },
+      { name: 'Company', entity: CompanyDAO.sequelize },
+      { name: 'CompanyAddress', entity: CompanyAddressDAO.sequelize },
+      { name: 'Employee', entity: EmployeeDAO.sequelize },
+      { name: 'Parking', entity: ParkingDAO.sequelize },
+      { name: 'Rule', entity: RuleDAO.sequelize },
+      { name: 'ParkingSpace', entity: ParkingSpaceDAO.sequelize },
+      { name: 'ParkingAddress', entity: ParkingAddressDAO.sequelize },
+      { name: 'Scheduling', entity: SchedulingDAO.sequelize },
+      { name: 'ParkingScore', entity: ParkingScoreDAO.sequelize },
+      { name: 'Log', entity: LogDAO.sequelize },
+      { name: 'AccountRecovery', entity: AccountRecoveryDAO.sequelize },
+      { name: 'ParkingFile', entity: ParkingFileDAO.sequelize },
+      { name: 'RouteSecurity', entity: RouteSecurityDAO.sequelize },
+      { name: 'FavoriteParking', entity: FavoriteParkingDAO.sequelize },
+      { name: 'SchedulingProduct', entity: SchedulingProductDAO.sequelize },
+      { name: 'ParkingProduct', entity: ParkingProductDAO.sequelize },
+      { name: 'ParkingPrice', entity: ParkingPriceDAO.sequelize }
     ];
 
-    Logger.Info('Database', 'Table verification started!');
+    this._log.info('Database', HttpCode.Not_Applicable, 'Table verification started!', undefined);
 
     /* #region  Table Relationships */
 
     // N:N - belongs to many
 
     // 1:N - has many
-    Company.hasMany(Parking, { foreignKey: 'companyId', as: 'parkings' });
-    Company.hasMany(RouteSecurity, { foreignKey: 'companyId', as: 'routeSecurity' });
-    User.hasMany(Vehicle, { foreignKey: 'userId', as: 'vehicles' });
-    User.hasMany(Card, { foreignKey: 'userId', as: 'cards' });
-    User.hasMany(ParkingScore, { foreignKey: 'userId', as: 'parkingScore' });
-    User.hasMany(Scheduling, { foreignKey: 'userId', as: 'scheduling' });
-    User.hasMany(AccountRecovery, { foreignKey: 'userId', as: 'accountRecovery' });
-    User.hasMany(FavoriteParking, { foreignKey: 'userId', as: 'favoriteParkings' });
-    Rule.hasMany(Employee, { foreignKey: 'ruleId', as: 'employees' });
-    Rule.hasMany(RouteSecurity, { foreignKey: 'ruleId', as: 'routeSecurity' });
-    Parking.hasMany(ParkingSpace, { foreignKey: 'parkingId', as: 'parkingSpace' });
-    Parking.hasMany(ParkingScore, { foreignKey: 'parkingId', as: 'parkingScore' });
-    Parking.hasMany(Employee, { foreignKey: 'parkingId', as: 'employees' });
-    Parking.hasMany(ParkingFile, { foreignKey: 'parkingId', as: 'files' });
-    Parking.hasMany(FavoriteParking, { foreignKey: 'parkingId', as: 'favoriteParkings' });
-    Parking.hasMany(ParkingProduct, { foreignKey: 'parkingId', as: 'parkingProducts' });
-    ParkingSpace.hasMany(Scheduling, { foreignKey: 'parkingSpaceId', as: 'scheduling' });
-    ParkingProduct.hasMany(SchedulingProduct, { foreignKey: 'parkingProductId', as: 'schedulingProducts' });
-    Employee.hasMany(AccountRecovery, { foreignKey: 'employeeId', as: 'accountsRecovery' });
-    Scheduling.hasMany(SchedulingProduct, { foreignKey: 'schedulingId', as: 'schedulingProducts' });
+    CompanyDAO.hasMany(ParkingDAO, { foreignKey: 'companyId', as: 'parkings' });
+    CompanyDAO.hasMany(RouteSecurityDAO, { foreignKey: 'companyId', as: 'routeSecurity' });
+    UserDAO.hasMany(VehicleDAO, { foreignKey: 'userId', as: 'vehicles' });
+    UserDAO.hasMany(CardDAO, { foreignKey: 'userId', as: 'cards' });
+    UserDAO.hasMany(ParkingScoreDAO, { foreignKey: 'userId', as: 'parkingScore' });
+    UserDAO.hasMany(SchedulingDAO, { foreignKey: 'userId', as: 'scheduling' });
+    UserDAO.hasMany(AccountRecoveryDAO, { foreignKey: 'userId', as: 'accountRecovery' });
+    UserDAO.hasMany(FavoriteParkingDAO, { foreignKey: 'userId', as: 'favoriteParkings' });
+    RuleDAO.hasMany(EmployeeDAO, { foreignKey: 'ruleId', as: 'employees' });
+    RuleDAO.hasMany(RouteSecurityDAO, { foreignKey: 'ruleId', as: 'routeSecurity' });
+    ParkingDAO.hasMany(ParkingSpaceDAO, { foreignKey: 'parkingId', as: 'parkingSpace' });
+    ParkingDAO.hasMany(ParkingScoreDAO, { foreignKey: 'parkingId', as: 'parkingScore' });
+    ParkingDAO.hasMany(EmployeeDAO, { foreignKey: 'parkingId', as: 'employees' });
+    ParkingDAO.hasMany(ParkingFileDAO, { foreignKey: 'parkingId', as: 'files' });
+    ParkingDAO.hasMany(FavoriteParkingDAO, { foreignKey: 'parkingId', as: 'favoriteParkings' });
+    ParkingDAO.hasMany(ParkingProductDAO, { foreignKey: 'parkingId', as: 'parkingProducts' });
+    ParkingDAO.hasMany(ParkingPriceDAO, { foreignKey: 'parkingId', as: 'parkingPrices' });
+    ParkingSpaceDAO.hasMany(SchedulingDAO, { foreignKey: 'parkingSpaceId', as: 'scheduling' });
+    ParkingProductDAO.hasMany(SchedulingProductDAO, { foreignKey: 'parkingProductId', as: 'schedulingProducts' });
+    EmployeeDAO.hasMany(AccountRecoveryDAO, { foreignKey: 'employeeId', as: 'accountsRecovery' });
+    SchedulingDAO.hasMany(SchedulingProductDAO, { foreignKey: 'schedulingId', as: 'schedulingProducts' });
 
     // N:1 - belongs to
-    Employee.belongsTo(Parking, { as: 'parking' });
-    Employee.belongsTo(Company, { as: 'company' });
-    Employee.belongsTo(Rule, { as: 'rule' });
-    ParkingProduct.belongsTo(Parking, { as: 'parking' });
+    EmployeeDAO.belongsTo(ParkingDAO, { as: 'parking' });
+    EmployeeDAO.belongsTo(CompanyDAO, { as: 'company' });
+    EmployeeDAO.belongsTo(RuleDAO, { as: 'rule' });
+    ParkingProductDAO.belongsTo(ParkingDAO, { as: 'parking' });
 
     // 1:1 - has one
-    Company.hasOne(CompanyAddress, { foreignKey: 'companyId', as: 'address' });
-    User.hasOne(UserAddress, { foreignKey: 'userId', as: 'address' });
-    Parking.hasOne(ParkingAddress, { foreignKey: 'parkingId', as: 'address' });
+    CompanyDAO.hasOne(CompanyAddressDAO, { foreignKey: 'companyId', as: 'address' });
+    UserDAO.hasOne(UserAddressDAO, { foreignKey: 'userId', as: 'address' });
+    ParkingDAO.hasOne(ParkingAddressDAO, { foreignKey: 'parkingId', as: 'address' });
 
     /* #endregion */
     this.checkAndBuild(models)
       .catch((error: any) => {
         if (error.toString().indexOf('ETIMEDOUT') != -1) {
-          Logger.Info('Database', 'trying to connect to the database again!');
+          this._log.warn('Database', HttpCode.Not_Applicable, 'trying to connect to the database again!', error);
           this.checkAndBuild(models);
         }
       });
@@ -111,18 +123,18 @@ export class Database {
 
   private checkAndBuild(models: PersistenceModel[]): Promise<any> {
     return new Promise((resolve, reject) => {
-      _instance.authenticate({ logging: (IsLogger ? msg => Logger.Info('Authenticate', msg) : IsLogger) })
+      _instance.authenticate({ logging: (IsLogger ? msg => this._log.info('Authenticate', HttpCode.Not_Applicable, msg, undefined) : IsLogger) })
         .then(() => {
-          Logger.Info('Database', 'Connection established successfully!');
+          this._log.info('Database', HttpCode.Not_Applicable, 'Connection established successfully!', undefined);
           this.CreateTables(models)
             .then(result => {
-              Logger.Info('Database', `Table verification ${result}!`);
+              this._log.info('Database', HttpCode.Not_Applicable, `Table verification ${result}!`, undefined);
               resolve(true);
             });
         })
         .catch(error => {
-          Logger.Error('Database', 'Error when trying to connect to the database!');
-          Logger.Error('Database', error);
+          this._log.error('Database', HttpCode.Not_Applicable, 'Error when trying to connect to the database!', undefined);
+          this._log.error('Database', HttpCode.Not_Applicable, '', error);
           reject(error);
         });
     });
@@ -141,17 +153,17 @@ export class Database {
           {
             force: ForceSync,
             alter: AlterSync,
-            logging: (IsLogger ? msg => Logger.Info(models[count].name, msg) : IsLogger)
+            logging: (IsLogger ? msg => this._log.info(models[count].name, HttpCode.Not_Applicable, msg, undefined) : IsLogger)
           })
           .then(() => {
-            Logger.Info(models[count].name, 'verification finished!');
+            this._log.info(models[count].name, HttpCode.Not_Applicable, 'verification finished!', undefined);
             success++;
             total = success + errors;
             count++;
             this.CreateTables(models, count, success, errors, total);
           })
           .catch(error => {
-            Logger.Error(models[count].name, error);
+            this._log.error(models[count].name, HttpCode.Not_Applicable, '', error);
             modelsWithErrors.push(models[count]);
             errors++;
             total = success + errors;
@@ -159,11 +171,11 @@ export class Database {
             this.CreateTables(models, count, success, errors, total);
           });
       } else {
-        Logger.Info('Database', `verification result => Sucess: ${success} | Errors: ${errors} | Total: ${models.length}`);
+        this._log.info('Database', HttpCode.Not_Applicable, `verification result => Sucess: ${success} | Errors: ${errors} | Total: ${models.length}`, undefined);
 
         if (errors > 0) {
-          Logger.Error('Database', `${errors} errors in the models were found!`);
-          Logger.Warn('Database', 'trying to fix the models');
+          this._log.error('Database', HttpCode.Not_Applicable, `${errors} errors in the models were found!`, undefined);
+          this._log.warn('Database', HttpCode.Not_Applicable, 'trying to fix the models', undefined);
           await this.TryFixModels(modelsWithErrors, resolve);
         } else {
           resolve('finished successfully');
@@ -177,29 +189,29 @@ export class Database {
       modelsWithErrors[count].entity.sync(
         {
           alter: AlterSync,
-          logging: IsLogger ? msg => Logger.Info(modelsWithErrors[count].name, msg) : IsLogger
+          logging: IsLogger ? msg => this._log.info(modelsWithErrors[count].name, HttpCode.Not_Applicable, msg, undefined) : IsLogger
         })
         .then(() => {
-          Logger.Info(modelsWithErrors[count].name, 'correction completed!');
+          this._log.info(modelsWithErrors[count].name, HttpCode.Not_Applicable, 'correction completed!', undefined);
           sucess++;
           attempts = sucess + errors;
           count++;
           this.TryFixModels(modelsWithErrors, resolve, count, attempts, sucess, errors);
         })
         .catch(error => {
-          Logger.Error(modelsWithErrors[count].name, error);
+          this._log.error(modelsWithErrors[count].name, HttpCode.Not_Applicable, '', error);
           errors++;
           attempts = sucess + errors;
           count++;
           this.TryFixModels(modelsWithErrors, resolve, count, attempts, sucess, errors);
         });
     } else {
-      Logger.Info('Database', `correction attempts => Sucess: ${sucess} | Errors: ${errors} | Total: ${attempts}`);
+      this._log.info('Database', HttpCode.Not_Applicable, `correction attempts => Sucess: ${sucess} | Errors: ${errors} | Total: ${attempts}`, undefined);
       if (errors > 0) {
         resolve('finished with errors');
       }
       else {
-        resolve('finished successfully and corrected errors');
+        resolve('finished successfully and corrected the errors');
       }
     }
   }
@@ -208,9 +220,9 @@ export class Database {
     const queryInterface = models[0].entity.getQueryInterface();
     await queryInterface.dropAllTables()
       .then(() => {
-        Logger.Warn('Database', 'drop all the table finished!');
+        this._log.warn('Database', HttpCode.Not_Applicable, 'drop all the table finished!', undefined);
       }).catch(error => {
-        Logger.Error('Database', error);
+        this._log.error('Database', HttpCode.Not_Applicable, '', error);
       });
   }
 }

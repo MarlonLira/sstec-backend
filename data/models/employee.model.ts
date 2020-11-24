@@ -5,7 +5,8 @@ import { Rule } from './rule.model';
 import { Parking } from './parking.model';
 import { Company } from './company.model';
 import { AccountRecovery } from './account-recovery.model';
-import { BaseModel, _instance } from './base.model';
+import { BaseModel, BaseModelDAO, _instance } from './base.model';
+import { InnerJson } from '../../commons/core/innerJson';
 
 export class Employee extends BaseModel {
   public id!: number;
@@ -27,6 +28,7 @@ export class Employee extends BaseModel {
   public accountsRecovery: AccountRecovery[];
 
   constructor(json?: any) {
+    json = InnerJson.parse(json);
     super(json);
     if (json) {
       this.id = Attributes.returnIfValid(json.id);
@@ -47,13 +49,11 @@ export class Employee extends BaseModel {
       this.accountsRecovery = Attributes.returnIfValid(json.accountsRecovery);
     }
   }
-
-  ToAny() {
-    return this.toJSON();
-  }
 }
 
-Employee.init({
+export class EmployeeDAO extends BaseModelDAO { }
+
+EmployeeDAO.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,

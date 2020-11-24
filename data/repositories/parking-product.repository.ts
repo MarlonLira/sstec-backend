@@ -2,21 +2,21 @@ import { injectable } from "inversify";
 import { Op } from 'sequelize';
 
 import { IParkingProductRepository } from '../interfaces/IRepositories/parking-productRepository.interface';
-import { ParkingProduct } from '../models/parking-product.model';
+import { ParkingProduct, ParkingProductDAO } from '../models/parking-product.model';
 import { TransactionType } from "../../commons/enums/transactionType";
-import { Parking } from "../models/parking.model";
+import { ParkingDAO } from "../models/parking.model";
 
 @injectable()
 export class ParkingProductRepository implements IParkingProductRepository {
 
   save(parkingProduct: ParkingProduct): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingProduct.sequelize.transaction();
+      const _transaction = await ParkingProductDAO.sequelize.transaction();
       parkingProduct.status = TransactionType.ACTIVE;
-      ParkingProduct.create(parkingProduct, { transaction: _transaction })
-        .then(async (result: ParkingProduct) => {
+      ParkingProductDAO.create(parkingProduct, { transaction: _transaction })
+        .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result);
+          resolve(new ParkingProduct(result));
         }).catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);
@@ -26,12 +26,12 @@ export class ParkingProductRepository implements IParkingProductRepository {
 
   update(parkingProduct: ParkingProduct): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingProduct.sequelize.transaction();
-      ParkingProduct.update(parkingProduct.ToAny(),
+      const _transaction = await ParkingProductDAO.sequelize.transaction();
+      ParkingProductDAO.update(parkingProduct,
         {
           where:
           {
-            id: parkingProduct.id
+            id: { [Op.eq]: parkingProduct.id }
           },
           transaction: _transaction,
           validate: false
@@ -49,13 +49,13 @@ export class ParkingProductRepository implements IParkingProductRepository {
 
   delete(_id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingProduct.sequelize.transaction();
-      ParkingProduct.update({
+      const _transaction = await ParkingProductDAO.sequelize.transaction();
+      ParkingProductDAO.update({
         status: TransactionType.DELETED
       },
         {
           where: {
-            id: _id
+            id: { [Op.eq]: _id }
           },
           transaction: _transaction,
           validate: false
@@ -73,39 +73,35 @@ export class ParkingProductRepository implements IParkingProductRepository {
 
   getByParkingId(id: number): Promise<ParkingProduct[]> {
     return new Promise(async (resolve, reject) => {
-      ParkingProduct.findAll({
+      ParkingProductDAO.findAll({
         where: {
           parkingId: { [Op.eq]: id },
           status: { [Op.eq]: TransactionType.ACTIVE },
         },
       })
-        .then((parkingProduct: ParkingProduct[]) => resolve(parkingProduct))
+        .then((result: any) => resolve(result))
         .catch((error: any) => reject(error));
     });
   }
 
   getById(id: number): Promise<ParkingProduct> {
     return new Promise((resolve, reject) => {
-      ParkingProduct.findByPk(id, {
-        include: [{ model: Parking, as: 'parking' }],
-        raw: true,
-        nest: true
+      ParkingProductDAO.findByPk(id, {
+        include: [{ model: ParkingDAO, as: 'parking' }]
       })
-        .then((parkingProduct: ParkingProduct) => resolve(parkingProduct))
+        .then((result: any) => resolve(new ParkingProduct(result)))
         .catch((error: any) => reject(error));
     });
   }
 
   toList(): Promise<ParkingProduct[]> {
     return new Promise((resolve, reject) => {
-      ParkingProduct.findAll({
+      ParkingProductDAO.findAll({
         where: {
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
+          status: { [Op.ne]: TransactionType.DELETED }
         }
       })
-        .then((result: ParkingProduct[]) => resolve(result))
+        .then((result: any) => resolve(result))
         .catch((error: any) => reject(error));
     });
   }

@@ -1,9 +1,9 @@
 import {ParkingPrice} from '../../models/parking-price.model';
 
 export interface IParkingPriceRepository{
-  save(parkingPrice: ParkingPrice): Promise<any>;
-  update(parkingPrice: ParkingPrice): Promise<any>;
-  toList(parkingId: number): Promise<ParkingPrice[]>;
+  save(model: ParkingPrice): Promise<any>;
+  update(model: ParkingPrice): Promise<any>;
   getById(id: number): Promise<ParkingPrice>;
   delete(id: number): Promise<any>;
+  getByParkingId(id: number): Promise<ParkingPrice[]>;
 }

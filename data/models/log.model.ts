@@ -3,7 +3,8 @@ import { DataTypes } from 'sequelize';
 import { Attributes } from '../../commons/core/attributes';
 import { LogLevel } from '../../commons/enums/log-level';
 import { HttpCode } from '../../commons/enums/httpCode';
-import { BaseModel, _instance } from './base.model';
+import { BaseModel, BaseModelDAO, _instance } from './base.model';
+import { InnerJson } from '../../commons/core/innerJson';
 
 export class Log extends BaseModel {
 
@@ -16,6 +17,7 @@ export class Log extends BaseModel {
   isRecord: boolean;
 
   constructor(json?: any) {
+    json = InnerJson.parse(json);
     super(json);
     if (json) {
       this.id = Attributes.returnIfValid(json.id);
@@ -27,13 +29,11 @@ export class Log extends BaseModel {
       this.isRecord = Attributes.returnIfValid(json.isRecord);
     }
   }
-
-  ToAny() {
-    return this.toJSON();
-  }
 }
 
-Log.init({
+export class LogDAO extends BaseModelDAO { }
+
+LogDAO.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,

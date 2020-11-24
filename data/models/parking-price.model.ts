@@ -1,19 +1,21 @@
 import { DataTypes } from 'sequelize';
 import { Attributes } from '../../commons/core/attributes';
-import { BaseModel, _instance } from './base.model';
+import { InnerJson } from '../../commons/core/innerJson';
+import { BaseModel, BaseModelDAO, _instance } from './base.model';
 
 export class ParkingPrice extends BaseModel {
 
   public id!: number;
   public status!: string;
-  public period!: string;
+  public period!: 'OVERTIME' | 'HOUR' | 'DAY' | 'WEEK' | 'MONTH' | 'YEAR';
   public value!: number;
-  public vehicleType!: string;
+  public vehicleType!: 'CAR' | 'MOTORCYCLE' | 'BOTH';
   public unit!: number;
   public parkingId!: number;
 
   constructor(json?: any) {
-    super(json)
+    json = InnerJson.parse(json);
+    super(json);
     if (json) {
       this.id = Attributes.returnIfValid(json.id);
       this.status = Attributes.returnIfValid(json.status);
@@ -24,13 +26,11 @@ export class ParkingPrice extends BaseModel {
       this.parkingId = Attributes.returnIfValid(json.parkingId);
     }
   }
-
-  ToAny() {
-    return this.toJSON();
-  }
 }
 
-ParkingPrice.init({
+export class ParkingPriceDAO extends BaseModelDAO { }
+
+ParkingPriceDAO.init({
   id: {
     type: new DataTypes.INTEGER(),
     autoIncrement: true,
@@ -45,7 +45,7 @@ ParkingPrice.init({
     allowNull: false
   },
   value: {
-    type: new DataTypes.INTEGER(),
+    type: new DataTypes.DOUBLE(),
     allowNull: false
   },
   vehicleType: {
@@ -63,5 +63,5 @@ ParkingPrice.init({
 },
   {
     sequelize: _instance,
-    tableName: 'PakingPrice'
+    tableName: 'ParkingPrice'
   });

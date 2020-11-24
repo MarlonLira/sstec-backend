@@ -42,8 +42,8 @@ class Server {
         const allowCors = require('./cors');
 
         this.inversifyExpress.setConfig((server) => {
-          server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
-          server.use(bodyParser.json({ limit: '50mb' }));
+          server.use(bodyParser.urlencoded({ extended: true, limit: '5mb' }));
+          server.use(bodyParser.json({ limit: '5mb' }));
           server.use(allowCors);
           server.use(helmet());
         });

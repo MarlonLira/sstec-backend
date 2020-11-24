@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { Op } from 'sequelize';
 
-import { CompanyAddress } from '../models/company-address.model';
+import { CompanyAddress, CompanyAddressDAO } from '../models/company-address.model';
 import { TransactionType } from '../../commons/enums/transactionType';
 import { ICompanyAddressRepository } from "../interfaces/IRepositories/company-addressRepository.interface";
 
@@ -10,21 +10,21 @@ export class CompanyAddressRepository implements ICompanyAddressRepository {
 
   getByCompanyId(companyId: number): Promise<CompanyAddress> {
     return new Promise((resolve, reject) => {
-      CompanyAddress.findOne({
+      CompanyAddressDAO.findOne({
         where: {
           companyId: { [Op.eq]: companyId },
           status: { [Op.ne]: TransactionType.DELETED }
         }
       }
-      ).then((result: CompanyAddress) => resolve(result)
+      ).then((result: any) => resolve(new CompanyAddress(result))
       ).catch((error: any) => reject(error));
     });
   }
 
   update(companyAddress: CompanyAddress): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await CompanyAddress.sequelize.transaction();
-      CompanyAddress.update(companyAddress.ToAny(),
+      const _transaction = await CompanyAddressDAO.sequelize.transaction();
+      CompanyAddressDAO.update(companyAddress,
         {
           where:
           {
@@ -35,7 +35,7 @@ export class CompanyAddressRepository implements ICompanyAddressRepository {
         })
         .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result);
+          resolve(new CompanyAddress(result));
         })
         .catch(async (error: any) => {
           await _transaction.rollback();
@@ -46,8 +46,8 @@ export class CompanyAddressRepository implements ICompanyAddressRepository {
 
   delete(id: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await CompanyAddress.sequelize.transaction();
-      CompanyAddress.destroy({
+      const _transaction = await CompanyAddressDAO.sequelize.transaction();
+      CompanyAddressDAO.destroy({
         where: {
           id: { [Op.eq]: id }
         },
@@ -55,7 +55,7 @@ export class CompanyAddressRepository implements ICompanyAddressRepository {
       })
         .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result);
+          resolve(new CompanyAddress(result));
         })
         .catch(async (error: any) => {
           await _transaction.rollback();
@@ -66,12 +66,12 @@ export class CompanyAddressRepository implements ICompanyAddressRepository {
 
   save(companyAddress: CompanyAddress): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      const _transaction = await CompanyAddress.sequelize.transaction();
+      const _transaction = await CompanyAddressDAO.sequelize.transaction();
       companyAddress.status = TransactionType.ACTIVE;
-      CompanyAddress.create(companyAddress, { transaction: _transaction })
+      CompanyAddressDAO.create(companyAddress, { transaction: _transaction })
         .then(async (result: any) => {
           await _transaction.commit();
-          resolve(result);
+          resolve(new CompanyAddress(result));
         }).catch(async (error: any) => {
           await _transaction.rollback();
           reject(error);

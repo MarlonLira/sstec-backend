@@ -1,91 +1,63 @@
-import { injectable } from "inversify";
-import { Op, QueryTypes, Sequelize } from 'sequelize';
-import { TransactionType } from '../../commons/enums/transactionType';
-import { ParkingPrice } from '../models/parking-price.model';
-import { IParkingPriceRepository } from '../interfaces/IRepositories/parking-priceRepository.interface';
+import { Response, Request } from "express";
+import { controller, httpGet, httpPost, httpDelete, request, response, httpPut } from "inversify-express-utils";
+import { inject } from "inversify";
+import { ParkingPrice } from "../models/parking-price.model";
+import TYPES from '../types';
+import { Http } from '../../commons/core/http';
+import { HttpCode } from '../../commons/enums/httpCode';
+import { HttpMessage } from "../../commons/enums/httpMessage";
+import { safetyMiddleware } from "../../middleware/safety/safety.config";
+import { IParkingPriceService } from "../interfaces/IServices/parking-priceService.interface";
 
-@injectable()
-export class ParkingPriceRepository implements IParkingPriceRepository {
+@controller('', safetyMiddleware())
+class ParkingPriceController {
 
-  save(parkingPrice: ParkingPrice): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingPrice.sequelize.transaction();
-      parkingPrice.status = TransactionType.ACTIVE;
-      ParkingPrice.create(parkingPrice, { transaction: _transaction })
-        .then(async (result: ParkingPrice) => {
-          await _transaction.commit();
-          resolve(result);
-        })
-        .catch(async (error: any) => {
-          await _transaction.rollback();
-          reject(error);
-        });
-    });
-  }
-  update(parkingPrice: ParkingPrice): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingPrice.sequelize.transaction();
-      ParkingPrice.update(parkingPrice.ToAny(),
-        {
-          where:
-          {
-            id: parkingPrice.id
-          },
-          transaction: _transaction,
-          validate: false
-        })
-        .then(async result => {
-          await _transaction.commit();
-          resolve(result);
-        })
-        .catch(async (error: any) => {
-          await _transaction.rollback();
-          reject(error);
-        });
-    });
-  }
-  toList(parkingId: number): Promise<ParkingPrice[]> {
-    return new Promise((resolve, reject) => {
-      ParkingPrice.findAll({
-        where: {
-          status: {
-            [Op.ne]: TransactionType.DELETED
-          }
-        }
-      })
-        .then((result: ParkingPrice[]) => resolve(result))
-        .catch((error: any) => reject(error));
-    })
-  }
-  getById(id: number): Promise<ParkingPrice> {
-    return new Promise((resolve, reject) => {
-      ParkingPrice.findByPk(id)
-        .then((parkingPrice: ParkingPrice) => resolve(parkingPrice))
-        .catch((error: any) => reject(error));
-    });
-  }
-  delete(parkingPriceId: number): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-      const _transaction = await ParkingPrice.sequelize.transaction();
-      ParkingPrice.update({
-        status: TransactionType.DELETED
-      },
-        {
-          where: {
-            id: parkingPriceId
-          },
-          transaction: _transaction,
-          validate: false
-        })
-        .then(async (result: any) => {
-          await _transaction.commit();
-          resolve(result);
-        })
-        .catch(async (error: any) => {
-          await _transaction.rollback();
-          reject(error);
-        });
+  constructor(@inject(TYPES.IParkingPriceService) private service: IParkingPriceService) { }
+
+  @httpPost('/parkingPrice')
+  post(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+    return new Promise((resolve) => {
+      this.service.save(new ParkingPrice(req.body))
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Preço', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Preço')));
     });
   }
 
+  @httpGet('/parkingPrice/:id')
+  getById(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+    return new Promise((resolve) => {
+      this.service.getById(Number(req.params.id))
+        .then((result: ParkingPrice) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Preço', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Preço')));
+    });
+  }
+
+  @httpGet('/parkingPrice/parkingId/:parkingId')
+  getByParkingId(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+    return new Promise((resolve) => {
+      this.service.getByParkingId(Number(req.params.parkingId))
+        .then((result: ParkingPrice[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Preço', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Preço')));
+    });
+  }
+
+  @httpPut('/parkingPrice')
+  put(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+    return new Promise((resolve) => {
+      this.service.update(new ParkingPrice(req.body))
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Updated_Successfully, 'Preço', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Preço')));
+    });
+  }
+
+  @httpDelete('/parkingPrice/:id')
+  delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
+    return new Promise((resolve) => {
+      this.service.delete(Number(req.params.id))
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Preço', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Preço')));
+    });
+  }
 }
+
+export default ParkingPriceController;

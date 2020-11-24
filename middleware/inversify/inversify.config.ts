@@ -124,8 +124,9 @@ container.bind<IRouteSecurityService>(TYPES.IRouteSecurityService).to(RouteSecur
 container.bind<IFavoriteParkingService>(TYPES.IFavoriteParkingService).to(FavoriteParkingService);
 container.bind<IParkingProductService>(TYPES.IParkingProductService).to(ParkingProductService);
 container.bind<ISchedulingProductService>(TYPES.ISchedulingProductService).to(SchedulingProductService);
-container.bind<IParkingPriceService>(TYPES.IParkingPriceService).to(ParkingPriceService);
 container.bind<IParkingFinanceService>(TYPES.IParkingFinanceService).to(ParkingFinanceService);
+container.bind<IParkingPriceService>(TYPES.IParkingPriceService).to(ParkingPriceService);
+
 
 // Repositories Binds
 container.bind<IUserRepository>(TYPES.IUserRepository).to(UserRepository);
@@ -148,6 +149,6 @@ container.bind<IRouteSecurityRepository>(TYPES.IRouteSecurityRepository).to(Rout
 container.bind<IFavoriteParkingRepository>(TYPES.IFavoriteParkingRepository).to(FavoriteParkingRepository);
 container.bind<IParkingProductRepository>(TYPES.IParkingProductRepository).to(ParkingProductRepository);
 container.bind<ISchedulingProductRepository>(TYPES.ISchedulingProductRepository).to(SchedulingProductRepository);
-container.bind<IParkingPriceRepository>(TYPES.IParkingPriceService).to(ParkingPriceRepository);
+container.bind<IParkingPriceRepository>(TYPES.IParkingPriceRepository).to(ParkingPriceRepository);
 
 export { container };
