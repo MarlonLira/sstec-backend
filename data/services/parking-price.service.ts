@@ -13,7 +13,7 @@ import { TransactionType } from "../../commons/enums/transactionType";
 export class ParkingPriceService implements IParkingPriceService {
 
   constructor(
-    @inject(TYPES.IParkingPriceService) private repository: IParkingPriceRepository,
+    @inject(TYPES.IParkingPriceRepository) private repository: IParkingPriceRepository,
     @inject(TYPES.ILogService) private log: ILogService) { }
 
   getByParkingId(id: number): Promise<ParkingPrice[]> {
