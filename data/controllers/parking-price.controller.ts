@@ -12,17 +12,9 @@ import { IParkingPriceService } from "../interfaces/IServices/parking-priceServi
 @controller('', safetyMiddleware())
 class ParkingPriceController {
 
-  constructor(@inject(TYPES.IParkingPriceService) private service: IParkingPriceService) {}
+  constructor(@inject(TYPES.IParkingPriceService) private service: IParkingPriceService) { }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @returns {Promise<any>}
-   * @memberof ParkingPriceController
-   */
-  @httpPost('/parkingSpace')
+  @httpPost('/parkingPrice')
   post(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.save(new ParkingPrice(req.body))
@@ -31,15 +23,7 @@ class ParkingPriceController {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @returns {Promise<any>}
-   * @memberof ParkingPriceController
-   */
-  @httpGet('/parkingSpace/id/:id')
+  @httpGet('/parkingPrice/:id')
   getById(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.getById(Number(req.params.id))
@@ -48,32 +32,16 @@ class ParkingPriceController {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @returns {Promise<any>}
-   * @memberof ParkingPriceController
-   */
-  @httpGet('/parkingSpace/parkingId/:parkingId')
+  @httpGet('/parkingPrice/parkingId/:parkingId')
   getByParkingId(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
-      this.service.getByParkinkId(Number(req.params.parkingId))
+      this.service.getByParkingId(Number(req.params.parkingId))
         .then((result: ParkingPrice[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'Preço', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Preço')));
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @returns {Promise<any>}
-   * @memberof ParkingPriceController
-   */
-  @httpPut('/parkingSpace')
+  @httpPut('/parkingPrice')
   put(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.save(new ParkingPrice(req.body))
@@ -82,18 +50,10 @@ class ParkingPriceController {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {Request<any>} req
-   * @param {Response<any>} res
-   * @returns {Promise<any>}
-   * @memberof ParkingPriceController
-   */
-  @httpDelete('/parkingSpace/parkingId/:parkingId/type/:type/amount/:amount')
+  @httpDelete('/parkingPrice/:id')
   delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
-      this.service.deleteGroupType(new ParkingPrice(req.params))
+      this.service.delete(Number(req.params.id))
         .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Preço', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Preço')));
     });
