@@ -22,11 +22,8 @@ export class CompanyService implements ICompanyService {
   getById(id: number): Promise<Company> {
     return new Promise((resolve, reject) => {
       this.repository.getById(id)
-        .then(async (result: Company) => {
-          const _result: any = result;
-          _result.address = await this.addressService.getByCompanyId(result.id);
-          resolve(_result);
-        }).catch(async (error: any) => {
+        .then((result: Company) => resolve(result))
+        .catch(async (error: any) => {
           reject(await this.log.critical('Empresa', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)))
         });
     });
