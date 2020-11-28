@@ -4,6 +4,7 @@ import { ICompanyRepository } from '../interfaces/IRepositories/companyRepositor
 import { Company, CompanyDAO } from '../models/company.model';
 import { injectable } from "inversify";
 import { TransactionType } from '../../commons/enums/transactionType';
+import { CompanyAddressDAO } from '../models/company-address.model';
 
 @injectable()
 export class CompanyRepository implements ICompanyRepository {
@@ -82,7 +83,12 @@ export class CompanyRepository implements ICompanyRepository {
 
   getById(id: number): Promise<Company> {
     return new Promise((resolve, reject) => {
-      CompanyDAO.findByPk(id)
+      CompanyDAO.findByPk(id,
+        {
+          include: [
+            { model: CompanyAddressDAO, as: 'address', where: { status: { [Op.ne]: TransactionType.DELETED } }, required: false }
+          ]
+        })
         .then((result: any) => resolve(new Company(result)))
         .catch((error: any) => reject(error));
     });
