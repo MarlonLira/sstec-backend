@@ -39,15 +39,21 @@ export class AuthService implements IAuthService {
       try {
         if (Attributes.isValid(auth.employee)) {
           const foundEmployee: Employee = await this._employeeService.getByEmail(auth.employee.email);
-          if (Attributes.isValid(foundEmployee) && Crypto.compare(auth.employee.password, foundEmployee.password)) {
-            auth.company = foundEmployee.company;;
-            auth.parking = foundEmployee.parking;
-            auth.routeSecurity = await this._routeSecurityService.getByCompanyId(foundEmployee.companyId);
-            auth.employee = foundEmployee;
-            auth.employee.password = undefined;
-            auth.authenticationLevel = foundEmployee.rule?.level;
-            const result = await this.authEncrypt(auth, 'Employee');
-            resolve(result);
+          if (Attributes.isValid(foundEmployee, true)) {
+            if (Crypto.compare(auth.employee.password, foundEmployee.password)) {
+              auth.company = foundEmployee.company;;
+              auth.parking = foundEmployee.parking;
+              auth.routeSecurity = await this._routeSecurityService.getByCompanyId(foundEmployee.companyId);
+              auth.employee = foundEmployee;
+              auth.employee.password = undefined;
+              auth.authenticationLevel = foundEmployee.rule?.level;
+
+              const result = await this.authEncrypt(auth, 'Employee');
+              console.log(result)
+              resolve(result);
+            } else {
+              reject(await this.log.error('Auth', HttpCode.Bad_Request, HttpMessage.Login_Unauthorized, undefined));
+            }
           } else {
             reject(await this.log.error('Auth', HttpCode.Bad_Request, HttpMessage.Login_Unauthorized, undefined));
           }
