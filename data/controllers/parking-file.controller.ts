@@ -21,8 +21,8 @@ class ParkingFileController {
   post(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.save(new ParkingFile(req.body))
-        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Estacionamento', result)))
-        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
+        .then((result: any) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Saved_Successfully, 'Imagem', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Imagem')));
     });
   }
 
@@ -39,8 +39,8 @@ class ParkingFileController {
   delete(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.delete(Number(req.params.id))
-        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Estacionamento', result)))
-        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Estacionamento')));
+        .then(result => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Deleted_Successfully, 'Imagem', result)))
+        .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'Imagem')));
     });
   }
 }
