@@ -62,8 +62,8 @@ export class EmployeeService implements IEmployeeService {
   save(employee: Employee): Promise<any> {
     return new Promise(async (resolve, reject) => {
       let _employee = await this.getByRegistryCode(employee.registryCode);
-      _employee = Attributes.isNullOrUndefined(_employee) ? await this.getByEmail(employee.email) : _employee;
-      if (Attributes.isNullOrUndefined(_employee)) {
+      _employee = !Attributes.isValid(_employee, true) ? await this.getByEmail(employee.email) : _employee;
+      if (!Attributes.isValid(_employee, true)) {
         employee.password = Crypto.encrypt(employee.password, CryptoType.PASSWORD);
         this.repository.save(employee)
           .then((result: any) => resolve(result))

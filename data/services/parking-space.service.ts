@@ -61,6 +61,8 @@ export class ParkingSpaceService implements IParkingSpaceService {
 
   save(parkingSpace: ParkingSpace, action): Promise<any> {
     return new Promise(async (resolve, reject) => {
+
+      parkingSpace.value = Math.sign(parkingSpace.value) === -1 ? (parkingSpace.value * -1) : parkingSpace.value;
       const total = Number(parkingSpace.amount);
       let exists = await (await this.repository.getListByParkingId(parkingSpace.parkingId)).filter(x => x.type === parkingSpace.type);
       let count = parkingSpace.amount - exists.length;
@@ -77,6 +79,7 @@ export class ParkingSpaceService implements IParkingSpaceService {
 
       exists = await (await this.repository.getListByParkingId(parkingSpace.parkingId)).filter(x => x.type === parkingSpace.type);
       count = total - exists.length;
+
       if (exists.length === 0 || count > 0 && action === 'update') {
         try {
           for (let x = 1; x <= count; x++) {
@@ -102,6 +105,7 @@ export class ParkingSpaceService implements IParkingSpaceService {
 
   update(parkingSpace: ParkingSpace): Promise<any> {
     return new Promise((resolve, reject) => {
+      parkingSpace.value = Math.sign(parkingSpace.value) === -1 ? (parkingSpace.value * -1) : parkingSpace.value;
       this.repository.updateAll(new ParkingSpace(parkingSpace), TransactionType.ACTIVE)
         .then(result => resolve(result))
         .catch(error =>

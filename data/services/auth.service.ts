@@ -15,8 +15,6 @@ import { IEmailService } from "../interfaces/IServices/emailService.interface";
 import { Email } from "../models/email.model";
 import { HttpCode } from "../../commons/enums/httpCode";
 import { ILogService } from "../interfaces/IServices/logService.interface";
-import { IParkingService } from "../interfaces/IServices/parkingService.interface";
-import { IRuleService } from "../interfaces/IServices/ruleService.interface";
 import { ICompanyService } from "../interfaces/IServices/companyService.interface";
 import { IUserService } from "../interfaces/IServices/userService.interface";
 import { IRouteSecurityService } from "../interfaces/IServices/route-securityService.interface";
@@ -49,7 +47,6 @@ export class AuthService implements IAuthService {
               auth.authenticationLevel = foundEmployee.rule?.level;
 
               const result = await this.authEncrypt(auth, 'Employee');
-              console.log(result)
               resolve(result);
             } else {
               reject(await this.log.error('Auth', HttpCode.Bad_Request, HttpMessage.Login_Unauthorized, undefined));
@@ -92,15 +89,11 @@ export class AuthService implements IAuthService {
   signupCompany(auth: Auth): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        const foundEmployee = Attributes.returnIfValid(
-          await this._employeeService.getByEmail(auth.employee.email),
-          await this._employeeService.getByRegistryCode(auth.employee.registryCode)
-        );
-        if (!Attributes.isValid(foundEmployee)) {
-          const company: Company = await this._companyService.getByRegistryCode(auth.company.registryCode);
-          if (!Attributes.isValid(company)) {
-            const createdCompany = await this._companyService.save(auth.company);
-            auth.employee.companyId = createdCompany.id;
+
+        this._companyService.save(auth.company)
+          .then((company: Company) => {
+
+            auth.employee.companyId = company.id;
             auth.employee.ruleId = 2;
 
             this._employeeService.save(auth.employee)
@@ -112,13 +105,8 @@ export class AuthService implements IAuthService {
                 await this._companyService.delete(auth.employee.companyId);
                 reject(await this.log.error('Signup Employee', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
               });
+          })
 
-          } else {
-            reject(await this.log.error('Signup Company', HttpCode.Bad_Request, HttpMessage.Already_Exists, undefined));
-          }
-        } else {
-          reject(await this.log.error('Signup Employee', HttpCode.Bad_Request, HttpMessage.Already_Exists, undefined));
-        }
       } catch (error) {
         reject(await this.log.critical('Auth', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
       }
