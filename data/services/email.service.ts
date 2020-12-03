@@ -9,7 +9,6 @@ import TYPES from "../types";
 import { InnerException } from "../../commons/core/innerException";
 import { HttpMessage } from "../../commons/enums/httpMessage";
 
-
 @injectable()
 export class EmailService implements IEmailService {
 

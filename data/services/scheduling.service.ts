@@ -13,6 +13,8 @@ import { IParkingSpaceService } from "../interfaces/IServices/parking-spaceServi
 import { IUserService } from "../interfaces/IServices/userService.interface";
 import { IVehicleService } from "../interfaces/IServices/vehicleService.interface";
 import { TransactionType } from "../../commons/enums/transactionType";
+import { Crypto } from "../../commons/core/crypto";
+import { CryptoType } from "../../commons/enums/cryptoType";
 
 @injectable()
 export class SchedulingService implements ISchedulingService {
@@ -119,9 +121,13 @@ export class SchedulingService implements ISchedulingService {
   }
 
   getByCompanyId(id: number): Promise<Scheduling[]> {
+    console.log(id)
     return new Promise((resolve, reject) => {
       this.repository.getByCompanyId(id)
-        .then((result: Scheduling[]) => resolve(result))
+        .then((result: Scheduling[]) => {
+          result.forEach((item: Scheduling) => item.cardNumber = this.getProtectedCard(item.cardNumber));
+          resolve(result);
+        })
         .catch(async (error: any) =>
           reject(await this.log.critical('Scheduling', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
@@ -130,9 +136,17 @@ export class SchedulingService implements ISchedulingService {
   getByParkingId(id: number): Promise<Scheduling[]> {
     return new Promise((resolve, reject) => {
       this.repository.getByParkingId(id)
-        .then((result: Scheduling[]) => resolve(result))
+        .then((result: Scheduling[]) => {
+          result.forEach((item: Scheduling) => item.cardNumber = this.getProtectedCard(item.cardNumber));
+          resolve(result);
+        })
         .catch(async (error: any) =>
           reject(await this.log.critical('Scheduling', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
+  }
+
+  private getProtectedCard = (card: string) => {
+    const decryptedCard = Crypto.decrypt(card, CryptoType.CARD);
+    return `${decryptedCard.substring(0, 2)}** **** **** **${decryptedCard.substring(13, 15)}`;
   }
 }

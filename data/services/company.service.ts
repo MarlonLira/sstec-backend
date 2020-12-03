@@ -78,9 +78,9 @@ export class CompanyService implements ICompanyService {
         this.repository.getByRegistryCode(registryCode)
           .then((result: Company) => resolve(result))
           .catch(async (error: any) =>
-            reject(await this.log.critical('Parking', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+            reject(await this.log.critical('Empresa', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
       } else {
-        reject(await this.log.error('Parking', HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, undefined));
+        reject(await this.log.error('Empresa', HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, undefined));
       }
     });
   }
