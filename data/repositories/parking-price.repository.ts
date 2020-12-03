@@ -63,7 +63,6 @@ export class ParkingPriceRepository implements IParkingPriceRepository {
           resolve(new ParkingPrice(result));
         })
         .catch(async (error: any) => {
-          console.log(error)
           await _transaction.rollback();
           reject(error);
         });
