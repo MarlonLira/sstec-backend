@@ -28,7 +28,7 @@ class UserController {
   getByRegistryCode(@request() req: Request<any>, @response() res: Response<any>): Promise<any> {
     return new Promise((resolve) => {
       this.service.getByRegistryCode(req.params.registryCode)
-        .then((result: User[]) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'User', result)))
+        .then((result: User) => resolve(Http.SendMessage(res, HttpCode.Ok, HttpMessage.Found, 'User', result)))
         .catch((error: any) => resolve(Http.SendErrorMessage(res, error, 'User')));
     });
   }
