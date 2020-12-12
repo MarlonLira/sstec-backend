@@ -33,7 +33,7 @@ export class UserRepository implements IUserRepository {
             { model: UserAddressDAO, as: 'address', where: { status: { [Op.ne]: TransactionType.DELETED } }, required: false }
           ]
         })
-        .then((result: any) => resolve(new User(result)))
+        .then((result: any) => resolve(result))
         .catch((error: any) => reject(error));
     });
   }
@@ -99,11 +99,11 @@ export class UserRepository implements IUserRepository {
     });
   }
 
-  getByRegistryCode(registryCode: string): Promise<User[]> {
+  getByRegistryCode(registryCode: string): Promise<User> {
     return new Promise((resolve, reject) => {
-      UserDAO.findAll({
+      UserDAO.findOne({
         where: {
-          registryCode: { [Op.like]: `${registryCode}%` },
+          registryCode: { [Op.eq]: registryCode },
           status: { [Op.ne]: TransactionType.DELETED }
         }
       })

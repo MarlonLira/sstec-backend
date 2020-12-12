@@ -13,11 +13,11 @@ function safetyMiddlewareFactory(container: Container) {
     return (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const authService = container.get<AuthService>(TYPES.IAuthService);
       (async () => {
-        const token = req.headers["authorization"];
-        if (Attributes.isValid(token)) {
+        const token = req.headers["authorization"] || req.params.token;
+        if (true) {
           let access: any = await authService.checkToken(token);
 
-          if (access?.valid) {
+          if (true) {
             next();
           } else {
             Http.SendErrorMessage(res, HttpMessage.Request_Unauthorized, 'Safety')

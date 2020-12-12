@@ -37,7 +37,7 @@ export class SchedulingService implements ISchedulingService {
           Attributes.isValid(scheduling.vehicleId)
         ) {
           const _availableParkingSpace = await this.parkingSpaceService.getAvailable(scheduling);
-          if (Attributes.isValid(_availableParkingSpace)) {
+          if (Attributes.isValid(_availableParkingSpace, true)) {
             scheduling.parkingSpaceId = _availableParkingSpace[0].id;
             scheduling.userName = (await this.userService.getById(scheduling.userId)).name;
             scheduling.vehiclePlate = (await this.vehicleService.getById(scheduling.vehicleId)).licensePlate;
@@ -54,6 +54,7 @@ export class SchedulingService implements ISchedulingService {
                 scheduling.status = TransactionType.PENDING;
                 this.repository.save(scheduling)
                   .then(result => {
+                    result.cardNumber = this.getProtectedCard(result.cardNumber);
                     global.SocketServer.emit('get.schedulings', result);
                     resolve(result);
                   });
@@ -62,12 +63,13 @@ export class SchedulingService implements ISchedulingService {
               scheduling.status = TransactionType.PENDING;
               this.repository.save(scheduling)
                 .then(result => {
+                  result.cardNumber = this.getProtectedCard(result.cardNumber);
                   global.SocketServer.emit('get.schedulings', result);
                   resolve(result);
                 });
             }
           } else {
-            reject(await this.log.info('Scheduling', HttpCode.Not_Found, HttpMessage.Not_Found, undefined));
+            reject(await this.log.warn('Scheduling', HttpCode.Not_Found, HttpMessage.Not_Found, undefined));
           }
         } else {
           reject(await this.log.error('Scheduling', HttpCode.Bad_Request, HttpMessage.Parameters_Not_Provided, undefined));
@@ -121,7 +123,6 @@ export class SchedulingService implements ISchedulingService {
   }
 
   getByCompanyId(id: number): Promise<Scheduling[]> {
-    console.log(id)
     return new Promise((resolve, reject) => {
       this.repository.getByCompanyId(id)
         .then((result: Scheduling[]) => {

@@ -145,11 +145,15 @@ export class AuthService implements IAuthService {
   accountRecoveryEmployee(auth: Auth): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-        const foundEmployee: Employee = await Attributes.returnIfValid(
-          await this._employeeService.getByRegistryCode(auth.employee.registryCode),
-          await this._employeeService.getByEmail(auth.employee.email)
-        );
-        if (Attributes.isValid(foundEmployee)) {
+        let foundEmployee: Employee = undefined;
+
+        if (auth.employee?.registryCode) {
+          foundEmployee = await this._employeeService.getByRegistryCode(auth.employee.registryCode)
+        } else if (auth.employee?.email) {
+          foundEmployee = await this._employeeService.getByEmail(auth.employee.email);
+        }
+
+        if (Attributes.isValid(foundEmployee, true)) {
           if (Attributes.isValid(foundEmployee.email)) {
             const _email = new Email();
             const _newPassword = Crypto.randomPassword();
@@ -157,7 +161,7 @@ export class AuthService implements IAuthService {
             _email.subject = 'Recuperação de Conta';
             _email.text = `Sua nova senha: ${_newPassword}`;
             _email.to = foundEmployee.email;
-            foundEmployee.password = Crypto.encrypt(_newPassword, CryptoType.PASSWORD);
+            foundEmployee.password = _newPassword;
             this._employeeService.update(foundEmployee)
               .then(async () => {
                 await this._emailService.send(_email);
