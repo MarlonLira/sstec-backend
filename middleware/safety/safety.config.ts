@@ -13,7 +13,7 @@ function safetyMiddlewareFactory(container: Container) {
     return (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const authService = container.get<AuthService>(TYPES.IAuthService);
       (async () => {
-        const token = req.headers["authorization"];
+        const token = req.headers["authorization"] || req.body.token || req.params.token;
         if (Attributes.isValid(token)) {
           let access: any = await authService.checkToken(token);
 

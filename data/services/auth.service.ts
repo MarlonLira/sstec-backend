@@ -68,11 +68,16 @@ export class AuthService implements IAuthService {
       try {
         if (Attributes.isValid(auth.user)) {
           const foundUser: User = await this._userService.getByEmail(auth.user.email);
-          if (Attributes.isValid(foundUser) && Crypto.compare(auth.user.password, foundUser.password)) {
-            auth.user = foundUser;
-            auth.user.password = undefined;
-            const result = await this.authEncrypt(auth, 'User');
-            resolve(result);
+          delete foundUser.address;
+          if (Attributes.isValid(foundUser, true)) {
+            if (Crypto.compare(auth.user.password, foundUser.password)) {
+              auth.user = foundUser;
+              auth.user.password = undefined;
+              const result = await this.authEncrypt(auth, 'User');
+              resolve(result);
+            } else {
+              reject(await this.log.error('Auth', HttpCode.Bad_Request, HttpMessage.Login_Unauthorized, undefined));
+            }
           } else {
             reject(await this.log.error('Auth', HttpCode.Bad_Request, HttpMessage.Login_Unauthorized, undefined));
           }
@@ -149,7 +154,7 @@ export class AuthService implements IAuthService {
           await this._employeeService.getByRegistryCode(auth.employee.registryCode),
           await this._employeeService.getByEmail(auth.employee.email)
         );
-        if (Attributes.isValid(foundEmployee)) {
+        if (Attributes.isValid(foundEmployee, true)) {
           if (Attributes.isValid(foundEmployee.email)) {
             const _email = new Email();
             const _newPassword = Crypto.randomPassword();
