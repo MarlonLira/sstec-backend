@@ -25,10 +25,10 @@ export class UserService implements IUserService {
     throw new Error("Method not implemented.");
   }
 
-  getByRegistryCode(registryCode: string): Promise<User[]> {
+  getByRegistryCode(registryCode: string): Promise<User> {
     return new Promise((resolve, reject) => {
       this.repository.getByRegistryCode(registryCode)
-        .then(async (result: User[]) => {
+        .then(async (result: User) => {
           resolve(result);
         }).catch(async (error: any) =>
           reject(await this.log.critical('User', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
@@ -50,10 +50,7 @@ export class UserService implements IUserService {
   getById(id: number): Promise<User> {
     return new Promise((resolve, reject) => {
       this.repository.getById(id)
-        .then((result: User) => {
-          result.image = undefined;
-          resolve(result)
-        })
+        .then((result: User) => resolve(result))
         .catch(async (error: any) =>
           reject(await this.log.critical('User', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
     });
@@ -64,26 +61,33 @@ export class UserService implements IUserService {
   }
 
   save(user: User): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.repository.getByRegistryCode(user.registryCode)
-        .then(async found => {
-          if (!Attributes.isValid(found)) {
-            user.password = Attributes.isValid(user.password) ? Crypto.encrypt(user.password, CryptoType.PASSWORD) : undefined;
-            this.repository.save(user)
-              .then(async (result: User) => {
-                if (user.address) {
-                  const address: UserAddress = new UserAddress(user.address);
-                  address.userId = result.id;
-                  await this.addressService.save(address);
-                }
-                resolve(result);
-              })
-              .catch(async (error: any) =>
-                reject(await this.log.critical('User', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
-          } else {
-            reject(await this.log.critical('User', HttpCode.Bad_Request, HttpMessage.Already_Exists, undefined));
-          }
-        });
+    return new Promise(async (resolve, reject) => {
+      let found: User = undefined;
+
+      if (user.registryCode) {
+        found = await this.repository.getByRegistryCode(user.registryCode);
+      }
+
+      if (!Attributes.isValid(found, true) && user.email) {
+        found = await this.repository.getByEmail(user.email);
+      }
+
+      if (!Attributes.isValid(found, true)) {
+        user.password = Attributes.isValid(user.password) ? Crypto.encrypt(user.password, CryptoType.PASSWORD) : undefined;
+        this.repository.save(user)
+          .then(async (result: User) => {
+            if (user.address) {
+              const address: UserAddress = new UserAddress(user.address);
+              address.userId = result.id;
+              await this.addressService.save(address);
+            }
+            resolve(result);
+          })
+          .catch(async (error: any) =>
+            reject(await this.log.critical('User', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
+      } else {
+        reject(await this.log.critical('User', HttpCode.Bad_Request, HttpMessage.Already_Exists, undefined));
+      }
     });
   }
 

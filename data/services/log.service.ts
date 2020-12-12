@@ -31,6 +31,8 @@ export class LogService implements ILogService {
         this.repository.save(log)
           .then((result: Log) => resolve(result))
           .catch((error: any) => reject(error));
+      } else {
+        resolve();
       }
     });
   }
