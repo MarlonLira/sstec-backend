@@ -14,10 +14,10 @@ function safetyMiddlewareFactory(container: Container) {
       const authService = container.get<AuthService>(TYPES.IAuthService);
       (async () => {
         const token = req.headers["authorization"] || req.params.token;
-        if (true) {
+        if (Attributes.isValid(token)) {
           let access: any = await authService.checkToken(token);
 
-          if (true) {
+          if (access?.valid) {
             next();
           } else {
             Http.SendErrorMessage(res, HttpMessage.Request_Unauthorized, 'Safety')
