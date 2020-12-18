@@ -150,12 +150,6 @@ export class AuthService implements IAuthService {
   accountRecoveryEmployee(auth: Auth): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
-<<<<<<< HEAD
-        const foundEmployee: Employee = await Attributes.returnIfValid(
-          await this._employeeService.getByRegistryCode(auth.employee.registryCode),
-          await this._employeeService.getByEmail(auth.employee.email)
-        );
-=======
         let foundEmployee: Employee = undefined;
 
         if (auth.employee?.registryCode) {
@@ -164,7 +158,6 @@ export class AuthService implements IAuthService {
           foundEmployee = await this._employeeService.getByEmail(auth.employee.email);
         }
 
->>>>>>> 0c4374e43693b108eb3f5c0f2698f061c0584d59
         if (Attributes.isValid(foundEmployee, true)) {
           if (Attributes.isValid(foundEmployee.email)) {
             const _email = new Email();

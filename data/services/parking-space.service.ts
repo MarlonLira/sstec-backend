@@ -60,6 +60,7 @@ export class ParkingSpaceService implements IParkingSpaceService {
   }
 
   save(parkingSpace: ParkingSpace, action): Promise<any> {
+    console.log(parkingSpace)
     return new Promise(async (resolve, reject) => {
 
       parkingSpace.value = Math.sign(parkingSpace.value) === -1 ? (parkingSpace.value * -1) : parkingSpace.value;
@@ -84,7 +85,7 @@ export class ParkingSpaceService implements IParkingSpaceService {
         try {
           for (let x = 1; x <= count; x++) {
             await this.repository.save(new ParkingSpace(parkingSpace));
-            if (x === count) { resolve(); }
+            if (x === count) { resolve(''); }
           }
         } catch (error) {
           reject(this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error)));
@@ -93,12 +94,12 @@ export class ParkingSpaceService implements IParkingSpaceService {
         parkingSpace.status = TransactionType.DELETED;
         parkingSpace.amount = (count * -1);
         this.updateAll(parkingSpace, TransactionType.ACTIVE)
-          .then(() => resolve());
+          .then(() => resolve(''));
       }
       else if (exists.length !== 0 && action === 'save') {
         reject(this.log.error('Vaga', HttpCode.Bad_Request, HttpMessage.Already_Exists, undefined))
       } else {
-        resolve();
+        resolve('');
       }
     });
   }
@@ -106,7 +107,7 @@ export class ParkingSpaceService implements IParkingSpaceService {
   update(parkingSpace: ParkingSpace): Promise<any> {
     return new Promise((resolve, reject) => {
       parkingSpace.value = Math.sign(parkingSpace.value) === -1 ? (parkingSpace.value * -1) : parkingSpace.value;
-      this.repository.updateAll(new ParkingSpace(parkingSpace), TransactionType.ACTIVE)
+      this.save(new ParkingSpace(parkingSpace), 'update')
         .then(result => resolve(result))
         .catch(error =>
           reject(this.log.critical('Vaga', HttpCode.Internal_Server_Error, HttpMessage.Unknown_Error, InnerException.decode(error))));
