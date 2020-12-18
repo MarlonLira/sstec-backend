@@ -8,28 +8,14 @@ import { IParkingProductService } from "../interfaces/IServices/parking-productS
 import { IParkingProductRepository } from "../interfaces/IRepositories/parking-productRepository.interface";
 import { ParkingProduct } from "../models/parking-product.model";
 
-/**
- * @description
- * @author Gustavo Gusmão
- * @export
- * @class ParkingProductService
- * @implements {IParkingProductService}
- */
 @injectable()
 export class ParkingProductService implements IParkingProductService {
 
   constructor(
     @inject(TYPES.IParkingProductRepository) private repository: IParkingProductRepository,
     @inject(TYPES.ILogService) private log: ILogService
-    ) { }
+  ) { }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {ParkingProduct} parkingProduct
-   * @returns {Promise<any>}
-   * @memberof ParkingProductService
-   */
   save(parkingProduct: ParkingProduct): Promise<any> {
     return new Promise((resolve, reject) => {
       this.repository.save(parkingProduct)
@@ -39,13 +25,6 @@ export class ParkingProductService implements IParkingProductService {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {number} id
-   * @returns {Promise<any>}
-   * @memberof ParkingProductService
-   */
   delete(id: number): Promise<any> {
     return new Promise((resolve, reject) => {
       this.repository.delete(id)
@@ -55,13 +34,6 @@ export class ParkingProductService implements IParkingProductService {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {number} id
-   * @returns {Promise<ParkingProduct>}
-   * @memberof ParkingProductService
-   */
   getById(id: number): Promise<ParkingProduct> {
     return new Promise((resolve, reject) => {
       this.repository.getById(id)
@@ -71,13 +43,6 @@ export class ParkingProductService implements IParkingProductService {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {number} id
-   * @returns {Promise<ParkingProduct[]>}
-   * @memberof ParkingProductService
-   */
   getByParkinkId(id: number): Promise<ParkingProduct[]> {
     return new Promise((resolve, reject) => {
       this.repository.getByParkingId(id)
@@ -88,13 +53,6 @@ export class ParkingProductService implements IParkingProductService {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {ParkingProduct} parkingProduct
-   * @returns {Promise<any>}
-   * @memberof ParkingProductService
-   */
   update(parkingProduct: ParkingProduct): Promise<any> {
     return new Promise((resolve, reject) => {
       this.repository.update(new ParkingProduct(parkingProduct))
@@ -104,13 +62,6 @@ export class ParkingProductService implements IParkingProductService {
     });
   }
 
-  /**
-   * @description
-   * @author Gustavo Gusmão
-   * @param {number} parkingId
-   * @returns {Promise<ParkingProduct[]>}
-   * @memberof ParkingProductService
-   */
   toList(parkingId: number): Promise<ParkingProduct[]> {
     return new Promise((resolve, reject) => {
       this.repository.toList(parkingId)
